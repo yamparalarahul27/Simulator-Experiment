@@ -1,5 +1,8 @@
-import { Engine, PROGRAM_ID, Instrument, GetClientDataResponse } from '@deriverse/kit';
+import { Engine, Instrument, GetClientDataResponse } from '@deriverse/kit';
 import { createSolanaRpc } from '@solana/kit';
+
+// Use the exact program ID from the official kit example
+const DERIVERSE_DEVNET_PROGRAM_ID = "Drvrseg8AQLP8B96DBGmHRjFGviFNYTkHueY9g3k27Gu";
 
 export interface OrderData {
   orderId: number;
@@ -17,6 +20,7 @@ export interface TradeHistoryResponse {
 export class DeriverseService {
   private engine: Engine | null = null;
   private rpc: ReturnType<typeof createSolanaRpc>;
+  private static isServiceAvailable = true;
 
   constructor() {
     // Initialize with Solana devnet RPC (can be changed to mainnet)
@@ -39,11 +43,11 @@ export class DeriverseService {
     try {
       console.log('Initializing Deriverse engine...');
       console.log('RPC URL:', 'https://api.devnet.solana.com');
-      console.log('Program ID:', PROGRAM_ID);
+      console.log('Program ID:', DERIVERSE_DEVNET_PROGRAM_ID);
       
       this.engine = new Engine(this.rpc, { 
-        programId: PROGRAM_ID,
-        version: 1,
+        programId: DERIVERSE_DEVNET_PROGRAM_ID,
+        version: 12, // Use version 12 as per kit-example
         commitment: 'confirmed',
         uiNumbers: true
       });
@@ -53,28 +57,38 @@ export class DeriverseService {
       console.log('Engine initialized:', initialized);
       
       if (!initialized) {
-        throw new Error('Engine.initialize() returned false');
+        DeriverseService.isServiceAvailable = false;
+        throw new Error('Deriverse is not available on devnet at the moment. The protocol may be undergoing maintenance or is temporarily down.');
       }
       
       console.log('Engine initialization successful');
+      DeriverseService.isServiceAvailable = true;
     } catch (error) {
+      DeriverseService.isServiceAvailable = false;
       console.error('Error initializing Deriverse engine:', error);
       // More specific error handling
       if (error instanceof Error) {
         if (error.message.includes('getMultipleAccountsInfo')) {
-          throw new Error('Failed to fetch Deriverse accounts. The service might be unavailable or network might be down.');
+          throw new Error('Deriverse protocol not found on devnet. The service might be unavailable or network might be down.');
         } else if (error.message.includes('Initialization failed')) {
-          throw new Error('Deriverse service initialization failed. Please try again later.');
+          throw new Error('Deriverse DEX is temporarily unavailable. Please try again later or check the status page.');
+        } else if (error.message.includes('RPC request failed')) {
+          throw new Error('Network connection failed. Please check your internet connection and try again.');
         } else {
-          throw new Error(`Initialization error: ${error.message}`);
+          throw new Error(`Deriverse initialization error: ${error.message}`);
         }
       }
-      throw new Error('Please check network and try again');
+      throw new Error('Deriverse DEX service is currently unavailable. Please try again later.');
     }
   }
 
   async fetchTradesForAddress(address: string): Promise<TradeHistoryResponse> {
     console.log('Fetching trades for address:', address);
+    
+    // Check if service is available before attempting
+    if (!DeriverseService.isDeriverseAvailable()) {
+      throw new Error('Deriverse DEX is currently unavailable on devnet. Please try again later.');
+    }
     
     if (!this.engine) {
       console.log('Engine not initialized, initializing...');
@@ -196,5 +210,19 @@ export class DeriverseService {
   static calculatePrice(sum: number, quantity: number): number {
     if (quantity === 0) return 0;
     return sum / quantity;
+  }
+
+  // Check if Deriverse service is available
+  static isDeriverseAvailable(): boolean {
+    return DeriverseService.isServiceAvailable;
+  }
+
+  // Get service status message
+  static getServiceStatusMessage(): string {
+    if (DeriverseService.isServiceAvailable) {
+      return "Deriverse DEX is operational on devnet";
+    } else {
+      return "Deriverse DEX is currently unavailable on devnet";
+    }
   }
 }

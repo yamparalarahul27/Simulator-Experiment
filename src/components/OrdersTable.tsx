@@ -36,7 +36,7 @@ export default function OrdersTable({ title, orders, loading = false }: OrdersTa
       <div className="w-full max-w-6xl mx-auto mt-8">
         <h3 className="text-xl font-bold text-white mb-4">{title}</h3>
         <div className="bg-zinc-900 rounded-lg p-6 text-center">
-          <p className="text-zinc-400">No trades found on Deriverse</p>
+          <p className="text-zinc-400">No {title.toLowerCase()} found on Deriverse Devnet</p>
         </div>
       </div>
     );
