@@ -1,5 +1,5 @@
-import TradeHistory from '@/components/TradeHistory';
+import TabNavigation from '@/components/TabNavigation';
 
 export default function Home() {
-  return <TradeHistory />;
+  return <TabNavigation />;
 }
