@@ -8,10 +8,10 @@ export default function LoadingScreen() {
     const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
-        // Total animation time: path draw (3s) + fill delay (2.5s) + fill duration (0.8s) + hold time (0.5s)
+        // Total animation time: path draw (2s) + fill delay (1.5s) + fill duration (0.8s) + hold time (0.5s)
         const timer = setTimeout(() => {
             setIsVisible(false);
-        }, 6800);
+        }, 4800);
 
         return () => clearTimeout(timer);
     }, []);

@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import CardWithCornerShine from './CardWithCornerShine';
 import AddressInput from './AddressInput';
 import OrdersTable from './OrdersTable';
-import NetworkStatus from './NetworkStatus';
+
 import { DeriverseService, OrderData, TradeHistoryResponse } from './DeriverseService';
 
 export default function TradeHistory() {
@@ -19,7 +20,7 @@ export default function TradeHistory() {
     setLoading(true);
     setError(null);
     setHasSearched(true);
-    
+
     try {
       const response: TradeHistoryResponse = await deriverseService.fetchTradesForAddress(address);
       setSpotOrders(response.spotOrders);
@@ -36,26 +37,19 @@ export default function TradeHistory() {
   const hasAnyOrders = spotOrders.length > 0 || perpOrders.length > 0;
 
   return (
-    <div className="min-h-screen bg-black text-white p-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Network Status Indicator */}
-        <NetworkStatus />
-        
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold tracking-tighter mb-2">Deriverse Analytics</h1>
-          <p className="text-zinc-400">Trading Journal & Portfolio Analysis - Devnet</p>
-        </div>
+    <div className="min-h-screen text-white p-8">
+      <div className="max-w-6xl mx-auto space-y-6">
 
         {/* Input Section */}
-        <div className="bg-zinc-900 rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold text-white mb-4">
-            Wallet Address Lookup
+        <CardWithCornerShine padding="md">
+          <h2 className="text-xl font-semibold text-white mb-4 text-center">
+            Trade Wallet Lookup
           </h2>
-          <AddressInput 
-            onSubmit={handleAddressSubmit} 
+          <AddressInput
+            onSubmit={handleAddressSubmit}
             loading={loading}
           />
-        </div>
+        </CardWithCornerShine>
 
         {/* Error Display */}
         {error && hasSearched && (
@@ -116,13 +110,14 @@ export default function TradeHistory() {
 
         {/* Initial Instructions */}
         {!hasSearched && (
-          <div className="bg-zinc-900 rounded-lg p-8 text-center">
+          <div className="bg-zinc-900 rounded-lg p-8 text-left">
             <h3 className="text-xl font-semibold text-white mb-4">
-              How to use Deriverse Analytics (Devnet)
+              How Deriverse Lookup Works (Devnet)
             </h3>
             <div className="text-zinc-400 space-y-2">
-              <p>🧪 This tool connects to <strong>Deriverse Devnet</strong> (test network)</p>
-              <p>1. Paste a Solana wallet address in the field above</p>
+              <p>🧪 This Lookup tool connects to <strong>Deriverse SDK</strong> to fetch the trades done on <a href="http://alpha.deriverse.io/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Deriverse DEX</a></p>
+              <p>Steps:</p>
+              <p>1. Paste your Solana wallet address in the field above</p>
               <p>2. Click "Run" to fetch trading data from Deriverse DEX</p>
               <p>3. View spot and perpetual orders for that address</p>
               <p>4. Note: Only devnet trading data will be shown</p>

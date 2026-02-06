@@ -2,18 +2,46 @@
 
 import { useState } from 'react';
 import TradeHistory from './TradeHistory';
+import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
 
 type TabType = 'dashboard' | 'lookup' | 'mockdata' | 'assistant' | 'devlogs';
 
 export default function TabNavigation() {
     const [activeTab, setActiveTab] = useState<TabType>('dashboard');
+    const [network, setNetwork] = useState<'devnet' | 'mainnet'>('devnet');
 
-    const tabs = [
-        { id: 'dashboard' as TabType, label: 'Dashboard' },
-        { id: 'lookup' as TabType, label: 'Look Up' },
-        { id: 'mockdata' as TabType, label: 'Mock Data' },
-        { id: 'assistant' as TabType, label: 'Assistant' },
-        { id: 'devlogs' as TabType, label: 'Dev Logs' },
+    // Clean navigation items configuration
+    const navItems: NavItem[] = [
+        {
+            title: 'Dashboard',
+            href: '#dashboard',
+            category: 'main',
+            onClick: () => setActiveTab('dashboard')
+        },
+        {
+            title: 'Lookup',
+            href: '#lookup',
+            category: 'main',
+            onClick: () => setActiveTab('lookup')
+        },
+        {
+            title: 'Mock Data',
+            href: '#mockdata',
+            category: 'dropdown',
+            onClick: () => setActiveTab('mockdata')
+        },
+        {
+            title: 'Assistant',
+            href: '#assistant',
+            category: 'dropdown',
+            onClick: () => setActiveTab('assistant')
+        },
+        {
+            title: 'Dev Logs',
+            href: '#devlogs',
+            category: 'dropdown',
+            onClick: () => setActiveTab('devlogs')
+        },
     ];
 
     const renderTabContent = () => {
@@ -50,31 +78,23 @@ export default function TabNavigation() {
     };
 
     return (
-        <div className="min-h-screen">
-            {/* Tab Navigation */}
-            <div className="border-b border-gray-200 dark:border-gray-700">
-                <nav className="flex justify-center gap-2 px-4 py-3" aria-label="Tabs">
-                    {tabs.map((tab) => (
-                        <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className={`
-                px-6 py-2.5 text-sm font-medium rounded-lg transition-all duration-200
-                ${activeTab === tab.id
-                                    ? 'bg-blue-600 text-white shadow-md'
-                                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                                }
-              `}
-                            aria-current={activeTab === tab.id ? 'page' : undefined}
-                        >
-                            {tab.label}
-                        </button>
-                    ))}
-                </nav>
-            </div>
+        <div className="min-h-screen text-white">
+            {/* New Glassmorphism Navigation */}
+            <GlassmorphismNavbar
+                logo="/assets/Deriverse_Journal_Logo.png"
+                navItems={navItems}
+                activePath={`#${activeTab}`}
+                networkStatus={{
+                    name: network === 'devnet' ? 'Devnet' : 'Mainnet',
+                    variant: network,
+                    isActive: true
+                }}
+                onNetworkChange={setNetwork}
+                className="mb-8"
+            />
 
-            {/* Tab Content */}
-            <div className="p-4">
+            {/* Content Area - Padding top added to account for fixed navbar */}
+            <div className="pt-24 p-4 max-w-7xl mx-auto">
                 {renderTabContent()}
             </div>
         </div>
