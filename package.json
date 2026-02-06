@@ -11,7 +11,10 @@
   "dependencies": {
     "@deriverse/kit": "^1.0.39",
     "@solana/web3.js": "^1.98.4",
+    "agentation": "^1.3.2",
     "bs58": "^6.0.0",
+    "framer-motion": "^12.33.0",
+    "geist": "^1.5.1",
     "lucide-react": "^0.563.0",
     "next": "16.1.6",
     "react": "19.2.3",

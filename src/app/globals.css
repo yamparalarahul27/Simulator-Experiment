@@ -1,26 +1,360 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Deriverse Brand Colors */
+  --ds-primary: #2E2F5F;
+  --ds-secondary: #605CA8;
+  --ds-accent: #8C83E9;
+  --ds-gradient-mid: #705BE3;
+
+  /* UI Colors */
+  --ds-bg-dark: #0D0D21;
+  --ds-bg-light: #BABACE;
+  --ds-border: #7C8EAA;
+
+  /* Text Colors */
+  --ds-text-primary: #EDEDED;
+  /* Off-white for dark background (WCAG compliant) */
+  --ds-text-dark: #040515;
+  /* Use ONLY on light backgrounds */
+  --ds-text-muted: #7C8EAA;
+
+  /* Default Theme Mappings */
+  --background: var(--ds-bg-dark);
+  --foreground: var(--ds-text-primary);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  /* Expose Deriverse tokens to Tailwind */
+  --color-primary: var(--ds-primary);
+  --color-secondary: var(--ds-secondary);
+  --color-accent: var(--ds-accent);
+  --color-ds-bg-dark: var(--ds-bg-dark);
+  --color-ds-bg-light: var(--ds-bg-light);
+  --color-ds-border: var(--ds-border);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background-color: var(--background);
+  background-image: url('/assets/background.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
+  color: var(--foreground);
+  font-family: var(--font-geist-mono), monospace;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================
+   Geist Typography Scale Utilities
+   ============================================ */
+
+/* Headings - Used for page titles and section headers */
+.text-heading-72 {
+  font-size: 4.5rem;
+  /* 72px */
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-heading-64 {
+  font-size: 4rem;
+  /* 64px */
+  line-height: 1.0625;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-heading-56 {
+  font-size: 3.5rem;
+  /* 56px */
+  line-height: 1.07;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-heading-48 {
+  font-size: 3rem;
+  /* 48px */
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-heading-40 {
+  font-size: 2.5rem;
+  /* 40px */
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-heading-32 {
+  font-size: 2rem;
+  /* 32px */
+  line-height: 1.125;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-heading-24 {
+  font-size: 1.5rem;
+  /* 24px */
+  line-height: 1.167;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-heading-20 {
+  font-size: 1.25rem;
+  /* 20px */
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  font-weight: 600;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-heading-16 {
+  font-size: 1rem;
+  /* 16px */
+  line-height: 1.25;
+  letter-spacing: 0;
+  font-weight: 600;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-heading-14 {
+  font-size: 0.875rem;
+  /* 14px */
+  line-height: 1.286;
+  letter-spacing: 0;
+  font-weight: 600;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+/* Buttons - Optimized for clickable elements */
+.text-button-16 {
+  font-size: 1rem;
+  /* 16px */
+  line-height: 1.5;
+  letter-spacing: 0;
+  font-weight: 500;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-button-14 {
+  font-size: 0.875rem;
+  /* 14px */
+  line-height: 1.429;
+  letter-spacing: 0;
+  font-weight: 500;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-button-12 {
+  font-size: 0.75rem;
+  /* 12px */
+  line-height: 1.5;
+  letter-spacing: 0;
+  font-weight: 500;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+/* Labels - For single-line text (tags, metadata, form labels) */
+.text-label-20 {
+  font-size: 1.25rem;
+  /* 20px */
+  line-height: 1.4;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-label-18 {
+  font-size: 1.125rem;
+  /* 18px */
+  line-height: 1.444;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-label-16 {
+  font-size: 1rem;
+  /* 16px */
+  line-height: 1.5;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-label-14 {
+  font-size: 0.875rem;
+  /* 14px */
+  line-height: 1.429;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-label-14-mono {
+  font-size: 0.875rem;
+  /* 14px */
+  line-height: 1.429;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-geist-mono), monospace;
+}
+
+.text-label-13 {
+  font-size: 0.8125rem;
+  /* 13px */
+  line-height: 1.385;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-label-13-mono {
+  font-size: 0.8125rem;
+  /* 13px */
+  line-height: 1.385;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-geist-mono), monospace;
+}
+
+.text-label-12 {
+  font-size: 0.75rem;
+  /* 12px */
+  line-height: 1.5;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-label-12-mono {
+  font-size: 0.75rem;
+  /* 12px */
+  line-height: 1.5;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-geist-mono), monospace;
+}
+
+/* Copy - For multi-line paragraphs and body text */
+.text-copy-24 {
+  font-size: 1.5rem;
+  /* 24px */
+  line-height: 1.5;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-copy-20 {
+  font-size: 1.25rem;
+  /* 20px */
+  line-height: 1.6;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-copy-18 {
+  font-size: 1.125rem;
+  /* 18px */
+  line-height: 1.556;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-copy-16 {
+  font-size: 1rem;
+  /* 16px */
+  line-height: 1.625;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-copy-14 {
+  font-size: 0.875rem;
+  /* 14px */
+  line-height: 1.571;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-copy-13 {
+  font-size: 0.8125rem;
+  /* 13px */
+  line-height: 1.538;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+.text-copy-13-mono {
+  font-size: 0.8125rem;
+  /* 13px */
+  line-height: 1.538;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: var(--font-geist-mono), monospace;
+}
+
+/* Strong modifier support - use <strong> within typography classes */
+.text-heading-72 strong,
+.text-heading-64 strong,
+.text-heading-56 strong,
+.text-heading-48 strong,
+.text-heading-40 strong,
+.text-heading-32 strong,
+.text-heading-24 strong,
+.text-heading-20 strong,
+.text-heading-16 strong,
+.text-heading-14 strong {
+  font-weight: 700;
+}
+
+.text-button-16 strong,
+.text-button-14 strong,
+.text-button-12 strong {
+  font-weight: 600;
+}
+
+.text-label-20 strong,
+.text-label-18 strong,
+.text-label-16 strong,
+.text-label-14 strong,
+.text-label-14-mono strong,
+.text-label-13 strong,
+.text-label-13-mono strong,
+.text-label-12 strong,
+.text-label-12-mono strong,
+.text-copy-24 strong,
+.text-copy-20 strong,
+.text-copy-18 strong,
+.text-copy-16 strong,
+.text-copy-14 strong,
+.text-copy-13 strong,
+.text-copy-13-mono strong {
+  font-weight: 600;
 }

@@ -6,7 +6,7 @@ import TradeHistory from './TradeHistory';
 type TabType = 'dashboard' | 'lookup' | 'mockdata' | 'assistant' | 'devlogs';
 
 export default function TabNavigation() {
-    const [activeTab, setActiveTab] = useState<TabType>('lookup');
+    const [activeTab, setActiveTab] = useState<TabType>('dashboard');
 
     const tabs = [
         { id: 'dashboard' as TabType, label: 'Dashboard' },
