@@ -190,7 +190,7 @@ export const GlassmorphismNavbar = ({
             <nav className={`fixed top-0 left-0 right-0 z-50 ${className}`}>
                 <div className="px-3 sm:px-6 py-2 sm:py-3">
                     {/* Glassmorphism container */}
-                    <div className="bg-black/80 backdrop-blur-xl border border-white/10 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-1.5 sm:py-2 shadow-2xl shadow-black/20">
+                    <div className="bg-black/80 backdrop-blur-xl border border-white/10 rounded-none px-3 sm:px-4 py-1.5 sm:py-2 shadow-2xl shadow-black/20">
                         <div className="flex items-center justify-between">
                             {/* Logo */}
                             <a href={logoHref} className="flex-shrink-0">
@@ -210,9 +210,9 @@ export const GlassmorphismNavbar = ({
                                                 item.onClick(e);
                                             }
                                         }}
-                                        className={`px-3 xl:px-4 py-1.5 xl:py-2 rounded-lg text-sm xl:text-base font-medium transition-all duration-300 ${isActive(item.href)
-                                            ? 'text-white bg-white/10'
-                                            : 'text-white/60 hover:text-white hover:bg-white/5'
+                                        className={`px-3 xl:px-4 py-1.5 xl:py-2 rounded-none text-sm xl:text-base font-medium transition-all duration-300 border-b-2 ${isActive(item.href)
+                                            ? 'text-white border-purple-500' // Purple stroke, no fill
+                                            : 'text-white/60 border-transparent hover:text-white hover:bg-white/5'
                                             }`}
                                     >
                                         {item.title}
@@ -229,7 +229,7 @@ export const GlassmorphismNavbar = ({
                                     >
                                         <button
                                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                            className="px-3 xl:px-4 py-1.5 xl:py-2 rounded-lg text-sm xl:text-base font-medium text-white/60 hover:text-white hover:bg-white/5 transition-all duration-300 flex items-center gap-1"
+                                            className="px-3 xl:px-4 py-1.5 xl:py-2 rounded-none text-sm xl:text-base font-medium text-white/60 hover:text-white hover:bg-white/5 transition-all duration-300 flex items-center gap-1 border-b-2 border-transparent"
                                         >
                                             {dropdownTitle}
                                             <svg
@@ -246,7 +246,7 @@ export const GlassmorphismNavbar = ({
                                         {/* Dropdown panel */}
                                         {isDropdownOpen && (
                                             <div className="absolute top-full right-0 pt-2 min-w-[200px]">
-                                                <div className="bg-black/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+                                                <div className="bg-black/95 backdrop-blur-xl border border-white/10 rounded-none shadow-2xl overflow-hidden">
                                                     {dropdownItems.map((item) => (
                                                         <a
                                                             key={item.href}
@@ -283,9 +283,9 @@ export const GlassmorphismNavbar = ({
                                                 item.onClick(e);
                                             }
                                         }}
-                                        className={`px-3 xl:px-4 py-1.5 xl:py-2 rounded-lg text-sm xl:text-base font-medium transition-all duration-300 ${isActive(item.href)
-                                            ? 'text-white bg-white/10'
-                                            : 'text-white/60 hover:text-white hover:bg-white/5'
+                                        className={`px-3 xl:px-4 py-1.5 xl:py-2 rounded-none text-sm xl:text-base font-medium transition-all duration-300 border-b-2 ${isActive(item.href)
+                                            ? 'text-white border-purple-500' // Purple stroke, no fill
+                                            : 'text-white/60 border-transparent hover:text-white hover:bg-white/5'
                                             }`}
                                     >
                                         {item.title}
@@ -299,14 +299,14 @@ export const GlassmorphismNavbar = ({
                                 {networkStatus && (
                                     <div className="hidden sm:block relative">
                                         <div
-                                            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 transition-all duration-300 cursor-default"
+                                            className="flex items-center gap-2 px-3 py-1.5 rounded-none bg-white/5 border border-white/10 transition-all duration-300 cursor-default"
                                         >
                                             <LivePulseIndicator
                                                 variant={networkStatus.variant}
                                                 size="sm"
                                                 noPing={!networkStatus.isActive}
                                             />
-                                            <span className="text-sm text-white/80 font-medium text-left">
+                                            <span className="text-sm text-green-500 font-medium text-left uppercase">
                                                 {networkStatus.name}
                                             </span>
                                         </div>

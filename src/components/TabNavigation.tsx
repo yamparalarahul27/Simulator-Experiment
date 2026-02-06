@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import TradeHistory from './TradeHistory';
+import TableUI_Demo from './TableUI_Demo';
 import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
 
-type TabType = 'dashboard' | 'lookup' | 'mockdata' | 'assistant' | 'devlogs';
+type TabType = 'dashboard' | 'lookup' | 'tradedata' | 'assistant' | 'appdocs';
 
 export default function TabNavigation() {
     const [activeTab, setActiveTab] = useState<TabType>('dashboard');
@@ -25,22 +26,22 @@ export default function TabNavigation() {
             onClick: () => setActiveTab('lookup')
         },
         {
-            title: 'Mock Data',
-            href: '#mockdata',
-            category: 'dropdown',
-            onClick: () => setActiveTab('mockdata')
+            title: 'Trade Data',
+            href: '#tradedata',
+            category: 'main',
+            onClick: () => setActiveTab('tradedata')
         },
         {
             title: 'Assistant',
             href: '#assistant',
-            category: 'dropdown',
+            category: 'main',
             onClick: () => setActiveTab('assistant')
         },
         {
-            title: 'Dev Logs',
-            href: '#devlogs',
+            title: 'App Docs',
+            href: '#appdocs',
             category: 'dropdown',
-            onClick: () => setActiveTab('devlogs')
+            onClick: () => setActiveTab('appdocs')
         },
     ];
 
@@ -54,22 +55,18 @@ export default function TabNavigation() {
                 );
             case 'lookup':
                 return <TradeHistory />;
-            case 'mockdata':
-                return (
-                    <div className="flex items-center justify-center min-h-[60vh]">
-                        <h1 className="text-4xl font-bold text-foreground">Mock Data</h1>
-                    </div>
-                );
+            case 'tradedata':
+                return <TableUI_Demo />;
             case 'assistant':
                 return (
                     <div className="flex items-center justify-center min-h-[60vh]">
                         <h1 className="text-4xl font-bold text-foreground">Assistant</h1>
                     </div>
                 );
-            case 'devlogs':
+            case 'appdocs':
                 return (
                     <div className="flex items-center justify-center min-h-[60vh]">
-                        <h1 className="text-4xl font-bold text-foreground">Dev Logs</h1>
+                        <h1 className="text-4xl font-bold text-foreground">App Docs</h1>
                     </div>
                 );
             default:

@@ -110,7 +110,7 @@ export default function TradeHistory() {
 
         {/* Initial Instructions */}
         {!hasSearched && (
-          <div className="bg-zinc-900 rounded-lg p-8 text-left">
+          <div className="bg-zinc-900 rounded-none p-8 text-left">
             <h3 className="text-xl font-semibold text-white mb-4">
               How Deriverse Lookup Works (Devnet)
             </h3>
