@@ -123,9 +123,9 @@ export const CardWithCornerShine = ({
 }: CardWithCornerShineProps) => {
     // Map padding preset to Tailwind classes
     const paddingClasses = {
-        sm: 'p-4',
-        md: 'p-6',
-        lg: 'p-8',
+        sm: 'px-4 pt-4 pb-4',
+        md: 'px-6 pt-6 pb-6',
+        lg: 'px-8 pt-8 pb-6',
     };
 
     // Construct dynamic background opacity class

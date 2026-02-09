@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import CardWithCornerShine from './CardWithCornerShine';
 import { ArrowUpRight, ArrowDownRight, TrendingUp, ChevronDown } from 'lucide-react';
-import { LineChart } from '@derpdaderp/chartkit';
+import { PnLChart } from './PnLChart';
 
 type FilterType = 'All' | 'Yesterday' | 'Today' | 'This Week' | 'This Month' | 'This Year';
 
@@ -123,19 +123,7 @@ export default function PnLCard() {
                                     TODO: Replace with CSV data parsing logic once file is provided.
                                     Currently using dummy data to demonstrate green/orange split.
                                 */}
-                                <LineChart
-                                    data={chartData}
-                                    series={[
-                                        { key: 'positive', label: 'Profit', color: '#4ade80', area: true, areaOpacity: 0.1 },
-                                        { key: 'negative', label: 'Loss', color: '#fb923c', area: true, areaOpacity: 0.1 }
-                                    ]}
-                                    theme="midnight"
-                                    responsive
-                                    height={400}
-                                    padding={20}
-                                    curve="monotone"
-                                    grid={{ horizontal: true, vertical: false, opacity: 0.1 }}
-                                />
+                                <PnLChart data={chartData} height={400} />
                             </div>
                         )}
                     </div>

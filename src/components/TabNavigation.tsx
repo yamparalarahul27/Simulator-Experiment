@@ -2,11 +2,10 @@
 
 import { useState } from 'react';
 import TradeHistory from './TradeHistory';
-import Dashboard from './Dashboard';
-import TableUI_Demo from './TableUI_Demo';
+import Home from './Home';
 import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
 
-type TabType = 'dashboard' | 'lookup' | 'tradedata' | 'journal' | 'appdocs';
+type TabType = 'dashboard' | 'lookup' | 'journal' | 'appdocs';
 
 export default function TabNavigation() {
     const [activeTab, setActiveTab] = useState<TabType>('dashboard');
@@ -33,12 +32,6 @@ export default function TabNavigation() {
             onClick: () => setActiveTab('lookup')
         },
         {
-            title: 'Trade Data',
-            href: '#tradedata',
-            category: 'main',
-            onClick: () => setActiveTab('tradedata')
-        },
-        {
             title: 'About & Future',
             href: '#appdocs',
             category: 'dropdown',
@@ -49,11 +42,9 @@ export default function TabNavigation() {
     const renderTabContent = () => {
         switch (activeTab) {
             case 'dashboard':
-                return <Dashboard />;
+                return <Home />;
             case 'lookup':
                 return <TradeHistory />;
-            case 'tradedata':
-                return <TableUI_Demo />;
             case 'journal':
                 return (
                     <div className="flex items-center justify-center min-h-[60vh]">

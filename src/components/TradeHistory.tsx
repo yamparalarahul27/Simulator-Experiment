@@ -1,20 +1,15 @@
-'use client';
-
 import { useState } from 'react';
 import CardWithCornerShine from './CardWithCornerShine';
 import AddressInput from './AddressInput';
-import OrdersTable from './OrdersTable';
-
-import { DeriverseService, OrderData, TradeHistoryResponse } from './DeriverseService';
+import { HeliusService, TransactionLog } from './HeliusService';
 
 export default function TradeHistory() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [spotOrders, setSpotOrders] = useState<OrderData[]>([]);
-  const [perpOrders, setPerpOrders] = useState<OrderData[]>([]);
+  const [transactions, setTransactions] = useState<TransactionLog[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
 
-  const deriverseService = new DeriverseService();
+  const heliusService = new HeliusService();
 
   const handleAddressSubmit = async (address: string) => {
     setLoading(true);
@@ -22,28 +17,26 @@ export default function TradeHistory() {
     setHasSearched(true);
 
     try {
-      const response: TradeHistoryResponse = await deriverseService.fetchTradesForAddress(address);
-      setSpotOrders(response.spotOrders);
-      setPerpOrders(response.perpOrders);
+      const response = await heliusService.fetchAllTransactions(address);
+      setTransactions(response.transactions);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
-      setSpotOrders([]);
-      setPerpOrders([]);
+      setTransactions([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const hasAnyOrders = spotOrders.length > 0 || perpOrders.length > 0;
+  const hasAnyTransactions = transactions.length > 0;
 
   return (
-    <div className="min-h-screen text-white p-8">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="min-h-screen text-white py-8">
+      <div className="max-w-7xl mx-auto space-y-6">
 
         {/* Input Section */}
         <CardWithCornerShine padding="md">
           <h2 className="text-xl font-semibold text-white mb-4 text-center">
-            Trade Wallet Lookup
+            Deriverse Activity Lookup
           </h2>
           <AddressInput
             onSubmit={handleAddressSubmit}
@@ -71,10 +64,10 @@ export default function TradeHistory() {
 
         {/* Loading State */}
         {loading && (
-          <div className="bg-zinc-900 rounded-lg p-6 mb-8">
+          <div className="bg-zinc-900 rounded-none p-6 mb-8">
             <div className="flex items-center justify-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-              <span className="ml-3 text-zinc-400">Fetching trades from Deriverse...</span>
+              <span className="ml-3 text-zinc-400">Fetching transactions...</span>
             </div>
           </div>
         )}
@@ -82,29 +75,84 @@ export default function TradeHistory() {
         {/* Results Section */}
         {!loading && hasSearched && (
           <>
-            {/* No trades found message */}
-            {!hasAnyOrders && !error && (
-              <div className="bg-zinc-900 rounded-lg p-6 mb-8 text-center">
-                <p className="text-zinc-400">No trades found on Deriverse Devnet</p>
+            {/* No transactions found message */}
+            {!hasAnyTransactions && !error && (
+              <div className="bg-zinc-900 rounded-none p-6 mb-8 text-center">
+                <p className="text-zinc-400">No transactions found for this address</p>
                 <p className="text-zinc-500 text-sm mt-2">
-                  This wallet may not have traded on Deriverse or only has mainnet activity
+                  This wallet may not have any activity on Solana Devnet
                 </p>
               </div>
             )}
 
-            {/* Spot Orders Table */}
-            <OrdersTable
-              title="Spot Orders"
-              orders={spotOrders}
-              loading={loading}
-            />
+            {/* All Transactions Table */}
+            {transactions.length > 0 && (
+              <div className="rounded-none border border-white/10 bg-black/80 backdrop-blur-xl overflow-hidden">
+                <div className="px-6 py-4 border-b border-white/10 bg-gradient-to-r from-white/5 to-transparent">
+                  <h3 className="text-lg font-semibold text-white">All Transactions (via Helius RPC)</h3>
+                  <p className="text-sm text-zinc-400 mt-1">Showing last {transactions.length} transactions for this address</p>
+                </div>
+                <div className="overflow-x-auto max-h-[70vh]">
+                  <table className="w-full text-left">
+                    <thead className="sticky top-0 bg-black/90 backdrop-blur-xl border-b border-white/10">
+                      <tr>
+                        <th className="px-6 py-4 text-xs font-semibold text-white/70 uppercase tracking-wider">Time</th>
+                        <th className="px-6 py-4 text-xs font-semibold text-white/70 uppercase tracking-wider">Type</th>
+                        <th className="px-6 py-4 text-xs font-semibold text-white/70 uppercase tracking-wider">Status</th>
+                        <th className="px-6 py-4 text-xs font-semibold text-white/70 uppercase tracking-wider text-right">Fee (lamports)</th>
+                        <th className="px-6 py-4 text-xs font-semibold text-white/70 uppercase tracking-wider">Signature</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {transactions.map((tx, index) => (
+                        <tr
+                          key={tx.signature}
+                          className="hover:bg-white/5 transition-all duration-200 group"
+                          style={{
+                            animation: `fadeIn 0.3s ease-in-out ${index * 0.05}s both`
+                          }}
+                        >
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-zinc-300">
+                            {HeliusService.formatTime(tx.time)}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`px-3 py-1.5 rounded-none text-xs font-semibold backdrop-blur-sm
+                                            ${tx.type.includes('Transfer') ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' :
+                                tx.type.includes('Swap') ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' :
+                                  tx.type.includes('Deriverse') ? 'bg-green-500/20 text-green-300 border border-green-500/30' :
+                                    'bg-zinc-500/20 text-zinc-300 border border-zinc-500/30'}`}>
+                              {tx.type}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm">
+                            <span className={`px-3 py-1.5 rounded-none text-xs font-semibold backdrop-blur-sm
+                                           ${tx.status === 'Confirmed'
+                                ? 'bg-green-500/20 text-green-300 border border-green-500/30'
+                                : 'bg-red-500/20 text-red-300 border border-red-500/30'}`}>
+                              {tx.status}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-white font-mono font-semibold">
+                            {tx.fee.toLocaleString()}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm">
+                            <a
+                              href={`https://solscan.io/tx/${tx.signature}?cluster=devnet`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-400 hover:text-blue-300 transition-colors font-mono group-hover:underline"
+                            >
+                              {tx.signature.slice(0, 8)}...{tx.signature.slice(-8)}
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
 
-            {/* Perpetual Orders Table */}
-            <OrdersTable
-              title="Perpetual Orders"
-              orders={perpOrders}
-              loading={loading}
-            />
           </>
         )}
 
@@ -112,15 +160,15 @@ export default function TradeHistory() {
         {!hasSearched && (
           <div className="bg-zinc-900 rounded-none p-8 text-left">
             <h3 className="text-xl font-semibold text-white mb-4">
-              How Deriverse Lookup Works (Devnet)
+              How Transaction Lookup Works
             </h3>
             <div className="text-zinc-400 space-y-2">
-              <p>🧪 This Lookup tool connects to <strong>Deriverse SDK</strong> to fetch the trades done on <a href="http://alpha.deriverse.io/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Deriverse DEX</a></p>
+              <p>🔍 This tool uses <strong>Helius RPC</strong> to fetch transaction history from Solana Devnet</p>
               <p>Steps:</p>
-              <p>1. Paste your Solana wallet address in the field above</p>
-              <p>2. Click "Run" to fetch trading data from Deriverse DEX</p>
-              <p>3. View spot and perpetual orders for that address</p>
-              <p>4. Note: Only devnet trading data will be shown</p>
+              <p>1. Paste any Solana wallet address in the field above</p>
+              <p>2. Click "Run" to fetch the last 50 transactions</p>
+              <p>3. View all transaction types: transfers, swaps, and more</p>
+              <p>4. Click on any signature to view details on Solscan</p>
             </div>
           </div>
         )}
