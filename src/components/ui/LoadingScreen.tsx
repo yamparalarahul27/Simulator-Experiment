@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DeriverseLogo } from './DeriverseLogo';
+import { DeriverseLogo } from '../layout/DeriverseLogo';
 
 export default function LoadingScreen() {
     const [isVisible, setIsVisible] = useState(true);
