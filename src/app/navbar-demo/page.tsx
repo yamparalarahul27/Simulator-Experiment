@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { LivePulseIndicator, LivePulseIndicatorWithLabel } from '@/components/LivePulseIndicator';
-import { HamburgerButton } from '@/components/HamburgerButton';
-import { GlassmorphismNavbar } from '@/components/GlassmorphismNavbar';
-import CardWithCornerShine from '@/components/CardWithCornerShine';
+import { LivePulseIndicator, LivePulseIndicatorWithLabel } from '@/components/ui/LivePulseIndicator';
+import { HamburgerButton } from '@/components/layout/HamburgerButton';
+import { GlassmorphismNavbar } from '@/components/layout/GlassmorphismNavbar';
+import CardWithCornerShine from '@/components/ui/CardWithCornerShine';
 
 export default function NavbarDemo() {
     const [hamburgerOpen, setHamburgerOpen] = useState(false);
