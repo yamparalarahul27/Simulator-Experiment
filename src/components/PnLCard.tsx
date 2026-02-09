@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import CardWithCornerShine from './CardWithCornerShine';
-import { ArrowUpRight, ArrowDownRight, TrendingUp } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, TrendingUp, ChevronDown } from 'lucide-react';
+import { LineChart } from '@derpdaderp/chartkit';
 
 type FilterType = 'All' | 'Yesterday' | 'Today' | 'This Week' | 'This Month' | 'This Year';
 
@@ -23,6 +24,23 @@ export default function PnLCard() {
 
     const data = getPlaceholderData(activeFilter);
     const isPositive = data.pnl.startsWith('+');
+    const [isChartVisible, setIsChartVisible] = useState(false);
+
+    // Generate dummy data based on filter
+    const chartData = useMemo(() => {
+        const points = 20;
+        return Array.from({ length: points }, (_, i) => {
+            // Create a wave pattern that goes positive and negative
+            const value = Math.sin(i * 0.5) * 500 + (Math.random() * 200 - 100);
+            return {
+                time: i,
+                // Split value into positive and negative fields for color separation
+                positive: value >= 0 ? value : null,
+                negative: value < 0 ? value : null,
+                value: value // Keep raw value if needed
+            };
+        });
+    }, [activeFilter]);
 
     return (
         <div className="w-full">
@@ -40,14 +58,14 @@ export default function PnLCard() {
                             </div>
                         </div>
 
-                        {/* Filters Scrollable Row */}
-                        <div className="flex bg-black/40 border border-white/5 rounded-none p-1 overflow-x-auto scrollbar-hide">
+                        {/* Filters Row - Grid Layout to fill space */}
+                        <div className="grid grid-cols-3 sm:grid-cols-6 gap-1 bg-black/40 border border-white/5 rounded-none p-1">
                             {filters.map((filter) => (
                                 <button
                                     key={filter}
                                     onClick={() => setActiveFilter(filter)}
                                     className={`
-                                        px-4 py-1.5 text-sm font-medium rounded-none whitespace-nowrap transition-all duration-300
+                                        w-full px-2 py-1.5 text-xs sm:text-sm font-medium rounded-none whitespace-nowrap transition-all duration-300
                                         ${activeFilter === filter
                                             ? 'bg-purple-600/20 text-purple-300 shadow-[0_0_10px_rgba(147,51,234,0.1)] border border-purple-500/30'
                                             : 'text-white/40 hover:text-white hover:bg-white/5 border border-transparent'}
@@ -80,11 +98,46 @@ export default function PnLCard() {
                         </div>
                     </div>
 
-                    {/* Placeholder Chart / Graphic Line */}
-                    <div className="relative h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent">
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 bg-black/80 text-xs text-white/20 uppercase tracking-widest font-mono">
-                            Data Visualization Pending
-                        </div>
+                    {/* Chart Accordion Section */}
+                    <div className="w-full border-t border-white/10 pt-4">
+                        <button
+                            onClick={() => setIsChartVisible(!isChartVisible)}
+                            className="w-full flex items-center justify-between group cursor-pointer"
+                        >
+                            <span className="text-white font-mono text-sm tracking-widest uppercase">
+                                Visualise PnL
+                            </span>
+                            <div className={`
+                                p-1.5 rounded-full bg-black border border-white/10 
+                                group-hover:border-white/30 transition-all duration-300
+                                ${isChartVisible ? 'rotate-180' : ''}
+                            `}>
+                                <ChevronDown className="w-4 h-4 text-white" />
+                            </div>
+                        </button>
+
+                        {/* Chart Container */}
+                        {isChartVisible && (
+                            <div className="mt-6 h-[400px] w-full animate-in fade-in slide-in-from-top-4 duration-300">
+                                {/* 
+                                    TODO: Replace with CSV data parsing logic once file is provided.
+                                    Currently using dummy data to demonstrate green/orange split.
+                                */}
+                                <LineChart
+                                    data={chartData}
+                                    series={[
+                                        { key: 'positive', label: 'Profit', color: '#4ade80', area: true, areaOpacity: 0.1 },
+                                        { key: 'negative', label: 'Loss', color: '#fb923c', area: true, areaOpacity: 0.1 }
+                                    ]}
+                                    theme="midnight"
+                                    responsive
+                                    height={400}
+                                    padding={20}
+                                    curve="monotone"
+                                    grid={{ horizontal: true, vertical: false, opacity: 0.1 }}
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
             </CardWithCornerShine>

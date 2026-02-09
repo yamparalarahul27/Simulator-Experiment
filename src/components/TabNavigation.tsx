@@ -15,10 +15,16 @@ export default function TabNavigation() {
     // Clean navigation items configuration
     const navItems: NavItem[] = [
         {
-            title: 'Dashboard',
+            title: 'Home',
             href: '#dashboard',
             category: 'main',
             onClick: () => setActiveTab('dashboard')
+        },
+        {
+            title: 'Journal',
+            href: '#journal',
+            category: 'main',
+            onClick: () => setActiveTab('journal')
         },
         {
             title: 'Lookup',
@@ -33,13 +39,7 @@ export default function TabNavigation() {
             onClick: () => setActiveTab('tradedata')
         },
         {
-            title: 'Journal',
-            href: '#journal',
-            category: 'main',
-            onClick: () => setActiveTab('journal')
-        },
-        {
-            title: 'App Docs',
+            title: 'About & Future',
             href: '#appdocs',
             category: 'dropdown',
             onClick: () => setActiveTab('appdocs')
@@ -63,7 +63,7 @@ export default function TabNavigation() {
             case 'appdocs':
                 return (
                     <div className="flex items-center justify-center min-h-[60vh]">
-                        <h1 className="text-4xl font-bold text-foreground">App Docs</h1>
+                        <h1 className="text-4xl font-bold text-foreground">About & Future</h1>
                     </div>
                 );
             default:

@@ -7,6 +7,7 @@ import {
 import "./globals.css";
 import { Agentation } from "agentation";
 import LoadingScreen from "@/components/LoadingScreen";
+import MobileRestrictedView from "@/components/MobileRestrictedView";
 
 export const metadata: Metadata = {
   title: "Deriverse",
@@ -28,7 +29,13 @@ export default function RootLayout({
           antialiased
         `}
       >
-        {children}
+        <div className="hidden md:block">
+          {children}
+        </div>
+        <div className="md:hidden">
+          <MobileRestrictedView />
+        </div>
+
         <LoadingScreen />
         {process.env.NODE_ENV === "development" && <Agentation />}
       </body>
