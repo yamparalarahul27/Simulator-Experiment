@@ -6,7 +6,7 @@ import Dashboard from './Dashboard';
 import TableUI_Demo from './TableUI_Demo';
 import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
 
-type TabType = 'dashboard' | 'lookup' | 'tradedata' | 'assistant' | 'appdocs';
+type TabType = 'dashboard' | 'lookup' | 'tradedata' | 'journal' | 'appdocs';
 
 export default function TabNavigation() {
     const [activeTab, setActiveTab] = useState<TabType>('dashboard');
@@ -33,10 +33,10 @@ export default function TabNavigation() {
             onClick: () => setActiveTab('tradedata')
         },
         {
-            title: 'Assistant',
-            href: '#assistant',
+            title: 'Journal',
+            href: '#journal',
             category: 'main',
-            onClick: () => setActiveTab('assistant')
+            onClick: () => setActiveTab('journal')
         },
         {
             title: 'App Docs',
@@ -54,10 +54,10 @@ export default function TabNavigation() {
                 return <TradeHistory />;
             case 'tradedata':
                 return <TableUI_Demo />;
-            case 'assistant':
+            case 'journal':
                 return (
                     <div className="flex items-center justify-center min-h-[60vh]">
-                        <h1 className="text-4xl font-bold text-foreground">Assistant</h1>
+                        <h1 className="text-4xl font-bold text-foreground">Journal</h1>
                     </div>
                 );
             case 'appdocs':
