@@ -6,8 +6,8 @@ import {
 } from 'geist/font/pixel';
 import "./globals.css";
 import { Agentation } from "agentation";
-import LoadingScreen from "@/components/LoadingScreen";
-import MobileRestrictedView from "@/components/MobileRestrictedView";
+import LoadingScreen from "@/components/ui/LoadingScreen";
+import MobileRestrictedView from "@/components/layout/MobileRestrictedView";
 
 export const metadata: Metadata = {
   title: "Deriverse",
