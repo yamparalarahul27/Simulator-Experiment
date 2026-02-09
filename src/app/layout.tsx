@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
+import {
+  GeistPixelSquare,
+} from 'geist/font/pixel';
 import "./globals.css";
 import { Agentation } from "agentation";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -18,7 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}
+        className={`
+          ${GeistSans.variable} 
+          ${GeistMono.variable} 
+          ${GeistPixelSquare.variable} 
+          antialiased
+        `}
       >
         {children}
         <LoadingScreen />

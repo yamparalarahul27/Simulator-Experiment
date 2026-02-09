@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import TradeHistory from './TradeHistory';
+import Dashboard from './Dashboard';
 import TableUI_Demo from './TableUI_Demo';
 import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
 
@@ -48,11 +49,7 @@ export default function TabNavigation() {
     const renderTabContent = () => {
         switch (activeTab) {
             case 'dashboard':
-                return (
-                    <div className="flex items-center justify-center min-h-[60vh]">
-                        <h1 className="text-4xl font-bold text-foreground">Dashboard</h1>
-                    </div>
-                );
+                return <Dashboard />;
             case 'lookup':
                 return <TradeHistory />;
             case 'tradedata':
