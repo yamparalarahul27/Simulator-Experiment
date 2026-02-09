@@ -1,6 +1,6 @@
 import React from 'react';
 import { Smartphone, MonitorSmartphone } from 'lucide-react';
-import { DeriverseLogo } from '@/components/DeriverseLogo';
+import { DeriverseLogo } from './DeriverseLogo';
 
 export default function MobileRestrictedView() {
     return (
