@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, ReactNode } from 'react';
-import { LivePulseIndicator } from './LivePulseIndicator';
+import { LivePulseIndicator } from '../ui/LivePulseIndicator';
 import { HamburgerButton } from './HamburgerButton';
 
 /**

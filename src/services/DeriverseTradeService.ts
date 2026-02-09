@@ -1,26 +1,24 @@
 /**
+ * Deriverse Trade Service
+ * 
  * Fetch and map Deriverse on-chain trade history to dashboard Trade[].
- * Uses wallet tx history + @deriverse/kit Engine.logsDecode.
+ * Uses wallet transaction history + @deriverse/kit Engine.logsDecode to parse
+ * spot and perpetual fills with PnL, fees, and prices.
  */
 
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Engine } from '@deriverse/kit';
 import type { LogMessage } from '@deriverse/kit';
 import type { Trade } from '../lib/types';
-
-const PROGRAM_ID = process.env.NEXT_PUBLIC_PROGRAM_ID ?? 'Drvrseg8AQLP8B96DBGmHRjFGviFNYTkHueY9g3k27Gu';
-const VERSION = parseInt(process.env.NEXT_PUBLIC_DERIVERSE_VERSION ?? '12', 10);
-const RPC_HTTP = process.env.NEXT_PUBLIC_RPC_HTTP ?? 'https://devnet.helius-rpc.com/?api-key=REMOVED';
-
-/** Devnet instrument id -> display symbol (e.g. SOL-USDC). Extend as more instruments are known. */
-const INSTR_ID_TO_SYMBOL: Record<number, string> = {
-    0: 'SOL-USDC',
-};
-
-/** Deriverse chain decimals: price uses 1e9, asset (e.g. SOL) 1e9, quote (e.g. USDC) 1e6 */
-const PRICE_DEC = 1e9;
-const ASSET_DEC = 1e9;
-const QUOTE_DEC = 1e6;
+import {
+    PROGRAM_ID,
+    DERIVERSE_VERSION,
+    RPC_HTTP,
+    PRICE_DECIMALS,
+    ASSET_DECIMALS,
+    QUOTE_DECIMALS,
+    INSTRUMENT_ID_TO_SYMBOL
+} from '../lib/constants';
 
 let enginePromise: Promise<Engine> | null = null;
 
@@ -31,7 +29,7 @@ async function getEngine(): Promise<Engine> {
         const rpc = createSolanaRpc(RPC_HTTP);
         return new Engine(rpc, {
             programId: address(PROGRAM_ID),
-            version: VERSION,
+            version: DERIVERSE_VERSION,
             uiNumbers: false,
         });
     })();
@@ -64,11 +62,11 @@ function parseTradesFromLogs(
         if ('orderId' in msg && 'qty' in msg && 'price' in msg && 'crncy' in msg && 'rebates' in msg && 'side' in msg) {
             const spot = msg as { orderId: number; side: number; qty: number; crncy: number; price: number; rebates: number };
             const instrId = orderIdToInstrId.get(spot.orderId) ?? 0;
-            const symbol = INSTR_ID_TO_SYMBOL[instrId] ?? `Instr-${instrId}`;
-            const qty = Number(spot.qty) / ASSET_DEC;
-            const price = Number(spot.price) / PRICE_DEC;
+            const symbol = INSTRUMENT_ID_TO_SYMBOL[instrId] ?? `Instr-${instrId}`;
+            const qty = Number(spot.qty) / ASSET_DECIMALS;
+            const price = Number(spot.price) / PRICE_DECIMALS;
             const notional = qty * price;
-            const fee = (-Number(spot.rebates) || 0) / QUOTE_DEC;
+            const fee = (-Number(spot.rebates) || 0) / QUOTE_DECIMALS;
             trades.push({
                 id: `${txSignature}-${spot.orderId}-spot`,
                 symbol,
@@ -91,12 +89,12 @@ function parseTradesFromLogs(
         if ('orderId' in msg && 'perps' in msg && 'price' in msg && 'crncy' in msg && 'rebates' in msg && 'side' in msg) {
             const perp = msg as { orderId: number; side: number; perps: number; crncy: number; price: number; rebates: number };
             const instrId = orderIdToInstrId.get(perp.orderId) ?? 0;
-            const symbol = INSTR_ID_TO_SYMBOL[instrId] ?? `Instr-${instrId}`;
-            const qty = Math.abs(Number(perp.perps)) / ASSET_DEC;
-            const price = Number(perp.price) / PRICE_DEC;
+            const symbol = INSTRUMENT_ID_TO_SYMBOL[instrId] ?? `Instr-${instrId}`;
+            const qty = Math.abs(Number(perp.perps)) / ASSET_DECIMALS;
+            const price = Number(perp.price) / PRICE_DECIMALS;
             const notional = qty * price;
-            const pnl = (Number(perp.crncy) || 0) / QUOTE_DEC;
-            const fee = (-Number(perp.rebates) || 0) / QUOTE_DEC;
+            const pnl = (Number(perp.crncy) || 0) / QUOTE_DECIMALS;
+            const fee = (-Number(perp.rebates) || 0) / QUOTE_DECIMALS;
             trades.push({
                 id: `${txSignature}-${perp.orderId}-perp`,
                 symbol,

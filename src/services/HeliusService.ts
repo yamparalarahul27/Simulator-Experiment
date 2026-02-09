@@ -1,6 +1,13 @@
-import { Connection, PublicKey, ParsedTransactionWithMeta } from '@solana/web3.js';
+/**
+ * Helius RPC Service
+ * 
+ * Fetches and processes Solana transaction history using Helius RPC endpoint.
+ * Provides transaction type detection and formatting utilities.
+ */
 
-const HELIUS_RPC_URL = 'https://devnet.helius-rpc.com/?api-key=REMOVED';
+import { PublicKey } from '@solana/web3.js';
+import { getRpcConnection, formatTimestamp } from '../lib/utils';
+import { PROGRAM_ID } from '../lib/constants';
 
 export interface TransactionLog {
     signature: string;
@@ -15,29 +22,29 @@ export interface TransactionHistoryResponse {
 }
 
 export class HeliusService {
-    private connection: Connection;
-
-    constructor() {
-        this.connection = new Connection(HELIUS_RPC_URL, 'confirmed');
-    }
-
+    /**
+     * Fetch all transactions for a given wallet address
+     * 
+     * @param address - Solana wallet address
+     * @returns Transaction history with details
+     */
     async fetchAllTransactions(address: string): Promise<TransactionHistoryResponse> {
-        console.log('Fetching ALL transactions for address via Helius:', address);
+        console.log('[Helius] Fetching transactions for address:', address);
+        const connection = getRpcConnection();
 
         try {
             const pubKey = new PublicKey(address);
 
             // Fetch last 50 transaction signatures
-            const signatures = await this.connection.getSignaturesForAddress(pubKey, { limit: 50 });
-
-            console.log(`Found ${signatures.length} transaction signatures`);
+            const signatures = await connection.getSignaturesForAddress(pubKey, { limit: 50 });
+            console.log(`[Helius] Found ${signatures.length} transaction signatures`);
 
             const transactions: TransactionLog[] = [];
 
             // Fetch details for each transaction
             for (const sig of signatures) {
                 try {
-                    const tx = await this.connection.getTransaction(sig.signature, {
+                    const tx = await connection.getTransaction(sig.signature, {
                         maxSupportedTransactionVersion: 0,
                         commitment: 'confirmed'
                     });
@@ -54,19 +61,24 @@ export class HeliusService {
                         transactions.push(txLog);
                     }
                 } catch (error) {
-                    console.warn(`Failed to fetch transaction ${sig.signature}:`, error);
+                    console.warn(`[Helius] Failed to fetch transaction ${sig.signature}:`, error);
                 }
             }
 
-            console.log(`Successfully fetched ${transactions.length} transaction details`);
-
+            console.log(`[Helius] Successfully fetched ${transactions.length} transaction details`);
             return { transactions };
         } catch (error) {
-            console.error('Error fetching transactions from Helius:', error);
+            console.error('[Helius] Error fetching transactions:', error);
             throw new Error('Failed to fetch transactions. Please check the address and try again.');
         }
     }
 
+    /**
+     * Detect transaction type from log messages
+     * 
+     * @param tx - Parsed transaction object
+     * @returns Human-readable transaction type
+     */
     private detectTransactionType(tx: any): string {
         if (!tx.meta || !tx.meta.logMessages) return 'Unknown';
 
@@ -76,13 +88,18 @@ export class HeliusService {
         if (logs.includes('Program 11111111111111111111111111111111')) return 'System Transfer';
         if (logs.includes('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA')) return 'Token Transfer';
         if (logs.includes('JUP')) return 'Jupiter Swap';
-        if (logs.includes('Drvrseg8AQLP8B96DBGmHRjFGviFNYTkHueY9g3k27Gu')) return 'Deriverse';
+        if (logs.includes(PROGRAM_ID)) return 'Deriverse';
 
         return 'Transaction';
     }
 
-    // Helper method to format time
+    /**
+     * Format Unix timestamp to localized string
+     * 
+     * @param timestamp - Unix timestamp in seconds
+     * @returns Formatted date string
+     */
     static formatTime(timestamp: number): string {
-        return new Date(timestamp * 1000).toLocaleString();
+        return formatTimestamp(timestamp);
     }
 }

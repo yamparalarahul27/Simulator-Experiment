@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import TradeHistory from './TradeHistory';
-import Home from './Home';
+import TradeHistory from '../features/TradeHistory';
+import Home from '../features/Home';
 import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
 
 type TabType = 'dashboard' | 'lookup' | 'journal' | 'appdocs';

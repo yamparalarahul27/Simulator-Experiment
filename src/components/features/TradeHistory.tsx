@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Connection } from '@solana/web3.js';
-import CardWithCornerShine from './CardWithCornerShine';
-import AddressInput from './AddressInput';
-import { HeliusService, TransactionLog } from './HeliusService';
+import CardWithCornerShine from '../ui/CardWithCornerShine';
+import AddressInput from '../ui/AddressInput';
+import { HeliusService, TransactionLog } from '../services/HeliusService';
 import { DeriverseTradeService } from '../services/DeriverseTradeService';
 import { Trade } from '../lib/types';
+import { getRpcConnection } from '../lib/utils';
 import DeriverseTradesTable from './DeriverseTradesTable';
 
 type TabType = 'deriverse' | 'all';
@@ -29,8 +29,8 @@ export default function TradeHistory() {
     setTransactions([]);
     setDeriverseTrades([]);
 
-    // Fetch both in parallel
-    const connection = new Connection('https://devnet.helius-rpc.com/?api-key=REMOVED', 'confirmed');
+    // Fetch both in parallel using shared RPC connection
+    const connection = getRpcConnection();
 
     try {
       // Fetch Helius transactions

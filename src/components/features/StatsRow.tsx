@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import CardWithCornerShine from './CardWithCornerShine';
+import CardWithCornerShine from '../ui/CardWithCornerShine';
 import Image from 'next/image';
 
 export default function StatsRow() {

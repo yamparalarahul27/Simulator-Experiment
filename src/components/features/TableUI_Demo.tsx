@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TableUI } from './TableUI';
+import { TableUI } from '../ui/TableUI';
 
 export default function TableUI_Demo() {
     const [data, setData] = useState<any[]>([]);
@@ -27,7 +27,7 @@ export default function TableUI_Demo() {
         <div className="p-8 space-y-6">
             <div className="space-y-2">
                 <h2 className="text-2xl font-bold text-white">Your Trade Data</h2>
-                <p className="text-zinc-400">Last updated 20 days back. (Showing recent 500 trades)</p>
+                <p className="text-zinc-400">Showing recent 500 trades</p>
             </div>
 
             {loading ? (

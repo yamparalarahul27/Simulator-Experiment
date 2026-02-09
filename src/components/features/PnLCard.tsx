@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import CardWithCornerShine from './CardWithCornerShine';
+import CardWithCornerShine from '../ui/CardWithCornerShine';
 import { ArrowUpRight, ArrowDownRight, TrendingUp, ChevronDown } from 'lucide-react';
 import { PnLChart } from './PnLChart';
 
