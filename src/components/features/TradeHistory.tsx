@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import CardWithCornerShine from '../ui/CardWithCornerShine';
 import AddressInput from '../ui/AddressInput';
-import { HeliusService, TransactionLog } from '../services/HeliusService';
-import { DeriverseTradeService } from '../services/DeriverseTradeService';
-import { Trade } from '../lib/types';
-import { getRpcConnection } from '../lib/utils';
+import { HeliusService, TransactionLog } from '../../services/HeliusService';
+import { DeriverseTradeService } from '../../services/DeriverseTradeService';
+import { Trade } from '../../lib/types';
+import { getRpcConnection } from '../../lib/utils';
 import DeriverseTradesTable from './DeriverseTradesTable';
 
 type TabType = 'deriverse' | 'all';

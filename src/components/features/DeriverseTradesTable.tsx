@@ -1,4 +1,4 @@
-import { Trade } from '../lib/types';
+import { Trade } from '../../lib/types';
 
 interface DeriverseTradesTableProps {
     trades: Trade[];
