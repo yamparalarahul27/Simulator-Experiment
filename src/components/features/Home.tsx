@@ -9,6 +9,8 @@ import InfoTooltip from '../ui/InfoTooltip';
 import LargestGainCard from './LargestGainCard';
 import LargestLossCard from './LargestLossCard';
 import TradeStreakCard from './TradeStreakCard';
+import DrawdownCard from './DrawdownCard';
+import OrderTypeRatioCard from './OrderTypeRatioCard';
 import { MOCK_TRADES, calculateFeeBreakdown } from '../../lib/mockData';
 import { calculateTradingVolume, formatCompactNumber, calculateLongShortRatio, filterTradesByDate, FilterType } from '../../lib/tradeFilters';
 import { addDays, startOfDay, endOfDay } from 'date-fns';
@@ -194,10 +196,28 @@ export default function Home() {
                         <LargestLossCard trades={filteredTrades} />
                     </div>
                     <div className="lg:col-span-1">
-                        <CardWithCornerShine padding="lg" minHeight="min-h-[200px]">
+                        <DrawdownCard trades={filteredTrades} />
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-1">
+                        <OrderTypeRatioCard trades={filteredTrades} />
+                    </div>
+                    <div className="lg:col-span-1">
+                        <CardWithCornerShine padding="lg" minHeight="min-h-[300px]">
                             <div className="flex flex-col h-full justify-center items-center relative z-10 opacity-30">
                                 <span className="text-white/40 text-sm font-mono uppercase tracking-wider">
-                                    Placeholder 3
+                                    Placeholder
+                                </span>
+                            </div>
+                        </CardWithCornerShine>
+                    </div>
+                    <div className="lg:col-span-1">
+                        <CardWithCornerShine padding="lg" minHeight="min-h-[300px]">
+                            <div className="flex flex-col h-full justify-center items-center relative z-10 opacity-30">
+                                <span className="text-white/40 text-sm font-mono uppercase tracking-wider">
+                                    Placeholder
                                 </span>
                             </div>
                         </CardWithCornerShine>

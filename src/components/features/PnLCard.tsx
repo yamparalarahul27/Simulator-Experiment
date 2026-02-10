@@ -21,6 +21,23 @@ interface PnLCardProps {
 export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) {
     const [isChartVisible, setIsChartVisible] = useState(false);
 
+    const comparisonLabel = useMemo(() => {
+        switch (activeFilter) {
+            case 'Today':
+                return 'vs Yesterday';
+            case 'Yesterday':
+                return 'vs previous day';
+            case 'This Week':
+                return 'vs previous week';
+            case 'This Month':
+                return 'vs previous month';
+            case 'This Year':
+                return 'vs previous year';
+            default:
+                return 'vs previous period';
+        }
+    }, [activeFilter]);
+
     // Calculate real PnL data based on filter
     const pnlData = useMemo(() => {
         const currentTrades = trades ?? filterTradesByDate(MOCK_TRADES, activeFilter);
@@ -80,16 +97,18 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                             </div>
                         </div>
 
-                        <div className={`
-                            flex items-center gap-2 px-4 py-2 rounded-none border backdrop-blur-sm
-                            ${pnlData.isPositive
-                                ? 'bg-green-500/10 border-green-500/20 text-green-400'
-                                : 'bg-red-500/10 border-red-500/20 text-red-400'}
-                        `}>
-                            {pnlData.isPositive ? <ArrowUpRight size={20} /> : <ArrowDownRight size={20} />}
-                            <span className="font-mono font-bold text-lg">{pnlData.percent}</span>
-                            <span className="text-white/40 text-sm ml-1">vs previous period</span>
-                        </div>
+                        {activeFilter !== 'All' && (
+                            <div className={`
+                                flex items-center gap-2 px-4 py-2 rounded-none border backdrop-blur-sm
+                                ${pnlData.isPositive
+                                    ? 'bg-green-500/10 border-green-500/20 text-green-400'
+                                    : 'bg-red-500/10 border-red-500/20 text-red-400'}
+                            `}>
+                                {pnlData.isPositive ? <ArrowUpRight size={20} /> : <ArrowDownRight size={20} />}
+                                <span className="font-mono font-bold text-lg">{pnlData.percent}</span>
+                                <span className="text-white/40 text-sm ml-1">{comparisonLabel}</span>
+                            </div>
+                        )}
                     </div>
 
                     {/* Chart Accordion Section */}
