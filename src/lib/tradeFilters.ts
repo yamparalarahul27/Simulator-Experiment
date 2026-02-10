@@ -1,0 +1,152 @@
+/**
+ * Trade filtering and analytics helper functions
+ */
+
+import { Trade } from './types';
+import {
+    isToday,
+    isYesterday,
+    isThisWeek,
+    isThisMonth,
+    isThisYear,
+    subDays,
+    isSameDay,
+    startOfDay,
+    endOfDay
+} from 'date-fns';
+
+export type FilterType = 'All' | 'Yesterday' | 'Today' | 'This Week' | 'This Month' | 'This Year';
+
+/**
+ * Filter trades by date range
+ */
+export function filterTradesByDate(trades: Trade[], filter: FilterType): Trade[] {
+    switch (filter) {
+        case 'Today':
+            return trades.filter(t => isToday(t.closedAt));
+
+        case 'Yesterday':
+            return trades.filter(t => isYesterday(t.closedAt));
+
+        case 'This Week':
+            return trades.filter(t => isThisWeek(t.closedAt, { weekStartsOn: 1 }));
+
+        case 'This Month':
+            return trades.filter(t => isThisMonth(t.closedAt));
+
+        case 'This Year':
+            return trades.filter(t => isThisYear(t.closedAt));
+
+        case 'All':
+        default:
+            return trades;
+    }
+}
+
+/**
+ * Get previous period trades for comparison
+ */
+export function getPreviousPeriodTrades(trades: Trade[], filter: FilterType): Trade[] {
+    const now = new Date();
+
+    switch (filter) {
+        case 'Today': {
+            const yesterday = subDays(now, 1);
+            return trades.filter(t => isSameDay(t.closedAt, yesterday));
+        }
+
+        case 'Yesterday': {
+            const twoDaysAgo = subDays(now, 2);
+            return trades.filter(t => isSameDay(t.closedAt, twoDaysAgo));
+        }
+
+        case 'This Week': {
+            // Previous 7 days before this week
+            const weekStart = subDays(now, 14);
+            const weekEnd = subDays(now, 7);
+            return trades.filter(t =>
+                t.closedAt >= startOfDay(weekStart) &&
+                t.closedAt <= endOfDay(weekEnd)
+            );
+        }
+
+        case 'This Month': {
+            // Previous 30 days before this month
+            const monthStart = subDays(now, 60);
+            const monthEnd = subDays(now, 30);
+            return trades.filter(t =>
+                t.closedAt >= startOfDay(monthStart) &&
+                t.closedAt <= endOfDay(monthEnd)
+            );
+        }
+
+        case 'This Year': {
+            // Previous 365 days before this year
+            const yearStart = subDays(now, 730);
+            const yearEnd = subDays(now, 365);
+            return trades.filter(t =>
+                t.closedAt >= startOfDay(yearStart) &&
+                t.closedAt <= endOfDay(yearEnd)
+            );
+        }
+
+        default:
+            return [];
+    }
+}
+
+/**
+ * Calculate win rate stats
+ */
+export function calculateWinRate(trades: Trade[]) {
+    if (trades.length === 0) {
+        return { winRate: '0', wins: 0, losses: 0 };
+    }
+
+    const wins = trades.filter(t => t.isWin).length;
+    const losses = trades.length - wins;
+    const winRate = ((wins / trades.length) * 100).toFixed(1);
+
+    return { winRate, wins, losses };
+}
+
+/**
+ * Calculate average winning trade PnL
+ */
+export function calculateAvgWin(trades: Trade[]): number {
+    const winningTrades = trades.filter(t => t.isWin);
+
+    if (winningTrades.length === 0) return 0;
+
+    const totalWinPnL = winningTrades.reduce((sum, t) => sum + t.pnl, 0);
+    return totalWinPnL / winningTrades.length;
+}
+
+/**
+ * Calculate trade streak for last 7 days
+ */
+export function calculateTradeStreak(trades: Trade[]): boolean[] {
+    const last7Days = Array.from({ length: 7 }, (_, i) => subDays(new Date(), 6 - i));
+
+    return last7Days.map(day => {
+        return trades.some(t => isSameDay(t.closedAt, day));
+    });
+}
+
+/**
+ * Calculate total PnL
+ */
+export function calculateTotalPnL(trades: Trade[]): number {
+    return trades.reduce((sum, t) => sum + t.pnl, 0);
+}
+
+/**
+ * Calculate percentage change
+ */
+export function calculatePercentChange(current: number, previous: number): string {
+    if (previous === 0) return current >= 0 ? '+100.0%' : '-100.0%';
+
+    const change = ((current - previous) / Math.abs(previous)) * 100;
+    const sign = change >= 0 ? '+' : '';
+    return `${sign}${change.toFixed(1)}%`;
+}

@@ -11,40 +11,7 @@ import {
     getAnnotation,
     downloadAnnotations
 } from '../../lib/annotationStorage';
-
-// Mock data generator
-function generateMockTrades(count: number): Trade[] {
-    const symbols = ['SOL-USDC', 'BTC-USDC', 'ETH-USDC', 'BONK-USDC'];
-    const sides: Array<'long' | 'short' | 'buy' | 'sell'> = ['long', 'short', 'buy', 'sell'];
-    const types: Array<'limit' | 'market'> = ['limit', 'market'];
-
-    return Array.from({ length: count }, (_, i) => {
-        const pnl = (Math.random() - 0.4) * 500;
-        const price = Math.random() * 100 + 10;
-        const quantity = Math.random() * 10;
-        const notional = price * quantity;
-        const closedAt = new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000);
-
-        return {
-            id: `trade-${i + 1}`,
-            symbol: symbols[Math.floor(Math.random() * symbols.length)],
-            quoteCurrency: 'USDC',
-            side: sides[Math.floor(Math.random() * sides.length)],
-            orderType: types[Math.floor(Math.random() * types.length)],
-            quantity,
-            price,
-            notional,
-            pnl,
-            fee: Math.random() * 5,
-            feeCurrency: 'USDC',
-            openedAt: new Date(closedAt.getTime() - Math.random() * 60 * 60 * 1000),
-            closedAt,
-            durationSeconds: Math.floor(Math.random() * 3600),
-            isWin: pnl >= 0,
-            txSignature: `sig-${i + 1}`,
-        };
-    });
-}
+import { MOCK_TRADES } from '../../lib/mockData';
 
 const ITEMS_PER_PAGE = 25;
 
@@ -66,7 +33,7 @@ export default function Journal() {
         // Load mock data for now
         // TODO: Replace with actual data based on dataSource toggle
         if (dataSource === 'mock') {
-            setTrades(generateMockTrades(50));
+            setTrades(MOCK_TRADES);
         }
     }, [dataSource]);
 

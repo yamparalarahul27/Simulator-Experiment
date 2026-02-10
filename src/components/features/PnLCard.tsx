@@ -2,44 +2,48 @@ import React, { useState, useMemo } from 'react';
 import CardWithCornerShine from '../ui/CardWithCornerShine';
 import { ArrowUpRight, ArrowDownRight, TrendingUp, ChevronDown } from 'lucide-react';
 import { PnLChart } from './PnLChart';
-
-type FilterType = 'All' | 'Yesterday' | 'Today' | 'This Week' | 'This Month' | 'This Year';
+import { MOCK_TRADES, calculateDailyPnL } from '../../lib/mockData';
+import {
+    filterTradesByDate,
+    getPreviousPeriodTrades,
+    calculateTotalPnL,
+    calculatePercentChange,
+    FilterType
+} from '../../lib/tradeFilters';
 
 export default function PnLCard() {
     const [activeFilter, setActiveFilter] = useState<FilterType>('All');
     const filters: FilterType[] = ['All', 'Yesterday', 'Today', 'This Week', 'This Month', 'This Year'];
-
-    // Placeholder data based on filter (to show interactivity)
-    const getPlaceholderData = (filter: FilterType) => {
-        switch (filter) {
-            case 'All': return { pnl: '+$124,592.00', percent: '+18.2%' };
-            case 'Yesterday': return { pnl: '-$1,240.50', percent: '-0.8%' };
-            case 'Today': return { pnl: '+$450.25', percent: '+0.4%' };
-            case 'This Week': return { pnl: '+$5,890.00', percent: '+2.1%' };
-            case 'This Month': return { pnl: '+$22,400.00', percent: '+8.5%' };
-            case 'This Year': return { pnl: '+$85,100.00', percent: '+14.2%' };
-            default: return { pnl: '$0.00', percent: '0%' };
-        }
-    };
-
-    const data = getPlaceholderData(activeFilter);
-    const isPositive = data.pnl.startsWith('+');
     const [isChartVisible, setIsChartVisible] = useState(false);
 
-    // Generate dummy data based on filter
+    // Calculate real PnL data based on filter
+    const pnlData = useMemo(() => {
+        const currentTrades = filterTradesByDate(MOCK_TRADES, activeFilter);
+        const previousTrades = getPreviousPeriodTrades(MOCK_TRADES, activeFilter);
+
+        const currentPnL = calculateTotalPnL(currentTrades);
+        const previousPnL = calculateTotalPnL(previousTrades);
+        const percentChange = calculatePercentChange(currentPnL, previousPnL);
+
+        return {
+            pnl: currentPnL,
+            pnlFormatted: `${currentPnL >= 0 ? '+' : ''}$${Math.abs(currentPnL).toFixed(2)}`,
+            percent: percentChange,
+            isPositive: currentPnL >= 0
+        };
+    }, [activeFilter]);
+
+    // Generate chart data from real trades
     const chartData = useMemo(() => {
-        const points = 20;
-        return Array.from({ length: points }, (_, i) => {
-            // Create a wave pattern that goes positive and negative
-            const value = Math.sin(i * 0.5) * 500 + (Math.random() * 200 - 100);
-            return {
-                time: i,
-                // Split value into positive and negative fields for color separation
-                positive: value >= 0 ? value : null,
-                negative: value < 0 ? value : null,
-                value: value // Keep raw value if needed
-            };
-        });
+        const currentTrades = filterTradesByDate(MOCK_TRADES, activeFilter);
+        const dailyPnL = calculateDailyPnL(currentTrades);
+
+        return dailyPnL.map(day => ({
+            time: day.date,
+            positive: day.pnl >= 0 ? day.pnl : null,
+            negative: day.pnl < 0 ? day.pnl : null,
+            value: day.pnl
+        }));
     }, [activeFilter]);
 
     return (
@@ -81,19 +85,19 @@ export default function PnLCard() {
                     <div className="flex-1 flex flex-col justify-center items-center py-8 space-y-4">
                         <div className="text-center space-y-2">
                             <span className="text-sm text-white/40 uppercase tracking-[0.2em]">Total PnL ({activeFilter})</span>
-                            <div className={`text-num-56 sm:text-num-72 tracking-normal ${isPositive ? 'text-green-400' : 'text-red-400'} drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]`}>
-                                {data.pnl}
+                            <div className={`text-num-56 sm:text-num-72 tracking-normal ${pnlData.isPositive ? 'text-green-400' : 'text-red-400'} drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]`}>
+                                {pnlData.pnlFormatted}
                             </div>
                         </div>
 
                         <div className={`
                             flex items-center gap-2 px-4 py-2 rounded-none border backdrop-blur-sm
-                            ${isPositive
+                            ${pnlData.isPositive
                                 ? 'bg-green-500/10 border-green-500/20 text-green-400'
                                 : 'bg-red-500/10 border-red-500/20 text-red-400'}
                         `}>
-                            {isPositive ? <ArrowUpRight size={20} /> : <ArrowDownRight size={20} />}
-                            <span className="font-mono font-bold text-lg">{data.percent}</span>
+                            {pnlData.isPositive ? <ArrowUpRight size={20} /> : <ArrowDownRight size={20} />}
+                            <span className="font-mono font-bold text-lg">{pnlData.percent}</span>
                             <span className="text-white/40 text-sm ml-1">vs previous period</span>
                         </div>
                     </div>

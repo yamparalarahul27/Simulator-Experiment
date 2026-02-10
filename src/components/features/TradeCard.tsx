@@ -6,6 +6,7 @@ import CardWithCornerShine from '../ui/CardWithCornerShine';
 import { Trade } from '../../lib/types';
 import { formatUsd } from '../../lib/utils';
 import { format } from 'date-fns';
+import { getPairImage, isPerpetual } from '../../lib/tokenImages';
 
 interface TradeCardProps {
     trade: Trade;
@@ -18,16 +19,28 @@ export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardPr
         ? annotation.substring(0, 60) + '...'
         : annotation;
 
+    const pairImage = getPairImage(trade.symbol);
+    const isPerp = isPerpetual(trade.symbol);
+
     return (
         <CardWithCornerShine padding="lg" minHeight="min-h-[200px]">
             <div className="flex flex-col h-full justify-between relative z-10">
                 {/* Header */}
                 <div className="flex items-start justify-between mb-4">
-                    <div>
-                        <h3 className="text-white font-bold text-lg">{trade.symbol}</h3>
-                        <p className="text-white/60 text-sm font-mono">
-                            {trade.side.toUpperCase()} • {trade.orderType}
-                        </p>
+                    <div className="flex items-center gap-3">
+                        {/* Token Pair Image */}
+                        <img
+                            src={pairImage}
+                            alt={trade.symbol}
+                            className="w-12 h-12 rounded-none"
+                        />
+
+                        <div>
+                            <h3 className="text-white font-bold text-lg">{trade.symbol}</h3>
+                            <p className="text-white/60 text-sm font-mono">
+                                {trade.side.toUpperCase()} • {trade.orderType}
+                            </p>
+                        </div>
                     </div>
                     <button
                         onClick={onAnnotate}
@@ -44,7 +57,7 @@ export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardPr
                 {/* PnL */}
                 <div className="mb-4">
                     <div className="flex items-baseline gap-2">
-                        <span className={`text-num-48 ${trade.pnl >= 0 ? 'text-green-400' : 'text-red-400'
+                        <span className={`text-num-40 ${trade.pnl >= 0 ? 'text-green-400' : 'text-red-400'
                             } drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]`}>
                             {trade.pnl >= 0 ? '+' : ''}{formatUsd(trade.pnl)}
                         </span>

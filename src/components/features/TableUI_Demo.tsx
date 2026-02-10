@@ -1,46 +1,128 @@
-import React, { useEffect, useState } from 'react';
-import { TableUI } from '../ui/TableUI';
+import React, { useMemo } from 'react';
+import { TableUI, Column } from '../ui/TableUI';
+import { MOCK_TRADES } from '../../lib/mockData';
+import { getPairImage } from '../../lib/tokenImages';
+import { format } from 'date-fns';
 
 export default function TableUI_Demo() {
-    const [data, setData] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        // Mock Data to prevent fetch errors
-        const mockData = Array.from({ length: 50 }, (_, i) => ({
-            id: `trade-${i + 1}`,
-            date: new Date(Date.now() - Math.random() * 1000000000).toISOString().split('T')[0],
-            pair: ['SOL/USDC', 'BTC/USDC', 'ETH/USDC'][Math.floor(Math.random() * 3)],
-            side: Math.random() > 0.5 ? 'Buy' : 'Sell',
-            price: (Math.random() * 1000 + 10).toFixed(2),
-            amount: (Math.random() * 10 + 0.1).toFixed(4),
-            total: (Math.random() * 10000 + 100).toFixed(2),
-            status: 'Completed'
+    // Map MOCK_TRADES to table format with custom columns
+    const tableData = useMemo(() => {
+        return MOCK_TRADES.slice(0, 50).map(trade => ({
+            id: trade.id,
+            date: format(trade.closedAt, 'MMM d, yyyy'),
+            time: format(trade.closedAt, 'HH:mm'),
+            pair: trade.symbol,
+            pairImage: getPairImage(trade.symbol),
+            side: trade.side.toUpperCase(),
+            type: trade.orderType,
+            price: `$${trade.price.toFixed(2)}`,
+            quantity: trade.quantity.toFixed(4),
+            notional: `$${trade.notional.toFixed(2)}`,
+            pnl: trade.pnl,
+            pnlFormatted: `${trade.pnl >= 0 ? '+' : ''}$${trade.pnl.toFixed(2)}`,
+            fee: `$${trade.fee.toFixed(2)}`,
+            leverage: trade.leverage ? `${trade.leverage}x` : '1x',
+            status: trade.isWin ? 'Win' : 'Loss',
         }));
-
-        setData(mockData);
-        setLoading(false);
     }, []);
+
+    // Define custom columns with renderers
+    const columns: Column[] = [
+        {
+            key: 'date',
+            header: 'Date',
+        },
+        {
+            key: 'time',
+            header: 'Time',
+        },
+        {
+            key: 'pair',
+            header: 'Pair',
+            render: (value, row) => (
+                <div className="flex items-center gap-2">
+                    <img
+                        src={row.pairImage}
+                        alt={value}
+                        className="w-6 h-6 rounded-none"
+                    />
+                    <span className="font-mono">{value}</span>
+                </div>
+            ),
+        },
+        {
+            key: 'side',
+            header: 'Side',
+            render: (value) => (
+                <span className={`px-2 py-1 rounded-sm text-xs font-mono ${value === 'BUY' || value === 'LONG'
+                        ? 'bg-green-500/20 text-green-400'
+                        : 'bg-red-500/20 text-red-400'
+                    }`}>
+                    {value}
+                </span>
+            ),
+        },
+        {
+            key: 'type',
+            header: 'Type',
+        },
+        {
+            key: 'price',
+            header: 'Price',
+        },
+        {
+            key: 'quantity',
+            header: 'Quantity',
+        },
+        {
+            key: 'notional',
+            header: 'Total',
+        },
+        {
+            key: 'pnlFormatted',
+            header: 'PnL',
+            render: (value, row) => (
+                <span className={`font-mono font-bold ${row.pnl >= 0 ? 'text-green-400' : 'text-red-400'
+                    }`}>
+                    {value}
+                </span>
+            ),
+        },
+        {
+            key: 'fee',
+            header: 'Fee',
+        },
+        {
+            key: 'leverage',
+            header: 'Leverage',
+            render: (value) => (
+                <span className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded-sm text-xs font-mono">
+                    {value}
+                </span>
+            ),
+        },
+        {
+            key: 'status',
+            header: 'Status',
+            render: (value) => (
+                <span className={`px-2 py-1 rounded-sm text-xs font-bold ${value === 'Win'
+                        ? 'bg-green-500/20 text-green-400'
+                        : 'bg-red-500/20 text-red-400'
+                    }`}>
+                    {value}
+                </span>
+            ),
+        },
+    ];
 
     return (
         <div className="p-8 space-y-6">
             <div className="space-y-2">
                 <h2 className="text-2xl font-bold text-white">Your Trade Data</h2>
-                <p className="text-zinc-400">Showing recent 500 trades</p>
+                <p className="text-zinc-400">Showing recent 50 trades from mock data</p>
             </div>
 
-            {loading ? (
-                <div className="text-white/60 p-8 text-center rounded-2xl border border-white/10 bg-black/80 backdrop-blur-xl">
-                    Loading trade data...
-                </div>
-            ) : error ? (
-                <div className="text-red-400 p-8 text-center rounded-2xl border border-white/10 bg-black/80 backdrop-blur-xl">
-                    Error loading data: {error}
-                </div>
-            ) : (
-                <TableUI data={data} maxHeight="70vh" />
-            )}
+            <TableUI data={tableData} columns={columns} maxHeight="70vh" />
         </div>
     );
 }

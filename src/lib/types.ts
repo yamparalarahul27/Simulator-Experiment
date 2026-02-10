@@ -2,12 +2,14 @@
  * Shared type definitions for trading data
  */
 
+export type OrderType = 'limit' | 'market' | 'stop_limit' | 'stop_market';
+
 export interface Trade {
     id: string;
     symbol: string;
     quoteCurrency: string;
     side: 'buy' | 'sell' | 'long' | 'short';
-    orderType: 'limit' | 'market';
+    orderType: OrderType;
     quantity: number;
     price: number;
     notional: number;
@@ -19,6 +21,15 @@ export interface Trade {
     durationSeconds: number;
     isWin: boolean;
     txSignature: string;
+
+    // Fee breakdown
+    feeBreakdown?: FeeComposition[];
+    isMaker?: boolean;
+
+    // Leverage fields (for perpetuals)
+    leverage?: number;
+    liquidationPrice?: number;
+    marginUsed?: number;
 }
 
 /**
@@ -36,4 +47,35 @@ export interface FeeComposition {
 export interface AnalyticsSummary {
     feeComposition: FeeComposition[];
     cumulativeFees: number;
+}
+
+/**
+ * Daily PnL data point
+ */
+export interface DailyPnL {
+    date: string;
+    pnl: number;
+    trades: number;
+    wins: number;
+    losses: number;
+}
+
+/**
+ * Session performance bucket (morning, afternoon, evening, night)
+ */
+export interface SessionBucket {
+    session: 'morning' | 'afternoon' | 'evening' | 'night';
+    pnl: number;
+    trades: number;
+    winRate: number;
+}
+
+/**
+ * Time of day performance bucket (hourly)
+ */
+export interface TimeOfDayBucket {
+    hour: number;
+    pnl: number;
+    trades: number;
+    winRate: number;
 }
