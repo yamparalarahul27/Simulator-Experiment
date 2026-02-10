@@ -20,3 +20,20 @@ export interface Trade {
     isWin: boolean;
     txSignature: string;
 }
+
+/**
+ * Fee composition breakdown
+ */
+export interface FeeComposition {
+    type: string;
+    amount: number;
+    percent: number;
+}
+
+/**
+ * Analytics summary with fee data
+ */
+export interface AnalyticsSummary {
+    feeComposition: FeeComposition[];
+    cumulativeFees: number;
+}
