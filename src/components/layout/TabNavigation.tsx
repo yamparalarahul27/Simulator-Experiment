@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import TradeHistory from '../features/TradeHistory';
 import Home from '../features/Home';
+import Journal from '../features/Journal';
 import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
 import Footer from './Footer';
 
@@ -47,11 +48,7 @@ export default function TabNavigation() {
             case 'lookup':
                 return <TradeHistory />;
             case 'journal':
-                return (
-                    <div className="flex items-center justify-center min-h-[60vh]">
-                        <h1 className="text-4xl font-bold text-foreground">Journal</h1>
-                    </div>
-                );
+                return <Journal />;
             case 'appdocs':
                 return (
                     <div className="flex items-center justify-center min-h-[60vh]">
