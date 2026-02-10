@@ -17,7 +17,7 @@ import { ReactNode } from 'react';
  * - Customizable glow effects for premium aesthetics
  * 
  * USAGE CONTEXT:
- * - Network status indicators (devnet/mainnet)
+ * - Network status indicators (Deriverse Devnet/Mainnet/Mock)
  * - Live data feed status
  * - Connection status badges
  * - Real-time activity indicators
@@ -34,7 +34,7 @@ import { ReactNode } from 'react';
  */
 export interface LivePulseIndicatorProps {
     /** Color variant for predefined status types (default: 'info') */
-    variant?: 'devnet' | 'mainnet' | 'success' | 'warning' | 'danger' | 'info';
+    variant?: 'devnet' | 'mainnet' | 'success' | 'mock' | 'danger' | 'info';
     /** Size preset (default: 'md') */
     size?: 'sm' | 'md' | 'lg' | 'xl';
     /** Custom background color class (overrides variant) */
@@ -92,7 +92,7 @@ export const LivePulseIndicator = ({
             color: 'bg-green-400',
             glow: 'shadow-[0_0_8px_rgba(74,222,128,0.6)]',
         },
-        warning: {
+        mock: {
             color: 'bg-yellow-400',
             glow: 'shadow-[0_0_8px_rgba(250,204,21,0.6)]',
         },

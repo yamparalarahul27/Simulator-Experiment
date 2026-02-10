@@ -67,8 +67,8 @@ export default function NavbarDemo() {
                                         <span className="text-copy-14 text-white/70">Success (Green)</span>
                                     </div>
                                     <div className="flex items-center gap-3">
-                                        <LivePulseIndicator variant="warning" />
-                                        <span className="text-copy-14 text-white/70">Warning (Yellow)</span>
+                                        <LivePulseIndicator variant="mock" />
+                                        <span className="text-copy-14 text-white/70">Mock (Yellow)</span>
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <LivePulseIndicator variant="danger" />
@@ -138,7 +138,7 @@ export default function NavbarDemo() {
                                         <span className="text-copy-14 text-white/70">Static indicator</span>
                                     </div>
                                     <div className="flex items-center gap-3">
-                                        <LivePulseIndicator variant="warning" noPing />
+                                        <LivePulseIndicator variant="mock" noPing />
                                         <span className="text-copy-14 text-white/70">No pulse effect</span>
                                     </div>
                                     <div className="flex items-center gap-3">
