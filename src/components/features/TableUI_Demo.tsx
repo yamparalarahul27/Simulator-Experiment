@@ -17,10 +17,10 @@ export default function TableUI_Demo() {
             type: trade.orderType,
             price: `$${trade.price.toFixed(2)}`,
             quantity: trade.quantity.toFixed(4),
-            notional: `$${trade.notional.toFixed(2)}`,
+            notional: `$${trade.notional.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
             pnl: trade.pnl,
-            pnlFormatted: `${trade.pnl >= 0 ? '+' : ''}$${trade.pnl.toFixed(2)}`,
-            fee: `$${trade.fee.toFixed(2)}`,
+            pnlFormatted: `${trade.pnl >= 0 ? '+' : ''}$${Math.abs(trade.pnl).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+            fee: `$${trade.fee.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
             leverage: trade.leverage ? `${trade.leverage}x` : '1x',
             status: trade.isWin ? 'Win' : 'Loss',
         }));
@@ -55,8 +55,8 @@ export default function TableUI_Demo() {
             header: 'Side',
             render: (value) => (
                 <span className={`px-2 py-1 rounded-sm text-xs font-mono ${value === 'BUY' || value === 'LONG'
-                        ? 'bg-green-500/20 text-green-400'
-                        : 'bg-red-500/20 text-red-400'
+                    ? 'bg-green-500/20 text-green-400'
+                    : 'bg-red-500/20 text-red-400'
                     }`}>
                     {value}
                 </span>
@@ -106,8 +106,8 @@ export default function TableUI_Demo() {
             header: 'Status',
             render: (value) => (
                 <span className={`px-2 py-1 rounded-sm text-xs font-bold ${value === 'Win'
-                        ? 'bg-green-500/20 text-green-400'
-                        : 'bg-red-500/20 text-red-400'
+                    ? 'bg-green-500/20 text-green-400'
+                    : 'bg-red-500/20 text-red-400'
                     }`}>
                     {value}
                 </span>

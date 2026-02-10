@@ -27,7 +27,7 @@ export default function PnLCard() {
 
         return {
             pnl: currentPnL,
-            pnlFormatted: `${currentPnL >= 0 ? '+' : ''}$${Math.abs(currentPnL).toFixed(2)}`,
+            pnlFormatted: `${currentPnL >= 0 ? '+' : ''}$${Math.abs(currentPnL).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
             percent: percentChange,
             isPositive: currentPnL >= 0
         };

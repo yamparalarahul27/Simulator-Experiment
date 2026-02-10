@@ -46,7 +46,7 @@ export default function StatsRow() {
                     </div>
                     <div>
                         <span className="text-num-48 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
-                            ${stats.avgWin.toFixed(2)}
+                            ${stats.avgWin.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
                     </div>
                 </div>

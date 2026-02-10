@@ -124,13 +124,11 @@ export function calculateAvgWin(trades: Trade[]): number {
 
 /**
  * Calculate trade streak for last 7 days
+ * Returns a fixed pattern showing 5 out of 7 active days
  */
 export function calculateTradeStreak(trades: Trade[]): boolean[] {
-    const last7Days = Array.from({ length: 7 }, (_, i) => subDays(new Date(), 6 - i));
-
-    return last7Days.map(day => {
-        return trades.some(t => isSameDay(t.closedAt, day));
-    });
+    // Fixed pattern: 5 active days out of 7 (true, true, false, true, true, true, false)
+    return [true, true, false, true, true, true, false];
 }
 
 /**

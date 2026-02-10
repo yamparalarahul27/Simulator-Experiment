@@ -10,7 +10,7 @@ import { format, subDays, startOfDay } from 'date-fns';
 const TRADE_COUNT = 240;
 const HISTORY_DAYS = 180;
 const BASE_FEE_RATE = 0.0005; // 0.05%
-const WIN_RATE = 0.55; // 55% win rate
+const WIN_RATE = 0.60; // 60% win rate
 const SEED = 12345; // Fixed seed for deterministic generation
 
 // Trading pairs with weighted distribution
@@ -93,8 +93,9 @@ function generateTrade(index: number, timestamp: Date, rng: SeededRandom): Trade
 
     // Price and quantity (realistic ranges per token)
     const basePrice = getBasePrice(symbolData.symbol);
-    const price = basePrice * (0.95 + rng.next() * 0.1); // ±5% variance
-    const quantity = 10 + rng.next() * 90; // 10-100 units
+    const rawPrice = basePrice * (0.95 + rng.next() * 0.1); // ±5% variance
+    const price = Math.round(rawPrice * 100) / 100; // Round to 2 decimals (xxx.xx format)
+    const quantity = 1 + rng.next() * 19; // 1-20 units (max 20)
     const notional = price * quantity;
 
     // Fee calculation
@@ -116,12 +117,15 @@ function generateTrade(index: number, timestamp: Date, rng: SeededRandom): Trade
         },
     ];
 
-    // PnL calculation
+    // PnL calculation (capped at $1500 profit for realistic daily trading)
     const isWin = rng.next() < WIN_RATE;
     const pnlPercent = isWin
-        ? 0.01 + rng.next() * 0.15 // 1-16% profit
+        ? 0.30 + rng.next() * 0.50 // 30-80% profit (increased significantly)
         : -(0.01 + rng.next() * 0.12); // 1-13% loss
-    const pnl = notional * pnlPercent;
+    const rawPnl = notional * pnlPercent;
+
+    // Cap profits at $1500 and losses at $600
+    const pnl = isWin ? Math.min(rawPnl, 1500) : Math.max(rawPnl, -600);
 
     // Duration (5 minutes to 24 hours)
     const durationSeconds = Math.floor(300 + rng.next() * 86100);
