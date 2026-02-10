@@ -129,7 +129,7 @@ export default function Journal() {
             {/* Empty State - No Trades */}
             {trades.length === 0 && (
                 <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
-                    <div className="mb-4 rounded-full bg-white/5 p-6">
+                    <div className="mb-4 rounded-none bg-white/5 p-6">
                         <svg
                             className="h-12 w-12 text-white/40"
                             fill="none"
@@ -171,7 +171,7 @@ export default function Journal() {
                             <button
                                 onClick={() => goToPage(currentPage - 1)}
                                 disabled={currentPage === 1}
-                                className="rounded-lg border border-white/10 bg-white/5 p-2 text-white/80 transition-colors hover:bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed"
+                                className="rounded-none border border-white/10 bg-white/5 p-2 text-white/80 transition-colors hover:bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed"
                             >
                                 <ChevronLeft className="h-5 w-5" />
                             </button>
@@ -188,9 +188,9 @@ export default function Journal() {
                                             <button
                                                 key={page}
                                                 onClick={() => goToPage(page)}
-                                                className={`min-w-[40px] rounded-lg px-3 py-2 text-sm font-medium transition-colors ${page === currentPage
-                                                        ? 'bg-purple-500 text-white'
-                                                        : 'border border-white/10 bg-white/5 text-white/80 hover:bg-white/10'
+                                                className={`min-w-[40px] rounded-none px-3 py-2 text-sm font-medium transition-colors ${page === currentPage
+                                                    ? 'bg-purple-500 text-white'
+                                                    : 'border border-white/10 bg-white/5 text-white/80 hover:bg-white/10'
                                                     }`}
                                             >
                                                 {page}
@@ -213,7 +213,7 @@ export default function Journal() {
                             <button
                                 onClick={() => goToPage(currentPage + 1)}
                                 disabled={currentPage === totalPages}
-                                className="rounded-lg border border-white/10 bg-white/5 p-2 text-white/80 transition-colors hover:bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed"
+                                className="rounded-none border border-white/10 bg-white/5 p-2 text-white/80 transition-colors hover:bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed"
                             >
                                 <ChevronRight className="h-5 w-5" />
                             </button>

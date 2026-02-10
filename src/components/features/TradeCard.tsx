@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { NotebookPen } from 'lucide-react';
+import { PencilLine } from 'lucide-react';
 import CardWithCornerShine from '../ui/CardWithCornerShine';
 import { Trade } from '../../lib/types';
 import { formatUsd } from '../../lib/utils';
@@ -31,13 +31,13 @@ export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardPr
                     </div>
                     <button
                         onClick={onAnnotate}
-                        className={`p-2 rounded-lg transition-colors ${annotation
+                        className={`p-2 rounded-none transition-colors group/btn ${annotation
                                 ? 'bg-purple-500/20 text-purple-400 hover:bg-purple-500/30'
                                 : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white/60'
                             }`}
-                        title="Add or edit note"
+                        title={annotation ? "Edit note" : "Annotate your trade, it helps in growth"}
                     >
-                        <NotebookPen className="h-5 w-5" />
+                        <PencilLine className="h-5 w-5" />
                     </button>
                 </div>
 
@@ -50,7 +50,7 @@ export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardPr
                         </span>
                         <span className={`text-sm font-medium ${trade.isWin ? 'text-green-400' : 'text-red-400'
                             }`}>
-                            {trade.isWin ? '✓ Win' : '✗ Loss'}
+                            {trade.isWin ? 'WIN' : 'LOSS'}
                         </span>
                     </div>
                 </div>
@@ -74,14 +74,7 @@ export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardPr
                     </div>
                 )}
 
-                {/* Empty State */}
-                {!annotation && (
-                    <div className="mt-auto pt-3 border-t border-white/10">
-                        <p className="text-xs text-white/30 italic">
-                            Annotate your trade, it helps in growth
-                        </p>
-                    </div>
-                )}
+
             </div>
         </CardWithCornerShine>
     );

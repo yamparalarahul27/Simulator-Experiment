@@ -79,7 +79,7 @@ export default function AnnotationModal({
                                 className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden"
                             >
                                 {/* Glassmorphism Container */}
-                                <div className="relative overflow-hidden rounded-lg border border-white/10 bg-[#0D0D21]/95 backdrop-blur-xl shadow-2xl">
+                                <div className="relative overflow-hidden rounded-none border border-white/10 bg-[#0D0D21]/95 backdrop-blur-xl shadow-2xl">
                                     {/* Corner Accents */}
                                     <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-purple-400/40"></div>
                                     <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-purple-400/40"></div>
@@ -107,8 +107,8 @@ export default function AnnotationModal({
                                             <div>
                                                 <p className="text-xs text-white/40 uppercase tracking-wider mb-1">Side</p>
                                                 <p className={`font-semibold ${trade.side === 'long' || trade.side === 'buy'
-                                                        ? 'text-green-400'
-                                                        : 'text-red-400'
+                                                    ? 'text-green-400'
+                                                    : 'text-red-400'
                                                     }`}>
                                                     {trade.side.toUpperCase()}
                                                 </p>
@@ -158,7 +158,7 @@ export default function AnnotationModal({
                                                 }
                                             }}
                                             placeholder="Add your thoughts, learnings, or observations about this trade..."
-                                            className="w-full h-40 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 focus:border-purple-400/40 focus:outline-none focus:ring-2 focus:ring-purple-400/20 resize-none"
+                                            className="w-full h-40 rounded-none border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 focus:border-purple-400/40 focus:outline-none focus:ring-2 focus:ring-purple-400/20 resize-none"
                                             autoFocus
                                         />
                                         <div className="mt-2 flex items-center justify-between text-xs">
@@ -176,13 +176,13 @@ export default function AnnotationModal({
                                     <div className="relative z-10 flex justify-end gap-3 border-t border-white/10 p-6">
                                         <button
                                             onClick={handleClose}
-                                            className="rounded-lg border border-white/10 bg-white/5 px-6 py-2.5 text-sm font-medium text-white/80 transition-colors hover:bg-white/10"
+                                            className="rounded-none border border-white/10 bg-white/5 px-6 py-2.5 text-sm font-medium text-white/80 transition-colors hover:bg-white/10"
                                         >
                                             Cancel
                                         </button>
                                         <button
                                             onClick={handleSave}
-                                            className="rounded-lg bg-purple-500 px-6 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+                                            className="rounded-none bg-purple-500 px-6 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
                                         >
                                             Save Note
                                         </button>
