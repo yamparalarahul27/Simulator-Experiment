@@ -13,7 +13,7 @@ import {
 
 export default function PnLCard() {
     const [activeFilter, setActiveFilter] = useState<FilterType>('All');
-    const filters: FilterType[] = ['All', 'Yesterday', 'Today', 'This Week', 'This Month', 'This Year'];
+    const filters: FilterType[] = ['All', 'Today', 'Yesterday', 'This Week', 'This Month', 'This Year'];
     const [isChartVisible, setIsChartVisible] = useState(false);
 
     // Calculate real PnL data based on filter

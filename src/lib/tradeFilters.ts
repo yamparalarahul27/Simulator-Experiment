@@ -139,6 +139,15 @@ export function calculateTotalPnL(trades: Trade[]): number {
 }
 
 /**
+ * Calculate average PnL across all trades
+ */
+export function calculateAvgPnL(trades: Trade[]): number {
+    if (trades.length === 0) return 0;
+    const totalPnL = calculateTotalPnL(trades);
+    return totalPnL / trades.length;
+}
+
+/**
  * Calculate percentage change
  */
 export function calculatePercentChange(current: number, previous: number): string {

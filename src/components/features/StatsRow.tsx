@@ -4,17 +4,16 @@ import React, { useMemo } from 'react';
 import CardWithCornerShine from '../ui/CardWithCornerShine';
 import Image from 'next/image';
 import { MOCK_TRADES } from '../../lib/mockData';
-import { calculateWinRate, calculateAvgWin, calculateTradeStreak } from '../../lib/tradeFilters';
+import { calculateWinRate, calculateTradeStreak, calculateAvgPnL } from '../../lib/tradeFilters';
 
 export default function StatsRow() {
     // Calculate real stats from MOCK_TRADES
     const stats = useMemo(() => {
         const { winRate, wins, losses } = calculateWinRate(MOCK_TRADES);
-        const avgWin = calculateAvgWin(MOCK_TRADES);
+        const avgPnL = calculateAvgPnL(MOCK_TRADES);
         const streak = calculateTradeStreak(MOCK_TRADES);
         const activeDays = streak.filter(Boolean).length;
-
-        return { winRate, wins, losses, avgWin, streak, activeDays };
+        return { winRate, wins, losses, avgPnL, streak, activeDays };
     }, []);
 
     return (
@@ -38,15 +37,15 @@ export default function StatsRow() {
                 </div>
             </CardWithCornerShine>
 
-            {/* Card 2: Avg WIN */}
+            {/* Card 2: Avg PnL */}
             <CardWithCornerShine padding="lg" minHeight="min-h-[160px]">
                 <div className="flex flex-col h-full justify-between relative z-10">
                     <div>
-                        <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">Avg WIN</h3>
+                        <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">Avg PnL</h3>
                     </div>
                     <div>
-                        <span className="text-num-48 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
-                            ${stats.avgWin.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        <span className={`text-num-48 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)] ${stats.avgPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                            {stats.avgPnL >= 0 ? '+' : ''}${Math.abs(stats.avgPnL).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
                     </div>
                 </div>
