@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import {
-  GeistPixelSquare,
+  GeistPixelGrid,
 } from 'geist/font/pixel';
 import "./globals.css";
 import { Agentation } from "agentation";
@@ -25,7 +25,7 @@ export default function RootLayout({
         className={`
           ${GeistSans.variable} 
           ${GeistMono.variable} 
-          ${GeistPixelSquare.variable} 
+          ${GeistPixelGrid.variable} 
           antialiased
         `}
       >

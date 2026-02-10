@@ -5,15 +5,17 @@ import { filterTradesByDate, FilterType } from '../../lib/tradeFilters';
 import { getPairImage } from '../../lib/tokenImages';
 import { format } from 'date-fns';
 import InfoTooltip from '../ui/InfoTooltip';
+import type { Trade } from '../../lib/types';
 
 interface TableUIDemoProps {
     activeFilter?: FilterType;
+    trades?: Trade[];
 }
 
-export default function TableUI_Demo({ activeFilter = 'All' }: TableUIDemoProps) {
+export default function TableUI_Demo({ activeFilter = 'All', trades }: TableUIDemoProps) {
     // Map MOCK_TRADES to table format with custom columns
     const tableData = useMemo(() => {
-        const filteredTrades = filterTradesByDate(MOCK_TRADES, activeFilter);
+        const filteredTrades = trades ?? filterTradesByDate(MOCK_TRADES, activeFilter);
         // Show up to 50 most recent trades from the filtered set
         return filteredTrades.slice(0, 50).map(trade => ({
             id: trade.id,
@@ -32,7 +34,7 @@ export default function TableUI_Demo({ activeFilter = 'All' }: TableUIDemoProps)
             leverage: trade.leverage ? `${trade.leverage}x` : '1x',
             status: trade.isWin ? 'Win' : 'Loss',
         }));
-    }, [activeFilter]);
+    }, [activeFilter, trades]);
 
     // Define custom columns with renderers
     const columns: Column[] = [

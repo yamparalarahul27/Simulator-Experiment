@@ -1,6 +1,14 @@
 @import "tailwindcss";
 @import "shadcn/tailwind.css";
 
+@font-face {
+  font-family: "GeistPixelGridLocal";
+  src: url("/fonts/GeistPixelGrid.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -149,7 +157,7 @@
   Number Scale - using Geist Pixel Square for numeric displays 
 */
 .text-num-72 {
-  font-family: var(--font-pixel-square), monospace;
+  font-family: "GeistPixelGridLocal", monospace;
   font-size: 4.5rem;
   /* 72px */
   line-height: 1;
@@ -157,7 +165,7 @@
 }
 
 .text-num-64 {
-  font-family: var(--font-pixel-square), monospace;
+  font-family: "GeistPixelGridLocal", monospace;
   font-size: 4rem;
   /* 64px */
   line-height: 1;
@@ -165,7 +173,7 @@
 }
 
 .text-num-56 {
-  font-family: var(--font-pixel-square), monospace;
+  font-family: "GeistPixelGridLocal", monospace;
   font-size: 3.5rem;
   /* 56px */
   line-height: 1;
@@ -173,7 +181,7 @@
 }
 
 .text-num-48 {
-  font-family: var(--font-pixel-square), monospace;
+  font-family: "GeistPixelGridLocal", monospace;
   font-size: 3rem;
   /* 48px */
   line-height: 1;
@@ -181,7 +189,7 @@
 }
 
 .text-num-40 {
-  font-family: var(--font-pixel-square), monospace;
+  font-family: "GeistPixelGridLocal", monospace;
   font-size: 2.5rem;
   /* 40px */
   line-height: 1;

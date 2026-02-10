@@ -12,12 +12,18 @@ export const COMPONENT_INFO = {
 
     avgWin: "Average profit per winning trade in the selected time period. This metric helps you understand the average size of your winners, which is key to maintaining a positive risk/reward ratio.",
 
+    avgLoss: "Average loss per losing trade in the selected time period. This metric helps you understand the typical size of your losing trades.",
+
     tradeStreak: "Shows your trading activity over the last 7 days. Fire emoji (🔥) represents active trading days, gray circle (⚫) represents inactive days. Displays the count of active days out of 7.",
 
     // Metrics Grid Cards
     feeDistribution: "Breakdown of your trading fees by category. Shows the distribution between Protocol fees (Maker/Taker) and Network fees. Helps you understand where your trading costs are allocated.",
 
     tradingVolume: "Total notional value of all your trades in the selected time period. This represents the sum of all position sizes (quantity × price) across all trades.",
+
+    largestGain: "Your best single winning trade (highest positive PnL) within the selected time filter window. Useful for understanding what your biggest winners look like.",
+
+    largestLoss: "Your worst single losing trade (most negative PnL) within the selected time filter window. Useful for spotting what your biggest losses look like.",
 
     longShortRatio: "Distribution of long versus short positions from your perpetual trades. Green shows the percentage of long positions, red shows short positions. Helps you understand your directional bias.",
 

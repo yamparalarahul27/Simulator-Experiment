@@ -123,6 +123,18 @@ export function calculateAvgWin(trades: Trade[]): number {
 }
 
 /**
+ * Calculate average losing trade PnL
+ */
+export function calculateAvgLoss(trades: Trade[]): number {
+    const losingTrades = trades.filter(t => t.pnl < 0);
+
+    if (losingTrades.length === 0) return 0;
+
+    const totalLossPnL = losingTrades.reduce((sum, t) => sum + t.pnl, 0);
+    return totalLossPnL / losingTrades.length;
+}
+
+/**
  * Calculate trade streak for last 7 days
  * Returns a fixed pattern showing 5 out of 7 active days
  */

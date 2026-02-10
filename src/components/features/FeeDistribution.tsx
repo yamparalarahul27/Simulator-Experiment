@@ -25,9 +25,6 @@ export default function FeeDistribution({ summary, className }: FeeDistributionP
                         </h3>
                         <InfoTooltip infoKey="feeDistribution" />
                     </div>
-                    <p className="text-white/60 text-xs mt-1">
-                        Breakdown of trading fees
-                    </p>
                 </div>
 
                 {/* Cumulative Fees - Large Display */}

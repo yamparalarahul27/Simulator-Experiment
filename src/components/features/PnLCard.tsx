@@ -11,17 +11,19 @@ import {
     FilterType
 } from '../../lib/tradeFilters';
 import InfoTooltip from '../ui/InfoTooltip';
+import type { Trade } from '../../lib/types';
 
 interface PnLCardProps {
     activeFilter?: FilterType;
+    trades?: Trade[];
 }
 
-export default function PnLCard({ activeFilter = 'All' }: PnLCardProps) {
+export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) {
     const [isChartVisible, setIsChartVisible] = useState(false);
 
     // Calculate real PnL data based on filter
     const pnlData = useMemo(() => {
-        const currentTrades = filterTradesByDate(MOCK_TRADES, activeFilter);
+        const currentTrades = trades ?? filterTradesByDate(MOCK_TRADES, activeFilter);
         const previousTrades = getPreviousPeriodTrades(MOCK_TRADES, activeFilter);
 
         const currentPnL = calculateTotalPnL(currentTrades);
@@ -34,11 +36,11 @@ export default function PnLCard({ activeFilter = 'All' }: PnLCardProps) {
             percent: percentChange,
             isPositive: currentPnL >= 0
         };
-    }, [activeFilter]);
+    }, [activeFilter, trades]);
 
     // Generate chart data from real trades
     const chartData = useMemo(() => {
-        const currentTrades = filterTradesByDate(MOCK_TRADES, activeFilter);
+        const currentTrades = trades ?? filterTradesByDate(MOCK_TRADES, activeFilter);
         const dailyPnL = calculateDailyPnL(currentTrades);
 
         return dailyPnL.map(day => ({
@@ -47,7 +49,7 @@ export default function PnLCard({ activeFilter = 'All' }: PnLCardProps) {
             negative: day.pnl < 0 ? day.pnl : null,
             value: day.pnl
         }));
-    }, [activeFilter]);
+    }, [activeFilter, trades]);
 
     return (
         <div className="w-full">
