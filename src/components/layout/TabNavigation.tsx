@@ -4,6 +4,7 @@ import { useState } from 'react';
 import TradeHistory from '../features/TradeHistory';
 import Home from '../features/Home';
 import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
+import Footer from './Footer';
 
 type TabType = 'dashboard' | 'lookup' | 'journal' | 'appdocs';
 
@@ -81,6 +82,9 @@ export default function TabNavigation() {
             {/* Content Area - Padding top added to account for fixed navbar */}
             <div className="pt-24 p-4 max-w-7xl mx-auto">
                 {renderTabContent()}
+
+                {/* Footer */}
+                <Footer />
             </div>
         </div>
     );
