@@ -60,9 +60,10 @@ export interface HamburgerButtonProps {
  * - Closed (Hamburger):
  *   - Three horizontal bars with equal spacing
  * - Open (X shape):
- *   - Top bar: rotates 45deg and translates down
+ * - Open (X shape):
+ *   - Top bar: translates down then rotates 45deg
  *   - Middle bar: fades out (opacity-0, scale-0)
- *   - Bottom bar: rotates -45deg and translates up
+ *   - Bottom bar: translates up then rotates -45deg
  * 
  * @example
  * ```tsx
@@ -127,11 +128,10 @@ export const HamburgerButton = ({
         >
             {/* Container for the three bars */}
             <div className={`${config.container} flex flex-col justify-between relative`}>
-                {/* Top bar - rotates 45deg and moves down when open */}
+                {/* Top bar - moves down then rotates 45deg */}
                 <span
-                    className={`w-full ${config.barHeight} ${barColor} rounded-full transition-all duration-300 origin-center ${isOpen ? `rotate-45 translate-y-[${config.translate}]` : ''
-                        }`}
-                    style={isOpen ? { transform: `rotate(45deg) translateY(${config.translate})` } : {}}
+                    className={`w-full ${config.barHeight} ${barColor} rounded-full transition-all duration-300 origin-center`}
+                    style={isOpen ? { transform: `translateY(${config.translate}) rotate(45deg)` } : {}}
                 />
 
                 {/* Middle bar - fades out when open */}
@@ -140,11 +140,10 @@ export const HamburgerButton = ({
                         }`}
                 />
 
-                {/* Bottom bar - rotates -45deg and moves up when open */}
+                {/* Bottom bar - moves up then rotates -45deg */}
                 <span
-                    className={`w-full ${config.barHeight} ${barColor} rounded-full transition-all duration-300 origin-center ${isOpen ? `-rotate-45 -translate-y-[${config.translate}]` : ''
-                        }`}
-                    style={isOpen ? { transform: `rotate(-45deg) translateY(-${config.translate})` } : {}}
+                    className={`w-full ${config.barHeight} ${barColor} rounded-full transition-all duration-300 origin-center`}
+                    style={isOpen ? { transform: `translateY(-${config.translate}) rotate(-45deg)` } : {}}
                 />
             </div>
         </button>

@@ -23,6 +23,11 @@ export const COMPONENT_INFO = {
 
     // Table
     transactionTable: "Complete list of your recent trades with detailed information including pair, side, type, quantity, price, notional value, PnL, fees, and more. Click column headers to sort.",
+
+    // Top Bar
+    walletSelector: "Select your connected Solana wallet to view its specific trading history and performance metrics. Currently in demo mode with pre-loaded addresses.",
+
+    timeFilters: "Filter your dashboard data by specific time periods. This affects PnL calculations, trading volume, fee distribution, and the transaction list.",
 } as const;
 
 export type ComponentInfoKey = keyof typeof COMPONENT_INFO;

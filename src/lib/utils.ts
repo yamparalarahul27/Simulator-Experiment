@@ -1,56 +1,42 @@
-/**
- * Shared utility functions
- */
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
+import { Connection } from "@solana/web3.js";
+import { RPC_HTTP } from "./constants";
 
-import { Connection } from '@solana/web3.js';
-import { HELIUS_RPC_URL } from './constants';
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
 
-let connectionInstance: Connection | null = null;
-
-/**
- * Get or create a shared RPC connection instance
- * Reuses the same connection to avoid creating multiple instances
- * 
- * @returns Solana Connection instance
- */
+// Get Solana RPC Connection
 export function getRpcConnection(): Connection {
-    if (!connectionInstance) {
-        connectionInstance = new Connection(HELIUS_RPC_URL, 'confirmed');
-    }
-    return connectionInstance;
+  return new Connection(RPC_HTTP, 'confirmed');
 }
 
-/**
- * Format a Unix timestamp to a localized date string
- * 
- * @param timestamp - Unix timestamp in seconds
- * @returns Formatted date string
- */
+// Format timestamp to readable date/time
 export function formatTimestamp(timestamp: number): string {
-    return new Date(timestamp * 1000).toLocaleString();
+  // Convert seconds to milliseconds if needed (assuming input is potentially seconds)
+  // Detailed logic: if timestamp is small (e.g. < 1e11), it's likely seconds.
+  const date = new Date(timestamp * (timestamp < 10000000000 ? 1000 : 1));
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  }).format(date);
 }
 
-/**
- * Format a number as USD currency
- * 
- * @param value - Number to format
- * @returns Formatted USD string (e.g., "$1,234.56")
- */
+// Format number as USD currency
 export function formatUsd(value: number): string {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    }).format(value);
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value);
 }
 
-/**
- * Format a number as percentage
- * 
- * @param value - Number to format (0-100)
- * @returns Formatted percentage string (e.g., "45.2%")
- */
+// Format number as percentage
 export function formatPercent(value: number): string {
-    return `${value.toFixed(1)}%`;
+  return `${value.toFixed(1)}%`;
 }
