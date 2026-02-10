@@ -11,6 +11,7 @@ const TRADE_COUNT = 240;
 const HISTORY_DAYS = 180;
 const BASE_FEE_RATE = 0.0005; // 0.05%
 const WIN_RATE = 0.55; // 55% win rate
+const SEED = 12345; // Fixed seed for deterministic generation
 
 // Trading pairs with weighted distribution
 const SYMBOLS = [
@@ -37,11 +38,32 @@ const LEVERAGE_DISTRIBUTION = [
 ];
 
 /**
+ * Seeded random number generator for deterministic mock data
+ * Uses a simple LCG (Linear Congruential Generator)
+ */
+class SeededRandom {
+    private seed: number;
+
+    constructor(seed: number) {
+        this.seed = seed;
+    }
+
+    next(): number {
+        this.seed = (this.seed * 9301 + 49297) % 233280;
+        return this.seed / 233280;
+    }
+
+    nextInt(min: number, max: number): number {
+        return Math.floor(this.next() * (max - min + 1)) + min;
+    }
+}
+
+/**
  * Weighted random selection
  */
-function weightedRandom<T extends { weight: number }>(items: T[]): T {
+function weightedRandom<T extends { weight: number }>(items: T[], rng: SeededRandom): T {
     const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
-    let random = Math.random() * totalWeight;
+    let random = rng.next() * totalWeight;
 
     for (const item of items) {
         random -= item.weight;
@@ -54,25 +76,25 @@ function weightedRandom<T extends { weight: number }>(items: T[]): T {
 /**
  * Generate a single mock trade
  */
-function generateTrade(index: number, timestamp: Date): Trade {
+function generateTrade(index: number, timestamp: Date, rng: SeededRandom): Trade {
     // Select symbol and type
-    const symbolData = weightedRandom(SYMBOLS);
-    const isPerp = Math.random() > 0.4; // 60% perp, 40% spot
+    const symbolData = weightedRandom(SYMBOLS, rng);
+    const isPerp = rng.next() > 0.4; // 60% perp, 40% spot
     const symbol = isPerp ? symbolData.symbol.replace('-USDC', '-PERP') : symbolData.symbol;
 
     // Order type and maker/taker
-    const orderType = ORDER_TYPES[Math.floor(Math.random() * ORDER_TYPES.length)];
-    const isMaker = Math.random() > 0.6; // 40% makers, 60% takers
+    const orderType = ORDER_TYPES[rng.nextInt(0, ORDER_TYPES.length - 1)];
+    const isMaker = rng.next() > 0.6; // 40% makers, 60% takers
 
     // Trade side
     const side = isPerp
-        ? (Math.random() > 0.5 ? 'long' : 'short')
-        : (Math.random() > 0.5 ? 'buy' : 'sell');
+        ? (rng.next() > 0.5 ? 'long' : 'short')
+        : (rng.next() > 0.5 ? 'buy' : 'sell');
 
     // Price and quantity (realistic ranges per token)
     const basePrice = getBasePrice(symbolData.symbol);
-    const price = basePrice * (0.95 + Math.random() * 0.1); // ±5% variance
-    const quantity = 10 + Math.random() * 90; // 10-100 units
+    const price = basePrice * (0.95 + rng.next() * 0.1); // ±5% variance
+    const quantity = 10 + rng.next() * 90; // 10-100 units
     const notional = price * quantity;
 
     // Fee calculation
@@ -95,14 +117,14 @@ function generateTrade(index: number, timestamp: Date): Trade {
     ];
 
     // PnL calculation
-    const isWin = Math.random() < WIN_RATE;
+    const isWin = rng.next() < WIN_RATE;
     const pnlPercent = isWin
-        ? 0.01 + Math.random() * 0.15 // 1-16% profit
-        : -(0.01 + Math.random() * 0.12); // 1-13% loss
+        ? 0.01 + rng.next() * 0.15 // 1-16% profit
+        : -(0.01 + rng.next() * 0.12); // 1-13% loss
     const pnl = notional * pnlPercent;
 
     // Duration (5 minutes to 24 hours)
-    const durationSeconds = Math.floor(300 + Math.random() * 86100);
+    const durationSeconds = Math.floor(300 + rng.next() * 86100);
     const closedAt = new Date(timestamp.getTime() + durationSeconds * 1000);
 
     // Leverage fields (for perpetuals only)
@@ -111,7 +133,7 @@ function generateTrade(index: number, timestamp: Date): Trade {
     let marginUsed: number | undefined;
 
     if (isPerp) {
-        const leverageData = weightedRandom(LEVERAGE_DISTRIBUTION);
+        const leverageData = weightedRandom(LEVERAGE_DISTRIBUTION, rng);
         leverage = leverageData.leverage;
         marginUsed = notional / leverage;
 
@@ -138,7 +160,7 @@ function generateTrade(index: number, timestamp: Date): Trade {
         closedAt,
         durationSeconds,
         isWin,
-        txSignature: `mock-tx-${index}-${Math.random().toString(36).substring(7)}`,
+        txSignature: `mock-tx-${index}-${rng.nextInt(100000, 999999)}`,
         feeBreakdown,
         isMaker,
         leverage,
@@ -169,18 +191,21 @@ function getBasePrice(symbol: string): number {
  */
 export function generateMockTrades(): Trade[] {
     const trades: Trade[] = [];
-    const now = new Date();
+    const rng = new SeededRandom(SEED);
+
+    // Use a fixed base date for deterministic generation (Feb 10, 2026)
+    const baseDate = new Date('2026-02-10T12:00:00Z');
 
     for (let i = 0; i < TRADE_COUNT; i++) {
         // Distribute trades over the history period
-        const daysAgo = Math.floor(Math.random() * HISTORY_DAYS);
-        const timestamp = subDays(now, daysAgo);
+        const daysAgo = rng.nextInt(0, HISTORY_DAYS - 1);
+        const timestamp = subDays(baseDate, daysAgo);
 
         // Random time of day
-        timestamp.setHours(Math.floor(Math.random() * 24));
-        timestamp.setMinutes(Math.floor(Math.random() * 60));
+        timestamp.setHours(rng.nextInt(0, 23));
+        timestamp.setMinutes(rng.nextInt(0, 59));
 
-        trades.push(generateTrade(i, timestamp));
+        trades.push(generateTrade(i, timestamp, rng));
     }
 
     // Sort by date (oldest first)
