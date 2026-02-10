@@ -10,10 +10,13 @@ import {
     calculatePercentChange,
     FilterType
 } from '../../lib/tradeFilters';
+import InfoTooltip from '../ui/InfoTooltip';
 
-export default function PnLCard() {
-    const [activeFilter, setActiveFilter] = useState<FilterType>('All');
-    const filters: FilterType[] = ['All', 'Today', 'Yesterday', 'This Week', 'This Month', 'This Year'];
+interface PnLCardProps {
+    activeFilter?: FilterType;
+}
+
+export default function PnLCard({ activeFilter = 'All' }: PnLCardProps) {
     const [isChartVisible, setIsChartVisible] = useState(false);
 
     // Calculate real PnL data based on filter
@@ -50,34 +53,19 @@ export default function PnLCard() {
         <div className="w-full">
             <CardWithCornerShine padding="lg" minHeight="min-h-[400px]">
                 <div className="flex flex-col h-full space-y-8">
-                    {/* Header & Filters */}
+                    {/* Header */}
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                         <div className="flex items-center gap-3">
                             <div className="p-2 bg-purple-500/10 rounded-none border border-purple-500/20">
                                 <TrendingUp className="w-6 h-6 text-purple-400" />
                             </div>
                             <div>
-                                <h2 className="text-xl font-bold text-white tracking-wide">PnL Analysis</h2>
+                                <div className="flex items-center">
+                                    <h2 className="text-xl font-bold text-white tracking-wide">PnL Analysis</h2>
+                                    <InfoTooltip infoKey="pnlCard" />
+                                </div>
                                 <p className="text-sm text-white/40 font-mono">NET PROFIT & LOSS</p>
                             </div>
-                        </div>
-
-                        {/* Filters Row - Grid Layout to fill space */}
-                        <div className="grid grid-cols-3 sm:grid-cols-6 gap-1 bg-black/40 border border-white/5 rounded-none p-1">
-                            {filters.map((filter) => (
-                                <button
-                                    key={filter}
-                                    onClick={() => setActiveFilter(filter)}
-                                    className={`
-                                        w-full px-2 py-1.5 text-xs sm:text-sm font-medium rounded-none whitespace-nowrap transition-all duration-300
-                                        ${activeFilter === filter
-                                            ? 'bg-purple-600/20 text-purple-300 shadow-[0_0_10px_rgba(147,51,234,0.1)] border border-purple-500/30'
-                                            : 'text-white/40 hover:text-white hover:bg-white/5 border border-transparent'}
-                                    `}
-                                >
-                                    {filter}
-                                </button>
-                            ))}
                         </div>
                     </div>
 
@@ -123,10 +111,6 @@ export default function PnLCard() {
                         {/* Chart Container */}
                         {isChartVisible && (
                             <div className="mt-6 h-[400px] w-full animate-in fade-in slide-in-from-top-4 duration-300">
-                                {/* 
-                                    TODO: Replace with CSV data parsing logic once file is provided.
-                                    Currently using dummy data to demonstrate green/orange split.
-                                */}
                                 <PnLChart data={chartData} height={400} />
                             </div>
                         )}
@@ -136,3 +120,4 @@ export default function PnLCard() {
         </div>
     );
 }
+

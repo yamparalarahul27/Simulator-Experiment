@@ -1,13 +1,21 @@
 import React, { useMemo } from 'react';
 import { TableUI, Column } from '../ui/TableUI';
 import { MOCK_TRADES } from '../../lib/mockData';
+import { filterTradesByDate, FilterType } from '../../lib/tradeFilters';
 import { getPairImage } from '../../lib/tokenImages';
 import { format } from 'date-fns';
+import InfoTooltip from '../ui/InfoTooltip';
 
-export default function TableUI_Demo() {
+interface TableUIDemoProps {
+    activeFilter?: FilterType;
+}
+
+export default function TableUI_Demo({ activeFilter = 'All' }: TableUIDemoProps) {
     // Map MOCK_TRADES to table format with custom columns
     const tableData = useMemo(() => {
-        return MOCK_TRADES.slice(0, 50).map(trade => ({
+        const filteredTrades = filterTradesByDate(MOCK_TRADES, activeFilter);
+        // Show up to 50 most recent trades from the filtered set
+        return filteredTrades.slice(0, 50).map(trade => ({
             id: trade.id,
             date: format(trade.closedAt, 'MMM d, yyyy'),
             time: format(trade.closedAt, 'HH:mm'),
@@ -24,7 +32,7 @@ export default function TableUI_Demo() {
             leverage: trade.leverage ? `${trade.leverage}x` : '1x',
             status: trade.isWin ? 'Win' : 'Loss',
         }));
-    }, []);
+    }, [activeFilter]);
 
     // Define custom columns with renderers
     const columns: Column[] = [
@@ -118,8 +126,11 @@ export default function TableUI_Demo() {
     return (
         <div className="p-8 space-y-6">
             <div className="space-y-2">
-                <h2 className="text-2xl font-bold text-white">Your Trade Data</h2>
-                <p className="text-zinc-400">Showing recent 50 trades from mock data</p>
+                <div className="flex items-center gap-2">
+                    <h2 className="text-2xl font-bold text-white">Your Trade Data</h2>
+                    <InfoTooltip infoKey="transactionTable" />
+                </div>
+                <p className="text-zinc-400">Showing recent {tableData.length} trades from {activeFilter} Filter</p>
             </div>
 
             <TableUI data={tableData} columns={columns} maxHeight="70vh" />

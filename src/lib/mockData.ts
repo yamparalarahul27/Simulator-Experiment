@@ -11,7 +11,7 @@ const TRADE_COUNT = 240;
 const HISTORY_DAYS = 180;
 const BASE_FEE_RATE = 0.0005; // 0.05%
 const WIN_RATE = 0.60; // 60% win rate
-const SEED = 12345; // Fixed seed for deterministic generation
+const SEED = 123; // Fixed seed for deterministic generation
 
 // Trading pairs with weighted distribution
 const SYMBOLS = [
@@ -95,7 +95,7 @@ function generateTrade(index: number, timestamp: Date, rng: SeededRandom): Trade
     const basePrice = getBasePrice(symbolData.symbol);
     const rawPrice = basePrice * (0.95 + rng.next() * 0.1); // ±5% variance
     const price = Math.round(rawPrice * 100) / 100; // Round to 2 decimals (xxx.xx format)
-    const quantity = 1 + rng.next() * 19; // 1-20 units (max 20)
+    const quantity = 1 + rng.next() * 4; // 1-5 units (reduced for smaller volume)
     const notional = price * quantity;
 
     // Fee calculation

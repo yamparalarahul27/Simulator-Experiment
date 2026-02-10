@@ -4,6 +4,7 @@ import React from 'react';
 import CardWithCornerShine from '../ui/CardWithCornerShine';
 import { AnalyticsSummary } from '../../lib/types';
 import { formatUsd, formatPercent } from '../../lib/utils';
+import InfoTooltip from '../ui/InfoTooltip';
 
 interface FeeDistributionProps {
     summary: AnalyticsSummary;
@@ -18,9 +19,12 @@ export default function FeeDistribution({ summary, className }: FeeDistributionP
             <div className="flex flex-col h-full justify-between relative z-10">
                 {/* Header */}
                 <div className="mb-4">
-                    <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">
-                        Fee Distribution
-                    </h3>
+                    <div className="flex items-center">
+                        <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">
+                            Fee Distribution
+                        </h3>
+                        <InfoTooltip infoKey="feeDistribution" />
+                    </div>
                     <p className="text-white/60 text-xs mt-1">
                         Breakdown of trading fees
                     </p>

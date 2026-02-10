@@ -157,3 +157,51 @@ export function calculatePercentChange(current: number, previous: number): strin
     const sign = change >= 0 ? '+' : '';
     return `${sign}${change.toFixed(1)}%`;
 }
+
+/**
+ * Calculate total trading volume (sum of all notional values)
+ */
+export function calculateTradingVolume(trades: Trade[]): number {
+    return trades.reduce((sum, t) => sum + t.notional, 0);
+}
+
+/**
+ * Format large numbers with K/M abbreviations for compact display
+ * Examples: $1,234 → $1.23K, $1,234,567 → $1.23M
+ */
+export function formatCompactNumber(value: number): string {
+    const absValue = Math.abs(value);
+    const sign = value >= 0 ? '' : '-';
+
+    if (absValue >= 1_000_000) {
+        // Millions
+        return `${sign}$${(absValue / 1_000_000).toFixed(2)}M`;
+    } else if (absValue >= 1_000) {
+        // Thousands
+        return `${sign}$${(absValue / 1_000).toFixed(2)}K`;
+    } else {
+        // Less than 1000, show full value
+        return `${sign}$${absValue.toFixed(2)}`;
+    }
+}
+
+/**
+ * Calculate Long/Short ratio from perpetual trades
+ * Returns percentage of long positions
+ */
+export function calculateLongShortRatio(trades: Trade[]): { longPercent: number; shortPercent: number; longCount: number; shortCount: number } {
+    // Filter only perpetual trades (they have side: 'long' or 'short')
+    const perpTrades = trades.filter(t => t.side === 'long' || t.side === 'short');
+
+    if (perpTrades.length === 0) {
+        return { longPercent: 50, shortPercent: 50, longCount: 0, shortCount: 0 };
+    }
+
+    const longCount = perpTrades.filter(t => t.side === 'long').length;
+    const shortCount = perpTrades.filter(t => t.side === 'short').length;
+
+    const longPercent = Math.round((longCount / perpTrades.length) * 100);
+    const shortPercent = 100 - longPercent;
+
+    return { longPercent, shortPercent, longCount, shortCount };
+}

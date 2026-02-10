@@ -4,17 +4,30 @@ import React, { useMemo } from 'react';
 import CardWithCornerShine from '../ui/CardWithCornerShine';
 import Image from 'next/image';
 import { MOCK_TRADES } from '../../lib/mockData';
-import { calculateWinRate, calculateTradeStreak, calculateAvgPnL } from '../../lib/tradeFilters';
+import { calculateWinRate, calculateTradeStreak, calculateAvgWin, filterTradesByDate, FilterType } from '../../lib/tradeFilters';
+import InfoTooltip from '../ui/InfoTooltip';
 
-export default function StatsRow() {
+interface StatsRowProps {
+    activeFilter?: FilterType;
+}
+
+export default function StatsRow({ activeFilter = 'All' }: StatsRowProps) {
     // Calculate real stats from MOCK_TRADES
     const stats = useMemo(() => {
-        const { winRate, wins, losses } = calculateWinRate(MOCK_TRADES);
-        const avgPnL = calculateAvgPnL(MOCK_TRADES);
+        const filteredTrades = filterTradesByDate(MOCK_TRADES, activeFilter);
+        const { winRate, wins, losses } = calculateWinRate(filteredTrades);
+        const avgWin = calculateAvgWin(filteredTrades);
+
+        // Streak is usually calculated on daily basis over a period. 
+        // If "Today" or "Yesterday" is selected, streak might just be that day's activity or still the last 7 days.
+        // For now, let's keep streak as "Last 7 days" relative to now, regardless of filter, 
+        // OR we could filter it. But streaks usually imply a time series. 
+        // Let's keep streak global for now (Last 7 Days) as implied by the UI "5/7 days".
         const streak = calculateTradeStreak(MOCK_TRADES);
         const activeDays = streak.filter(Boolean).length;
-        return { winRate, wins, losses, avgPnL, streak, activeDays };
-    }, []);
+
+        return { winRate, wins, losses, avgWin, streak, activeDays };
+    }, [activeFilter]);
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -22,7 +35,10 @@ export default function StatsRow() {
             <CardWithCornerShine padding="lg" minHeight="min-h-[160px]">
                 <div className="flex flex-col h-full justify-between relative z-10">
                     <div>
-                        <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">Win Rate</h3>
+                        <div className="flex items-center">
+                            <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">Win Rate</h3>
+                            <InfoTooltip infoKey="winRate" />
+                        </div>
                     </div>
                     <div className="flex flex-col items-start gap-2">
                         <span className="text-num-48 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
@@ -37,15 +53,18 @@ export default function StatsRow() {
                 </div>
             </CardWithCornerShine>
 
-            {/* Card 2: Avg PnL */}
+            {/* Card 2: Avg Win */}
             <CardWithCornerShine padding="lg" minHeight="min-h-[160px]">
                 <div className="flex flex-col h-full justify-between relative z-10">
                     <div>
-                        <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">Avg PnL</h3>
+                        <div className="flex items-center">
+                            <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">AVG WIN</h3>
+                            <InfoTooltip infoKey="avgWin" />
+                        </div>
                     </div>
                     <div>
-                        <span className={`text-num-48 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)] ${stats.avgPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                            {stats.avgPnL >= 0 ? '+' : ''}${Math.abs(stats.avgPnL).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        <span className="text-num-48 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)] text-green-400">
+                            +${Math.abs(stats.avgWin).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
                     </div>
                 </div>
@@ -55,7 +74,10 @@ export default function StatsRow() {
             <CardWithCornerShine padding="lg" minHeight="min-h-[160px]">
                 <div className="flex flex-col h-full justify-between relative z-10">
                     <div>
-                        <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">Trade Streak</h3>
+                        <div className="flex items-center">
+                            <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">Trade Streak</h3>
+                            <InfoTooltip infoKey="tradeStreak" />
+                        </div>
                         <p className="text-white/60 text-xs mt-1">
                             Keep it up, you are active {stats.activeDays} days in this week
                         </p>
