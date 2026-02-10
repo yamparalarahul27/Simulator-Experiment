@@ -5,6 +5,7 @@ import {
   GeistPixelGrid,
 } from 'geist/font/pixel';
 import "./globals.css";
+import '@pqina/flip/dist/flip.min.css';
 import { Agentation } from "agentation";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import MobileRestrictedView from "@/components/layout/MobileRestrictedView";

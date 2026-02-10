@@ -11,6 +11,8 @@ import LargestLossCard from './LargestLossCard';
 import TradeStreakCard from './TradeStreakCard';
 import DrawdownCard from './DrawdownCard';
 import OrderTypeRatioCard from './OrderTypeRatioCard';
+import AverageTradeDurationCard from './AverageTradeDurationCard';
+import TimeBasedPerformanceCard from './TimeBasedPerformanceCard';
 import { MOCK_TRADES, calculateFeeBreakdown } from '../../lib/mockData';
 import { calculateTradingVolume, formatCompactNumber, calculateLongShortRatio, filterTradesByDate, FilterType } from '../../lib/tradeFilters';
 import { addDays, startOfDay, endOfDay } from 'date-fns';
@@ -205,22 +207,10 @@ export default function Home() {
                         <OrderTypeRatioCard trades={filteredTrades} />
                     </div>
                     <div className="lg:col-span-1">
-                        <CardWithCornerShine padding="lg" minHeight="min-h-[300px]">
-                            <div className="flex flex-col h-full justify-center items-center relative z-10 opacity-30">
-                                <span className="text-white/40 text-sm font-mono uppercase tracking-wider">
-                                    Placeholder
-                                </span>
-                            </div>
-                        </CardWithCornerShine>
+                        <AverageTradeDurationCard trades={filteredTrades} />
                     </div>
                     <div className="lg:col-span-1">
-                        <CardWithCornerShine padding="lg" minHeight="min-h-[300px]">
-                            <div className="flex flex-col h-full justify-center items-center relative z-10 opacity-30">
-                                <span className="text-white/40 text-sm font-mono uppercase tracking-wider">
-                                    Placeholder
-                                </span>
-                            </div>
-                        </CardWithCornerShine>
+                        <TimeBasedPerformanceCard trades={filteredTrades} />
                     </div>
                 </div>
 

@@ -29,6 +29,10 @@ export const COMPONENT_INFO = {
 
     orderTypeRatio: "Shows the ratio of Limit versus Market orders in the selected dataset. Helps you understand whether you tend to provide liquidity (limit) or take liquidity (market).",
 
+    avgTradeDuration: "Average time your trades stay open in the selected dataset, shown as HH:MM:SS. Helps you understand whether your strategy is more scalping-oriented or longer duration.",
+
+    timeBasedPerformance: "Time-based performance breakdown of your PnL. Switch between session buckets (morning/afternoon/evening/night) and hourly buckets (0–23) to see when your trading performs best.",
+
     longShortRatio: "Distribution of long versus short positions from your perpetual trades. Green shows the percentage of long positions, red shows short positions. Helps you understand your directional bias.",
 
     // Table
