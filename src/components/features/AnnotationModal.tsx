@@ -66,11 +66,11 @@ export default function AnnotationModal({
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={handleClose}
-                            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+                            className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm"
                         />
 
                         {/* Modal */}
-                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <div className="fixed inset-0 z-[61] flex items-center justify-center p-4 overflow-y-auto">
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}

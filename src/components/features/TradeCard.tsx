@@ -31,9 +31,9 @@ export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardPr
                     </div>
                     <button
                         onClick={onAnnotate}
-                        className={`p-2 rounded-none transition-colors group/btn ${annotation
-                                ? 'bg-purple-500/20 text-purple-400 hover:bg-purple-500/30'
-                                : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white/60'
+                        className={`relative z-20 p-2 rounded-none transition-colors group/btn ${annotation
+                            ? 'bg-purple-500/20 text-purple-400 hover:bg-purple-500/30'
+                            : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white/60'
                             }`}
                         title={annotation ? "Edit note" : "Annotate your trade, it helps in growth"}
                     >
