@@ -25,7 +25,7 @@ export const WelcomeFooter = ({ className = '' }: WelcomeFooterProps) => {
     return (
         <div className={`
             absolute bottom-8 left-1/2 transform -translate-x-1/2
-            w-full max-w-[600px]
+            w-full max-w-[300px]
             text-center
             ${className}
         `}>
@@ -37,14 +37,14 @@ export const WelcomeFooter = ({ className = '' }: WelcomeFooterProps) => {
                 transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
             >
                 <WelcomeCard className="footer-card !min-h-[auto] !py-4 w-full">
-                    <div className="powered-by flex items-center justify-between w-full mb-2">
+                    <div className="powered-by flex items-center justify-center space-x-4 w-full mb-2">
                         <span className="text-white/40 text-sm font-mono uppercase tracking-wider">Powered by</span>
                         <img 
                             src="/assets/deriverse_dex_logo.png" 
                             alt="Deriverse Dex" 
                             className="h-4 w-auto opacity-80"
                         />
-                        <span className="text-white/40 text-sm font-mono">,</span>
+                        {/*<span className="text-white/40 text-sm font-mono">,</span>
                         <img 
                             src="/assets/solana_network_logo.png" 
                             alt="Solana Network" 
@@ -55,7 +55,7 @@ export const WelcomeFooter = ({ className = '' }: WelcomeFooterProps) => {
                             src="/assets/superteam_earn_logo.png" 
                             alt="Superteam Earn" 
                             className="h-[18px] w-auto opacity-80"
-                        />
+                        />*/ }
                     </div>
                 </WelcomeCard>
             </motion.div>

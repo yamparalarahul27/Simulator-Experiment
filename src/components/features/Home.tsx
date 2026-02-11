@@ -30,7 +30,7 @@ import type { DateRange } from 'react-day-picker';
  * @returns Dashboard layout with analytics cards, charts, and transaction table
  */
 export default function Home() {
-  const [activeFilter, setActiveFilter] = useState<FilterType>('Today');
+  const [activeFilter, setActiveFilter] = useState<FilterType>('All');
   const [activeWallet, setActiveWallet] = useState<1 | 2 | 3>(1);
   const [draftDateRange, setDraftDateRange] = useState<DateRange | undefined>({
     from: new Date(new Date().getFullYear(), 0, 20),
