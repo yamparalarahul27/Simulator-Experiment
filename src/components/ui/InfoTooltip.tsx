@@ -29,14 +29,18 @@ export default function InfoTooltip({ infoKey, className = '' }: InfoTooltipProp
                 <TooltipTrigger asChild>
                     <button
                         type="button"
-                        className={`inline-flex items-center justify-center w-4 h-4 ml-2 text-white/40 hover:text-white/70 transition-colors duration-200 cursor-help ${className}`}
+                        className={`inline-flex items-center justify-center w-5 h-5 ml-2 text-white/40 hover:text-white/70 transition-colors duration-200 cursor-help ${className}`}
                         aria-label="More information"
                     >
-                        <Info size={14} />
+                        <Info size={20} />
                     </button>
                 </TooltipTrigger>
-                <TooltipContent className="w-64">
+                <TooltipContent className="w-64 relative">
                     <p>{COMPONENT_INFO[infoKey]}</p>
+                    {/* Downward arrow */}
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 translate-y-0">
+                        <div className="w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-popover"></div>
+                    </div>
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>

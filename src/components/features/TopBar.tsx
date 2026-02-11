@@ -86,7 +86,7 @@ const FILTER_LABELS: Record<FilterType, string> = {
                 </div>
             </Field>
 
-            <Field className="w-full sm:w-[324px]">
+            <Field className="w-full sm:w-[324px]" suppressHydrationWarning>
                 <FieldLabel htmlFor="date-picker-range">Date Range</FieldLabel>
                 <Popover>
                     <PopoverTrigger asChild>
@@ -94,6 +94,7 @@ const FILTER_LABELS: Record<FilterType, string> = {
                             variant="outline"
                             id="date-picker-range"
                             className="w-full justify-between px-2.5 font-normal rounded-none"
+                            suppressHydrationWarning
                         >
                             <span className="inline-flex items-center gap-2">
                                 <CalendarIcon className="h-4 w-4" />

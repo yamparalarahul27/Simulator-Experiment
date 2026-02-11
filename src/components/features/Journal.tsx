@@ -16,6 +16,11 @@ import { MOCK_TRADES } from '../../lib/mockData';
 
 const ITEMS_PER_PAGE = 25;
 
+/**
+ * Trade journal component for annotating and reviewing trading history
+ * 
+ * @returns Interactive journal with trade cards, annotations, and pagination
+ */
 export default function Journal() {
     const [trades, setTrades] = useState<Trade[]>([]);
     const [annotations, setAnnotations] = useState<Record<string, any>>({});

@@ -173,7 +173,7 @@ export default function AverageTradeDurationCard({ trades, minHeight = 'min-h-[3
         .avg-trade-duration-flip :global(.tick-flip-card),
         .avg-trade-duration-flip :global(.tick-flip),
         .avg-trade-duration-flip :global(.tick-group) {
-          background: rgba(0, 0, 0, 0.25) !important;
+          background: rgba(0, 0, 0, 40%) !important;
         }
 
         /* Increase flip panel height */
@@ -189,7 +189,7 @@ export default function AverageTradeDurationCard({ trades, minHeight = 'min-h-[3
 
         .avg-trade-duration-flip :global(.tick-flip-panel-text),
         .avg-trade-duration-flip :global(.tick-text) {
-          color: rgba(255, 255, 255, 0.95) !important;
+          color: rgba(255, 255, 255, 0.90) !important;
         }
 
         /* Force sharp corners and PixelGrid font inside flip cards */

@@ -25,6 +25,8 @@ export const COMPONENT_INFO = {
 
     largestLoss: "Your worst single losing trade (most negative PnL) within the selected time filter window. Useful for spotting what your biggest losses look like.",
 
+    largestTrades: "Shows both your best winning trade and worst losing trade side-by-side. Displays the PnL, asset with icon, trade direction (long/short), and closing time for comparison.",
+
     drawdown: "Maximum peak-to-trough drop in your cumulative PnL over the selected period. Helps quantify the worst equity decline you experienced before recovering.",
 
     orderTypeRatio: "Shows the ratio of Limit versus Market orders in the selected dataset. Helps you understand whether you tend to provide liquidity (limit) or take liquidity (market).",

@@ -9,6 +9,11 @@ import DeriverseTradesTable from './DeriverseTradesTable';
 
 type TabType = 'deriverse' | 'all';
 
+/**
+ * Trade history component for fetching and displaying wallet transaction data
+ * 
+ * @returns Interface for wallet address input and transaction history display
+ */
 export default function TradeHistory() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

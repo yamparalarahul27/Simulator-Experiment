@@ -5,8 +5,7 @@ import FeeDistribution from './FeeDistribution';
 import CardWithCornerShine from '../ui/CardWithCornerShine';
 import TopBar from './TopBar';
 import InfoTooltip from '../ui/InfoTooltip';
-import LargestGainCard from './LargestGainCard';
-import LargestLossCard from './LargestLossCard';
+import LargestTradesCard from './LargestTradesCard';
 import DrawdownCard from './DrawdownCard';
 import OrderTypeRatioCard from './OrderTypeRatioCard';
 import AverageTradeDurationCard from './AverageTradeDurationCard';
@@ -25,6 +24,11 @@ import {
 import { addDays, startOfDay, endOfDay } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
 
+/**
+ * Main dashboard component displaying comprehensive trading analytics
+ * 
+ * @returns Dashboard layout with analytics cards, charts, and transaction table
+ */
 export default function Home() {
   const [activeFilter, setActiveFilter] = useState<FilterType>('Today');
   const [activeWallet, setActiveWallet] = useState<1 | 2 | 3>(1);
@@ -100,8 +104,8 @@ export default function Home() {
 
           <div className="flex items-center gap-2">
             <div className="flex items-center">
-              <span className="text-white/60 text-sm font-mono mr-2">Wallet:</span>
               <InfoTooltip infoKey="walletSelector" />
+              <span className="text-white/60 text-sm font-mono ml-2 mr-2">Wallet:</span>
             </div>
             {[1, 2, 3].map((num) => (
               <button
@@ -136,47 +140,44 @@ export default function Home() {
         <div className="flex items-center justify-center">
           <h2 className="text-white/60 text-sm font-mono uppercase tracking-wider">Portfolio Overview</h2>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="w-full">
           <PnLCard activeFilter={activeFilter} trades={filteredTrades} />
-          <DrawdownCard trades={filteredTrades} minHeight="min-h-[400px]" />
+          {/* <DrawdownCard trades={filteredTrades} minHeight="min-h-[400px]" /> */}
         </div>
 
         <div className="flex items-center justify-center">
           <h2 className="text-white/60 text-sm font-mono uppercase tracking-wider">Performance &amp; Time In Market</h2>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="space-y-6">
-            <CardWithCornerShine padding="lg" minHeight="min-h-[160px]">
-              <div className="flex flex-col h-full justify-between relative z-10">
-                <div>
-                  <div className="flex items-center">
-                    <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">Win Rate</h3>
-                    <InfoTooltip infoKey="winRate" />
-                  </div>
-                </div>
-                <div className="flex flex-col items-start gap-2">
-                  <span className="text-num-48 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
-                    {winStats.winRate}%
-                  </span>
-                  <span className="px-1.5 py-0.5 bg-white/10 text-white/60 text-xs font-mono rounded-sm">
-                    {winStats.wins}W / {winStats.losses}L
-                  </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <CardWithCornerShine padding="lg" minHeight="min-h-[200px]">
+            <div className="flex flex-col h-full justify-between relative z-10">
+              <div>
+                <div className="flex items-center">
+                  <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">Win Rate</h3>
+                  <InfoTooltip infoKey="winRate" />
                 </div>
               </div>
-            </CardWithCornerShine>
+              <div className="flex flex-col items-start gap-2">
+                <span className="text-num-48 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
+                  {winStats.winRate}%
+                </span>
+                <span className="px-1.5 py-0.5 bg-white/10 text-white/60 text-xs font-mono rounded-sm">
+                  {winStats.wins}W / {winStats.losses}L
+                </span>
+              </div>
+            </div>
+          </CardWithCornerShine>
 
-            <AverageTradeDurationCard trades={filteredTrades} minHeight="min-h-[160px]" />
+          <AverageTradeDurationCard trades={filteredTrades} minHeight="min-h-[200px]" />
 
-            <LargestGainCard trades={filteredTrades} />
-            <LargestLossCard trades={filteredTrades} />
-          </div>
-
-          <TimeBasedPerformanceCard
-            trades={filteredTrades}
-            minHeight="min-h-[520px]"
-            chartHeightClass="h-[360px]"
-          />
+          <LargestTradesCard trades={filteredTrades} />
         </div>
+
+        <TimeBasedPerformanceCard
+          trades={filteredTrades}
+          minHeight="min-h-[600px]"
+          chartHeightClass="h-[480px]"
+        />
 
         <div className="flex items-center justify-center">
           <h2 className="text-white/60 text-sm font-mono uppercase tracking-wider">Trading Behavior &amp; Risk</h2>
@@ -269,9 +270,6 @@ export default function Home() {
           <FeeDistribution summary={feeData} />
         </div>
 
-        <div className="flex items-center justify-center">
-          <h2 className="text-white/60 text-sm font-mono uppercase tracking-wider">Evidence</h2>
-        </div>
         <TableUI_Demo activeFilter={activeFilter} trades={filteredTrades} />
       </div>
     </div>
