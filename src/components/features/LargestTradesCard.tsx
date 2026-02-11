@@ -38,7 +38,7 @@ const AssetIcon = ({ trade }: { trade: Trade }) => {
       <img 
         src={iconPath}
         alt={trade.symbol}
-        className="w-6 h-6 mr-2"
+        className="w-[26px] h-[26px] mr-2"
         onError={(e) => { 
           console.log('Icon failed to load:', iconPath);
           // Hide broken image and show fallback
@@ -50,7 +50,7 @@ const AssetIcon = ({ trade }: { trade: Trade }) => {
           console.log('Icon loaded successfully:', iconPath);
         }}
       />
-      <span className="w-6 h-6 mr-2 hidden items-center justify-center bg-white/10 text-white/60 text-xs font-mono rounded">
+      <span className="w-[26px] h-[26px] mr-2 hidden items-center justify-center bg-black text-white text-xs font-mono rounded-none">
         {trade.symbol.slice(0, 3)}
       </span>
     </>

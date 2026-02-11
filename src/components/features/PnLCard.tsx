@@ -128,15 +128,10 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                                     {pnlData.pnlFormatted}
                                 </div>
                                 {activeFilter !== 'All' && (
-                                    <div className={`
-                                        flex items-center justify-center gap-2 px-4 py-2 rounded-none border backdrop-blur-sm
-                                        ${pnlData.isPositive
-                                            ? 'bg-green-500/10 border-green-500/20 text-green-400'
-                                            : 'bg-red-500/10 border-red-500/20 text-red-400'}
-                                    `}>
-                                        {pnlData.isPositive ? <ArrowUpRight size={20} /> : <ArrowDownRight size={20} />}
-                                        <span className="font-mono font-bold text-lg">{pnlData.percent}</span>
-                                        <span className="text-white/40 text-sm ml-1">{comparisonLabel}</span>
+                                    <div className="text-center">
+                                        <span className="text-white/40 text-sm font-mono">
+                                            {pnlData.isPositive ? '+' : ''}{pnlData.percent} {comparisonLabel}
+                                        </span>
                                     </div>
                                 )}
                             </div>
