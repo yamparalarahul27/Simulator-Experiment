@@ -20,6 +20,8 @@ type ViewMode = 'session' | 'hourly';
 
 interface TimeBasedPerformanceCardProps {
   trades: Trade[];
+  minHeight?: string;
+  chartHeightClass?: string;
 }
 
 function formatPnL(value: number): string {
@@ -35,7 +37,11 @@ const SessionLabel: Record<string, string> = {
   night: 'Night',
 };
 
-export default function TimeBasedPerformanceCard({ trades }: TimeBasedPerformanceCardProps) {
+export default function TimeBasedPerformanceCard({
+  trades,
+  minHeight = 'min-h-[300px]',
+  chartHeightClass = 'h-[200px]',
+}: TimeBasedPerformanceCardProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('session');
 
   const chartData = useMemo(() => {
@@ -76,7 +82,7 @@ export default function TimeBasedPerformanceCard({ trades }: TimeBasedPerformanc
   };
 
   return (
-    <CardWithCornerShine padding="lg" minHeight="min-h-[300px]">
+    <CardWithCornerShine padding="lg" minHeight={minHeight}>
       <div className="flex flex-col h-full justify-between relative z-10">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center">
@@ -114,7 +120,7 @@ export default function TimeBasedPerformanceCard({ trades }: TimeBasedPerformanc
               <span className="text-white/40 text-sm font-mono">No trades in selected period</span>
             </div>
           ) : (
-            <div className="w-full h-[200px]">
+            <div className={`w-full ${chartHeightClass}`}>
               <ResponsiveContainer>
                 <BarChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.08)" />

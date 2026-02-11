@@ -7,6 +7,7 @@ import type { Trade } from '../../lib/types';
 
 interface AverageTradeDurationCardProps {
   trades: Trade[];
+  minHeight?: string;
 }
 
 function formatHMS(totalSeconds: number): string {
@@ -22,7 +23,7 @@ function formatHMS(totalSeconds: number): string {
   return `${hh}:${mm}:${ss}`;
 }
 
-export default function AverageTradeDurationCard({ trades }: AverageTradeDurationCardProps) {
+export default function AverageTradeDurationCard({ trades, minHeight = 'min-h-[300px]' }: AverageTradeDurationCardProps) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const tickInstanceRef = useRef<any>(null);
   const fitContainerRef = useRef<HTMLDivElement | null>(null);
@@ -107,7 +108,7 @@ export default function AverageTradeDurationCard({ trades }: AverageTradeDuratio
   }, [formatted]);
 
   return (
-    <CardWithCornerShine padding="lg" minHeight="min-h-[300px]">
+    <CardWithCornerShine padding="lg" minHeight={minHeight}>
       <div className="flex flex-col h-full justify-between relative z-10">
         <div>
           <div className="flex items-center">

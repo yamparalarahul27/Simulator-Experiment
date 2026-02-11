@@ -5,6 +5,7 @@ import { Download, ChevronLeft, ChevronRight } from 'lucide-react';
 import TradeCard from './TradeCard';
 import AnnotationModal from './AnnotationModal';
 import { Trade } from '../../lib/types';
+import JournalStreakCard from './JournalStreakCard';
 import {
     loadAnnotations,
     saveAnnotation,
@@ -92,6 +93,8 @@ export default function Journal() {
                     </button>
                 )}
             </div>
+
+            <JournalStreakCard />
 
             {/* Empty State - No Trades */}
             {trades.length === 0 && (

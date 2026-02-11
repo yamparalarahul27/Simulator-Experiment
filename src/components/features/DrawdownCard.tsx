@@ -7,6 +7,7 @@ import type { Trade } from '../../lib/types';
 
 interface DrawdownCardProps {
   trades: Trade[];
+  minHeight?: string;
 }
 
 function calculateMaxDrawdown(trades: Trade[]): number {
@@ -28,7 +29,7 @@ function calculateMaxDrawdown(trades: Trade[]): number {
   return maxDrawdown;
 }
 
-export default function DrawdownCard({ trades }: DrawdownCardProps) {
+export default function DrawdownCard({ trades, minHeight = 'min-h-[200px]' }: DrawdownCardProps) {
   const maxDrawdown = useMemo(() => calculateMaxDrawdown(trades), [trades]);
 
   const formatted = `$${maxDrawdown.toLocaleString('en-US', {
@@ -37,7 +38,7 @@ export default function DrawdownCard({ trades }: DrawdownCardProps) {
   })}`;
 
   return (
-    <CardWithCornerShine padding="lg" minHeight="min-h-[200px]">
+    <CardWithCornerShine padding="lg" minHeight={minHeight}>
       <div className="flex flex-col h-full justify-between relative z-10">
         <div>
           <div className="flex items-center">
