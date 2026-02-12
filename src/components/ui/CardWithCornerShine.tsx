@@ -42,7 +42,7 @@ export interface CardWithCornerShineProps {
     /** Whether to show shadow on hover (default: true) */
     showHoverShadow?: boolean;
     /** Padding size preset (default: 'md') */
-    padding?: 'sm' | 'md' | 'lg';
+    padding?: 'xs' | 'sm' | 'md' | 'lg';
     /** Background opacity percentage (default: 80) */
     bgOpacity?: number;
     /** Click handler to make the card interactive */
@@ -123,10 +123,11 @@ export const CardWithCornerShine = ({
 }: CardWithCornerShineProps) => {
     // Map padding preset to Tailwind classes
     const paddingClasses = {
+        xs: 'px-[4.4rem] pt-[4.4rem] pb-[4.4rem]',
         sm: 'px-4 pt-4 pb-4',
         md: 'px-6 pt-6 pb-6',
         lg: 'px-8 pt-8 pb-6',
-    };
+    } as const;
 
     // Construct dynamic background opacity class
     const bgOpacityClass = `bg-black/${bgOpacity}`;

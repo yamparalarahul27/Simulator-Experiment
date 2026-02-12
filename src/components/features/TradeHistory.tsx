@@ -76,9 +76,9 @@ export default function TradeHistory() {
       <div className="max-w-7xl mx-auto space-y-6">
 
         {/* Input Section */}
-        <CardWithCornerShine padding="md">
+        <CardWithCornerShine padding="xs">
           <h2 className="text-xl font-semibold text-white mb-4 text-center">
-            Deriverse Activity Lookup
+            Wallet Transaction Search
           </h2>
           <AddressInput
             onSubmit={handleAddressSubmit}

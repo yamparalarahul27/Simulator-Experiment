@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TradeHistory from '../features/TradeHistory';
 import Home from '../features/Home';
 import Journal from '../features/Journal';
@@ -8,11 +8,36 @@ import Settings from '../features/Settings';
 import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
 import Footer from './Footer';
 
-type TabType = 'dashboard' | 'lookup' | 'journal' | 'appdocs' | 'help' | 'roadmap' | 'settings';
+export type TabType = 'dashboard' | 'lookup' | 'journal' | 'appdocs' | 'help' | 'roadmap' | 'settings';
 
 export default function TabNavigation() {
-    const [activeTab, setActiveTab] = useState<TabType>('dashboard');
+    const [activeTab, setActiveTab] = useState<TabType>(() => {
+        if (typeof window === 'undefined') return 'dashboard';
+        const persisted = window.localStorage.getItem('deriverse.activeTab') as TabType | null;
+        return persisted ?? 'dashboard';
+    });
     const [network, setNetwork] = useState<'devnet' | 'mainnet' | 'mock'>('mock');
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+
+        const handleExternalTabChange = (event: Event) => {
+            const nextTab = (event as CustomEvent<TabType>).detail;
+            if (nextTab) {
+                setActiveTab(nextTab);
+            }
+        };
+
+        window.addEventListener('deriverse:set-active-tab', handleExternalTabChange as EventListener);
+        return () => {
+            window.removeEventListener('deriverse:set-active-tab', handleExternalTabChange as EventListener);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        window.localStorage.setItem('deriverse.activeTab', activeTab);
+    }, [activeTab]);
 
     // Clean navigation items configuration
     const navItems: NavItem[] = [

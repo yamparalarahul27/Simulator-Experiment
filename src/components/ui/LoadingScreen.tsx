@@ -3,10 +3,20 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DeriverseLogo } from '../layout/DeriverseLogo';
+import type { TabType } from '../layout/TabNavigation';
 import WelcomeScreen from './WelcomeScreen';
 import DeriverseWalletAsk from './DeriverseWalletAsk';
 
 type LoadingPhase = 'welcome' | 'wallet-ask' | 'logo' | 'complete';
+
+const dispatchTabChange = (tab: TabType) => {
+    if (typeof window === 'undefined') return;
+    window.dispatchEvent(
+        new CustomEvent<TabType>('deriverse:set-active-tab', {
+            detail: tab,
+        })
+    );
+};
 
 export default function LoadingScreen() {
     const [currentPhase, setCurrentPhase] = useState<LoadingPhase>('welcome');
@@ -55,6 +65,10 @@ export default function LoadingScreen() {
     };
 
     const handleWalletChoice = (choice: 'wallet' | 'mock') => {
+        // Route users to lookup (wallet) or dashboard (mock) tabs
+        const nextTab: TabType = choice === 'wallet' ? 'lookup' : 'dashboard';
+        dispatchTabChange(nextTab);
+
         // Both choices now lead to the logo animation
         // The actual wallet connection/data fetching happens in the app
         setCurrentPhase('logo');

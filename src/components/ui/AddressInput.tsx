@@ -58,28 +58,30 @@ export default function AddressInput({ onSubmit, loading = false }: AddressInput
   return (
     <div className="w-full max-w-2xl mx-auto">
       <div className="flex flex-col space-y-4">
-        <div className="relative">
-          <input
-            type="text"
-            value={address}
-            onChange={handleInputChange}
-            placeholder="Paste Solana wallet address (44 characters, base58 format)"
-            className="w-full px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-none text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            disabled={loading}
-          />
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
+          <div className="relative flex-1">
+            <input
+              type="text"
+              value={address}
+              onChange={handleInputChange}
+              placeholder="Paste Solana wallet address (44 characters, base58 format)"
+              className="w-full px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-none text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              disabled={loading}
+            />
+          </div>
+
+          <button
+            onClick={handleSubmit}
+            disabled={!isValid || loading}
+            className="sm:w-auto w-full px-6 py-3 bg-blue-600 text-white rounded-none font-medium hover:bg-blue-700 disabled:bg-zinc-700 disabled:text-zinc-500 disabled:cursor-not-allowed transition-colors"
+          >
+            {loading ? 'Loading...' : 'Run'}
+          </button>
         </div>
 
         {error && (
           <p className="text-blue-400 text-sm">{error}</p>
         )}
-
-        <button
-          onClick={handleSubmit}
-          disabled={!isValid || loading}
-          className="w-full px-6 py-3 bg-blue-600 text-white rounded-none font-medium hover:bg-blue-700 disabled:bg-zinc-700 disabled:text-zinc-500 disabled:cursor-not-allowed transition-colors"
-        >
-          {loading ? 'Loading...' : 'Run'}
-        </button>
       </div>
     </div>
   );
