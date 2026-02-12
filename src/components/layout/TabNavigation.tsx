@@ -4,19 +4,20 @@ import { useState } from 'react';
 import TradeHistory from '../features/TradeHistory';
 import Home from '../features/Home';
 import Journal from '../features/Journal';
+import Settings from '../features/Settings';
 import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
 import Footer from './Footer';
 
-type TabType = 'dashboard' | 'lookup' | 'journal' | 'appdocs';
+type TabType = 'dashboard' | 'lookup' | 'journal' | 'appdocs' | 'help' | 'roadmap' | 'settings';
 
 export default function TabNavigation() {
     const [activeTab, setActiveTab] = useState<TabType>('dashboard');
-    const [network, setNetwork] = useState<'devnet' | 'mainnet'>('devnet');
+    const [network, setNetwork] = useState<'devnet' | 'mainnet' | 'mock'>('mock');
 
     // Clean navigation items configuration
     const navItems: NavItem[] = [
         {
-            title: 'Home',
+            title: 'Analytics',
             href: '#dashboard',
             category: 'main',
             onClick: () => setActiveTab('dashboard')
@@ -28,16 +29,28 @@ export default function TabNavigation() {
             onClick: () => setActiveTab('journal')
         },
         {
-            title: 'Lookup',
+            title: 'Wallet(s)',
             href: '#lookup',
             category: 'main',
             onClick: () => setActiveTab('lookup')
         },
         {
-            title: 'About & Future',
+            title: 'About',
             href: '#appdocs',
             category: 'dropdown',
             onClick: () => setActiveTab('appdocs')
+        },
+        {
+            title: 'Help',
+            href: '#help',
+            category: 'dropdown',
+            onClick: () => setActiveTab('help')
+        },
+        {
+            title: 'Roadmap',
+            href: '#roadmap',
+            category: 'dropdown',
+            onClick: () => setActiveTab('roadmap')
         },
     ];
 
@@ -52,11 +65,33 @@ export default function TabNavigation() {
             case 'appdocs':
                 return (
                     <div className="flex items-center justify-center min-h-[60vh]">
-                        <h1 className="text-4xl font-bold text-foreground">About & Future</h1>
+                        <h1 className="text-4xl font-bold text-white">About</h1>
                     </div>
                 );
+            case 'help':
+                return (
+                    <div className="flex items-center justify-center min-h-[60vh]">
+                        <h1 className="text-4xl font-bold text-white">Help Center</h1>
+                    </div>
+                );
+            case 'roadmap':
+                return (
+                    <div className="flex items-center justify-center min-h-[60vh]">
+                        <h1 className="text-4xl font-bold text-white">Roadmap</h1>
+                    </div>
+                );
+            case 'settings':
+                return <Settings />;
             default:
                 return null;
+        }
+    };
+
+    const getNetworkName = (net: 'devnet' | 'mainnet' | 'mock') => {
+        switch (net) {
+            case 'mainnet': return 'Mainnet';
+            case 'mock': return 'Mock Data';
+            default: return 'Devnet';
         }
     };
 
@@ -68,11 +103,12 @@ export default function TabNavigation() {
                 navItems={navItems}
                 activePath={`#${activeTab}`}
                 networkStatus={{
-                    name: network === 'devnet' ? 'Devnet' : 'Mainnet',
+                    name: getNetworkName(network),
                     variant: network,
                     isActive: true
                 }}
                 onNetworkChange={setNetwork}
+                onSettingsClick={() => setActiveTab('settings')}
                 className="mb-8"
             />
 

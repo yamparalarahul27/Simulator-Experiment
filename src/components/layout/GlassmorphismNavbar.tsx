@@ -55,7 +55,7 @@ export interface NetworkStatus {
     /** Network display name */
     name: string;
     /** Network variant for LivePulseIndicator */
-    variant: 'devnet' | 'mainnet';
+    variant: 'devnet' | 'mainnet' | 'mock';
     /** Whether network is active/connected */
     isActive: boolean;
 }
@@ -77,7 +77,9 @@ export interface GlassmorphismNavbarProps {
     /** Title for dropdown section (default: 'More') */
     dropdownTitle?: string;
     /** Callback when network is changed */
-    onNetworkChange?: (network: 'devnet' | 'mainnet') => void;
+    onNetworkChange?: (network: 'devnet' | 'mainnet' | 'mock') => void;
+    /** Callback for settings button click */
+    onSettingsClick?: () => void;
     /** Additional CSS classes for nav container */
     className?: string;
 }
@@ -122,6 +124,7 @@ export const GlassmorphismNavbar = ({
     networkStatus,
     dropdownTitle = 'More',
     onNetworkChange,
+    onSettingsClick,
     className = '',
 }: GlassmorphismNavbarProps) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -179,9 +182,19 @@ export const GlassmorphismNavbar = ({
     const isActive = (href: string) => activePath === href;
 
     // Network change handler
-    const handleNetworkChange = (network: 'devnet' | 'mainnet') => {
+    const handleNetworkChange = (network: 'devnet' | 'mainnet' | 'mock') => {
         setIsNetworkDropdownOpen(false);
         onNetworkChange?.(network);
+    };
+
+    // Helper for status text color
+    const getStatusColor = (variant: string) => {
+        switch (variant) {
+            case 'mainnet': return 'text-blue-500';
+            case 'mock': return 'text-yellow-500';
+            case 'devnet':
+            default: return 'text-green-500';
+        }
     };
 
     return (
@@ -293,25 +306,80 @@ export const GlassmorphismNavbar = ({
                                 ))}
                             </div>
 
-                            {/* Right side: Network status + Hamburger */}
+                            {/* Right side: Network status + Settings + Hamburger */}
                             <div className="flex items-center gap-2">
                                 {/* Network status selector (hidden on mobile) */}
                                 {networkStatus && (
-                                    <div className="hidden sm:block relative">
-                                        <div
-                                            className="flex items-center gap-2 px-3 py-1.5 rounded-none bg-white/5 border border-white/10 transition-all duration-300 cursor-default"
+                                    <div className="hidden sm:block relative" ref={networkDropdownRef}>
+                                        <button
+                                            onClick={() => setIsNetworkDropdownOpen(!isNetworkDropdownOpen)}
+                                            className="flex items-center gap-2 px-3 py-1.5 rounded-none bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 cursor-pointer"
                                         >
                                             <LivePulseIndicator
                                                 variant={networkStatus.variant}
                                                 size="sm"
                                                 noPing={!networkStatus.isActive}
                                             />
-                                            <span className="text-sm text-green-500 font-medium text-left uppercase">
+                                            <span className={`text-sm ${getStatusColor(networkStatus.variant)} font-medium text-left uppercase`}>
                                                 {networkStatus.name}
                                             </span>
-                                        </div>
+                                            <svg
+                                                className={`w-3 h-3 text-white/40 transition-transform duration-300 ${isNetworkDropdownOpen ? 'rotate-180' : ''}`}
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </button>
+
+                                        {isNetworkDropdownOpen && (
+                                            <div className="absolute top-full right-0 pt-2 min-w-[160px]">
+                                                <div className="bg-black/95 backdrop-blur-xl border border-white/10 rounded-none shadow-2xl overflow-hidden">
+                                                    <button
+                                                        onClick={() => handleNetworkChange('mock')}
+                                                        className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${networkStatus.variant === 'mock'
+                                                            ? 'text-white bg-white/10'
+                                                            : 'text-white/60 hover:text-white hover:bg-white/5'
+                                                            }`}
+                                                    >
+                                                        <LivePulseIndicator variant="mock" size="sm" />
+                                                        <span>Mock Data</span>
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleNetworkChange('devnet')}
+                                                        className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${networkStatus.variant === 'devnet'
+                                                            ? 'text-white bg-white/10'
+                                                            : 'text-white/60 hover:text-white hover:bg-white/5'
+                                                            }`}
+                                                    >
+                                                        <LivePulseIndicator variant="devnet" size="sm" />
+                                                        <span>Devnet</span>
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleNetworkChange('mainnet')}
+                                                        className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${networkStatus.variant === 'mainnet'
+                                                            ? 'text-white bg-white/10'
+                                                            : 'text-white/60 hover:text-white hover:bg-white/5'
+                                                            }`}
+                                                    >
+                                                        <LivePulseIndicator variant="mainnet" size="sm" />
+                                                        <span>Mainnet</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
+
+                                {/* Settings Icon (Desktop) */}
+                                <button
+                                    onClick={onSettingsClick}
+                                    className="hidden sm:flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/10 transition-colors"
+                                    aria-label="Settings"
+                                >
+                                    <img src="/assets/setting_icon.png" alt="Settings" className="w-5 h-5 opacity-80 hover:opacity-100 transition-opacity" />
+                                </button>
 
                                 {/* Hamburger button (mobile only) */}
                                 <div className="lg:hidden">
@@ -344,7 +412,7 @@ export const GlassmorphismNavbar = ({
                             {/* Network selector (mobile) */}
                             {networkStatus && (
                                 <div className="pb-4 border-b border-white/10">
-                                    <p className="text-xs text-white/40 uppercase tracking-wider mb-3">Network</p>
+                                    <p className="text-xs text-white/40 uppercase tracking-wider mb-3">Data Status</p>
                                     <button
                                         onClick={() => setIsNetworkDropdownOpen(!isNetworkDropdownOpen)}
                                         className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all"
@@ -370,6 +438,13 @@ export const GlassmorphismNavbar = ({
 
                                     {isNetworkDropdownOpen && (
                                         <div className="mt-2 space-y-1">
+                                            <button
+                                                onClick={() => handleNetworkChange('mock')}
+                                                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all"
+                                            >
+                                                <LivePulseIndicator variant="mock" size="sm" />
+                                                <span>Mock Data</span>
+                                            </button>
                                             <button
                                                 onClick={() => handleNetworkChange('devnet')}
                                                 className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all"

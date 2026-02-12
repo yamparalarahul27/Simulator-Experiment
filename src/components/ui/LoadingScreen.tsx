@@ -5,9 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { DeriverseLogo } from '../layout/DeriverseLogo';
 import WelcomeScreen from './WelcomeScreen';
 import DeriverseWalletAsk from './DeriverseWalletAsk';
-import TradeImport from './TradeImport';
 
-type LoadingPhase = 'welcome' | 'wallet-ask' | 'trade-import' | 'logo' | 'complete';
+type LoadingPhase = 'welcome' | 'wallet-ask' | 'logo' | 'complete';
 
 export default function LoadingScreen() {
     const [currentPhase, setCurrentPhase] = useState<LoadingPhase>('welcome');
@@ -56,16 +55,8 @@ export default function LoadingScreen() {
     };
 
     const handleWalletChoice = (choice: 'wallet' | 'mock') => {
-        if (choice === 'mock') {
-            setCurrentPhase('logo');
-            return;
-        }
-        if (choice === 'wallet') {
-            setCurrentPhase('trade-import');
-        }
-    };
-
-    const handleTradeImportComplete = () => {
+        // Both choices now lead to the logo animation
+        // The actual wallet connection/data fetching happens in the app
         setCurrentPhase('logo');
     };
 
@@ -78,19 +69,14 @@ export default function LoadingScreen() {
                     exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
                 >
                     {/* Welcome Screen Phase */}
-                    <WelcomeScreen 
-                        isVisible={currentPhase === 'welcome'} 
+                    <WelcomeScreen
+                        isVisible={currentPhase === 'welcome'}
                         onComplete={handleWelcomeComplete}
                     />
 
                     {/* Wallet Ask Phase */}
                     {currentPhase === 'wallet-ask' && (
                         <DeriverseWalletAsk onChoice={handleWalletChoice} />
-                    )}
-
-                    {/* Trade Import Phase */}
-                    {currentPhase === 'trade-import' && (
-                        <TradeImport onComplete={handleTradeImportComplete} />
                     )}
 
                     {/* Logo Animation Phase */}
