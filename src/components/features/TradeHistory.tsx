@@ -3,7 +3,6 @@ import CardWithCornerShine from '../ui/CardWithCornerShine';
 import AddressInput from '../ui/AddressInput';
 import { HeliusService, TransactionLog } from '../../services/HeliusService';
 import { DeriverseTradeService } from '../../services/DeriverseTradeService';
-import { Trade } from '../../lib/types';
 import { getRpcConnection } from '../../lib/utils';
 import DeriverseTradesTable from './DeriverseTradesTable';
 
@@ -18,7 +17,7 @@ export default function TradeHistory() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [transactions, setTransactions] = useState<TransactionLog[]>([]);
-  const [deriverseTrades, setDeriverseTrades] = useState<Trade[]>([]);
+  const [deriverseTrades, setDeriverseTrades] = useState<any[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('deriverse');
   const [loadingDeriverse, setLoadingDeriverse] = useState(false);

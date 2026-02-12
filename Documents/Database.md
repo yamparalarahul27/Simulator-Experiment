@@ -1,19 +1,14 @@
-# Database & Data Persistence
+# Data & Persistence Strategy
 
-## Architecture
-Deriverse is a **decentralized application (dApp)**. The "Database" is primarily the Solana Blockchain itself.
+## Current State (Feb 2026)
+- **Mock-first experience**: The Home dashboard and Journal consume `MOCK_TRADES` bundled in the repo; no live persistence layer is wired in.
+- **Live RPC lookups**: The Lookup tab fetches data directly from Solana via `HeliusService` and `DeriverseTradeService`, but results are ephemeral (kept in component state only).
+- **No Supabase/storage**: Previous Supabase helpers were removed. There is no database connection, cache, or server-side persistence.
 
-## On-Chain Data
-- All trade data, order books, and account balances are stored on-chain in Solana accounts owned by the Deriverse program.
-- Data fetching is performed via RPC calls using `@deriverse/kit`.
+## In-Memory & Client State
+- React state + localStorage (annotations) are the only persistence mechanisms.
+- When TradeHistory runs, results live in state until the user navigates away; nothing is saved.
 
-## Local State
-- The application uses React State and Context for managing transient session data (e.g., currently connected wallet, fetched trade history).
-- No persistent local database (like PostgreSQL or MongoDB) is currently integrated. 
-
-## Caching
-- Browser-side caching may be implemented for performance (e.g., `SWR` or `TanStack Query`) to reduce RPC load, though currently, direct fetches are used.
-
-## Recommendations for AIs
-- When asked to "query the database", strictly refer to fetching data from the Solana blockchain via `DeriverseService`.
-- If a future requirement involves user settings or analytics that are too expensive for on-chain storage, a lightweight database (e.g., Supabase/PostgreSQL) may be introduced here.
+## Future Options
+- If long-term storage becomes necessary (user settings, cached trades, app mode), reintroduce a backend (Supabase/Postgres, edge KV, etc.) and document it here.
+- Consider lightweight caching (SWR, TanStack Query) once real RPC data powers the dashboard to avoid repeated fetches.
