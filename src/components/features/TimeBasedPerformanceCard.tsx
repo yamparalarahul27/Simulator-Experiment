@@ -120,8 +120,8 @@ export default function TimeBasedPerformanceCard({
               <span className="text-white/40 text-sm font-mono">No trades in selected period</span>
             </div>
           ) : (
-            <div className={`w-full ${chartHeightClass}`}>
-              <ResponsiveContainer>
+            <div className={`w-full min-w-0 ${chartHeightClass}`}>
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                 <BarChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.08)" />
                   <XAxis

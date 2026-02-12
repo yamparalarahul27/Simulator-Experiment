@@ -18,21 +18,15 @@ interface TradeDisplay {
 }
 
 const AssetIcon = ({ trade }: { trade: Trade }) => {
-  // Use perp for perpetual contracts, spot for regular trades
-  // If isMaker is undefined, default to spot
-  const iconFolder = (trade.isMaker === false) ? 'perp' : 'spot';
-  // Convert symbol to lowercase and change suffix based on folder
-  const symbolName = trade.symbol.toLowerCase().replace('-usdc', '');
-  const iconPath = `/assets/tokens/${iconFolder}/${symbolName}-${iconFolder === 'perp' ? 'perp' : 'usdc'}.png`;
-  
-  console.log('AssetIcon debug:', { 
-    symbol: trade.symbol, 
-    isMaker: trade.isMaker, 
-    iconFolder, 
-    symbolName,
-    iconPath 
-  });
-  
+  const iconFolder = trade.isMaker === false ? 'perp' : 'spot';
+  const normalizedSymbol = trade.symbol
+    .toLowerCase()
+    .replace(/-usdc$/i, '')
+    .replace(/-perp$/i, '')
+    .replace(/--+/g, '-');
+  const suffix = iconFolder === 'perp' ? 'perp' : 'usdc';
+  const iconPath = `/assets/tokens/${iconFolder}/${normalizedSymbol}-${suffix}.png`;
+
   return (
     <>
       <img 
