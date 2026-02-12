@@ -9,7 +9,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 
 export default function NavbarDemo() {
     const [hamburgerOpen, setHamburgerOpen] = useState(false);
-    const [network, setNetwork] = useState<'devnet' | 'mainnet'>('devnet');
+    const [network, setNetwork] = useState<'devnet' | 'mainnet' | 'mock'>('devnet');
 
     const navItems = [
         { title: 'Dashboard', href: '/', category: 'main' as const },
@@ -32,7 +32,7 @@ export default function NavbarDemo() {
                     navItems={navItems}
                     activePath="/navbar-demo"
                     networkStatus={{
-                        name: network === 'devnet' ? 'Devnet' : 'Mainnet',
+                        name: network === 'mock' ? 'Mock Data' : (network === 'devnet' ? 'Devnet' : 'Mainnet'),
                         variant: network,
                         isActive: true,
                     }}
@@ -354,9 +354,9 @@ export default function NavbarDemo() {
                                         <h4 className="text-label-14 text-white mb-3">Try it out:</h4>
                                         <ul className="space-y-2 text-copy-13 text-white/60">
                                             <li>• Hover over "More" to see dropdown (desktop)</li>
-                                            <li>• Click network selector to switch Devnet/Mainnet</li>
+                                            <li>• Click network selector to switch Devnet/Mainnet/Mock</li>
                                             <li>• Resize window to see mobile menu</li>
-                                            <li>• Current network: <span className="text-white font-medium">{network === 'devnet' ? 'Devnet' : 'Mainnet'}</span></li>
+                                            <li>• Current network: <span className="text-white font-medium">{network === 'mock' ? 'Mock Data' : (network === 'devnet' ? 'Devnet' : 'Mainnet')}</span></li>
                                         </ul>
                                     </div>
                                 </div>
