@@ -14,16 +14,15 @@ export function getRpcConnection(): Connection {
 
 // Format timestamp to readable date/time
 export function formatTimestamp(timestamp: number): string {
-  // Convert seconds to milliseconds if needed (assuming input is potentially seconds)
-  // Detailed logic: if timestamp is small (e.g. < 1e11), it's likely seconds.
   const date = new Date(timestamp * (timestamp < 10000000000 ? 1000 : 1));
-  return new Intl.DateTimeFormat('en-US', {
+  // Fixed format to match server/client: "MMM DD at HH:MM AM/PM"
+  return date.toLocaleString('en-US', {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
     hour12: true
-  }).format(date);
+  }).replace(',', ' at');
 }
 
 // Format number as USD currency

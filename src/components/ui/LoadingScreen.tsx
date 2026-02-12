@@ -5,8 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { DeriverseLogo } from '../layout/DeriverseLogo';
 import WelcomeScreen from './WelcomeScreen';
 import DeriverseWalletAsk from './DeriverseWalletAsk';
+import TradeImport from './TradeImport';
 
-type LoadingPhase = 'welcome' | 'wallet-ask' | 'logo' | 'complete';
+type LoadingPhase = 'welcome' | 'wallet-ask' | 'trade-import' | 'logo' | 'complete';
 
 export default function LoadingScreen() {
     const [currentPhase, setCurrentPhase] = useState<LoadingPhase>('welcome');
@@ -57,8 +58,15 @@ export default function LoadingScreen() {
     const handleWalletChoice = (choice: 'wallet' | 'mock') => {
         if (choice === 'mock') {
             setCurrentPhase('logo');
+            return;
         }
-        // Wallet choice does nothing for now
+        if (choice === 'wallet') {
+            setCurrentPhase('trade-import');
+        }
+    };
+
+    const handleTradeImportComplete = () => {
+        setCurrentPhase('logo');
     };
 
     return (
@@ -78,6 +86,11 @@ export default function LoadingScreen() {
                     {/* Wallet Ask Phase */}
                     {currentPhase === 'wallet-ask' && (
                         <DeriverseWalletAsk onChoice={handleWalletChoice} />
+                    )}
+
+                    {/* Trade Import Phase */}
+                    {currentPhase === 'trade-import' && (
+                        <TradeImport onComplete={handleTradeImportComplete} />
                     )}
 
                     {/* Logo Animation Phase */}

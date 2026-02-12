@@ -1,11 +1,14 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import WelcomeCard from './WelcomeCard';
 import WelcomeButton from './WelcomeButton';
 import WelcomeFooter from './WelcomeFooter';
 import WelcomeHeader from './WelcomeHeader';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { useWalletModal } from '@solana/wallet-adapter-react-ui';
+import { persistAppMode } from '@/lib/appModeStorage';
 
 interface DeriverseWalletAskProps {
     onChoice: (choice: 'wallet' | 'mock') => void;
@@ -20,11 +23,22 @@ const WalletAskContent = {
 };
 
 export default function DeriverseWalletAsk({ onChoice }: DeriverseWalletAskProps) {
+    const { connected, publicKey } = useWallet();
+    const { setVisible } = useWalletModal();
+
     const handleWalletContinue = () => {
-        // Primary button does nothing for now (placeholder for future wallet connection)
+        setVisible(true);
     };
 
+    useEffect(() => {
+        if (connected && publicKey) {
+            void persistAppMode('REAL', publicKey.toBase58());
+            onChoice('wallet');
+        }
+    }, [connected, publicKey, onChoice]);
+
     const handleMockData = () => {
+        void persistAppMode('MOCK');
         onChoice('mock');
     };
 
