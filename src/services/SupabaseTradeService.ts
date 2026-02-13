@@ -88,7 +88,7 @@ export class SupabaseTradeService {
         }
 
         // Transform database format to Trade[]
-        return (data || []).map(dbTrade => ({
+        return (data || []).map((dbTrade: any) => ({
             id: dbTrade.id,
             symbol: dbTrade.symbol,
             quoteCurrency: dbTrade.quote_currency,
@@ -171,9 +171,9 @@ export class SupabaseTradeService {
         }
 
         const totalTrades = data.length;
-        const totalPnl = data.reduce((sum, t) => sum + Number(t.pnl), 0);
-        const totalFees = data.reduce((sum, t) => sum + Number(t.fee), 0);
-        const wins = data.filter(t => t.is_win).length;
+        const totalPnl = data.reduce((sum: number, t: any) => sum + Number(t.pnl), 0);
+        const totalFees = data.reduce((sum: number, t: any) => sum + Number(t.fee), 0);
+        const wins = data.filter((t: any) => t.is_win).length;
 
         // Safe division (avoid division by zero)
         const winRate = totalTrades > 0 ? (wins / totalTrades) * 100 : 0;
