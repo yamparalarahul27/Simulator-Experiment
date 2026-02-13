@@ -107,5 +107,8 @@ export const spacing = {
 - ⚠️ Requires component refactors
 - 🔄 No visual changes if implemented correctly
 
-### 10. Full Audit Report
+### 10. Security and Bug Check
+- CodeRabit, Prismor
+
+### 11. Full Audit Report
 See attached: `documentation-audit-report.md`
