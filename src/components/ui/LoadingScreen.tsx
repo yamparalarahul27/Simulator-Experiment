@@ -9,6 +9,20 @@ import DeriverseWalletAsk from './DeriverseWalletAsk';
 
 type LoadingPhase = 'welcome' | 'wallet-ask' | 'logo' | 'complete';
 
+// Navigation event types
+type NavigationEvent = {
+    navigateToDashboard?: () => void;
+    navigateToLookup?: (walletAddress: string) => void;
+    returnToWelcome?: () => void;
+};
+
+const dispatchShowWelcome = () => {
+    if (typeof window === 'undefined') return;
+    window.dispatchEvent(
+        new CustomEvent('deriverse:show-welcome')
+    );
+};
+
 const dispatchTabChange = (tab: TabType) => {
     if (typeof window === 'undefined') return;
     window.dispatchEvent(
@@ -21,6 +35,7 @@ const dispatchTabChange = (tab: TabType) => {
 export default function LoadingScreen() {
     const [currentPhase, setCurrentPhase] = useState<LoadingPhase>('welcome');
     const [isVisible, setIsVisible] = useState(true);
+    const [navigationCallbacks, setNavigationCallbacks] = useState<NavigationEvent>({});
 
     useEffect(() => {
         // Only set up logo timer after welcome is completed by user
@@ -83,6 +98,22 @@ export default function LoadingScreen() {
         setCurrentPhase('wallet-ask');
     };
 
+    const handleNavigateToDashboard = () => {
+        // Navigate to dashboard tab
+        dispatchTabChange('dashboard');
+        setCurrentPhase('logo');
+    };
+
+    const handleNavigateToLookup = (walletAddress: string) => {
+        // Navigate to lookup tab with wallet address
+        dispatchTabChange('lookup');
+        setCurrentPhase('logo');
+    };
+
+    const handleReturnToWelcome = () => {
+        dispatchShowWelcome();
+    };
+
     const handleWalletChoice = (choice: 'wallet' | 'mock') => {
         // Route users to lookup (wallet) or dashboard (mock) tabs
         const nextTab: TabType = choice === 'wallet' ? 'lookup' : 'dashboard';
@@ -109,7 +140,12 @@ export default function LoadingScreen() {
 
                     {/* Wallet Ask Phase */}
                     {currentPhase === 'wallet-ask' && (
-                        <DeriverseWalletAsk onChoice={handleWalletChoice} />
+                        <DeriverseWalletAsk 
+                            onChoice={handleWalletChoice}
+                            onNavigateToDashboard={handleNavigateToDashboard}
+                            onNavigateToLookup={handleNavigateToLookup}
+                            onReturnToWelcome={handleReturnToWelcome}
+                        />
                     )}
 
                     {/* Logo Animation Phase */}

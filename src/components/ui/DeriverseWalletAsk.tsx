@@ -1,14 +1,22 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import WelcomeCard from './WelcomeCard';
 import WelcomeButton from './WelcomeButton';
 import WelcomeFooter from './WelcomeFooter';
 import WelcomeHeader from './WelcomeHeader';
+import NewUserModal from './NewUserModal';
+import { useWalletConnection } from '../../lib/hooks/useWalletConnection';
+import { SupabaseWalletService } from '../../services/SupabaseWalletService';
+import { toast } from 'sonner';
+import type { TabType } from '../layout/TabNavigation';
 
 interface DeriverseWalletAskProps {
     onChoice: (choice: 'wallet' | 'mock') => void;
+    onNavigateToDashboard?: () => void;
+    onNavigateToLookup?: (walletAddress: string) => void;
+    onReturnToWelcome?: () => void;
 }
 
 const WalletAskContent = {
@@ -19,9 +27,114 @@ const WalletAskContent = {
     secondaryOption: "Explore with mock data"
 };
 
-export default function DeriverseWalletAsk({ onChoice }: DeriverseWalletAskProps) {
-    const handleWalletContinue = () => {
-        onChoice('wallet');
+export default function DeriverseWalletAsk({ 
+    onChoice, 
+    onNavigateToDashboard, 
+    onNavigateToLookup, 
+    onReturnToWelcome 
+}: DeriverseWalletAskProps) {
+    // Wallet connection state
+    const [isConnecting, setIsConnecting] = useState(false);
+    const [isCheckingWallet, setIsCheckingWallet] = useState(false);
+    const [showNewUserModal, setShowNewUserModal] = useState(false);
+    const [walletError, setWalletError] = useState<string | null>(null);
+    const [connectedWalletAddress, setConnectedWalletAddress] = useState<string | null>(null);
+
+    // Wallet connection hook
+    const {
+        connected,
+        connecting,
+        walletAddress,
+        openWalletModal,
+        connect,
+        disconnect
+    } = useWalletConnection();
+
+    const walletService = new SupabaseWalletService();
+
+    // Handle wallet connection success
+    useEffect(() => {
+        if (connected && walletAddress && isConnecting) {
+            setIsConnecting(false);
+            checkWalletExists(walletAddress);
+        }
+    }, [connected, walletAddress, isConnecting]);
+
+    // Handle wallet connection errors
+    useEffect(() => {
+        if (!connecting && isConnecting && !connected) {
+            setIsConnecting(false);
+            setWalletError('Failed to connect wallet. Please try again.');
+        }
+    }, [connecting, isConnecting, connected]);
+    const handleWalletConnect = async () => {
+        try {
+            setIsConnecting(true);
+            setWalletError(null);
+            openWalletModal();
+        } catch (error) {
+            setIsConnecting(false);
+            setWalletError('Failed to open wallet selection. Please try again.');
+            console.error('[Wallet] Connection error:', error);
+        }
+    };
+
+    const checkWalletExists = async (address: string) => {
+        try {
+            setIsCheckingWallet(true);
+            setWalletError(null);
+            
+            const existingWallet = await walletService.getWallet(address);
+            
+            if (existingWallet) {
+                // Existing user - show success and navigate to dashboard
+                toast.success('Login successful! Welcome back to Deriverse Journal.');
+                setConnectedWalletAddress(address);
+                
+                // Smooth navigation to dashboard
+                setTimeout(() => {
+                    onNavigateToDashboard?.();
+                }, 1000);
+            } else {
+                // New user - show modal
+                setConnectedWalletAddress(address);
+                setShowNewUserModal(true);
+            }
+        } catch (error) {
+            setWalletError('Failed to verify wallet. Please try again.');
+            console.error('[Supabase] Wallet check error:', error);
+        } finally {
+            setIsCheckingWallet(false);
+        }
+    };
+
+    const handleNewUserChoice = async (choice: 'signup' | 'back') => {
+        setShowNewUserModal(false);
+        
+        if (choice === 'signup' && connectedWalletAddress) {
+            try {
+                // Save new user wallet to Supabase
+                await walletService.saveWallet({
+                    address: connectedWalletAddress,
+                    network: 'devnet',
+                    method: 'wallet_connect'
+                });
+                
+                toast.success('Welcome to Deriverse Journal! Your wallet has been registered.');
+                
+                // Navigate to lookup screen
+                setTimeout(() => {
+                    onNavigateToLookup?.(connectedWalletAddress);
+                }, 1000);
+            } catch (error) {
+                setWalletError('Failed to register wallet. Please try again.');
+                console.error('[Supabase] Save wallet error:', error);
+            }
+        } else if (choice === 'back') {
+            // Disconnect wallet and return to welcome
+            await disconnect();
+            onReturnToWelcome?.();
+        }
     };
 
     const handleMockData = () => {
@@ -86,13 +199,38 @@ export default function DeriverseWalletAsk({ onChoice }: DeriverseWalletAskProps
 
                     {/* CTA Buttons */}
                     <div className="flex flex-col items-center gap-4 mt-8">
-                        <WelcomeButton onClick={handleWalletContinue}>
-                            {WalletAskContent.primaryButton}
-                        </WelcomeButton>
+                        {/* Error Message */}
+                        {walletError && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="text-red-400 text-sm text-center max-w-md"
+                            >
+                                {walletError}
+                            </motion.div>
+                        )}
+                        
+                        {/* Loading State */}
+                        {(isConnecting || isCheckingWallet) && (
+                            <div className="flex items-center gap-3 text-zinc-400">
+                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
+                                <span className="text-sm">
+                                    {isConnecting ? 'Connecting wallet...' : 'Verifying wallet...'}
+                                </span>
+                            </div>
+                        )}
+                        
+                        {/* Wallet Connect Button */}
+                        {!isConnecting && !isCheckingWallet && (
+                            <WelcomeButton onClick={handleWalletConnect}>
+                                {WalletAskContent.primaryButton}
+                            </WelcomeButton>
+                        )}
                         
                         <button 
                             className="text-white text-sm font-mono hover:text-white/80 transition-colors cursor-pointer"
-                            onClick={handleMockData}
+                            onClick={() => onChoice('mock')}
+                            disabled={isConnecting || isCheckingWallet}
                         >
                             {WalletAskContent.secondaryOption}
                         </button>
@@ -102,6 +240,13 @@ export default function DeriverseWalletAsk({ onChoice }: DeriverseWalletAskProps
 
             {/* Footer */}
             <WelcomeFooter />
+            
+            {/* New User Modal */}
+            <NewUserModal
+                isVisible={showNewUserModal}
+                onChoice={handleNewUserChoice}
+                walletAddress={connectedWalletAddress || ''}
+            />
         </motion.div>
     );
 }

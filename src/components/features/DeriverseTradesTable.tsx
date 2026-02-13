@@ -2,9 +2,12 @@ import { Trade } from '../../lib/types';
 
 interface DeriverseTradesTableProps {
     trades: Trade[];
+    onSaveTrades?: () => void;
+    savingTrades?: boolean;
+    currentWalletAddress?: string | null;
 }
 
-export default function DeriverseTradesTable({ trades }: DeriverseTradesTableProps) {
+export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrades = false, currentWalletAddress }: DeriverseTradesTableProps) {
     if (trades.length === 0) {
         return (
             <div className="rounded-none border border-white/10 bg-black/80 backdrop-blur-xl overflow-hidden p-12 text-center">
@@ -25,24 +28,51 @@ export default function DeriverseTradesTable({ trades }: DeriverseTradesTablePro
     return (
         <div className="space-y-4">
             {/* Statistics Summary */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="rounded-none border border-white/10 bg-black/80 backdrop-blur-xl p-4">
+            <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+                <div className="rounded-none border border-white/10 bg-black/80 backdrop-blur-xl p-4 md:col-span-1">
                     <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Total Trades</p>
                     <p className="text-2xl font-semibold text-white font-mono">{trades.length}</p>
                 </div>
-                <div className="rounded-none border border-white/10 bg-black/80 backdrop-blur-xl p-4">
+                <div className="rounded-none border border-white/10 bg-black/80 backdrop-blur-xl p-4 md:col-span-2">
                     <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Total PnL</p>
                     <p className={`text-2xl font-semibold font-mono ${totalPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                         {totalPnL >= 0 ? '+' : ''}{totalPnL.toFixed(2)} USDC
                     </p>
                 </div>
-                <div className="rounded-none border border-white/10 bg-black/80 backdrop-blur-xl p-4">
+                <div className="rounded-none border border-white/10 bg-black/80 backdrop-blur-xl p-4 md:col-span-1">
                     <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Win Rate</p>
                     <p className="text-2xl font-semibold text-white font-mono">{winRate.toFixed(1)}%</p>
                 </div>
-                <div className="rounded-none border border-white/10 bg-black/80 backdrop-blur-xl p-4">
+                <div className="rounded-none border border-white/10 bg-black/80 backdrop-blur-xl p-4 md:col-span-1">
                     <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Total Fees</p>
-                    <p className="text-2xl font-semibold text-white font-mono">{totalFees.toFixed(2)} USDC</p>
+                    <p className="text-2xl font-semibold text-white font-mono">{totalFees.toFixed(2)} USDC
+                    </p>
+                </div>
+                <div className="rounded-none bg-blue-600/10 backdrop-blur-xl flex flex-col justify-center md:col-span-1 p-4">
+                    {onSaveTrades && trades.length > 0 && currentWalletAddress ? (
+                        <button
+                            onClick={onSaveTrades}
+                            disabled={savingTrades}
+                            className="px-4 py-2 bg-blue-600 border border-white/10 text-white rounded-none font-semibold hover:bg-blue-700 transition disabled:bg-blue-900/40 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
+                        >
+                            {savingTrades ? (
+                                <>
+                                    <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                                    <span>Saving...</span>
+                                </>
+                            ) : (
+                                <>
+                                
+                                    <span>Save & Ingest {trades.length} Trades</span>
+                                </>
+                            )}
+                        </button>
+                    ) : (
+                        <div className="text-center">
+                            <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Actions</p>
+                            <p className="text-sm text-zinc-500">No trades to save</p>
+                        </div>
+                    )}
                 </div>
             </div>
 

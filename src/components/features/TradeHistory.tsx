@@ -291,28 +291,12 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                   </div>
                 ) : (
                   <>
-                    <DeriverseTradesTable trades={deriverseTrades} />
-                    {deriverseTrades.length > 0 && currentWalletAddress && (
-                      <div className="flex justify-end">
-                        <button
-                          onClick={handleSaveTrades}
-                          disabled={savingTrades}
-                          className="px-6 py-3 bg-blue-600 text-white rounded-none font-semibold hover:bg-blue-700 transition disabled:bg-blue-900/40 disabled:cursor-not-allowed flex items-center gap-2"
-                        >
-                          {savingTrades ? (
-                            <>
-                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                              <span>Saving...</span>
-                            </>
-                          ) : (
-                            <>
-                              <span>💾</span>
-                              <span>Save {deriverseTrades.length} Trades to Database</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    )}
+                    <DeriverseTradesTable 
+                      trades={deriverseTrades} 
+                      onSaveTrades={handleSaveTrades}
+                      savingTrades={savingTrades}
+                      currentWalletAddress={currentWalletAddress}
+                    />
                   </>
                 )}
               </div>

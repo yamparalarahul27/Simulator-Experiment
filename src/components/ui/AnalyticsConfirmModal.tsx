@@ -32,10 +32,10 @@ export const AnalyticsConfirmModal = ({
             />
 
             {/* Modal Content */}
-            <div className="relative bg-black/90 border border-white/10 rounded-sm shadow-2xl p-6 max-w-md w-full animate-in fade-in zoom-in-95 duration-200">
+            <div className="relative bg-black/90 border border-white/10 rounded-none p-6 max-w-md w-full animate-in fade-in zoom-in-95 duration-200">
                 <div className="text-center space-y-4">
                     {/* Success Icon */}
-                    <div className="mx-auto w-12 h-12 rounded-full bg-green-500/20 border border-green-500/30 flex items-center justify-center">
+                    <div className="mx-auto w-12 h-12 rounded-none bg-green-500/20 border border-green-500/30 flex items-center justify-center">
                         <svg className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
@@ -56,15 +56,15 @@ export const AnalyticsConfirmModal = ({
                     <div className="grid grid-cols-2 gap-3 pt-2">
                         <button
                             onClick={onCancel}
-                            className="px-4 py-2.5 rounded-sm border border-white/10 bg-white/5 text-white/60 hover:text-white hover:bg-white/10 transition-colors font-mono text-sm"
+                            className="px-4 py-2.5 rounded-none border border-white/10 bg-white/5 text-white/60 hover:text-white hover:bg-white/10 transition-colors font-mono text-sm"
                         >
-                            No, Stay Here
+                            No
                         </button>
                         <button
                             onClick={onConfirm}
-                            className="px-4 py-2.5 rounded-sm bg-purple-600 text-white hover:bg-purple-700 transition-colors font-mono text-sm shadow-lg shadow-purple-500/20 border border-purple-500/50"
+                            className="px-4 py-2.5 rounded-none bg-purple-600/10 text-white hover:bg-purple-700 transition-colors font-mono text-sm shadow-lg shadow-purple-500/20 border border-purple-500/50"
                         >
-                            Yes, Show Analytics
+                            Yes
                         </button>
                     </div>
                 </div>

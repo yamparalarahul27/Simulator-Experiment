@@ -2,6 +2,9 @@
  * Shared constants used across the application
  */
 
+// Application metadata
+export const APP_BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://deriverse.app';
+
 // Deriverse Program Configuration
 export const PROGRAM_ID = process.env.NEXT_PUBLIC_PROGRAM_ID ?? 'Drvrseg8AQLP8B96DBGmHRjFGviFNYTkHueY9g3k27Gu';
 export const DERIVERSE_VERSION = parseInt(process.env.NEXT_PUBLIC_DERIVERSE_VERSION ?? '12', 10);

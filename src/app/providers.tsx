@@ -3,7 +3,7 @@
 import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import type { Cluster } from '@solana/web3.js';
 import type { IUnifiedWalletConfig } from '@jup-ag/wallet-adapter/dist/types/contexts/WalletConnectionProvider';
-import { DEFAULT_WALLET_CLUSTER, SupportedCluster, WALLET_CLUSTER_CONFIG } from '@/lib/constants';
+import { APP_BASE_URL, DEFAULT_WALLET_CLUSTER, SupportedCluster, WALLET_CLUSTER_CONFIG } from '@/lib/constants';
 
 type UnifiedWalletProviderType = typeof import('@jup-ag/wallet-adapter')['UnifiedWalletProvider'];
 
@@ -27,10 +27,11 @@ export default function Providers({ children }: PropsWithChildren) {
     const walletConfig = useMemo(() => ({
         env: cluster as Cluster,
         autoConnect: false,
+        theme: 'dark',
         metadata: {
-            name: 'Deriverse',
-            description: 'Deriverse wallet connectivity',
-            url: 'https://deriverse.app',
+            name: 'Deriverse Journal',
+            description: 'Deriverse Journal wallet connectivity',
+            url: APP_BASE_URL,
             iconUrls: ['/assets/Deriverse_Journal_Logo.png']
         }
         // RPC URLs are configured per cluster via WALLET_CLUSTER_CONFIG.
