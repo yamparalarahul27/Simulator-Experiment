@@ -11,7 +11,6 @@ import {
     DrawerTitle,
 } from './drawer';
 import HelpDrawerContent from './HelpDrawerContent';
-import AboutDrawerContent from './AboutDrawerContent';
 
 /**
  * WelcomeHeader component for onboarding surfaces (Welcome + Wallet Ask).
@@ -35,7 +34,7 @@ export default function WelcomeHeader() {
                             Help
                         </button>
                     </DrawerTrigger>
-                    <DrawerContent className="bg-black/80 backdrop-blur-xl border-white/10">
+                    <DrawerContent className="bg-black/80 backdrop-blur-xl w-[]90vw] max-w-3xl border-white/10">
                         <DrawerClose asChild>
                             <button className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors">
                                 <XSquare className="h-4 w-4" />
@@ -45,22 +44,6 @@ export default function WelcomeHeader() {
                             <DrawerTitle className="text-white">Help</DrawerTitle>
                         </DrawerHeader>
                         <HelpDrawerContent />
-                    </DrawerContent>
-                </Drawer>
-
-                {/* About Drawer - Center */}
-                <Drawer direction="top">
-                    <DrawerTrigger asChild>
-                        <button className="text-white/60 text-base font-mono hover:text-white/80 transition-colors flex items-center gap-2">
-                            <img src="/assets/about_icon.png" alt="About" className="w-5 h-5" />
-                            About
-                        </button>
-                    </DrawerTrigger>
-                    <DrawerContent className="bg-black/60 backdrop-blur-xl border-white/10 max-h-[800px]">
-                        <DrawerHeader>
-                            <DrawerTitle className="text-white">About</DrawerTitle>
-                        </DrawerHeader>
-                        <AboutDrawerContent />
                     </DrawerContent>
                 </Drawer>
 
