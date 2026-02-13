@@ -37,6 +37,8 @@ export const COMPONENT_INFO = {
 
     longShortRatio: "Distribution of long versus short positions from your perpetual trades. Green shows the percentage of long positions, red shows short positions. Helps you understand your directional bias.",
 
+    lastIngestion: "Timestamp for the most recent data ingestion from Supabase, helping you confirm how fresh your Devnet analytics are.",
+
     // Table
     transactionTable: "Complete list of your recent trades with detailed information including pair, side, type, quantity, price, notional value, PnL, fees, and more. Click column headers to sort.",
 

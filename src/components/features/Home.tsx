@@ -13,6 +13,7 @@ import TimeBasedPerformanceCard from './TimeBasedPerformanceCard';
 import MockDataBanner from '../ui/MockDataBanner';
 import { MOCK_TRADES, calculateFeeBreakdown } from '../../lib/mockData';
 import { SupabaseTradeService } from '../../services/SupabaseTradeService';
+import { SupabaseWalletService } from '../../services/SupabaseWalletService';
 import { Trade } from '../../lib/types';
 import { toast } from 'sonner';
 import {
@@ -25,7 +26,7 @@ import {
   filterTradesByDate,
   FilterType,
 } from '../../lib/tradeFilters';
-import { addDays, startOfDay, endOfDay } from 'date-fns';
+import { addDays, startOfDay, endOfDay, format } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
 
 /**
@@ -42,7 +43,9 @@ interface HomeProps {
 
 export default function Home({ network = 'mock', analyzingWallet, onNavigateToLookup }: HomeProps = {}) {
   const [activeFilter, setActiveFilter] = useState<FilterType>('All');
-  const [activeWallet, setActiveWallet] = useState<1 | 2 | 3>(1);
+  const [lastIngestionAt, setLastIngestionAt] = useState<string | null>(null);
+  const [ingestionLoading, setIngestionLoading] = useState(false);
+  const [ingestionError, setIngestionError] = useState<string | null>(null);
   const [draftDateRange, setDraftDateRange] = useState<DateRange | undefined>({
     from: new Date(new Date().getFullYear(), 0, 20),
     to: addDays(new Date(new Date().getFullYear(), 0, 20), 20),
@@ -92,6 +95,41 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
     }
 
     fetchRealTrades();
+  }, [network, analyzingWallet]);
+
+  useEffect(() => {
+    if (network !== 'devnet' || !analyzingWallet) {
+      setLastIngestionAt(null);
+      setIngestionLoading(false);
+      setIngestionError(null);
+      return;
+    }
+
+    let mounted = true;
+    const walletService = new SupabaseWalletService();
+
+    setIngestionLoading(true);
+    setIngestionError(null);
+    walletService
+      .getWallet(analyzingWallet)
+      .then((wallet) => {
+        if (!mounted) return;
+        setLastIngestionAt(wallet?.last_synced_at ?? null);
+      })
+      .catch(() => {
+        if (!mounted) return;
+        setIngestionError('Failed to load ingestion time');
+        setLastIngestionAt(null);
+      })
+      .finally(() => {
+        if (mounted) {
+          setIngestionLoading(false);
+        }
+      });
+
+    return () => {
+      mounted = false;
+    };
   }, [network, analyzingWallet]);
 
   const availablePairs = useMemo(() => {
@@ -188,33 +226,28 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
 
   return (
     <div className="space-y-6">
-      {/* Mock Data Banner */}
-      {network === 'mock' && (
-        <MockDataBanner onFetchTrades={onNavigateToLookup} />
-      )}
-
       <div className="flex flex-col gap-6">
         <div className="flex items-center justify-between gap-6 flex-wrap">
           <h1 className="text-3xl font-bold text-white">Home Analytics</h1>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <div className="flex items-center">
-              <InfoTooltip infoKey="walletSelector" />
-              <span className="text-white/60 text-sm font-mono ml-2 mr-2">Wallet:</span>
+              <InfoTooltip infoKey="lastIngestion" />
+              <span className="text-white/60 text-sm font-mono ml-2 mr-2">Last ingestion:</span>
             </div>
-            {[1, 2, 3].map((num) => (
-              <button
-                key={num}
-                type="button"
-                onClick={() => setActiveWallet(num as 1 | 2 | 3)}
-                className={`px-4 py-2 rounded-none text-sm font-mono transition-all duration-200 border-b-2 ${activeWallet === num
-                  ? 'bg-purple-500/20 border-purple-500 text-white/100'
-                  : 'bg-white/5 border-x border-t border-white/10 border-b-transparent text-white/60 hover:bg-white/10 hover:border-white/20'
-                  }`}
-              >
-                {num}
-              </button>
-            ))}
+            <span className="text-sm font-mono text-white/70">
+              {network !== 'devnet'
+                ? 'Mock data (no ingestion)'
+                : !analyzingWallet
+                  ? 'Connect wallet to ingest trades'
+                  : ingestionLoading
+                    ? 'Checking ingestion...'
+                    : ingestionError
+                      ? ingestionError
+                      : lastIngestionAt
+                        ? format(new Date(lastIngestionAt), 'MMM d, yyyy h:mm a')
+                        : 'No data ingested yet'}
+            </span>
           </div>
         </div>
 
@@ -228,6 +261,9 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
           onSelectedPairsChange={setDraftSelectedPairs}
           onApply={handleApplyFilters}
         />
+        {network === 'mock' && (
+          <MockDataBanner onFetchTrades={onNavigateToLookup} />
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-8">
