@@ -372,13 +372,12 @@ export const GlassmorphismNavbar = ({
                                     </div>
                                 )}
 
-                                {/* Profile & Settings Icon (Desktop) */}
                                 <button
                                     onClick={onProfileSettingsClick}
                                     className="hidden sm:flex items-center justify-center w-8 h-8 rounded-full"
                                     aria-label="Profile and Settings"
                                 >
-                                    <img src="/assets/profile_icon.png" alt="Profile &amp; Settings" className="w-6 h-6 opacity-80 hover:opacity-100 transition-opacity" />
+                                    <img src="/assets/Profile_icon.png" alt="Profile &amp; Settings" className="w-6 h-6 opacity-80 hover:opacity-100 transition-opacity" />
                                 </button>
 
                                 {/* Hamburger button (mobile only) */}
