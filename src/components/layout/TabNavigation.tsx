@@ -114,9 +114,9 @@ export default function TabNavigation() {
 
     const getNetworkName = (net: 'devnet' | 'mainnet' | 'mock') => {
         switch (net) {
-            case 'mainnet': return 'Mainnet';
-            case 'mock': return 'Mock Data';
-            default: return 'Devnet';
+            case 'mainnet': return 'On Mainnet';
+            case 'devnet': return 'On Devnet';
+            default: return 'On Mock Data';
         }
     };
 

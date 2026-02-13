@@ -5,8 +5,10 @@ import { HeliusService, TransactionLog } from '../../services/HeliusService';
 import { DeriverseTradeService } from '../../services/DeriverseTradeService';
 import { getRpcConnection } from '../../lib/utils';
 import DeriverseTradesTable from './DeriverseTradesTable';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 
 type TabType = 'deriverse' | 'all';
+type InputMode = 'manual' | 'wallet';
 
 /**
  * Trade history component for fetching and displaying wallet transaction data
@@ -22,6 +24,8 @@ export default function TradeHistory() {
   const [activeTab, setActiveTab] = useState<TabType>('deriverse');
   const [loadingDeriverse, setLoadingDeriverse] = useState(false);
   const [loadingHelius, setLoadingHelius] = useState(false);
+  const [inputMode, setInputMode] = useState<InputMode>('manual');
+  const [howItWorksOpen, setHowItWorksOpen] = useState(true);
 
   const heliusService = new HeliusService();
   const deriverseService = new DeriverseTradeService();
@@ -69,34 +73,64 @@ export default function TradeHistory() {
     }
   };
 
-  const hasAnyTransactions = transactions.length > 0;
-
   return (
     <div className="min-h-screen text-white py-8">
       <div className="max-w-7xl mx-auto space-y-6">
+
+        {/* Input Mode Switcher */}
+        <div className="flex gap-4 border-b border-white/10 pb-2">
+          {(['manual', 'wallet'] as InputMode[]).map(mode => (
+            <button
+              key={mode}
+              onClick={() => setInputMode(mode)}
+              className={`px-4 py-2 font-semibold uppercase tracking-wide text-sm transition-all ${
+                inputMode === mode
+                  ? 'text-white border-b-2 border-blue-400'
+                  : 'text-zinc-500 hover:text-zinc-300'
+              }`}
+            >
+              {mode === 'manual' ? 'Manual Address' : 'Connect Wallet'}
+            </button>
+          ))}
+        </div>
 
         {/* Input Section */}
         <CardWithCornerShine padding="xs">
           <h2 className="text-xl font-semibold text-white mb-4 text-center">
             Wallet Transaction Search
           </h2>
-          <AddressInput
-            onSubmit={handleAddressSubmit}
-            loading={loading}
-          />
+          {inputMode === 'manual' ? (
+            <AddressInput
+              onSubmit={handleAddressSubmit}
+              loading={loading}
+            />
+          ) : (
+            <div className="flex flex-col items-center gap-4 text-center py-4">
+              <p className="text-zinc-400 max-w-md">
+                Connect your Solana wallet to quickly run the lookup without pasting the address manually.
+              </p>
+              <button
+                className="px-6 py-3 bg-white/10 border border-white/20 rounded-none font-semibold text-white hover:bg-white/15 transition"
+                disabled
+              >
+                Connect Wallet
+              </button>
+            </div>
+          )}
         </CardWithCornerShine>
 
         {/* Results Section */}
         {hasSearched && !loading && (
-          <>
-            {/* Tab Navigation */}
-            <div className="flex gap-2 border-b border-white/10">
+          <CardWithCornerShine padding="sm" className="space-y-6">
+            {/* Results Header */}
+            <div className="flex gap-4 border-b border-white/10 pb-2">
               <button
                 onClick={() => setActiveTab('deriverse')}
-                className={`px-6 py-3 font-semibold transition-all duration-200 relative
-                           ${activeTab === 'deriverse'
+                className={`px-6 py-3 font-semibold text-sm uppercase tracking-wide transition-all ${
+                  activeTab === 'deriverse'
                     ? 'text-white border-b-2 border-blue-400'
-                    : 'text-zinc-400 hover:text-zinc-300'}`}
+                    : 'text-zinc-400 hover:text-zinc-200'
+                }`}
               >
                 Deriverse Trades
                 {deriverseTrades.length > 0 && (
@@ -107,10 +141,11 @@ export default function TradeHistory() {
               </button>
               <button
                 onClick={() => setActiveTab('all')}
-                className={`px-6 py-3 font-semibold transition-all duration-200 relative
-                           ${activeTab === 'all'
+                className={`px-6 py-3 font-semibold text-sm uppercase tracking-wide transition-all ${
+                  activeTab === 'all'
                     ? 'text-white border-b-2 border-blue-400'
-                    : 'text-zinc-400 hover:text-zinc-300'}`}
+                    : 'text-zinc-400 hover:text-zinc-200'
+                }`}
               >
                 All Transactions
                 {transactions.length > 0 && (
@@ -221,25 +256,53 @@ export default function TradeHistory() {
                 )}
               </div>
             )}
-          </>
+          </CardWithCornerShine>
         )}
 
         {/* Initial Instructions */}
         {!hasSearched && (
-          <div className="rounded-none border border-white/10 bg-black/80 backdrop-blur-xl p-8">
-            <h3 className="text-xl font-semibold text-white mb-4">
-              How It Works
-            </h3>
-            <div className="text-zinc-400 space-y-2">
-              <p>🎯 <strong>Deriverse Trades</strong>: Parsed on-chain trading activity (spot & perpetual fills, PnL, fees)</p>
-              <p>📊 <strong>All Transactions</strong>: Complete transaction history via Helius RPC</p>
-              <p className="mt-4">Steps:</p>
-              <p>1. Paste any Solana wallet address</p>
-              <p>2. Click "Run" to fetch both Deriverse trades and all transactions</p>
-              <p>3. Switch between tabs to view different data</p>
-              <p>4. Click signatures to view details on Solscan</p>
-            </div>
-          </div>
+          <Accordion
+            type="single"
+            collapsible
+            value={howItWorksOpen ? 'how-it-works' : undefined}
+            onValueChange={value => setHowItWorksOpen(value === 'how-it-works')}
+            className="border border-white/10 rounded-none bg-black/80"
+          >
+            <AccordionItem value="how-it-works" className="px-4">
+              <AccordionTrigger className="text-xl font-semibold">
+                <span>How It Works</span>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="text-zinc-400 space-y-2">
+                  {inputMode === 'manual' ? (
+                    <>
+                      <p>🎯 <strong>Deriverse Trades</strong>: Parsed on-chain trading activity (spot & perpetual fills, PnL, fees)</p>
+                      <p>📊 <strong>All Transactions</strong>: Complete transaction history via Helius RPC</p>
+                      <p className="mt-4 font-semibold text-white">Steps:</p>
+                      <ol className="list-decimal list-inside space-y-1 text-zinc-300">
+                        <li>Paste any Solana wallet address or connect your wallet</li>
+                        <li>Click "Run" to fetch Deriverse trades & full history</li>
+                        <li>Switch between tabs to compare Deriverse vs. all transactions</li>
+                        <li>Open any signature in Solscan for full details</li>
+                      </ol>
+                    </>
+                  ) : (
+                    <>
+                      <p className="mt-4 font-semibold text-white">Steps:</p>
+                      <ol className="list-decimal list-inside space-y-1 text-zinc-300">
+                        <li>Click "Connect Wallet" to link your Solana wallet</li>
+                        <li>Choose your preferred wallet provider (Phantom, Solflare, etc.)</li>
+                        <li>Approve the connection to fetch your wallet address</li>
+                        <li>Click "Run" to load Deriverse trades & transaction history</li>
+                        <li>Switch between tabs to compare Deriverse vs. all transactions</li>
+                        <li>Open any signature in Solscan for full details</li>
+                      </ol>
+                    </>
+                  )}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         )}
       </div>
     </div>

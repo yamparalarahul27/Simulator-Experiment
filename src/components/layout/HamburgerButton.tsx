@@ -121,7 +121,7 @@ export const HamburgerButton = ({
         <button
             type="button"
             onClick={onClick}
-            className={`p-2 rounded-lg hover:bg-white/10 transition-colors ${className}`}
+            className={`p-2 rounded-none hover:bg-white/10 transition-colors ${className}`}
             aria-label={ariaLabel}
             aria-expanded={isOpen}
             aria-controls={ariaControls}

@@ -344,7 +344,7 @@ export const GlassmorphismNavbar = ({
                                                             }`}
                                                     >
                                                         <LivePulseIndicator variant="mock" size="sm" />
-                                                        <span>Mock Data</span>
+                                                        <span>On Mock Data</span>
                                                     </button>
                                                     <button
                                                         onClick={() => handleNetworkChange('devnet')}
@@ -354,7 +354,7 @@ export const GlassmorphismNavbar = ({
                                                             }`}
                                                     >
                                                         <LivePulseIndicator variant="devnet" size="sm" />
-                                                        <span>Devnet</span>
+                                                        <span>On Devnet</span>
                                                     </button>
                                                     <button
                                                         onClick={() => handleNetworkChange('mainnet')}
@@ -364,7 +364,7 @@ export const GlassmorphismNavbar = ({
                                                             }`}
                                                     >
                                                         <LivePulseIndicator variant="mainnet" size="sm" />
-                                                        <span>Mainnet</span>
+                                                        <span>On Mainnet</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -409,61 +409,6 @@ export const GlassmorphismNavbar = ({
                     <div className="absolute top-14 bottom-4 left-3 right-3 bg-black/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-top duration-300">
                         {/* Scrollable content */}
                         <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                            {/* Network selector (mobile) */}
-                            {networkStatus && (
-                                <div className="pb-4 border-b border-white/10">
-                                    <p className="text-xs text-white/40 uppercase tracking-wider mb-3">Data Status</p>
-                                    <button
-                                        onClick={() => setIsNetworkDropdownOpen(!isNetworkDropdownOpen)}
-                                        className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all"
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <LivePulseIndicator
-                                                variant={networkStatus.variant}
-                                                size="md"
-                                                noPing={!networkStatus.isActive}
-                                            />
-                                            <span className="text-white font-medium">{networkStatus.name}</span>
-                                        </div>
-                                        <svg
-                                            className={`w-4 h-4 text-white/60 transition-transform duration-300 ${isNetworkDropdownOpen ? 'rotate-180' : ''
-                                                }`}
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                    </button>
-
-                                    {isNetworkDropdownOpen && (
-                                        <div className="mt-2 space-y-1">
-                                            <button
-                                                onClick={() => handleNetworkChange('mock')}
-                                                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all"
-                                            >
-                                                <LivePulseIndicator variant="mock" size="sm" />
-                                                <span>Mock Data</span>
-                                            </button>
-                                            <button
-                                                onClick={() => handleNetworkChange('devnet')}
-                                                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all"
-                                            >
-                                                <LivePulseIndicator variant="devnet" size="sm" />
-                                                <span>Devnet</span>
-                                            </button>
-                                            <button
-                                                onClick={() => handleNetworkChange('mainnet')}
-                                                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all"
-                                            >
-                                                <LivePulseIndicator variant="mainnet" size="sm" />
-                                                <span>Mainnet</span>
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-
                             {/* Main navigation */}
                             {mainItems.length > 0 && (
                                 <div>
@@ -480,7 +425,7 @@ export const GlassmorphismNavbar = ({
                                                         setIsMobileMenuOpen(false);
                                                     }
                                                 }}
-                                                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive(item.href)
+                                                className={`flex items-center gap-3 px-4 py-3 rounded-none transition-all ${isActive(item.href)
                                                     ? 'text-white bg-white/10'
                                                     : 'text-white/60 hover:text-white hover:bg-white/5'
                                                     }`}
@@ -509,7 +454,7 @@ export const GlassmorphismNavbar = ({
                                                         setIsMobileMenuOpen(false);
                                                     }
                                                 }}
-                                                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive(item.href)
+                                                className={`flex items-center gap-3 px-4 py-3 rounded-none transition-all ${isActive(item.href)
                                                     ? 'text-white bg-white/10'
                                                     : 'text-white/60 hover:text-white hover:bg-white/5'
                                                     }`}
@@ -538,7 +483,7 @@ export const GlassmorphismNavbar = ({
                                                         setIsMobileMenuOpen(false);
                                                     }
                                                 }}
-                                                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive(item.href)
+                                                className={`flex items-center gap-3 px-4 py-3 rounded-none transition-all ${isActive(item.href)
                                                     ? 'text-white bg-white/10'
                                                     : 'text-white/60 hover:text-white hover:bg-white/5'
                                                     }`}
