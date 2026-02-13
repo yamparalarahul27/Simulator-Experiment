@@ -78,8 +78,8 @@ export interface GlassmorphismNavbarProps {
     dropdownTitle?: string;
     /** Callback when network is changed */
     onNetworkChange?: (network: 'devnet' | 'mainnet' | 'mock') => void;
-    /** Callback for settings button click */
-    onSettingsClick?: () => void;
+    /** Callback for Profile & Settings button click */
+    onProfileSettingsClick?: () => void;
     /** Additional CSS classes for nav container */
     className?: string;
 }
@@ -124,7 +124,7 @@ export const GlassmorphismNavbar = ({
     networkStatus,
     dropdownTitle = 'More',
     onNetworkChange,
-    onSettingsClick,
+    onProfileSettingsClick,
     className = '',
 }: GlassmorphismNavbarProps) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -372,13 +372,13 @@ export const GlassmorphismNavbar = ({
                                     </div>
                                 )}
 
-                                {/* Settings Icon (Desktop) */}
+                                {/* Profile & Settings Icon (Desktop) */}
                                 <button
-                                    onClick={onSettingsClick}
-                                    className="hidden sm:flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/10 transition-colors"
-                                    aria-label="Settings"
+                                    onClick={onProfileSettingsClick}
+                                    className="hidden sm:flex items-center justify-center w-8 h-8 rounded-full"
+                                    aria-label="Profile and Settings"
                                 >
-                                    <img src="/assets/setting_icon.png" alt="Settings" className="w-5 h-5 opacity-80 hover:opacity-100 transition-opacity" />
+                                    <img src="/assets/profile_icon.png" alt="Profile &amp; Settings" className="w-6 h-6 opacity-80 hover:opacity-100 transition-opacity" />
                                 </button>
 
                                 {/* Hamburger button (mobile only) */}

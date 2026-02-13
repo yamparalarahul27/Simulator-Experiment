@@ -17,7 +17,7 @@ export default function NavbarDemo() {
         { title: 'Portfolio', href: '/portfolio', category: 'main' as const },
         { title: 'Analytics', href: '/analytics', category: 'dropdown' as const },
         { title: 'History', href: '/history', category: 'dropdown' as const },
-        { title: 'Settings', href: '/settings', category: 'dropdown' as const },
+        { title: 'Profile & Settings', href: '/profile-settings', category: 'dropdown' as const },
         { title: 'Docs', href: '/docs', category: 'info' as const },
         { title: 'Support', href: '/support', category: 'info' as const },
     ];

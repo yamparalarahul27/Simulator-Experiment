@@ -4,17 +4,17 @@ import { useEffect, useState } from 'react';
 import TradeHistory from '../features/TradeHistory';
 import Home from '../features/Home';
 import Journal from '../features/Journal';
-import Settings from '../features/Settings';
+import ProfileSettings from '../features/ProfileSettings';
 import AboutScreen from '../features/AboutScreen';
 import HelpScreen from '../features/HelpScreen';
 import RoadmapScreen from '../features/RoadmapScreen';
 import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
 import Footer from './Footer';
 
-export type TabType = 'dashboard' | 'lookup' | 'journal' | 'appdocs' | 'help' | 'roadmap' | 'settings';
+export type TabType = 'dashboard' | 'lookup' | 'journal' | 'appdocs' | 'help' | 'roadmap' | 'profile-settings';
 
 const DEFAULT_TAB: TabType = 'dashboard';
-const PERSISTABLE_TABS: TabType[] = ['dashboard', 'lookup', 'journal', 'appdocs', 'help', 'roadmap', 'settings'];
+const PERSISTABLE_TABS: TabType[] = ['dashboard', 'lookup', 'journal', 'appdocs', 'help', 'roadmap', 'profile-settings'];
 
 export default function TabNavigation() {
     const [activeTab, setActiveTab] = useState<TabType>(DEFAULT_TAB);
@@ -22,9 +22,10 @@ export default function TabNavigation() {
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
-        const persisted = window.localStorage.getItem('deriverse.activeTab') as TabType | null;
-        if (persisted && PERSISTABLE_TABS.includes(persisted)) {
-            setActiveTab(persisted);
+        const persistedRaw = window.localStorage.getItem('deriverse.activeTab');
+        const migrated = persistedRaw === 'settings' ? 'profile-settings' : persistedRaw;
+        if (migrated && (PERSISTABLE_TABS as string[]).includes(migrated)) {
+            setActiveTab(migrated as TabType);
         }
     }, []);
 
@@ -103,8 +104,8 @@ export default function TabNavigation() {
                 return <HelpScreen />;
             case 'roadmap':
                 return <RoadmapScreen />;
-            case 'settings':
-                return <Settings />;
+            case 'profile-settings':
+                return <ProfileSettings />;
             default:
                 return null;
         }
@@ -131,7 +132,7 @@ export default function TabNavigation() {
                     isActive: true
                 }}
                 onNetworkChange={setNetwork}
-                onSettingsClick={() => setActiveTab('settings')}
+                onProfileSettingsClick={() => setActiveTab('profile-settings')}
                 className="mb-8"
             />
 
