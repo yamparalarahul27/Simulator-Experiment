@@ -6,6 +6,7 @@ import TradeCard from './TradeCard';
 import AnnotationModal from './AnnotationModal';
 import { Trade } from '../../lib/types';
 import JournalStreakCard from './JournalStreakCard';
+import MockDataBanner from '../ui/MockDataBanner';
 import {
     loadAnnotations,
     saveAnnotation,
@@ -13,6 +14,8 @@ import {
     downloadAnnotations
 } from '../../lib/annotationStorage';
 import { MOCK_TRADES } from '../../lib/mockData';
+import { SupabaseTradeService } from '../../services/SupabaseTradeService';
+import { toast } from 'sonner';
 
 const ITEMS_PER_PAGE = 25;
 
@@ -21,27 +24,53 @@ const ITEMS_PER_PAGE = 25;
  * 
  * @returns Interactive journal with trade cards, annotations, and pagination
  */
-export default function Journal() {
+
+interface JournalProps {
+    network?: 'devnet' | 'mainnet' | 'mock';
+    analyzingWallet?: string | null;
+    onNavigateToLookup?: () => void;
+}
+
+export default function Journal({ network = 'mock', analyzingWallet, onNavigateToLookup }: JournalProps = {}) {
     const [trades, setTrades] = useState<Trade[]>([]);
     const [annotations, setAnnotations] = useState<Record<string, any>>({});
     const [selectedTrade, setSelectedTrade] = useState<Trade | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-
-    // TODO: Add toggle for data source (Deriverse / All Transactions / Mock)
-    // User will explain toggle implementation later
-    const [dataSource] = useState<'mock' | 'deriverse' | 'all'>('mock');
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         // Load annotations from localStorage
         setAnnotations(loadAnnotations());
 
-        // Load mock data for now
-        // TODO: Replace with actual data based on dataSource toggle
-        if (dataSource === 'mock') {
-            setTrades(MOCK_TRADES);
+        async function loadTrades() {
+            if (network === 'devnet' && analyzingWallet) {
+                setLoading(true);
+                try {
+                    const service = new SupabaseTradeService();
+                    const realTrades = await service.getTrades(analyzingWallet);
+                    setTrades(realTrades);
+
+                    if (realTrades.length === 0) {
+                        toast.info('No trades found for this wallet');
+                    }
+                } catch (err) {
+                    console.error('Failed to load trades:', err);
+                    toast.error('Failed to load journal entries');
+                    setTrades([]);
+                } finally {
+                    setLoading(false);
+                }
+            } else if (network === 'devnet' && !analyzingWallet) {
+                setTrades([]);
+            } else {
+                // Mock data
+                setTrades(MOCK_TRADES);
+            }
         }
-    }, [dataSource]);
+
+        loadTrades();
+    }, [network, analyzingWallet]);
 
     const handleAnnotate = (trade: Trade) => {
         setSelectedTrade(trade);
@@ -78,6 +107,11 @@ export default function Journal() {
 
     return (
         <div className="space-y-6">
+            {/* Mock Data Banner */}
+            {network === 'mock' && (
+                <MockDataBanner onFetchTrades={onNavigateToLookup} />
+            )}
+
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
@@ -101,8 +135,16 @@ export default function Journal() {
 
             <JournalStreakCard />
 
+            {/* Loading State */}
+            {loading && (
+                <div className="flex flex-col items-center justify-center min-h-[300px] text-white">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500 mb-4"></div>
+                    <p className="text-white/60">Loading journal entries...</p>
+                </div>
+            )}
+
             {/* Empty State - No Trades */}
-            {trades.length === 0 && (
+            {!loading && trades.length === 0 && (
                 <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
                     <div className="mb-4 rounded-none bg-white/5 p-6">
                         <svg
@@ -119,15 +161,27 @@ export default function Journal() {
                             />
                         </svg>
                     </div>
-                    <h3 className="text-xl font-semibold text-white mb-2">No Trades Yet</h3>
-                    <p className="text-white/60 max-w-md">
-                        Make Trade on Deriverse
+                    <h3 className="text-xl font-semibold text-white mb-2">No Trades Found</h3>
+                    <p className="text-white/60 max-w-md mb-6">
+                        {network === 'devnet' && !analyzingWallet
+                            ? "Go to Wallet Lookup to load your trades."
+                            : network === 'devnet'
+                                ? "We couldn't find any saved trades for your wallet."
+                                : "Make a trade to see it appear here."}
                     </p>
+                    {network === 'devnet' && (
+                        <button
+                            onClick={onNavigateToLookup}
+                            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-sm transition-colors"
+                        >
+                            Go to Wallet Lookup
+                        </button>
+                    )}
                 </div>
             )}
 
             {/* Trade Cards Grid */}
-            {trades.length > 0 && (
+            {!loading && trades.length > 0 && (
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {paginatedTrades.map((trade) => (

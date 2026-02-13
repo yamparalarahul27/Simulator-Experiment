@@ -39,29 +39,18 @@ export const WelcomeFooter = ({ className = '' }: WelcomeFooterProps) => {
                 <WelcomeCard className="footer-card !min-h-[auto] !py-4 w-full">
                     <div className="powered-by flex items-center justify-center space-x-4 w-full mb-2">
                         <span className="text-white/40 text-sm font-mono uppercase tracking-wider">Powered by</span>
-                        <img 
-                            src="/assets/deriverse_dex_logo.png" 
-                            alt="Deriverse Dex" 
+                        <img
+                            src="/assets/deriverse_dex_logo.png"
+                            alt="Deriverse Dex"
                             className="h-4 w-auto opacity-80"
                         />
-                        {/*<span className="text-white/40 text-sm font-mono">,</span>
-                        <img 
-                            src="/assets/solana_network_logo.png" 
-                            alt="Solana Network" 
-                            className="h-4 w-auto opacity-80"
-                        />
-                        <span className="text-white/40 text-sm font-mono">&</span>
-                        <img 
-                            src="/assets/superteam_earn_logo.png" 
-                            alt="Superteam Earn" 
-                            className="h-[18px] w-auto opacity-80"
-                        />*/ }
+
                     </div>
                 </WelcomeCard>
             </motion.div>
 
             {/* Attribution - Outside Card */}
-            <motion.div 
+            <motion.div
                 className="attribution text-xs opacity-60 text-white/80 mt-2"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

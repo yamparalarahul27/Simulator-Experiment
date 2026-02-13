@@ -19,6 +19,7 @@ const PERSISTABLE_TABS: TabType[] = ['dashboard', 'lookup', 'journal', 'appdocs'
 export default function TabNavigation() {
     const [activeTab, setActiveTab] = useState<TabType>(DEFAULT_TAB);
     const [network, setNetwork] = useState<'devnet' | 'mainnet' | 'mock'>('mock');
+    const [analyzingWallet, setAnalyzingWallet] = useState<string | null>(null);
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
@@ -90,14 +91,20 @@ export default function TabNavigation() {
         },
     ];
 
+    const handleSwitchToRealData = (walletAddress: string) => {
+        setAnalyzingWallet(walletAddress);
+        setNetwork('devnet');
+        setActiveTab('dashboard');
+    };
+
     const renderTabContent = () => {
         switch (activeTab) {
             case 'dashboard':
-                return <Home />;
+                return <Home network={network} analyzingWallet={analyzingWallet} onNavigateToLookup={() => setActiveTab('lookup')} />;
             case 'lookup':
-                return <TradeHistory />;
+                return <TradeHistory onSwitchToRealData={handleSwitchToRealData} />;
             case 'journal':
-                return <Journal />;
+                return <Journal network={network} analyzingWallet={analyzingWallet} onNavigateToLookup={() => setActiveTab('lookup')} />;
             case 'appdocs':
                 return <AboutScreen />;
             case 'help':

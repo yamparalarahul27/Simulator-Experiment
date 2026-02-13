@@ -10,16 +10,21 @@ import { useWalletConnection } from '../../lib/hooks/useWalletConnection';
 import { SupabaseWalletService } from '../../services/SupabaseWalletService';
 import { SupabaseTradeService } from '../../services/SupabaseTradeService';
 import { toast } from 'sonner';
+import AnalyticsConfirmModal from '../ui/AnalyticsConfirmModal';
 
 type TabType = 'deriverse' | 'all';
 type InputMode = 'manual' | 'wallet';
+
+interface TradeHistoryProps {
+  onSwitchToRealData?: (walletAddress: string) => void;
+}
 
 /**
  * Trade history component for fetching and displaying wallet transaction data
  * 
  * @returns Interface for wallet address input and transaction history display
  */
-export default function TradeHistory() {
+export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps = {}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [transactions, setTransactions] = useState<TransactionLog[]>([]);
@@ -32,6 +37,10 @@ export default function TradeHistory() {
   const [howItWorksOpen, setHowItWorksOpen] = useState(true);
   const [savingTrades, setSavingTrades] = useState(false);
   const [currentWalletAddress, setCurrentWalletAddress] = useState<string | null>(null);
+
+  // Modal state
+  const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
+  const [savedTradeCount, setSavedTradeCount] = useState(0);
 
   const heliusService = new HeliusService();
   const deriverseService = new DeriverseTradeService();
@@ -132,10 +141,13 @@ export default function TradeHistory() {
     try {
       const result = await tradeService.saveTrades(currentWalletAddress, deriverseTrades);
       console.log(`[Supabase] Saved ${result.saved} trades`);
-      toast.success(`Successfully saved ${result.saved} trades!`, {
-        description: 'Trades are now cached in database',
-        duration: 3000,
-      });
+
+      // Update state and show modal
+      setSavedTradeCount(result.saved);
+      setShowAnalyticsModal(true);
+
+      // Also show toast as backup/confirmation
+      toast.success(`Successfully saved ${result.saved} trades!`);
     } catch (error) {
       console.error('[Supabase] Failed to save trades:', error);
       toast.error('Failed to save trades', {
@@ -147,8 +159,21 @@ export default function TradeHistory() {
     }
   };
 
+  const handleAnalyticsConfirm = () => {
+    setShowAnalyticsModal(false);
+    if (onSwitchToRealData && currentWalletAddress) {
+      onSwitchToRealData(currentWalletAddress);
+    }
+  };
+
   return (
     <div className="min-h-screen text-white py-8">
+      <AnalyticsConfirmModal
+        isOpen={showAnalyticsModal}
+        onConfirm={handleAnalyticsConfirm}
+        onCancel={() => setShowAnalyticsModal(false)}
+        tradeCount={savedTradeCount}
+      />
       <div className="max-w-7xl mx-auto space-y-6">
 
         {/* Input Mode Switcher */}

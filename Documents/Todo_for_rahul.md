@@ -38,18 +38,49 @@ Show cached trades instantly without fetching from blockchain every time.
 - 15-20 minutes implementation
 - Immediate value for users
 
+
 ---
 
-## Priority 2: Analytics Dashboard
+## Priority 2: Mock to Real Data UX Flow
 
 ### Goal
-Create visual analytics using cached trade data.
+Create a seamless transition for users from viewing mock data to seeing their own real trading analytics.
 
 ### Why This Matters
-- **📈 Insights**: Visual representation of trading performance
-- **🎯 Decision Making**: Identify patterns, strengths, weaknesses
-- **💹 Engagement**: Users spend more time analyzing their trades
-- **🏆 Motivation**: See progress over time
+- **🌉 Bridge the Gap**: Clear path from "What is this?" (Mock) to "This is mine" (Real)
+- **🧠 Clarity**: Users always know if they are looking at sample data or their own data
+- **🤝 Call to Action**: Encourage users to import their trades to see the value
+- **🔄 User Choice**: Respect user's decision to stay in "exploration mode" or switch to "analytics mode"
+
+### User Journey
+1. **Landing**: User sees Dashboard/Journal with **Mock Data** + Banner explaining it's mock data.
+2. **Action**: Banner has "Go to Wallet Lookup" button.
+3. **Lookup**: User goes to Wallet tab, fetches trades (manual or connected).
+4. **Save**: User clicks "Save Trades".
+5. **Confirmation**: Modal appears: "Trades Saved! View Analytics?"
+   - **Yes**: Switch network to "Devnet" (Real Data mode) -> Go to Dashboard -> Show Real Charts.
+   - **No**: Stay on Lookup page.
+6. **Persistence**: Network selector "On Devnet" = Real Data, "On Mock Data" = Mock Data.
+
+### Key Components
+1. **Mock Data Banner**:
+   - Reusable component for Dashboard/Journal.
+   - Distinct visual style (e.g., Yellow/Info variant).
+   - "You are viewing sample data. Fetch your trades to see real analytics."
+
+2. **Analytics Confirmation Modal**:
+   - Triggered after successful save in `TradeHistory`.
+   - Clear binary choice: "View Analytics" vs "Dismiss".
+
+3. **Data Mode Integration**:
+   - Tie `network` state ('mock' vs 'devnet') to data sourcing in `Home` and `Journal`.
+   - 'mock' -> `MOCK_TRADES`
+   - 'devnet' -> `SupabaseTradeService.getTrades()`
+
+### Estimated Effort
+- 45-60 minutes
+- High impact on user activation
+
 
 ### Features to Build
 1. **PnL Chart Over Time**

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import PnLCard from './PnLCard';
 import TableUI_Demo from './TableUI_Demo';
 import FeeDistribution from './FeeDistribution';
@@ -10,7 +10,11 @@ import DrawdownCard from './DrawdownCard';
 import OrderTypeRatioCard from './OrderTypeRatioCard';
 import AverageTradeDurationCard from './AverageTradeDurationCard';
 import TimeBasedPerformanceCard from './TimeBasedPerformanceCard';
+import MockDataBanner from '../ui/MockDataBanner';
 import { MOCK_TRADES, calculateFeeBreakdown } from '../../lib/mockData';
+import { SupabaseTradeService } from '../../services/SupabaseTradeService';
+import { Trade } from '../../lib/types';
+import { toast } from 'sonner';
 import {
   calculateTradingVolume,
   formatCompactNumber,
@@ -29,7 +33,14 @@ import type { DateRange } from 'react-day-picker';
  * 
  * @returns Dashboard layout with analytics cards, charts, and transaction table
  */
-export default function Home() {
+
+interface HomeProps {
+  network?: 'devnet' | 'mainnet' | 'mock';
+  analyzingWallet?: string | null;
+  onNavigateToLookup?: () => void;
+}
+
+export default function Home({ network = 'mock', analyzingWallet, onNavigateToLookup }: HomeProps = {}) {
   const [activeFilter, setActiveFilter] = useState<FilterType>('All');
   const [activeWallet, setActiveWallet] = useState<1 | 2 | 3>(1);
   const [draftDateRange, setDraftDateRange] = useState<DateRange | undefined>({
@@ -43,11 +54,51 @@ export default function Home() {
   });
   const [appliedSelectedPairs, setAppliedSelectedPairs] = useState<string[]>([]);
 
+  // Real data state
+  const [realTrades, setRealTrades] = useState<Trade[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Determine which trades to display
+  const displayTrades = useMemo(() => {
+    return network === 'devnet' ? realTrades : MOCK_TRADES;
+  }, [network, realTrades]);
+
+  // Fetch real trades when in devnet mode
+  useEffect(() => {
+    async function fetchRealTrades() {
+      if (network === 'devnet' && analyzingWallet) {
+        setLoading(true);
+        setError(null);
+        try {
+          const service = new SupabaseTradeService();
+          const trades = await service.getTrades(analyzingWallet);
+          setRealTrades(trades);
+
+          if (trades.length === 0) {
+            toast.info('No trades found for this wallet on Devnet');
+          }
+        } catch (err) {
+          console.error('Failed to load trades:', err);
+          setError('Failed to load trades from database');
+          toast.error('Failed to load trades');
+        } finally {
+          setLoading(false);
+        }
+      } else if (network === 'devnet' && !analyzingWallet) {
+        // Devnet selected but no wallet -> Prompt user
+        setRealTrades([]);
+      }
+    }
+
+    fetchRealTrades();
+  }, [network, analyzingWallet]);
+
   const availablePairs = useMemo(() => {
     const symbols = new Set<string>();
-    for (const t of MOCK_TRADES) symbols.add(t.symbol);
+    for (const t of displayTrades) symbols.add(t.symbol);
     return Array.from(symbols).sort((a, b) => a.localeCompare(b));
-  }, []);
+  }, [displayTrades]);
 
   const handleApplyFilters = () => {
     setAppliedDateRange(draftDateRange);
@@ -57,7 +108,7 @@ export default function Home() {
 
   // Filter trades based on active filter
   const filteredTrades = useMemo(() => {
-    let trades = filterTradesByDate(MOCK_TRADES, activeFilter);
+    let trades = filterTradesByDate(displayTrades, activeFilter);
 
     if (appliedDateRange?.from) {
       const from = startOfDay(appliedDateRange.from);
@@ -73,7 +124,7 @@ export default function Home() {
     }
 
     return trades;
-  }, [activeFilter, appliedDateRange, appliedSelectedPairs]);
+  }, [activeFilter, appliedDateRange, appliedSelectedPairs, displayTrades]);
 
   // Calculate real fee data from FILTERED trades
   const feeData = useMemo(() => {
@@ -96,8 +147,50 @@ export default function Home() {
   const avgWin = useMemo(() => calculateAvgWin(filteredTrades), [filteredTrades]);
   const avgLoss = useMemo(() => calculateAvgLoss(filteredTrades), [filteredTrades]);
 
+  // Loading state
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-white">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mb-4"></div>
+        <p className="text-white/60">Loading your trading analytics...</p>
+      </div>
+    );
+  }
+
+  // Empty state for Devnet with no wallet or no trades
+  if (network === 'devnet' && (!analyzingWallet || realTrades.length === 0)) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6">
+        <div className="p-6 bg-white/5 rounded-full">
+          <svg className="w-16 h-16 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2z" />
+          </svg>
+        </div>
+        <div>
+          <h2 className="text-2xl font-bold text-white mb-2">No Trades Loaded</h2>
+          <p className="text-white/60 max-w-md mx-auto">
+            {analyzingWallet
+              ? "We couldn't find any saved trades for your wallet in our database."
+              : "You haven't selected a wallet to analyze yet."}
+          </p>
+        </div>
+        <button
+          onClick={onNavigateToLookup}
+          className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-sm transition-colors"
+        >
+          Go to Wallet Lookup
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
+      {/* Mock Data Banner */}
+      {network === 'mock' && (
+        <MockDataBanner onFetchTrades={onNavigateToLookup} />
+      )}
+
       <div className="flex flex-col gap-6">
         <div className="flex items-center justify-between gap-6 flex-wrap">
           <h1 className="text-3xl font-bold text-white">Home Analytics</h1>
@@ -112,11 +205,10 @@ export default function Home() {
                 key={num}
                 type="button"
                 onClick={() => setActiveWallet(num as 1 | 2 | 3)}
-                className={`px-4 py-2 rounded-none text-sm font-mono transition-all duration-200 border-b-2 ${
-                  activeWallet === num
-                    ? 'bg-purple-500/20 border-purple-500 text-white/100'
-                    : 'bg-white/5 border-x border-t border-white/10 border-b-transparent text-white/60 hover:bg-white/10 hover:border-white/20'
-                }`}
+                className={`px-4 py-2 rounded-none text-sm font-mono transition-all duration-200 border-b-2 ${activeWallet === num
+                  ? 'bg-purple-500/20 border-purple-500 text-white/100'
+                  : 'bg-white/5 border-x border-t border-white/10 border-b-transparent text-white/60 hover:bg-white/10 hover:border-white/20'
+                  }`}
               >
                 {num}
               </button>
