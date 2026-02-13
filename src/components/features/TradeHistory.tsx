@@ -7,6 +7,9 @@ import { getRpcConnection } from '../../lib/utils';
 import DeriverseTradesTable from './DeriverseTradesTable';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 import { useWalletConnection } from '../../lib/hooks/useWalletConnection';
+import { SupabaseWalletService } from '../../services/SupabaseWalletService';
+import { SupabaseTradeService } from '../../services/SupabaseTradeService';
+import { toast } from 'sonner';
 
 type TabType = 'deriverse' | 'all';
 type InputMode = 'manual' | 'wallet';
@@ -27,9 +30,13 @@ export default function TradeHistory() {
   const [loadingHelius, setLoadingHelius] = useState(false);
   const [inputMode, setInputMode] = useState<InputMode>('manual');
   const [howItWorksOpen, setHowItWorksOpen] = useState(true);
+  const [savingTrades, setSavingTrades] = useState(false);
+  const [currentWalletAddress, setCurrentWalletAddress] = useState<string | null>(null);
 
   const heliusService = new HeliusService();
   const deriverseService = new DeriverseTradeService();
+  const walletService = new SupabaseWalletService();
+  const tradeService = new SupabaseTradeService();
   const {
     connect,
     disconnect,
@@ -64,11 +71,26 @@ export default function TradeHistory() {
     setHasSearched(true);
     setTransactions([]);
     setDeriverseTrades([]);
+    setCurrentWalletAddress(address);
 
     // Fetch both in parallel using shared RPC connection
     const connection = getRpcConnection();
 
     try {
+      // Save wallet to Supabase
+      try {
+        await walletService.saveWallet({
+          address,
+          network: 'devnet',
+          provider: walletName || undefined,
+          method: inputMode === 'wallet' ? 'wallet_connect' : 'manual',
+        });
+        console.log('[Supabase] Wallet saved:', address);
+      } catch (supabaseError) {
+        console.error('[Supabase] Failed to save wallet:', supabaseError);
+        // Don't block the trade fetch if Supabase fails
+      }
+
       // Fetch Helius transactions
       setLoadingHelius(true);
       const heliusPromise = heliusService.fetchAllTransactions(address)
@@ -101,6 +123,30 @@ export default function TradeHistory() {
     }
   };
 
+  const handleSaveTrades = async () => {
+    if (!currentWalletAddress || deriverseTrades.length === 0) {
+      return;
+    }
+
+    setSavingTrades(true);
+    try {
+      const result = await tradeService.saveTrades(currentWalletAddress, deriverseTrades);
+      console.log(`[Supabase] Saved ${result.saved} trades`);
+      toast.success(`Successfully saved ${result.saved} trades!`, {
+        description: 'Trades are now cached in database',
+        duration: 3000,
+      });
+    } catch (error) {
+      console.error('[Supabase] Failed to save trades:', error);
+      toast.error('Failed to save trades', {
+        description: 'Please check your connection and try again',
+        duration: 4000,
+      });
+    } finally {
+      setSavingTrades(false);
+    }
+  };
+
   return (
     <div className="min-h-screen text-white py-8">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -111,11 +157,10 @@ export default function TradeHistory() {
             <button
               key={mode}
               onClick={() => setInputMode(mode)}
-              className={`px-4 py-2 font-semibold uppercase tracking-wide text-sm transition-all ${
-                inputMode === mode
-                  ? 'text-white border-b-2 border-blue-400'
-                  : 'text-zinc-500 hover:text-zinc-300'
-              }`}
+              className={`px-4 py-2 font-semibold uppercase tracking-wide text-sm transition-all ${inputMode === mode
+                ? 'text-white border-b-2 border-blue-400'
+                : 'text-zinc-500 hover:text-zinc-300'
+                }`}
             >
               {mode === 'manual' ? 'Manual Address' : 'Connect Wallet'}
             </button>
@@ -125,7 +170,7 @@ export default function TradeHistory() {
         {/* Input Section */}
         <CardWithCornerShine padding="xs">
           <h2 className="text-xl font-semibold text-white mb-4 text-center">
-            Wallet Transaction Search
+            Wallet Transaction Search on Devnet
           </h2>
           {inputMode === 'manual' ? (
             <AddressInput
@@ -181,11 +226,10 @@ export default function TradeHistory() {
             <div className="flex gap-4 border-b border-white/10 pb-2">
               <button
                 onClick={() => setActiveTab('deriverse')}
-                className={`px-6 py-3 font-semibold text-sm uppercase tracking-wide transition-all ${
-                  activeTab === 'deriverse'
-                    ? 'text-white border-b-2 border-blue-400'
-                    : 'text-zinc-400 hover:text-zinc-200'
-                }`}
+                className={`px-6 py-3 font-semibold text-sm uppercase tracking-wide transition-all ${activeTab === 'deriverse'
+                  ? 'text-white border-b-2 border-blue-400'
+                  : 'text-zinc-400 hover:text-zinc-200'
+                  }`}
               >
                 Deriverse Trades
                 {deriverseTrades.length > 0 && (
@@ -196,11 +240,10 @@ export default function TradeHistory() {
               </button>
               <button
                 onClick={() => setActiveTab('all')}
-                className={`px-6 py-3 font-semibold text-sm uppercase tracking-wide transition-all ${
-                  activeTab === 'all'
-                    ? 'text-white border-b-2 border-blue-400'
-                    : 'text-zinc-400 hover:text-zinc-200'
-                }`}
+                className={`px-6 py-3 font-semibold text-sm uppercase tracking-wide transition-all ${activeTab === 'all'
+                  ? 'text-white border-b-2 border-blue-400'
+                  : 'text-zinc-400 hover:text-zinc-200'
+                  }`}
               >
                 All Transactions
                 {transactions.length > 0 && (
@@ -213,7 +256,7 @@ export default function TradeHistory() {
 
             {/* Tab Content */}
             {activeTab === 'deriverse' && (
-              <div>
+              <div className="space-y-4">
                 {loadingDeriverse ? (
                   <div className="rounded-none border border-white/10 bg-black/80 backdrop-blur-xl p-12 text-center">
                     <div className="flex items-center justify-center">
@@ -222,7 +265,30 @@ export default function TradeHistory() {
                     </div>
                   </div>
                 ) : (
-                  <DeriverseTradesTable trades={deriverseTrades} />
+                  <>
+                    <DeriverseTradesTable trades={deriverseTrades} />
+                    {deriverseTrades.length > 0 && currentWalletAddress && (
+                      <div className="flex justify-end">
+                        <button
+                          onClick={handleSaveTrades}
+                          disabled={savingTrades}
+                          className="px-6 py-3 bg-blue-600 text-white rounded-none font-semibold hover:bg-blue-700 transition disabled:bg-blue-900/40 disabled:cursor-not-allowed flex items-center gap-2"
+                        >
+                          {savingTrades ? (
+                            <>
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                              <span>Saving...</span>
+                            </>
+                          ) : (
+                            <>
+                              <span>💾</span>
+                              <span>Save {deriverseTrades.length} Trades to Database</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             )}

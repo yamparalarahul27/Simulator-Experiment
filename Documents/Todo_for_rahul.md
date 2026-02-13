@@ -1,4 +1,247 @@
-# Todo List for Rahul
+# Future Enhancements - Todo List
+
+## Priority 1: Load Cached Trades
+
+### Goal
+Show cached trades instantly without fetching from blockchain every time.
+
+### Why This Matters
+- **⚡ Performance**: Instant load (no RPC calls needed)
+- **💰 Cost Savings**: Reduces expensive RPC calls to Helius/Solana
+- **📊 Reliability**: Historical data always available, even if RPC is down
+- **🔄 Better UX**: Show cached data immediately, then offer refresh option
+
+### Implementation Approach
+1. **Check Database First**
+   - When user enters wallet address, query `trades` table first
+   - If trades exist, display them immediately
+   - Show "Last synced X hours ago" indicator
+
+2. **Add Refresh Button**
+   - Replace "Run Lookup" with "Refresh" when cached data exists
+   - Re-fetch from blockchain on user request
+   - Update `last_synced_at` in `user_wallets` table
+
+3. **Smart Loading**
+   ```typescript
+   // Pseudocode
+   const cachedTrades = await tradeService.getTrades(address);
+   if (cachedTrades.length > 0) {
+     setDeriverseTrades(cachedTrades);
+     setDataSource('cache');
+   } else {
+     // Fetch from blockchain
+   }
+   ```
+
+### Estimated Effort
+- 15-20 minutes implementation
+- Immediate value for users
+
+---
+
+## Priority 2: Analytics Dashboard
+
+### Goal
+Create visual analytics using cached trade data.
+
+### Why This Matters
+- **📈 Insights**: Visual representation of trading performance
+- **🎯 Decision Making**: Identify patterns, strengths, weaknesses
+- **💹 Engagement**: Users spend more time analyzing their trades
+- **🏆 Motivation**: See progress over time
+
+### Features to Build
+1. **PnL Chart Over Time**
+   - Line chart showing cumulative PnL
+   - Use Recharts (already in project)
+   - Query: `SELECT closed_at, SUM(pnl) OVER (ORDER BY closed_at) as cumulative_pnl`
+
+2. **Win Rate Visualization**
+   - Pie chart or donut chart
+   - Winning vs losing trades
+   - Percentage display
+
+3. **Performance by Symbol**
+   - Bar chart comparing different trading pairs
+   - Total PnL per symbol
+   - Win rate per symbol
+
+4. **Daily/Weekly Performance**
+   - Heatmap or bar chart
+   - Identify best trading days
+   - Pattern recognition
+
+5. **Best/Worst Trades Display**
+   - Table showing top 10 winners and losers
+   - Link to transaction on Solscan
+   - Highlight patterns
+
+### Implementation Approach
+- Create new `Analytics` tab in navigation
+- Use existing Recharts library
+- Query cached trades from Supabase
+- Real-time calculations (no backend needed)
+
+### Estimated Effort
+- 1-2 hours for basic dashboard
+- Can iterate and add features over time
+
+---
+
+## Priority 3: Trade Annotations System
+
+### Goal
+Let users add notes, tags, and lessons learned to individual trades.
+
+### Why This Matters
+- **📝 Learning**: Document what worked and what didn't
+- **🏷️ Organization**: Tag trades by strategy, setup, emotion
+- **💡 Improvement**: Review past mistakes and successes
+- **🔍 Filtering**: Find trades by tag or note content
+
+### Features to Build
+1. **Add Notes to Trades**
+   - Text area for each trade
+   - Save to database
+   - Display in trade details
+
+2. **Tagging System**
+   - Predefined tags: "revenge trade", "good setup", "FOMO", "patience"
+   - Custom tags
+   - Multi-tag support
+
+3. **Lessons Learned**
+   - Dedicated field for key takeaways
+   - Display in journal view
+
+4. **Filter by Tags**
+   - Show all trades with specific tag
+   - Analyze performance by tag
+   - Example: "How do my 'revenge trades' perform?"
+
+### Database Schema
+```sql
+CREATE TABLE trade_annotations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  trade_id TEXT NOT NULL REFERENCES trades(id) ON DELETE CASCADE,
+  notes TEXT,
+  tags TEXT[], -- Array of tags
+  lessons_learned TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+```
+
+### Migration from localStorage
+- Current annotations stored in localStorage
+- Migrate to database for persistence
+- Sync across devices
+
+### Estimated Effort
+- 30-45 minutes for basic implementation
+- Additional time for UI polish
+
+---
+
+## Priority 4: Multi-Wallet Management
+
+### Goal
+Track multiple wallets and compare performance across them.
+
+### Why This Matters
+- **👛 Organization**: Manage multiple trading accounts
+- **📊 Comparison**: Compare performance across wallets
+- **🔄 Flexibility**: Easy switching between wallets
+- **📈 Portfolio View**: Combined analytics across all wallets
+
+### Features to Build
+1. **Save Multiple Wallets**
+   - Already have `user_wallets` table
+   - Add wallet nickname/label
+   - Store wallet metadata
+
+2. **Wallet Selector**
+   - Dropdown to switch between saved wallets
+   - Show wallet nickname + truncated address
+   - Quick access to recent wallets
+
+3. **Compare Wallet Performance**
+   - Side-by-side comparison
+   - Total PnL per wallet
+   - Win rate per wallet
+   - Best performing wallet
+
+4. **Combined Analytics**
+   - Portfolio-level metrics
+   - Total across all wallets
+   - Use existing multi-wallet SQL query
+
+### Implementation Approach
+- Use existing `user_wallets` table
+- Add wallet management UI
+- Extend analytics to support multi-wallet view
+
+### Estimated Effort
+- 45-60 minutes for basic implementation
+- Foundation already exists (database schema ready)
+
+---
+
+## Additional Ideas (Lower Priority)
+
+### 5. Export Trades to CSV
+- Download trades for tax reporting
+- Excel-compatible format
+- Filter by date range
+
+### 6. Trade Alerts/Notifications
+- Alert when PnL crosses threshold
+- Daily/weekly summary emails
+- Browser notifications
+
+### 7. Strategy Tracking
+- Tag trades by strategy
+- Compare strategy performance
+- Identify best strategies
+
+### 8. Social Features
+- Share trade performance (anonymously)
+- Leaderboards
+- Community insights
+
+---
+
+## Implementation Order Recommendation
+
+1. **Load Cached Trades** (15-20 min) - Immediate value
+2. **Multi-Wallet Management** (45-60 min) - Foundation for growth
+3. **Analytics Dashboard** (1-2 hours) - High engagement
+4. **Trade Annotations** (30-45 min) - Learning tool
+
+**Total Estimated Time:** 3-4 hours for all priority features
+
+---
+
+## Technical Notes
+
+### Already Implemented ✅
+- `user_wallets` table with foreign key relationship
+- `trades` table with comprehensive schema
+- `SupabaseWalletService` for wallet operations
+- `SupabaseTradeService` for trade operations
+- Toast notifications (Sonner)
+- Analytics SQL queries documented
+
+### Ready to Use
+- Recharts library (for charts)
+- Supabase client (for database)
+- TypeScript types (Trade interface)
+- Existing UI components (cards, tables)
+
+### Dependencies
+All features can be built with existing dependencies. No new packages needed (except possibly for CSV export).
+
 
 ## Documentation Audit Summary
 
@@ -100,7 +343,6 @@ export const spacing = {
   md: '1rem',
   lg: '2rem'
 };
-```
 
 ### 9. Centralization Impact
 - ✅ Improved consistency
@@ -109,6 +351,3 @@ export const spacing = {
 
 ### 10. Security and Bug Check
 - CodeRabit, Prismor
-
-### 11. Full Audit Report
-See attached: `documentation-audit-report.md`

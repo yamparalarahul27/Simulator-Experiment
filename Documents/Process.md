@@ -1,11 +1,11 @@
 # Development Process
 
 ## Workflow
-1.  **Task Management**: Follow the items in `task.md`.
-2.  **Branching**:
+
+1.  **Branching**:
     - `main`: Production-ready code.
     - Feature branches: Created for new tasks (e.g., `feature/analytics-dashboard`).
-3.  **Commits**:
+2.  **Commits**:
     - Follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification for every commit (e.g., `feat(auth): add MFA enrollment`, `fix(trades): handle null pnl`).
     - Required structure: `<type>(optional scope): <short description>`.
     - Accepted types include (but are not limited to): `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`.
