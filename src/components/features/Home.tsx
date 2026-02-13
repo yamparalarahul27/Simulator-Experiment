@@ -161,24 +161,26 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
   if (network === 'devnet' && (!analyzingWallet || realTrades.length === 0)) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6">
-        <div className="p-6 bg-white/5 rounded-full">
-          <svg className="w-16 h-16 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2z" />
-          </svg>
+        <div>
+          <img 
+            src="/assets/graphic_no_trade_data.png" 
+            alt="No trade data" 
+            className="w-64"
+          />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-white mb-2">No Trades Loaded</h2>
+          <h2 className="text-2xl font-bold text-white mb-2">Add or Connect Wallet to view your trades Analytics</h2>
           <p className="text-white/60 max-w-md mx-auto">
             {analyzingWallet
               ? "We couldn't find any saved trades for your wallet in our database."
-              : "You haven't selected a wallet to analyze yet."}
+              : "It seems you haven't selected a wallet to analyze yet."}
           </p>
         </div>
         <button
           onClick={onNavigateToLookup}
-          className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-sm transition-colors"
+          className="px-6 py-3 bg-purple-600/50 hover:bg-purple-700 text-white font-medium rounded-none transition-colors"
         >
-          Go to Wallet Lookup
+          Add Wallet
         </button>
       </div>
     );

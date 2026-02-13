@@ -66,11 +66,16 @@ export default function LoadingScreen() {
                 }
             });
         } else {
-            document.body.style.overflow = '';
-            const bodyChildren = Array.from(document.body.children);
-            bodyChildren.forEach((child) => {
-                (child as HTMLElement).style.visibility = '';
-            });
+            // Add a small buffer before showing content to ensure smooth transition
+            const bufferTimer = setTimeout(() => {
+                document.body.style.overflow = '';
+                const bodyChildren = Array.from(document.body.children);
+                bodyChildren.forEach((child) => {
+                    (child as HTMLElement).style.visibility = '';
+                });
+            }, 200);
+
+            return () => clearTimeout(bufferTimer);
         }
     }, [isVisible]);
 

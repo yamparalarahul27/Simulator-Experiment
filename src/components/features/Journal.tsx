@@ -133,7 +133,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                 )}
             </div>
 
-            <JournalStreakCard />
+            {!loading && trades.length > 0 && <JournalStreakCard />}
 
             {/* Loading State */}
             {loading && (
@@ -146,22 +146,14 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
             {/* Empty State - No Trades */}
             {!loading && trades.length === 0 && (
                 <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
-                    <div className="mb-4 rounded-none bg-white/5 p-6">
-                        <svg
-                            className="h-12 w-12 text-white/40"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={1.5}
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                            />
-                        </svg>
-                    </div>
-                    <h3 className="text-xl font-semibold text-white mb-2">No Trades Found</h3>
+                    <div>
+          <img 
+            src="/assets/graphic_no_trade_data.png" 
+            alt="No trade data" 
+            className="w-64"
+          />
+        </div>
+                    <h3 className="text-xl font-semibold text-white mb-2">Add or Connect Wallet to view your trades Journal</h3>
                     <p className="text-white/60 max-w-md mb-6">
                         {network === 'devnet' && !analyzingWallet
                             ? "Go to Wallet Lookup to load your trades."
@@ -172,9 +164,9 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                     {network === 'devnet' && (
                         <button
                             onClick={onNavigateToLookup}
-                            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-sm transition-colors"
+                            className="px-6 py-3 bg-purple-600/50 hover:bg-purple-700 text-white font-medium rounded-none transition-colors"
                         >
-                            Go to Wallet Lookup
+                            Add Wallet
                         </button>
                     )}
                 </div>

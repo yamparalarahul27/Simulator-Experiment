@@ -346,7 +346,7 @@ export const GlassmorphismNavbar = ({
                                         </button>
 
                                         {isNetworkDropdownOpen && (
-                                            <div className="absolute top-full right-0 pt-2 min-w-[160px]">
+                                            <div className="absolute top-full right-0 pt-2 min-w-[200px]">
                                                 <div className="bg-black/95 backdrop-blur-xl border border-white/10 rounded-none shadow-2xl overflow-hidden">
                                                     <button
                                                         onClick={() => handleNetworkChange('mock')}
@@ -368,16 +368,12 @@ export const GlassmorphismNavbar = ({
                                                         <LivePulseIndicator variant="devnet" size="sm" />
                                                         <span>On Devnet</span>
                                                     </button>
-                                                    <button
-                                                        onClick={() => handleNetworkChange('mainnet')}
-                                                        className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${networkStatus.variant === 'mainnet'
-                                                            ? 'text-white bg-white/10'
-                                                            : 'text-white/60 hover:text-white hover:bg-white/5'
-                                                            }`}
+                                                    <div
+                                                        className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-white/40 cursor-not-allowed`}
                                                     >
                                                         <LivePulseIndicator variant="mainnet" size="sm" />
-                                                        <span>On Mainnet</span>
-                                                    </button>
+                                                        <span>On Mainnet (Coming Soon)</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         )}
