@@ -5,18 +5,28 @@ import TradeHistory from '../features/TradeHistory';
 import Home from '../features/Home';
 import Journal from '../features/Journal';
 import Settings from '../features/Settings';
+import AboutScreen from '../features/AboutScreen';
+import HelpScreen from '../features/HelpScreen';
+import RoadmapScreen from '../features/RoadmapScreen';
 import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
 import Footer from './Footer';
 
 export type TabType = 'dashboard' | 'lookup' | 'journal' | 'appdocs' | 'help' | 'roadmap' | 'settings';
 
+const DEFAULT_TAB: TabType = 'dashboard';
+const PERSISTABLE_TABS: TabType[] = ['dashboard', 'lookup', 'journal', 'appdocs', 'help', 'roadmap', 'settings'];
+
 export default function TabNavigation() {
-    const [activeTab, setActiveTab] = useState<TabType>(() => {
-        if (typeof window === 'undefined') return 'dashboard';
-        const persisted = window.localStorage.getItem('deriverse.activeTab') as TabType | null;
-        return persisted ?? 'dashboard';
-    });
+    const [activeTab, setActiveTab] = useState<TabType>(DEFAULT_TAB);
     const [network, setNetwork] = useState<'devnet' | 'mainnet' | 'mock'>('mock');
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const persisted = window.localStorage.getItem('deriverse.activeTab') as TabType | null;
+        if (persisted && PERSISTABLE_TABS.includes(persisted)) {
+            setActiveTab(persisted);
+        }
+    }, []);
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
@@ -88,23 +98,11 @@ export default function TabNavigation() {
             case 'journal':
                 return <Journal />;
             case 'appdocs':
-                return (
-                    <div className="flex items-center justify-center min-h-[60vh]">
-                        <h1 className="text-4xl font-bold text-white">About</h1>
-                    </div>
-                );
+                return <AboutScreen />;
             case 'help':
-                return (
-                    <div className="flex items-center justify-center min-h-[60vh]">
-                        <h1 className="text-4xl font-bold text-white">Help Center</h1>
-                    </div>
-                );
+                return <HelpScreen />;
             case 'roadmap':
-                return (
-                    <div className="flex items-center justify-center min-h-[60vh]">
-                        <h1 className="text-4xl font-bold text-white">Roadmap</h1>
-                    </div>
-                );
+                return <RoadmapScreen />;
             case 'settings':
                 return <Settings />;
             default:

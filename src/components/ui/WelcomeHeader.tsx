@@ -10,6 +10,8 @@ import {
     DrawerHeader,
     DrawerTitle,
 } from './drawer';
+import HelpDrawerContent from './HelpDrawerContent';
+import AboutDrawerContent from './AboutDrawerContent';
 
 /**
  * WelcomeHeader component for onboarding surfaces (Welcome + Wallet Ask).
@@ -42,9 +44,7 @@ export default function WelcomeHeader() {
                         <DrawerHeader className="pr-8">
                             <DrawerTitle className="text-white">Help</DrawerTitle>
                         </DrawerHeader>
-                        <div className="p-4 text-white/80">
-                            Help content
-                        </div>
+                        <HelpDrawerContent />
                     </DrawerContent>
                 </Drawer>
 
@@ -60,9 +60,7 @@ export default function WelcomeHeader() {
                         <DrawerHeader>
                             <DrawerTitle className="text-white">About</DrawerTitle>
                         </DrawerHeader>
-                        <div className="p-4 text-white/80">
-                            About content
-                        </div>
+                        <AboutDrawerContent />
                     </DrawerContent>
                 </Drawer>
 
