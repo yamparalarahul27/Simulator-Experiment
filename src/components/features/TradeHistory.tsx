@@ -6,6 +6,7 @@ import { DeriverseTradeService } from '../../services/DeriverseTradeService';
 import { getRpcConnection } from '../../lib/utils';
 import DeriverseTradesTable from './DeriverseTradesTable';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
+import { useWalletConnection } from '../../lib/hooks/useWalletConnection';
 
 type TabType = 'deriverse' | 'all';
 type InputMode = 'manual' | 'wallet';
@@ -29,6 +30,33 @@ export default function TradeHistory() {
 
   const heliusService = new HeliusService();
   const deriverseService = new DeriverseTradeService();
+  const {
+    connect,
+    disconnect,
+    connected,
+    connecting,
+    walletAddress,
+    shortAddress,
+    walletName,
+    openWalletModal
+  } = useWalletConnection();
+
+  const handleWalletConnect = async () => {
+    try {
+      openWalletModal();
+      await connect();
+    } catch (err) {
+      console.error('[Wallet] connect failed', err);
+    }
+  };
+
+  const handleWalletDisconnect = async () => {
+    try {
+      await disconnect();
+    } catch (err) {
+      console.error('[Wallet] disconnect failed', err);
+    }
+  };
 
   const handleAddressSubmit = async (address: string) => {
     setLoading(true);
@@ -105,15 +133,42 @@ export default function TradeHistory() {
               loading={loading}
             />
           ) : (
-            <div className="flex flex-col items-center gap-4 text-center py-4">
+            <div className="flex flex-col items-center gap-4 text-center py-4 w-full">
               <p className="text-zinc-400 max-w-md">
                 Connect your Solana wallet to quickly run the lookup without pasting the address manually.
               </p>
+              <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto justify-center">
+                <button
+                  onClick={handleWalletConnect}
+                  disabled={connecting || connected}
+                  className="px-6 py-3 bg-white/10 border border-white/20 rounded-none font-semibold text-white hover:bg-white/15 transition disabled:opacity-50"
+                >
+                  {connecting
+                    ? 'Connecting…'
+                    : connected
+                      ? 'Wallet Connected'
+                      : 'Connect Wallet'}
+                </button>
+                {connected && (
+                  <button
+                    onClick={handleWalletDisconnect}
+                    className="px-6 py-3 border border-white/20 rounded-none font-semibold text-white hover:bg-white/10 transition"
+                  >
+                    Disconnect
+                  </button>
+                )}
+              </div>
+              {walletAddress && (
+                <div className="text-sm text-blue-300 font-mono">
+                  {walletName ? `${walletName} • ${shortAddress}` : shortAddress}
+                </div>
+              )}
               <button
-                className="px-6 py-3 bg-white/10 border border-white/20 rounded-none font-semibold text-white hover:bg-white/15 transition"
-                disabled
+                onClick={() => walletAddress && handleAddressSubmit(walletAddress)}
+                disabled={!walletAddress || loading}
+                className="px-6 py-3 bg-blue-600 text-white rounded-none font-semibold hover:bg-blue-700 transition disabled:bg-blue-900/40"
               >
-                Connect Wallet
+                {loading ? 'Running…' : walletAddress ? 'Run Lookup' : 'Connect to Run'}
               </button>
             </div>
           )}

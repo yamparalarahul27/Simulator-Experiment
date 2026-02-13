@@ -10,6 +10,23 @@ export const DERIVERSE_VERSION = parseInt(process.env.NEXT_PUBLIC_DERIVERSE_VERS
 export const HELIUS_RPC_URL = process.env.NEXT_PUBLIC_HELIUS_RPC_URL ?? 'https://devnet.helius-rpc.com/?api-key=REMOVED';
 export const RPC_HTTP = process.env.NEXT_PUBLIC_RPC_HTTP ?? HELIUS_RPC_URL;
 
+export type SupportedCluster = 'devnet' | 'mainnet-beta';
+
+// Map of user-selectable clusters to their RPC endpoints. Keeps wallet adapters
+// lightweight while still letting us flip between devnet and mainnet via envs.
+export const WALLET_CLUSTER_CONFIG: Record<SupportedCluster, { rpcUrl: string }> = {
+    'devnet': {
+        rpcUrl: process.env.NEXT_PUBLIC_RPC_DEVNET ?? HELIUS_RPC_URL
+    },
+    'mainnet-beta': {
+        rpcUrl: process.env.NEXT_PUBLIC_RPC_MAINNET ?? 'https://api.mainnet-beta.solana.com'
+    }
+};
+
+export const DEFAULT_WALLET_CLUSTER: SupportedCluster = (process.env.NEXT_PUBLIC_WALLET_CLUSTER === 'mainnet-beta'
+    ? 'mainnet-beta'
+    : 'devnet');
+
 // Deriverse Decimals
 export const PRICE_DECIMALS = 1e9;
 export const ASSET_DECIMALS = 1e9;
