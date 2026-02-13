@@ -68,6 +68,8 @@ export interface GlassmorphismNavbarProps {
     logo: ReactNode | string;
     /** Logo link destination (default: '/') */
     logoHref?: string;
+    /** Optional handler when logo is clicked */
+    onLogoClick?: () => void;
     /** Array of navigation items */
     navItems: NavItem[];
     /** Currently active path for highlighting */
@@ -119,6 +121,7 @@ export interface GlassmorphismNavbarProps {
 export const GlassmorphismNavbar = ({
     logo,
     logoHref = '/',
+    onLogoClick,
     navItems,
     activePath = '',
     networkStatus,
@@ -206,7 +209,16 @@ export const GlassmorphismNavbar = ({
                     <div className="bg-black/80 backdrop-blur-xl border border-white/10 rounded-none px-3 sm:px-4 py-1.5 sm:py-2 shadow-2xl shadow-black/20">
                         <div className="flex items-center justify-between">
                             {/* Logo */}
-                            <a href={logoHref} className="flex-shrink-0">
+                            <a
+                                href={logoHref}
+                                onClick={(event) => {
+                                    if (onLogoClick) {
+                                        event.preventDefault();
+                                        onLogoClick();
+                                    }
+                                }}
+                                className="flex-shrink-0"
+                            >
                                 {renderLogo()}
                             </a>
 

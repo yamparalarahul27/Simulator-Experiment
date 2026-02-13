@@ -140,6 +140,7 @@ export default function TabNavigation() {
                 }}
                 onNetworkChange={setNetwork}
                 onProfileSettingsClick={() => setActiveTab('profile-settings')}
+                onLogoClick={() => setActiveTab('dashboard')}
                 className="mb-8"
             />
 

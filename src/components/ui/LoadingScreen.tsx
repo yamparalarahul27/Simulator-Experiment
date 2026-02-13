@@ -40,6 +40,20 @@ export default function LoadingScreen() {
         }
     }, [currentPhase]);
 
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+
+        const handleShowWelcome = () => {
+            setCurrentPhase('welcome');
+            setIsVisible(true);
+        };
+
+        window.addEventListener('deriverse:show-welcome', handleShowWelcome);
+        return () => {
+            window.removeEventListener('deriverse:show-welcome', handleShowWelcome);
+        };
+    }, []);
+
     // Hide all body content while loading
     useEffect(() => {
         if (isVisible) {
