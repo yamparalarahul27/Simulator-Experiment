@@ -13,6 +13,23 @@ interface PnLCardProps {
     trades?: Trade[];
 }
 
+/**
+ * PnLCard Component
+ * 
+ * PURPOSE:
+ * Displays a summary of Profit & Loss (PnL) for a set of trades.
+ * Includes total PnL value, a percentage comparison (placeholder), and
+ * toggleable visibility for the PnL equity chart and drawdown analysis.
+ * 
+ * FEATURES:
+ * - Dynamic color coding (green for profit, red for loss)
+ * - Integration with PnLChart for equity curve visualization
+ * - Integration with Drawdown stats via Filter reactivity
+ * - Fallback to MOCK_TRADES if real data is not provided
+ * 
+ * @param activeFilter - The current timeframe filter (e.g., 'Today', 'This Week')
+ * @param trades - Optional array of real trade data to analyze
+ */
 export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) {
     const [isChartVisible, setIsChartVisible] = useState(false);
     const [showDrawdown, setShowDrawdown] = useState(false);
@@ -37,7 +54,7 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
     // Calculate real PnL data based on filter
     const pnlData = useMemo(() => {
         const currentTrades = trades ?? filterTradesByDate(MOCK_TRADES, activeFilter);
-        
+
         // Calculate total PnL from trades
         const currentPnL = currentTrades.reduce((sum, trade) => sum + trade.pnl, 0);
 
@@ -83,11 +100,11 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                     {/* Header */}
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                         <div className="flex items-center gap-3">
-                            <img 
-    src="/assets/PnL Analysis Icon.png" 
-    alt="PnL Analysis" 
-    className="w-10 h-10"
-/>
+                            <img
+                                src="/assets/PnL Analysis Icon.png"
+                                alt="PnL Analysis"
+                                className="w-10 h-10"
+                            />
                             <div>
                                 <div className="flex items-center">
                                     <h2 className="text-xl font-bold text-white tracking-wide">PnL Analysis</h2>
@@ -96,20 +113,18 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                                 <p className="text-sm text-white/40 font-mono">NET PROFIT & LOSS</p>
                             </div>
                         </div>
-                        
+
                         {/* Drawdown Toggle */}
                         <div className="flex items-center gap-3">
                             <span className="text-white/60 text-sm">Show Drawdown on Chart</span>
                             <button
                                 onClick={() => setShowDrawdown(!showDrawdown)}
-                                className={`relative inline-flex h-6 w-11 items-center rounded-none bg-black/10 border border-white/10 transition-colors duration-300 ${
-                                    showDrawdown ? 'bg-purple-600' : 'bg-gray-600'
-                                }`}
+                                className={`relative inline-flex h-6 w-11 items-center rounded-none bg-black/10 border border-white/10 transition-colors duration-300 ${showDrawdown ? 'bg-purple-600' : 'bg-gray-600'
+                                    }`}
                             >
                                 <span
-                                    className={`inline-block h-4 w-4 transform rounded-none bg-white transition-transform duration-300 ${
-                                        showDrawdown ? 'translate-x-6' : 'translate-x-1'
-                                    }`}
+                                    className={`inline-block h-4 w-4 transform rounded-none bg-white transition-transform duration-300 ${showDrawdown ? 'translate-x-6' : 'translate-x-1'
+                                        }`}
                                 />
                             </button>
                         </div>
@@ -120,7 +135,7 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
                             {/* Divider Line */}
                             <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/10 hidden md:block" />
-                            
+
                             {/* Total PnL */}
                             <div className="text-center space-y-2">
                                 <span className="text-sm text-white/40 uppercase tracking-[0.2em]">Total PnL ({activeFilter})</span>
@@ -135,7 +150,7 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                                     </div>
                                 )}
                             </div>
-                            
+
                             {/* Max Drawdown */}
                             <div className="text-center space-y-2">
                                 <span className="text-sm text-white/40 uppercase tracking-[0.2em]">Max Drawdown</span>
@@ -197,9 +212,9 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                         {isChartVisible && (
                             <div className="mt-6">
                                 <div className="h-[400px] w-full animate-in fade-in slide-in-from-top-4 duration-300">
-                                    <PnLChart 
-                                        data={chartData} 
-                                        height={400} 
+                                    <PnLChart
+                                        data={chartData}
+                                        height={400}
                                         showDrawdown={showDrawdown}
                                         drawdownData={drawdownData}
                                     />

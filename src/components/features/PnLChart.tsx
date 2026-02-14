@@ -15,7 +15,7 @@ const CustomTooltip = ({ active, payload, label, showDrawdown }: any) => {
         const drawdownInfo = showDrawdown && payload.find((p: any) => p.name === 'drawdown');
         const pnlInfo = payload.find((p: any) => p.name === 'value');
         const ratioInfo = showDrawdown && payload.find((p: any) => p.name === 'pnlToDrawdownRatio');
-        
+
         return (
             <div className="bg-black/90 border border-white/10 p-3 rounded shadow-xl backdrop-blur-md">
                 <p className="text-white/60 text-xs mb-1">Time: {label}</p>
@@ -40,6 +40,25 @@ const CustomTooltip = ({ active, payload, label, showDrawdown }: any) => {
     return null;
 };
 
+/**
+ * PnLChart Component
+ * 
+ * PURPOSE:
+ * A rich, interactive equity curve chart built with Recharts.
+ * Visualizes Profit & Loss over time and optionally overlays drawdown metrics
+ * for comprehensive risk vs reward analysis.
+ * 
+ * FEATURES:
+ * - Dynamic split-color gradient (Green for positive, Orange for negative)
+ * - Animated area curves for a premium feel
+ * - Optional Drawdown overlay with specialized tooltips
+ * - Integration with PnL/DD ratio visualization
+ * 
+ * @param data - Array of data points containing 'time', 'value', and optional metrics
+ * @param height - custom chart height in pixels
+ * @param showDrawdown - Boolean toggle to show/hide risk metrics overlay
+ * @param drawdownData - Array of pre-calculated drawdown points
+ */
 export const PnLChart: React.FC<PnLChartProps> = ({ data, height = 400, showDrawdown = false, drawdownData = [] }) => {
     // 1. Calculate gradient offset based on data range
     const gradientOffset = useMemo(() => {
@@ -59,12 +78,12 @@ export const PnLChart: React.FC<PnLChartProps> = ({ data, height = 400, showDraw
     // 2. Merge data with drawdown information if enabled
     const chartData = useMemo(() => {
         if (!showDrawdown || !drawdownData.length) return data;
-        
+
         return data.map((item, index) => {
             const drawdownPoint = drawdownData[index];
             const totalPnL = data.slice(0, index + 1).reduce((sum: number, d: any) => sum + d.value, 0);
             const maxDrawdown = drawdownData.slice(0, index + 1).reduce((max: number, dd: DrawdownPoint) => Math.max(max, dd.value), 0);
-            
+
             return {
                 ...item,
                 drawdown: drawdownPoint?.value || 0,

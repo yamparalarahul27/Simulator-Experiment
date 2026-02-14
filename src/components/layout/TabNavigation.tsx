@@ -16,6 +16,20 @@ export type TabType = 'dashboard' | 'lookup' | 'journal' | 'appdocs' | 'help' | 
 const DEFAULT_TAB: TabType = 'dashboard';
 const PERSISTABLE_TABS: TabType[] = ['dashboard', 'lookup', 'journal', 'appdocs', 'help', 'roadmap', 'profile-settings'];
 
+/**
+ * TabNavigation Component
+ * 
+ * PURPOSE:
+ * The primary navigation controller for the Deriverse application.
+ * Manages the active tab state and coordinates between high-level views
+ * like Dashboard, Journal, and Profile.
+ * 
+ * FEATURES:
+ * - Persistent tab state across page refreshes via localStorage
+ * - Global event listeners for cross-component navigation
+ * - Network state management ('devnet' | 'mainnet' | 'mock')
+ * - Dynamic rendering of feature screens based on selection
+ */
 export default function TabNavigation() {
     const [activeTab, setActiveTab] = useState<TabType>(DEFAULT_TAB);
     const [network, setNetwork] = useState<'devnet' | 'mainnet' | 'mock'>('mock');
