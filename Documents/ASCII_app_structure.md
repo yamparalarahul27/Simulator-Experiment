@@ -21,8 +21,8 @@
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  page.tsx ──────────► TabNavigation Component (Main Router)                 │
 │  layout.tsx ────────► Root Layout + Font System (Geist)                     │
-│  globals.css ───────► Global Styles + Design System                         │
-│  providers.tsx ─────► Solana Wallet Adapter + Context                       │
+│  globals.css ───────► Global Styles + Custom Spinner                        │
+│  providers.tsx ─────► Jupiter Unified Wallet Provider + Supabase Context    │
 └─────────────────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
@@ -33,17 +33,16 @@
 │  ┌──────────────────────────────────────────────────────────────┐          │
 │  │  GlassmorphismNavbar.tsx                                      │          │
 │  │  • Logo + Navigation Items                                    │          │
-│  │  • Network Selector (Mock/Devnet/Mainnet)                    │          │
-│  │  • Profile Settings Dropdown                                  │          │
+│  │  • Network Selector (Mock / Devnet)                           │          │
+│  │  • Connection Status Indicator                                 │          │
 │  └──────────────────────────────────────────────────────────────┘          │
 │                           │                                                  │
 │                           ▼                                                  │
 │  ┌──────────────────────────────────────────────────────────────┐          │
-│  │  TabNavigation.tsx (State Manager)                            │          │
+│  │  TabNavigation.tsx (Feature Orchestrator)                     │          │
 │  │  • Active Tab State Management                                │          │
-│  │  • Network State (mock/devnet/mainnet)                       │          │
-│  │  • LocalStorage Persistence                                   │          │
-│  │  • Routes to Feature Components                               │          │
+│  │  • Network State (mock vs devnet)                             │          │
+│  │  • Render: Home | Journal | Trades | About | Roadmap          │          │
 │  └──────────────────────────────────────────────────────────────┘          │
 │                           │                                                  │
 │                           ▼                                                  │
@@ -60,11 +59,10 @@
 │  │  Home.tsx        │  │  TradeHistory    │  │  Journal.tsx     │         │
 │  │  (Analytics)     │  │  (Wallet Lookup) │  │  (Annotations)   │         │
 │  ├──────────────────┤  ├──────────────────┤  ├──────────────────┤         │
-│  │ • TopBar         │  │ • Wallet Input   │  │ • Trade List     │         │
-│  │ • PnL Card       │  │ • Network Select │  │ • Annotation UI  │         │
-│  │ • Stats Row      │  │ • Trade Table    │  │ • Markdown Export│         │
-│  │ • Charts         │  │ • Real-time Data │  │ • LocalStorage   │         │
-│  │ • Performance    │  │ • Deriverse SDK  │  │ • Trade Notes    │         │
+│  │ • PnL & Stats    │  │ • Wallet Input   │  │ • Trade Cards    │         │
+│  │ • Time Charts    │  │ • Sync Status    │  │ • Lesson Editor  │         │
+│  │ • Win Rate Donut │  │ • Save to DB     │  │ • Markdown Export│         │
+│  │ • Mock Banner    │  │ • Real-time Logs │  │ • Tag System     │         │
 │  └──────────────────┘  └──────────────────┘  └──────────────────┘         │
 │           │                      │                      │                    │
 │           └──────────────────────┴──────────────────────┘                   │
@@ -72,54 +70,41 @@
 └──────────────────────────────────┼───────────────────────────────────────────┘
                                    ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                        DATA FLOW & STATE MANAGEMENT                          │
+│                    INFRASTRUCTURE & SERVICES (src/services/)                 │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  ┌────────────────────────────────────────────────────────────────┐        │
-│  │  DATA SOURCES (Conditional)                                     │        │
+│  │  DATA SOURCES & PERSISTENCE                                     │        │
 │  ├────────────────────────────────────────────────────────────────┤        │
 │  │                                                                  │        │
-│  │  IF network === 'mock':                                         │        │
-│  │  ┌──────────────────────────────────────────────────────┐      │        │
-│  │  │  src/lib/mockData.ts                                  │      │        │
-│  │  │  • generateMockTrades() → 240 trades                 │      │        │
-│  │  │  • Deterministic seeded RNG                          │      │        │
-│  │  │  • 8 trading pairs (SOL, BTC, ETH, JUP, etc.)       │      │        │
-│  │  │  • Spot + Perpetual markets                          │      │        │
-│  │  │  • 60% win rate, realistic PnL                       │      │        │
-│  │  └──────────────────────────────────────────────────────┘      │        │
+│  │  IF state.network === 'devnet':                                 │        │
+│  │  ┌─────────────────────────────┐  ┌────────────────────────────┐│        │
+│  │  │  SupabaseTradeService.ts    │  │  SupabaseWalletService.ts  ││        │
+│  │  │  • Save/Load Trade Data     │  │  • Wallet Existence Checks  ││        │
+│  │  │  • PnL Aggregations         │  │  • User Registration       ││        │
+│  │  └─────────────────────────────┘  └────────────────────────────┘│        │
 │  │                                                                  │        │
-│  │  IF network === 'devnet' OR 'mainnet':                         │        │
-│  │  ┌──────────────────────────────────────────────────────┐      │        │
-│  │  │  src/services/DeriverseTradeService.ts                │      │        │
-│  │  │  • fetchTradesForWallet(connection, address)         │      │        │
-│  │  │  • Uses @deriverse/kit Engine                        │      │        │
-│  │  │  • Fetches Solana transactions                       │      │        │
-│  │  │  • Decodes program logs → Trade objects              │      │        │
-│  │  │  • Parses Spot & Perpetual fills                     │      │        │
-│  │  └──────────────────────────────────────────────────────┘      │        │
-│  │           │                                                      │        │
-│  │           ▼                                                      │        │
-│  │  ┌──────────────────────────────────────────────────────┐      │        │
-│  │  │  Solana Blockchain (via RPC)                         │      │        │
-│  │  │  • Transaction signatures                             │      │        │
-│  │  │  • Program logs (Deriverse protocol)                 │      │        │
-│  │  │  • Block timestamps                                   │      │        │
-│  │  └──────────────────────────────────────────────────────┘      │        │
+│  │  BLOCKCHAIN INTERACTION:                                         │        │
+│  │  ┌─────────────────────────────┐  ┌────────────────────────────┐│        │
+│  │  │  DeriverseTradeService.ts   │  │  HeliusService.ts          ││        │
+│  │  │  • @deriverse/kit Engine    │  │  • Signature Fetching      ││        │
+│  │  │  • Log Decoding             │  │  • Transaction Metadata    ││        │
+│  │  └─────────────────────────────┘  └────────────────────────────┘│        │
+│  │                                                                  │        │
 │  └────────────────────────────────────────────────────────────────┘        │
 │                                  │                                           │
 │                                  ▼                                           │
 │  ┌────────────────────────────────────────────────────────────────┐        │
-│  │  DATA PROCESSING (src/lib/)                                     │        │
+│  │  CORE UTILITIES (src/lib/)                                       │        │
 │  ├────────────────────────────────────────────────────────────────┤        │
-│  │  • tradeFilters.ts ──► Date filtering, time ranges             │        │
-│  │  • drawdownCalculations.ts ──► Max drawdown analysis            │        │
-│  │  • mockData.ts ──► PnL calculations, session performance        │        │
-│  │  • types.ts ──► TypeScript interfaces (Trade, DailyPnL, etc.)  │        │
+│  │  • useWalletConnection.ts ─► Jupiter Adapter Wrapper            │        │
+│  │  • supabaseClient.ts ─────► Database Connection                 │        │
+│  │  • tradeFilters.ts ────────► Timezone-aware filtering           │        │
+│  │  • mockData.ts ────────────► 240+ Deterministic trades           │        │
 │  └────────────────────────────────────────────────────────────────┘        │
-│                                  │                                           │
-└──────────────────────────────────┼───────────────────────────────────────────┘
-                                   ▼
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                          ANALYTICS & VISUALIZATION                           │
 ├─────────────────────────────────────────────────────────────────────────────┤
@@ -169,30 +154,25 @@
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
+│                          PROJECT DOCUMENTATION                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  Documents/                                                                  │
+│  ├── architecture_(update).md    ──► System design & flow diagrams           │
+│  ├── ASCII_app_structure.md     ──► (This file)                              │
+│  ├── product_prd.md             ──► Features & Roadmap                      │
+│  ├── todo_rahul.md              ──► Active task tracking                    │
+│  ├── multi_wallet_discussion.md ──► Database & Schema planning               │
+│  └── ai_working_context.md       ──► Knowledge base for LLMs                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
 │                          TECHNOLOGY STACK                                    │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  Frontend:                                                                   │
-│  • Next.js 16 (App Router)                                                  │
-│  • React 19 (Hooks: useState, useMemo, useEffect)                          │
-│  • TypeScript 5                                                             │
-│  • TailwindCSS 4 (Utility-first styling)                                   │
-│                                                                              │
-│  Blockchain:                                                                 │
-│  • @solana/web3.js (Blockchain interaction)                                │
-│  • @deriverse/kit (Trade log decoding)                                     │
-│  • @jup-ag/wallet-adapter (Wallet connection)                              │
-│                                                                              │
-│  UI Libraries:                                                               │
-│  • Recharts (Charts & graphs)                                               │
-│  • MUI Material + MUI Charts (Data visualization)                          │
-│  • Lucide React (Icons)                                                     │
-│  • Framer Motion (Animations)                                               │
-│  • Geist Fonts (Typography: Mono, Sans, Pixel)                             │
-│                                                                              │
-│  State Management:                                                           │
-│  • React Hooks (Local state)                                                │
-│  • LocalStorage (Persistence)                                               │
-│  • No global state library (simple prop drilling)                          │
+│  Frontend: Next.js 16, React 19, TailwindCSS 4                              │
+│  Blockchain: @deriverse/kit, @jup-ag/wallet-adapter, @solana/web3.js        │
+│  Database/Auth: Supabase (PostgreSQL + RLS)                                 │
+│  Charts: Recharts, Framer Motion                                            │
+│  Typography: Geist (Sans/Mono/Pixel)                                        │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -235,45 +215,20 @@
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                          KEY DATA STRUCTURES                                 │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│  Trade {                                                                     │
-│    id: string                                                                │
-│    symbol: string              // e.g., "SOL-USDC", "BTC-PERP"             │
-│    side: 'buy'|'sell'|'long'|'short'                                        │
-│    orderType: 'limit'|'market'|'stop_limit'|'stop_market'                  │
-│    quantity: number                                                          │
-│    price: number                                                             │
-│    notional: number            // quantity × price                          │
-│    pnl: number                 // profit/loss                               │
-│    fee: number                                                               │
-│    openedAt: Date                                                            │
-│    closedAt: Date                                                            │
-│    isWin: boolean                                                            │
-│    leverage?: number           // for perpetuals                            │
-│    txSignature: string         // Solana transaction ID                     │
-│  }                                                                           │
-│                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
-
 ╔═══════════════════════════════════════════════════════════════════════════════╗
 ║                              SUMMARY                                          ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
-║  Deriverse is a trading analytics dashboard for Solana-based trading.        ║
-║  It supports both MOCK data (for demos) and REAL blockchain data via the      ║
-║  Deriverse SDK. Users can view analytics, look up wallet trades, and         ║
-║  annotate trades in a journal. The app uses a modern Next.js stack with      ║
-║  glassmorphism UI, comprehensive metrics, and local persistence.              ║
+║  Deriverse bridge's the gap between mock exploration and real blockchain      ║
+║  verification. It uses a Jupiter-powered connection flow, decodes Solana      ║
+║  logs in real-time via the Deriverse SDK, and persists user context in        ║
+║  Supabase. UI is built for performance with minimal global state.             ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 ```
 
 ## Key Highlights
 
-1. **Three Modes**: Mock data (demo), Devnet (testnet), Mainnet (production)
-2. **Main Features**: Analytics Dashboard, Wallet Lookup, Trade Journal
-3. **Data Sources**: Mock generator OR real Solana blockchain via Deriverse SDK
-4. **Architecture**: Clean separation of concerns (UI → Features → Services → Data)
-5. **State**: Simple React hooks + localStorage (no complex state management)
-6. **Real-time**: Fetches on-chain trades using `@deriverse/kit` Engine to decode program logs
+1. **Dual Engines**: Seamless toggle between Mock (Simulation) and Devnet (Live).
+2. **Unified Auth**: Jupiter Wallet Adapter integrated with Supabase RLS.
+3. **Data Services**: High-performance log decoding via `@deriverse/kit`.
+4. **State Strategy**: Local React hooks + Service layer (No heavy Redux/Zustand).
+5. **Persistence**: Supabase for cross-device wallet and trade synchronization.

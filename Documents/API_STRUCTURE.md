@@ -220,23 +220,6 @@ function transformHeliusData(rawData: HeliusResponse): Trade[] {
 }
 ```
 
-## API Integration Strategy
-
-### Phase 1: Mock Data (Current)
-- Deterministic test data
-- No external dependencies
-- Fast development iteration
-
-### Phase 2: Real Data Integration
-- Helius API for blockchain data
-- Deriverse API for trading analytics
-- Error handling and loading states
-
-### Phase 3: Optimization
-- Data caching strategies
-- Request batching
-- Background data refresh
-
 ## Rate Limiting & Caching
 
 ### Current Approach
