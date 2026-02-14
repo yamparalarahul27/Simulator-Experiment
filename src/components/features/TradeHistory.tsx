@@ -34,7 +34,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
   const [activeTab, setActiveTab] = useState<TabType>('deriverse');
   const [loadingDeriverse, setLoadingDeriverse] = useState(false);
   const [loadingHelius, setLoadingHelius] = useState(false);
-  const [inputMode, setInputMode] = useState<InputMode>('manual');
+  const [inputMode, setInputMode] = useState<InputMode>('wallet');
   const [howItWorksOpen, setHowItWorksOpen] = useState(true);
   const [savingTrades, setSavingTrades] = useState(false);
   const [currentWalletAddress, setCurrentWalletAddress] = useState<string | null>(null);
@@ -228,7 +228,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
 
         {/* Input Mode Switcher */}
         <div className="flex gap-4 border-b border-white/10 pb-2">
-          {(['manual', 'wallet'] as InputMode[]).map(mode => (
+          {(['wallet', 'manual'] as InputMode[]).map(mode => (
             <button
               key={mode}
               onClick={() => setInputMode(mode)}
