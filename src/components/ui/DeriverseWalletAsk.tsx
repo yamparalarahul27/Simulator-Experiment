@@ -204,7 +204,7 @@ export default function DeriverseWalletAsk({
                             <motion.div
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="text-red-400 text-sm text-center max-w-md"
+                                className="text-orange-400 text-sm text-center max-w-md"
                             >
                                 {walletError}
                             </motion.div>
