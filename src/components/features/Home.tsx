@@ -327,9 +327,9 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
                   <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">Win Rate</h3>
                   <InfoTooltip infoKey="winRate" />
                 </div>
-              </div>
+              </div> 
               <div className="flex flex-col items-start gap-2">
-                <span className="text-num-48 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
+                <span className="mt-2 text-num-48 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
                   {winStats.winRate}%
                 </span>
                 <span className="px-1.5 py-0.5 bg-white/10 text-white/60 text-xs font-mono rounded-sm">
@@ -354,6 +354,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
           <h2 className="text-white/60 text-sm font-mono uppercase tracking-wider">Trading Behavior &amp; Risk</h2>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
           <OrderTypeRatioCard trades={filteredTrades} />
 
           <CardWithCornerShine padding="lg" minHeight="min-h-[300px]">
@@ -364,11 +365,13 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
                   <InfoTooltip infoKey="longShortRatio" />
                 </div>
               </div>
+              <div className="mt-4"/>
               <div className="space-y-2">
                 <div className="flex items-baseline gap-2">
                   <span className="text-num-48 text-green-400 drop-shadow-[0_0_5px_rgba(34,197,94,0.3)]">
                     {longShortRatio.longPercent}%
                   </span>
+                  
                   <span className="text-white/60 text-sm font-mono">Long</span>
                 </div>
                 <div className="flex items-baseline gap-2">
@@ -386,7 +389,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
           <h2 className="text-white/60 text-sm font-mono uppercase tracking-wider">Finances</h2>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="space-y-6">
+          <div className="space-y-4">
             <CardWithCornerShine padding="lg" minHeight="min-h-[160px]">
               <div className="flex flex-col h-full justify-between relative z-10">
                 <div>
@@ -395,6 +398,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
                     <InfoTooltip infoKey="tradingVolume" />
                   </div>
                 </div>
+                <div className="mt-4"/>
                 <div>
                   <span className="text-num-48 text-white/95 drop-shadow-[0_0_5px_rgba(255,255,255,0.1)]">
                     {formatCompactNumber(tradingVolume)}
@@ -411,6 +415,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
                     <InfoTooltip infoKey="avgWin" />
                   </div>
                 </div>
+                <div className="mt-4"/>
                 <div>
                   <span className="text-num-48 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)] text-green-400">
                     +${Math.abs(avgWin).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -427,7 +432,9 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
                     <InfoTooltip infoKey="avgLoss" />
                   </div>
                 </div>
-                <div>
+                <div className="mt-4"/>
+                <div
+          >
                   <span className="text-num-48 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)] text-red-400">
                     {avgLoss === 0
                       ? '$0.00'

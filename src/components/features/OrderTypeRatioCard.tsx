@@ -44,6 +44,7 @@ export default function OrderTypeRatioCard({ trades }: OrderTypeRatioCardProps) 
             <InfoTooltip infoKey="orderTypeRatio" />
           </div>
         </div>
+        <div className="mt-4"/>
 
         <div className="space-y-2">
           <div className="flex items-baseline gap-2">
