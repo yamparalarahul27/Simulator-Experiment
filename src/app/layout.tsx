@@ -34,11 +34,8 @@ export default function RootLayout({
         `}
       >
         <Providers>
-          <div className="hidden md:block">
+          <div className="hidden md:block h-full">
             {children}
-          </div>
-          <div className="md:hidden">
-            <MobileRestrictedView />
           </div>
           <LoadingScreen />
         </Providers>

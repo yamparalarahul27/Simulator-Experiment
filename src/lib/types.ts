@@ -33,6 +33,19 @@ export interface Trade {
 }
 
 /**
+ * Annotation data for a single trade
+ */
+export interface TradeAnnotation {
+    id?: string;
+    tradeId: string;
+    notes: string;
+    tags: string[];
+    lessonsLearned: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+/**
  * Fee composition breakdown
  */
 export interface FeeComposition {

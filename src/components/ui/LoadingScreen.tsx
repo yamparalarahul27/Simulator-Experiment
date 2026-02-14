@@ -32,6 +32,20 @@ const dispatchTabChange = (tab: TabType) => {
     );
 };
 
+/**
+ * LoadingScreen Component
+ * 
+ * PURPOSE:
+ * Manages the initial multi-phase app entry sequence.
+ * Orchestrates transitions between the Welcome screen, Wallet connection prompt,
+ * and the final Logo animation.
+ * 
+ * PHASES:
+ * 1. 'welcome': Display branding and app introduction
+ * 2. 'wallet-ask': Prompt user for network/wallet choice
+ * 3. 'logo': Play the primary branding animation
+ * 4. 'complete': Transition to the main dashboard
+ */
 export default function LoadingScreen() {
     const [currentPhase, setCurrentPhase] = useState<LoadingPhase>('welcome');
     const [isVisible, setIsVisible] = useState(true);
@@ -140,7 +154,7 @@ export default function LoadingScreen() {
 
                     {/* Wallet Ask Phase */}
                     {currentPhase === 'wallet-ask' && (
-                        <DeriverseWalletAsk 
+                        <DeriverseWalletAsk
                             onChoice={handleWalletChoice}
                             onNavigateToDashboard={handleNavigateToDashboard}
                             onNavigateToLookup={handleNavigateToLookup}

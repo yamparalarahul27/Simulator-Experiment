@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
-import { Trade } from '../../lib/types';
+import { Plus, Tag, X } from 'lucide-react';
+import { Trade, TradeAnnotation } from '../../lib/types';
 import { formatUsd } from '../../lib/utils';
 import { format } from 'date-fns';
 import UnsavedChangesModal from './UnsavedChangesModal';
@@ -11,29 +11,50 @@ import UnsavedChangesModal from './UnsavedChangesModal';
 interface AnnotationModalProps {
     isOpen: boolean;
     trade: Trade | null;
-    initialNote: string;
-    onSave: (note: string) => void;
+    initialData: TradeAnnotation | null;
+    onSave: (data: TradeAnnotation) => void;
     onClose: () => void;
 }
 
-const MAX_CHARS = 500;
+const MAX_NOTE_CHARS = 1000;
+const MAX_LESSON_CHARS = 280;
+
+const PREDEFINED_TAGS = ['Good Setup', 'Revenge', 'FOMO', 'Patience', 'High Conviction', 'Mistake'];
 
 export default function AnnotationModal({
     isOpen,
     trade,
-    initialNote,
+    initialData,
     onSave,
     onClose
 }: AnnotationModalProps) {
-    const [note, setNote] = useState(initialNote);
+    const [note, setNote] = useState(initialData?.notes || '');
+    const [lesson, setLesson] = useState(initialData?.lessonsLearned || '');
+    const [tags, setTags] = useState<string[]>(initialData?.tags || []);
+    const [newTag, setNewTag] = useState('');
+    const [isAddingTag, setIsAddingTag] = useState(false);
     const [showUnsavedWarning, setShowUnsavedWarning] = useState(false);
 
     useEffect(() => {
-        setNote(initialNote);
-    }, [initialNote, isOpen]);
+        if (isOpen) {
+            setNote(initialData?.notes || '');
+            setLesson(initialData?.lessonsLearned || '');
+            setTags(initialData?.tags || []);
+        }
+    }, [initialData, isOpen]);
+
+    const hasChanges = () => {
+        const initialNotes = initialData?.notes || '';
+        const initialLesson = initialData?.lessonsLearned || '';
+        const initialTags = initialData?.tags || [];
+
+        return note.trim() !== initialNotes.trim() ||
+            lesson.trim() !== initialLesson.trim() ||
+            JSON.stringify(tags.sort()) !== JSON.stringify(initialTags.sort());
+    };
 
     const handleClose = () => {
-        if (note.trim() !== initialNote.trim() && note.trim() !== '') {
+        if (hasChanges()) {
             setShowUnsavedWarning(true);
         } else {
             onClose();
@@ -41,19 +62,46 @@ export default function AnnotationModal({
     };
 
     const handleSave = () => {
-        onSave(note);
+        if (!trade) return;
+        onSave({
+            tradeId: trade.id,
+            notes: note,
+            tags: tags,
+            lessonsLearned: lesson
+        });
         setShowUnsavedWarning(false);
     };
 
     const handleDiscard = () => {
-        setNote(initialNote);
+        setNote(initialData?.notes || '');
+        setLesson(initialData?.lessonsLearned || '');
+        setTags(initialData?.tags || []);
         setShowUnsavedWarning(false);
         onClose();
     };
 
+    const toggleTag = (tagName: string) => {
+        setTags(prev =>
+            prev.includes(tagName)
+                ? prev.filter(t => t !== tagName)
+                : [...prev, tagName]
+        );
+    };
+
+    const handleAddCustomTag = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && newTag.trim()) {
+            if (!tags.includes(newTag.trim())) {
+                setTags(prev => [...prev, newTag.trim()]);
+            }
+            setNewTag('');
+            setIsAddingTag(false);
+        }
+    };
+
     if (!isOpen || !trade) return null;
 
-    const remainingChars = MAX_CHARS - note.length;
+    const remainingNoteChars = MAX_NOTE_CHARS - note.length;
+    const remainingLessonChars = MAX_LESSON_CHARS - lesson.length;
 
     return (
         <>
@@ -91,7 +139,7 @@ export default function AnnotationModal({
                                         <h2 className="text-xl font-bold text-white">Trade Note</h2>
                                         <button
                                             onClick={handleClose}
-                                            className="rounded-lg p-2 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+                                            className="rounded-none p-2 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
                                         >
                                             <X className="h-5 w-5" />
                                         </button>
@@ -145,35 +193,114 @@ export default function AnnotationModal({
                                         </div>
                                     </div>
 
-                                    {/* Textarea */}
-                                    <div className="relative z-10 p-6">
-                                        <label className="mb-2 block text-sm font-medium text-white/80">
-                                            Your Note
-                                        </label>
-                                        <textarea
-                                            value={note}
-                                            onChange={(e) => {
-                                                if (e.target.value.length <= MAX_CHARS) {
-                                                    setNote(e.target.value);
-                                                }
-                                            }}
-                                            placeholder="Add your thoughts, learnings, or observations about this trade..."
-                                            className="w-full h-40 rounded-none border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 focus:border-purple-400/40 focus:outline-none focus:ring-2 focus:ring-purple-400/20 resize-none"
-                                            autoFocus
-                                        />
-                                        <div className="mt-2 flex items-center justify-between text-xs">
-                                            <span className="text-white/40">
-                                                Annotate your trade, it helps in growth
-                                            </span>
-                                            <span className={`font-mono ${remainingChars < 50 ? 'text-yellow-400' : 'text-white/40'
-                                                }`}>
-                                                {remainingChars} / {MAX_CHARS}
-                                            </span>
+                                    {/* Content Scroll Area */}
+                                    <div className="relative z-10 p-6 space-y-6 max-h-[50vh] overflow-y-auto custom-scrollbar">
+
+                                        {/* Tags Section */}
+                                        <div className="space-y-2">
+                                            <label className="flex items-center gap-2 text-sm font-medium text-white/80">
+                                                <Tag className="h-4 w-4 text-purple-400" />
+                                                Tags
+                                            </label>
+                                            <div className="flex flex-wrap gap-2">
+                                                {/* Predefined Tags */}
+                                                {PREDEFINED_TAGS.map(tag => (
+                                                    <button
+                                                        key={tag}
+                                                        onClick={() => toggleTag(tag)}
+                                                        className={`px-3 py-1 text-xs font-medium transition-all border ${tags.includes(tag)
+                                                            ? 'bg-purple-500/20 border-purple-400 text-purple-300'
+                                                            : 'bg-white/5 border-white/10 text-white/40 hover:border-white/30 hover:text-white/70'
+                                                            }`}
+                                                    >
+                                                        {tag}
+                                                    </button>
+                                                ))}
+
+                                                {/* Custom Tags */}
+                                                {tags.filter(t => !PREDEFINED_TAGS.includes(t)).map(tag => (
+                                                    <button
+                                                        key={tag}
+                                                        onClick={() => toggleTag(tag)}
+                                                        className="px-3 py-1 text-xs font-medium bg-blue-500/20 border border-blue-400 text-blue-300 transition-all"
+                                                    >
+                                                        {tag}
+                                                    </button>
+                                                ))}
+
+                                                {/* Add Tag Button */}
+                                                {isAddingTag ? (
+                                                    <input
+                                                        type="text"
+                                                        value={newTag}
+                                                        onChange={(e) => setNewTag(e.target.value)}
+                                                        onKeyDown={handleAddCustomTag}
+                                                        onBlur={() => setIsAddingTag(false)}
+                                                        placeholder="Press Enter..."
+                                                        className="bg-zinc-800 border border-purple-500/50 px-3 py-1 text-xs text-white focus:outline-none w-32"
+                                                        autoFocus
+                                                    />
+                                                ) : (
+                                                    <button
+                                                        onClick={() => setIsAddingTag(true)}
+                                                        className="px-3 py-1 text-xs font-medium bg-white/5 border border-dashed border-white/20 text-white/40 hover:border-white/40 hover:text-white/60 flex items-center gap-1"
+                                                    >
+                                                        <Plus className="h-3 w-3" />
+                                                        Add Tag
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Notes Area */}
+                                        <div className="space-y-2">
+                                            <label className="block text-sm font-medium text-white/80">
+                                                Trade Notes
+                                            </label>
+                                            <textarea
+                                                value={note}
+                                                onChange={(e) => {
+                                                    if (e.target.value.length <= MAX_NOTE_CHARS) {
+                                                        setNote(e.target.value);
+                                                    }
+                                                }}
+                                                placeholder="Add your thoughts, entry reasons, or emotional state..."
+                                                className="w-full h-28 rounded-none border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 focus:border-purple-400/40 focus:outline-none focus:ring-1 focus:ring-purple-400/20 resize-none text-sm"
+                                            />
+                                            <div className="flex justify-end text-[10px] font-mono">
+                                                <span className={`transition-colors ${remainingNoteChars < 50 ? 'text-yellow-400' : 'text-white/20'}`}>
+                                                    {remainingNoteChars} / {MAX_NOTE_CHARS}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {/* Key Lesson Area */}
+                                        <div className="bg-purple-500/5 border border-purple-500/10 p-3 space-y-2">
+                                            <label className="block text-xs font-bold uppercase tracking-wider text-purple-400">
+                                                Key Lesson (280 Max)
+                                            </label>
+                                            <textarea
+                                                value={lesson}
+                                                onChange={(e) => {
+                                                    if (e.target.value.length <= MAX_LESSON_CHARS) {
+                                                        setLesson(e.target.value);
+                                                    }
+                                                }}
+                                                placeholder="What is the one thing you learned from this?"
+                                                className="w-full h-16 rounded-none border border-purple-500/20 bg-black/40 px-4 py-2 text-sm text-white placeholder:text-purple-400/20 focus:border-purple-400/40 focus:outline-none transition-all resize-none italic"
+                                            />
+                                            <div className="flex items-center justify-between text-[10px]">
+                                                <span className="text-purple-400/40 italic">
+                                                    Distill your core insight
+                                                </span>
+                                                <span className={`font-mono ${remainingLessonChars < 20 ? 'text-red-400' : 'text-purple-400/40'}`}>
+                                                    {remainingLessonChars}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* Footer */}
-                                    <div className="relative z-10 flex justify-end gap-3 border-t border-white/10 p-6">
+                                    <div className="relative z-10 flex justify-end gap-3 border-t border-white/10 p-6 bg-[#0D0D21]">
                                         <button
                                             onClick={handleClose}
                                             className="rounded-none border border-white/10 bg-white/5 px-6 py-2.5 text-sm font-medium text-white/80 transition-colors hover:bg-white/10"
@@ -182,9 +309,9 @@ export default function AnnotationModal({
                                         </button>
                                         <button
                                             onClick={handleSave}
-                                            className="rounded-none bg-purple-500 px-6 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+                                            className="rounded-none bg-purple-600 px-6 py-2.5 text-sm font-medium text-white transition-all hover:bg-purple-500 shadow-[0_0_20px_rgba(147,51,234,0.3)]"
                                         >
-                                            Save Note
+                                            Save Annotation
                                         </button>
                                     </div>
 

@@ -41,10 +41,12 @@ export default function TableUI_Demo({ activeFilter = 'All', trades }: TableUIDe
         {
             key: 'date',
             header: 'Date',
+            render: (value) => <span suppressHydrationWarning>{value}</span>
         },
         {
             key: 'time',
             header: 'Time',
+            render: (value) => <span suppressHydrationWarning>{value}</span>
         },
         {
             key: 'pair',

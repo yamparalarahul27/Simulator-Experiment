@@ -1,6 +1,7 @@
-'use strict';
-import React from 'react';
+'use client';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import MobileRestrictedView from '../layout/MobileRestrictedView';
 import WelcomeCard from './WelcomeCard';
 import WelcomeButton from './WelcomeButton';
 import WelcomeFooter from './WelcomeFooter';
@@ -35,9 +36,25 @@ const WelcomeContent = {
 };
 
 export const WelcomeScreen = ({ onComplete, isVisible }: WelcomeScreenProps) => {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     const handleGetStarted = () => {
         onComplete();
     };
+
+    if (isVisible && isMobile) {
+        return <MobileRestrictedView />;
+    }
 
     return (
         <AnimatePresence>
@@ -67,9 +84,9 @@ export const WelcomeScreen = ({ onComplete, isVisible }: WelcomeScreenProps) => 
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                             >
-                                <img 
-                                    src="/assets/deriverse_j_hero_logo.png" 
-                                    alt="Deriverse Journal" 
+                                <img
+                                    src="/assets/deriverse_j_hero_logo.png"
+                                    alt="Deriverse Journal"
                                     className="h-auto"
                                     style={{ width: '180px', height: 'auto' }}
                                 />
@@ -85,7 +102,7 @@ export const WelcomeScreen = ({ onComplete, isVisible }: WelcomeScreenProps) => 
                                 <h1 className="text-xl font-mono uppercase tracking-wider text-white/80 mb-6">
                                     {WelcomeContent.greeting}
                                 </h1>
-                                
+
                                 <p className="text-sm leading-relaxed text-white/60 max-w-md mx-auto">
                                     {WelcomeContent.description}
                                 </p>

@@ -143,12 +143,27 @@ export function calculateAvgLoss(trades: Trade[]): number {
 }
 
 /**
- * Calculate trade streak for last 7 days
- * Returns a fixed pattern showing 5 out of 7 active days
+ * Calculate journal streak for last 21 days
+ * Checks if trades exist AND if at least one trade on that day has an annotation
  */
-export function calculateTradeStreak(trades: Trade[]): boolean[] {
-    // Fixed pattern: 5 active days out of 7 (true, true, false, true, true, true, false)
-    return [true, true, false, true, true, true, false];
+export function calculateJournalStreak(trades: Trade[], annotations: Record<string, any>): boolean[] {
+    const streak: boolean[] = [];
+    const now = new Date();
+
+    // Look back 21 days, starting from Today (index 0)
+    for (let i = 0; i < 21; i++) {
+        const targetDay = startOfDay(subDays(now, i));
+
+        // Find trades on this day
+        const dayTrades = trades.filter(t => isSameDay(t.closedAt, targetDay));
+
+        // Check if any of these trades have an annotation
+        const isAnnotated = dayTrades.some(t => annotations[t.id]);
+
+        streak.push(isAnnotated);
+    }
+
+    return streak;
 }
 
 /**

@@ -3,21 +3,39 @@
 import React from 'react';
 import { PencilLine } from 'lucide-react';
 import CardWithCornerShine from '../ui/CardWithCornerShine';
-import { Trade } from '../../lib/types';
+import { Trade, TradeAnnotation } from '../../lib/types';
 import { formatUsd } from '../../lib/utils';
 import { format } from 'date-fns';
 import { getPairImage, isPerpetual } from '../../lib/tokenImages';
 
 interface TradeCardProps {
     trade: Trade;
-    annotation?: string;
+    annotation?: TradeAnnotation;
     onAnnotate: () => void;
 }
 
+/**
+ * TradeCard Component
+ * 
+ * PURPOSE:
+ * Represents a single trading transaction in a compact, visually rich card format.
+ * Primarily used within the Journal view to provide a summary of an individual trade
+ * and allow the user to add or edit journal annotations.
+ * 
+ * FEATURES:
+ * - Pair-specific branding (token images)
+ * - Clear Side (Long/Short) and Order Type indicators
+ * - Visual annotation feedback (highlighted pencil icon if note exists)
+ * - Integration with AnnotationModal via onAnnotate callback
+ * 
+ * @param trade - The core trade data object
+ * @param annotation - Optional journal entry (notes/tags) associated with this trade
+ * @param onAnnotate - Callback function triggered to open the annotation editor
+ */
 export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardProps) {
-    const truncatedNote = annotation && annotation.length > 60
-        ? annotation.substring(0, 60) + '...'
-        : annotation;
+    const truncatedNote = annotation?.notes && annotation.notes.length > 60
+        ? annotation.notes.substring(0, 60) + '...'
+        : annotation?.notes;
 
     const pairImage = getPairImage(trade.symbol);
     const isPerp = isPerpetual(trade.symbol);
@@ -70,7 +88,7 @@ export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardPr
 
                 {/* Date */}
                 <div className="mb-3">
-                    <p className="text-white/40 text-xs font-mono">
+                    <p className="text-white/40 text-xs font-mono" suppressHydrationWarning>
                         {format(trade.closedAt, 'MMM d, yyyy • HH:mm')}
                     </p>
                 </div>
@@ -78,12 +96,34 @@ export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardPr
                 {/* Annotation Preview */}
                 {annotation && (
                     <div className="mt-auto pt-3 border-t border-white/10">
-                        <p className="text-xs text-white/40 mb-1 font-mono uppercase tracking-wider">
-                            Note
-                        </p>
-                        <p className="text-sm text-white/70 line-clamp-2">
-                            {truncatedNote}
-                        </p>
+                        {/* Tags on card */}
+                        {annotation.tags && annotation.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mb-2">
+                                {annotation.tags.slice(0, 2).map(tag => (
+                                    <span key={tag} className="text-[9px] px-1.5 py-0.5 bg-purple-500/20 text-purple-400 border border-purple-500/20 font-mono">
+                                        #{tag}
+                                    </span>
+                                ))}
+                                {annotation.tags.length > 2 && (
+                                    <span className="text-[9px] text-white/20">+{annotation.tags.length - 2}</span>
+                                )}
+                            </div>
+                        )}
+
+                        {truncatedNote && (
+                            <p className="text-xs text-white/50 line-clamp-2 italic font-serif">
+                                "{truncatedNote}"
+                            </p>
+                        )}
+
+                        {annotation.lessonsLearned && !truncatedNote && (
+                            <div className="bg-purple-500/5 p-2 border border-purple-500/10">
+                                <p className="text-[10px] text-purple-400 font-bold mb-1 uppercase">Lesson</p>
+                                <p className="text-xs text-white/70 line-clamp-1 italic">
+                                    {annotation.lessonsLearned}
+                                </p>
+                            </div>
+                        )}
                     </div>
                 )}
 
