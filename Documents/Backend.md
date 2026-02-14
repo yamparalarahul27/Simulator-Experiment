@@ -16,6 +16,3 @@ Deriverse is presently a client-first experience. There is no dedicated server/A
 - **RPC Provider**: Defaults to `https://api.devnet.solana.com` (configurable via `NEXT_PUBLIC_RPC_HTTP`).
 - **Dependencies**: `@solana/web3.js`, `@deriverse/kit`, and the public Helius RPC endpoint. No Supabase/storage layer is active.
 
-## Future Expansion
-- If server-side logic is needed (e.g., caching decoded trades, user auth, long-term storage), Next.js Server Actions or API routes under `src/app/api/` should be introduced.
-- Any reintroduction of persistence (Supabase or otherwise) should be documented here before implementation.

@@ -2,9 +2,9 @@ const phases = [
     {
         title: 'Phase 01 – 1 to 20th Feb 2026',
         items: [
-            'Anlytics Widgets with Real & Mock Data',
-            'Wallet Integration',
-            'SignUp, Help and About Screen'
+            'Wallet SignUp/SignIn',
+            'Strong Analytics with filters',
+            'TASTE & CRAFT Driven Design'
         ]
     },
     {
