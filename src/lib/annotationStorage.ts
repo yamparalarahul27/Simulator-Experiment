@@ -148,6 +148,11 @@ export async function migrateToSupabase(walletAddress: string, service: any): Pr
 
     let migratedCount = 0;
     for (const tradeId of tradeIds) {
+        // Skip mock trades - they only live in localStorage
+        if (tradeId.startsWith('mock')) {
+            continue;
+        }
+
         try {
             const local = localData[tradeId];
             await service.saveAnnotation({
@@ -155,7 +160,8 @@ export async function migrateToSupabase(walletAddress: string, service: any): Pr
                 notes: local.note,
                 tags: [], // Tags weren't supported in old version
                 lessonsLearned: ''
-            });
+            }, walletAddress); // Pass wallet address to satisfy schema
+
             migratedCount++;
             // Remove from local after successful migration to prevent double migration
             deleteAnnotation(tradeId);
