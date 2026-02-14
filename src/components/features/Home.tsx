@@ -16,6 +16,7 @@ import { SupabaseTradeService } from '../../services/SupabaseTradeService';
 import { SupabaseWalletService } from '../../services/SupabaseWalletService';
 import { Trade } from '../../lib/types';
 import { toast } from 'sonner';
+import SyncStatus from '../ui/SyncStatus';
 import {
   calculateTradingVolume,
   formatCompactNumber,
@@ -231,23 +232,14 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
           <h1 className="text-3xl font-bold text-white">Home Analytics</h1>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center">
-              <InfoTooltip infoKey="lastIngestion" />
-              <span className="text-white/60 text-sm font-mono ml-2 mr-2">Last ingestion:</span>
-            </div>
-            <span className="text-sm font-mono text-white/70">
-              {network !== 'devnet'
-                ? 'Mock data (no ingestion)'
-                : !analyzingWallet
-                  ? 'Connect wallet to ingest trades'
-                  : ingestionLoading
-                    ? 'Checking ingestion...'
-                    : ingestionError
-                      ? ingestionError
-                      : lastIngestionAt
-                        ? format(new Date(lastIngestionAt), 'MMM d, yyyy h:mm a')
-                        : 'No data ingested yet'}
-            </span>
+            <SyncStatus
+              lastSyncedAt={lastIngestionAt}
+              dataSource={network === 'devnet' ? 'fresh' : 'mock'}
+              isLoading={ingestionLoading}
+              error={ingestionError}
+              context="home"
+              hasWallet={!!analyzingWallet}
+            />
           </div>
         </div>
 
