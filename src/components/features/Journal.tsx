@@ -65,59 +65,78 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                 if (network === 'devnet' && analyzingWallet) {
                     const tradeService = new SupabaseTradeService();
                     tradeList = await tradeService.getTrades(analyzingWallet);
-
-                    // Load annotations from Supabase ONLY for real wallets
-                    const dbAnnotations = await annotationService.getAnnotationsForWallet(analyzingWallet);
-                    setAnnotations(dbAnnotations);
                 } else if (network === 'mock') {
                     tradeList = MOCK_TRADES;
-                    // For mock, load from localStorage
-                    const localAnnotations = loadAnnotations();
-                    const mappedAnnotations: Record<string, TradeAnnotation> = {};
-                    Object.keys(localAnnotations).forEach(id => {
-                        const local = localAnnotations[id];
-                        mappedAnnotations[id] = {
-                            tradeId: id,
-                            notes: local.note,
-                            tags: [], // Tags not fully supported in old format but we can adapt if needed
-                            lessonsLearned: ''
-                        };
-                    });
-                    setAnnotations(mappedAnnotations);
                 }
 
+                // PRIMARY LOAD: Set trades immediately so cards appear
                 setTrades(tradeList);
+                setLoading(false); // Stop main loading as soon as trades are here
 
-                // Trigger Migration if wallet is connected
+                // OPTIONAL LOAD: Load annotations and handle migrations in the background
                 if (network === 'devnet' && analyzingWallet) {
-                    const migrated = await migrateToSupabase(analyzingWallet, annotationService);
-                    if (migrated > 0) {
-                        toast.success(`Successfully backed up ${migrated} notes to cloud`);
-                        // Re-fetch annotations after migration
+                    // Safe fetch for cloud annotations
+                    try {
                         const dbAnnotations = await annotationService.getAnnotationsForWallet(analyzingWallet);
                         setAnnotations(dbAnnotations);
+                    } catch (annErr) {
+                        console.error('[Journal] Optional: Failed to load cloud annotations:', annErr);
+                        // Don't toast error here, just log it. Trades are still visible.
+                    }
+
+                    // Safe background migration
+                    try {
+                        const migrated = await migrateToSupabase(analyzingWallet, annotationService);
+                        if (migrated > 0) {
+                            toast.success(`Successfully backed up ${migrated} notes to cloud`);
+                            const freshAnnotations = await annotationService.getAnnotationsForWallet(analyzingWallet);
+                            setAnnotations(freshAnnotations);
+                        }
+                    } catch (migErr) {
+                        console.error('[Journal] Optional: Migration error:', migErr);
+                    }
+                } else if (network === 'mock') {
+                    // For mock, load from localStorage
+                    try {
+                        const localAnnotations = loadAnnotations();
+                        const mappedAnnotations: Record<string, TradeAnnotation> = {};
+                        Object.keys(localAnnotations).forEach(id => {
+                            const local = localAnnotations[id];
+                            if (local && local.note) {
+                                mappedAnnotations[id] = {
+                                    tradeId: id,
+                                    notes: local.note,
+                                    tags: [],
+                                    lessonsLearned: ''
+                                };
+                            }
+                        });
+                        setAnnotations(mappedAnnotations);
+                    } catch (localErr) {
+                        console.error('[Journal] Optional: Failed to load local annotations:', localErr);
                     }
                 }
 
-                // Extract unique tags from annotations
-                const allTags = new Set<string>();
-                Object.values(annotations).forEach(ann => {
-                    ann.tags?.forEach(tag => allTags.add(tag));
-                });
-                // Add some default tags for search
-                ['Good Setup', 'Revenge', 'FOMO', 'Patience'].forEach(t => allTags.add(t));
-                setAvailableTags(Array.from(allTags).sort());
-
             } catch (err) {
-                console.error('Failed to load journal:', err);
-                toast.error('Failed to load journal entries');
-            } finally {
+                console.error('CRITICAL: Failed to load journal trades:', err);
+                toast.error('Failed to load journal trades');
                 setLoading(false);
             }
         }
 
         loadInitialData();
     }, [network, analyzingWallet]);
+
+    // Extract unique tags from annotations whenever they change
+    useEffect(() => {
+        const allTags = new Set<string>();
+        Object.values(annotations).forEach(ann => {
+            ann.tags?.forEach(tag => allTags.add(tag));
+        });
+        // Add some default tags for search
+        ['Good Setup', 'Revenge', 'FOMO', 'Patience'].forEach(t => allTags.add(t));
+        setAvailableTags(Array.from(allTags).sort());
+    }, [annotations]);
 
     const handleAnnotate = (trade: Trade) => {
         setSelectedTrade(trade);
