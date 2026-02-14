@@ -145,7 +145,7 @@ export default function TabNavigation() {
             />
 
             {/* Content Area - Padding top added to account for fixed navbar */}
-            <div className="pt-24 p-4 max-w-7xl mx-auto">
+            <div className="pt-36 p-4 max-w-7xl mx-auto">
                 {renderTabContent()}
 
                 {/* Footer */}
