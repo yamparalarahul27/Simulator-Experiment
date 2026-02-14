@@ -556,3 +556,28 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom Calendar Styling for Dark Theme */
+.custom-calendar {
+  color: white;
+}
+
+.custom-calendar .rdp-nav_button {
+  color: white;
+}
+
+.custom-calendar .rdp-nav_button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.custom-calendar .rdp-day {
+  text-align: center;
+  width: 40px;
+  height: 40px;
+}
+
+.custom-calendar .rdp-head_cell {
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+}

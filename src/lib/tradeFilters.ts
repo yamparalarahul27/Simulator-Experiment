@@ -21,6 +21,8 @@ export type FilterType = 'All' | 'Yesterday' | 'Today' | 'This Week' | 'This Mon
  * Filter trades by date range
  */
 export function filterTradesByDate(trades: Trade[], filter: FilterType): Trade[] {
+    const now = new Date();
+
     switch (filter) {
         case 'Today':
             return trades.filter(t => isToday(t.closedAt));
@@ -29,13 +31,19 @@ export function filterTradesByDate(trades: Trade[], filter: FilterType): Trade[]
             return trades.filter(t => isYesterday(t.closedAt));
 
         case 'This Week':
-            return trades.filter(t => isThisWeek(t.closedAt, { weekStartsOn: 1 }));
+            // Last 7 days (rolling)
+            const sevenDaysAgo = startOfDay(subDays(now, 7));
+            return trades.filter(t => t.closedAt >= sevenDaysAgo);
 
         case 'This Month':
-            return trades.filter(t => isThisMonth(t.closedAt));
+            // Last 30 days (rolling)
+            const thirtyDaysAgo = startOfDay(subDays(now, 30));
+            return trades.filter(t => t.closedAt >= thirtyDaysAgo);
 
         case 'This Year':
-            return trades.filter(t => isThisYear(t.closedAt));
+            // Last 365 days (rolling)
+            const yearAgo = startOfDay(subDays(now, 365));
+            return trades.filter(t => t.closedAt >= yearAgo);
 
         case 'All':
         default:

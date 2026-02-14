@@ -27,7 +27,7 @@ import {
   filterTradesByDate,
   FilterType,
 } from '../../lib/tradeFilters';
-import { addDays, startOfDay, endOfDay, format } from 'date-fns';
+import { addDays, startOfDay, endOfDay, format, subDays } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
 
 /**
@@ -43,7 +43,7 @@ interface HomeProps {
 }
 
 export default function Home({ network = 'mock', analyzingWallet, onNavigateToLookup }: HomeProps = {}) {
-  const [activeFilter, setActiveFilter] = useState<FilterType>('All');
+  const [activeFilter, setActiveFilter] = useState<FilterType | undefined>('All');
   const [lastIngestionAt, setLastIngestionAt] = useState<string | null>(null);
   const [ingestionLoading, setIngestionLoading] = useState(false);
   const [ingestionError, setIngestionError] = useState<string | null>(null);
@@ -142,20 +142,64 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
   const handleApplyFilters = () => {
     setAppliedDateRange(draftDateRange);
     setAppliedSelectedPairs(draftSelectedPairs);
-    setActiveFilter('All');
+    setActiveFilter(undefined); // No filter active when date range is applied
   };
+
+  const handleFilterChange = (filter: FilterType) => {
+    setActiveFilter(filter);
+    // Clear applied date range when any filter is selected (including 'All')
+    setAppliedDateRange(undefined);
+  };
+
+  const getTimelineText = (filter: FilterType | undefined): string | null => {
+    if (!filter) return null;
+
+    const now = new Date();
+
+    switch (filter) {
+      case 'All':
+        return 'Analytics Since Beginning of Trade Activity';
+
+      case 'Today':
+        return format(now, "do MMM yyyy 'Analytics'");
+
+      case 'Yesterday':
+        return format(subDays(now, 1), "do MMM yyyy 'Analytics'");
+
+      case 'This Week':
+        return format(subDays(now, 7), "do MMM") + ' to ' + format(now, "do MMM yyyy 'Analytics'");
+
+      case 'This Month':
+        return format(subDays(now, 30), "do MMM") + ' to ' + format(now, "do MMM yyyy 'Analytics'");
+
+      case 'This Year':
+        return format(subDays(now, 365), "do MMM yyyy") + ' to ' + format(now, "do MMM yyyy 'Analytics'");
+
+      default:
+        return null;
+    }
+  };
+
+  const timelineText = getTimelineText(activeFilter);
 
   // Filter trades based on active filter
   const filteredTrades = useMemo(() => {
-    let trades = filterTradesByDate(displayTrades, activeFilter);
+    let trades;
 
-    if (appliedDateRange?.from) {
-      const from = startOfDay(appliedDateRange.from);
-      trades = trades.filter((t) => t.closedAt >= from);
-    }
-    if (appliedDateRange?.to) {
-      const to = endOfDay(appliedDateRange.to);
-      trades = trades.filter((t) => t.closedAt <= to);
+    if (activeFilter && activeFilter !== 'All') {
+      // Use quick filter, ignore date range completely
+      trades = filterTradesByDate(displayTrades, activeFilter);
+    } else {
+      // Use date range if applied, otherwise show all trades
+      trades = displayTrades;
+      if (appliedDateRange?.from) {
+        const from = startOfDay(appliedDateRange.from);
+        trades = trades.filter((t) => t.closedAt >= from);
+      }
+      if (appliedDateRange?.to) {
+        const to = endOfDay(appliedDateRange.to);
+        trades = trades.filter((t) => t.closedAt <= to);
+      }
     }
 
     if (appliedSelectedPairs.length > 0) {
@@ -229,7 +273,12 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
     <div className="space-y-6">
       <div className="flex flex-col gap-6">
         <div className="flex items-center justify-between gap-6 flex-wrap">
-          <h1 className="text-3xl font-bold text-white">Home Analytics</h1>
+          <div>
+            <h1 className="text-3xl font-bold text-white">Home Analytics</h1>
+            {timelineText && (
+              <p className="text-white/60 text-sm font-mono mt-1">{timelineText}</p>
+            )}
+          </div>
 
           <div className="flex items-center gap-3">
             <SyncStatus
@@ -245,7 +294,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
 
         <TopBar
           activeFilter={activeFilter}
-          onFilterChange={setActiveFilter}
+          onFilterChange={handleFilterChange}
           dateRange={draftDateRange}
           onDateRangeChange={setDraftDateRange}
           availablePairs={availablePairs}

@@ -13,7 +13,7 @@ import { CalendarIcon, ChevronDown } from 'lucide-react';
 import type { DateRange } from 'react-day-picker';
 
 interface TopBarProps {
-    activeFilter: FilterType;
+    activeFilter: FilterType | undefined;
     onFilterChange: (filter: FilterType) => void;
     dateRange: DateRange | undefined;
     onDateRangeChange: (range: DateRange | undefined) => void;
@@ -120,6 +120,10 @@ const FILTER_LABELS: Record<FilterType, string> = {
                             selected={dateRange}
                             onSelect={onDateRangeChange}
                             numberOfMonths={2}
+                            className="custom-calendar"
+                            formatters={{
+                                formatWeekdayName: (date) => format(date, 'EEEEE'),
+                            }}
                         />
                     </PopoverContent>
                 </Popover>
