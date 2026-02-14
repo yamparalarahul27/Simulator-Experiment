@@ -72,15 +72,10 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
         setError(null);
         try {
           const service = new SupabaseTradeService();
-          const annotationService = new (await import('../../services/SupabaseAnnotationService')).SupabaseAnnotationService();
-
-          const [trades, dbAnnotations] = await Promise.all([
-            service.getTrades(analyzingWallet),
-            annotationService.getAnnotationsForWallet(analyzingWallet)
-          ]);
+          const trades = await service.getTrades(analyzingWallet);
 
           setRealTrades(trades);
-          setAnnotations(dbAnnotations);
+          setAnnotations({}); // Reset annotations for real data in Home as they aren't used here
 
           if (trades.length === 0) {
             toast.info('No trades found for this wallet on Devnet');
@@ -102,12 +97,14 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
         const mappedAnnotations: Record<string, any> = {};
         Object.keys(localAnnotations).forEach(id => {
           const local = localAnnotations[id];
-          mappedAnnotations[id] = {
-            tradeId: id,
-            notes: local.note,
-            tags: [],
-            lessonsLearned: ''
-          };
+          if (local && local.note) {
+            mappedAnnotations[id] = {
+              tradeId: id,
+              notes: local.note,
+              tags: [],
+              lessonsLearned: ''
+            };
+          }
         });
         setAnnotations(mappedAnnotations);
       }
