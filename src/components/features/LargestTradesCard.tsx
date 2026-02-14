@@ -51,6 +51,20 @@ const AssetIcon = ({ trade }: { trade: Trade }) => {
   );
 };
 
+/**
+ * LargestTradesCard Component
+ * 
+ * PURPOSE:
+ * Visualizes the most significant trades (largest gain and largest loss) for a wallet.
+ * Helps traders quickly identify their outliers and best/worst performers.
+ * 
+ * FEATURES:
+ * - Dynamic identification of max gain and max loss from a trade list
+ * - Detailed trade display with asset icons and side indicators
+ * - Visual color coding for quick performance recognition
+ * 
+ * @param trades - Array of trades to analyze for outliers
+ */
 export default function LargestTradesCard({ trades }: LargestTradesCardProps) {
   const { bestTrade, worstTrade } = useMemo(() => {
     const winners = trades.filter((t) => t.pnl > 0);

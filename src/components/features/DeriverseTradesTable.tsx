@@ -7,6 +7,24 @@ interface DeriverseTradesTableProps {
     currentWalletAddress?: string | null;
 }
 
+/**
+ * DeriverseTradesTable Component
+ * 
+ * PURPOSE:
+ * A comprehensive data table for visualizing multiple trade objects.
+ * Features a statistics summary (PnL, Fees, Win Rate) at the top and
+ * provides functionality to save trades to persistent storage.
+ * 
+ * FEATURES:
+ * - Real-time statistics calculation (PnL, Fees, Win Rate)
+ * - "Save to Database" integration for persistence
+ * - Handles empty states gracefully for disconnected or inactive wallets
+ * 
+ * @param trades - Array of trade objects to display
+ * @param onSaveTrades - Callback to trigger the data ingestion process
+ * @param savingTrades - Boolean state indicating if a save is in progress
+ * @param currentWalletAddress - The address of the wallet being analyzed
+ */
 export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrades = false, currentWalletAddress }: DeriverseTradesTableProps) {
     if (trades.length === 0) {
         return (
@@ -62,7 +80,7 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
                                 </>
                             ) : (
                                 <>
-                                
+
                                     <span>Save & Ingest {trades.length} Trades</span>
                                 </>
                             )}

@@ -14,6 +14,24 @@ interface TradeCardProps {
     onAnnotate: () => void;
 }
 
+/**
+ * TradeCard Component
+ * 
+ * PURPOSE:
+ * Represents a single trading transaction in a compact, visually rich card format.
+ * Primarily used within the Journal view to provide a summary of an individual trade
+ * and allow the user to add or edit journal annotations.
+ * 
+ * FEATURES:
+ * - Pair-specific branding (token images)
+ * - Clear Side (Long/Short) and Order Type indicators
+ * - Visual annotation feedback (highlighted pencil icon if note exists)
+ * - Integration with AnnotationModal via onAnnotate callback
+ * 
+ * @param trade - The core trade data object
+ * @param annotation - Optional journal entry (notes/tags) associated with this trade
+ * @param onAnnotate - Callback function triggered to open the annotation editor
+ */
 export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardProps) {
     const truncatedNote = annotation?.notes && annotation.notes.length > 60
         ? annotation.notes.substring(0, 60) + '...'

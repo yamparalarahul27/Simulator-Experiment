@@ -29,6 +29,22 @@ function calculateMaxDrawdown(trades: Trade[]): number {
   return maxDrawdown;
 }
 
+/**
+ * DrawdownCard Component
+ * 
+ * PURPOSE:
+ * Displays the Maximum Drawdown (MDD) for a trading account.
+ * MDD is a key risk metric representing the largest peak-to-trough decline
+ * in the account's equity curve.
+ * 
+ * FEATURES:
+ * - Client-side peak-to-trough calculation logic
+ * - Integration with InfoTooltip for financial concept explanation
+ * - Red-themed aesthetics to emphasize risk metrics
+ * 
+ * @param trades - Array of trades used to calculate the equity curve and drawdown
+ * @param minHeight - Optional custom minimum height for the card
+ */
 export default function DrawdownCard({ trades, minHeight = 'min-h-[200px]' }: DrawdownCardProps) {
   const maxDrawdown = useMemo(() => calculateMaxDrawdown(trades), [trades]);
 
