@@ -12,10 +12,6 @@
 2. **Live Blockchain Data**: Fetched via `HeliusService` + `DeriverseTradeService`
 3. **Persistent Storage**: Supabase for caching and annotations
 
----
-
-## Database Schema
-
 ### Table: `user_wallets`
 
 **Purpose**: Track Solana wallet addresses that have been looked up, with metadata about connection method and sync status.
