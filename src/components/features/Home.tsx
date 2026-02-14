@@ -48,15 +48,9 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
   const [lastIngestionAt, setLastIngestionAt] = useState<string | null>(null);
   const [ingestionLoading, setIngestionLoading] = useState(false);
   const [ingestionError, setIngestionError] = useState<string | null>(null);
-  const [draftDateRange, setDraftDateRange] = useState<DateRange | undefined>({
-    from: new Date(new Date().getFullYear(), 0, 20),
-    to: addDays(new Date(new Date().getFullYear(), 0, 20), 20),
-  });
+  const [draftDateRange, setDraftDateRange] = useState<DateRange | undefined>(undefined);
   const [draftSelectedPairs, setDraftSelectedPairs] = useState<string[]>([]);
-  const [appliedDateRange, setAppliedDateRange] = useState<DateRange | undefined>({
-    from: new Date(new Date().getFullYear(), 0, 20),
-    to: addDays(new Date(new Date().getFullYear(), 0, 20), 20),
-  });
+  const [appliedDateRange, setAppliedDateRange] = useState<DateRange | undefined>(undefined);
   const [appliedSelectedPairs, setAppliedSelectedPairs] = useState<string[]>([]);
 
   // Real data state
