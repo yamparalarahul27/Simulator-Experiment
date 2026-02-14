@@ -21,9 +21,15 @@ interface WelcomeButtonProps {
     children: ReactNode;
     onClick: () => void;
     className?: string;
+    disabled?: boolean;
 }
 
-export const WelcomeButton = ({ children, onClick, className = '' }: WelcomeButtonProps) => {
+export const WelcomeButton = ({
+    children,
+    onClick,
+    className = '',
+    disabled = false
+}: WelcomeButtonProps) => {
     return (
         <motion.button
             className={`
@@ -36,13 +42,14 @@ export const WelcomeButton = ({ children, onClick, className = '' }: WelcomeButt
                 text-white
                 font-semibold
                 text-base
-                cursor-pointer
                 inline-block
                 text-center
                 transition-all duration-300
+                ${disabled ? 'opacity-50 cursor-not-allowed grayscale-[0.5]' : 'cursor-pointer'}
                 ${className}
             `}
-            onClick={onClick}
+            onClick={disabled ? undefined : onClick}
+            disabled={disabled}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}

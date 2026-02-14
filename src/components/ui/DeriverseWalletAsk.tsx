@@ -12,6 +12,8 @@ import { SupabaseWalletService } from '../../services/SupabaseWalletService';
 import { toast } from 'sonner';
 import type { TabType } from '../layout/TabNavigation';
 
+// Custom spinner styles are now in globals.css
+
 interface DeriverseWalletAskProps {
     onChoice: (choice: 'wallet' | 'mock') => void;
     onNavigateToDashboard?: () => void;
@@ -27,11 +29,11 @@ const WalletAskContent = {
     secondaryOption: "Explore with mock data"
 };
 
-export default function DeriverseWalletAsk({ 
-    onChoice, 
-    onNavigateToDashboard, 
-    onNavigateToLookup, 
-    onReturnToWelcome 
+export default function DeriverseWalletAsk({
+    onChoice,
+    onNavigateToDashboard,
+    onNavigateToLookup,
+    onReturnToWelcome
 }: DeriverseWalletAskProps) {
     // Wallet connection state
     const [isConnecting, setIsConnecting] = useState(false);
@@ -46,6 +48,7 @@ export default function DeriverseWalletAsk({
         connecting,
         walletAddress,
         openWalletModal,
+        isWalletModalOpen,
         connect,
         disconnect
     } = useWalletConnection();
@@ -54,19 +57,37 @@ export default function DeriverseWalletAsk({
 
     // Handle wallet connection success
     useEffect(() => {
-        if (connected && walletAddress && isConnecting) {
-            setIsConnecting(false);
-            checkWalletExists(walletAddress);
+        if (connected && walletAddress && (isConnecting || isCheckingWallet === false)) {
+            // Only trigger check if we were expecting a connection or if we just became connected
+            // while in this component
+            if (isConnecting) {
+                setIsConnecting(false);
+                checkWalletExists(walletAddress);
+            }
         }
     }, [connected, walletAddress, isConnecting]);
 
-    // Handle wallet connection errors
+    // Handle wallet connection cancellation or closure without connection
     useEffect(() => {
-        if (!connecting && isConnecting && !connected) {
-            setIsConnecting(false);
-            setWalletError('Failed to connect wallet. Please try again.');
+        // If we were connecting, the modal is now closed, and we aren't connected/connecting
+        if (isConnecting && !isWalletModalOpen && !connected && !connecting) {
+            // Small delay to let adapter states settle
+            const timer = setTimeout(() => {
+                if (!connected && !connecting && !isWalletModalOpen) {
+                    setIsConnecting(false);
+                    // Don't set error if they just closed it, unless we want to
+                }
+            }, 500);
+            return () => clearTimeout(timer);
         }
-    }, [connecting, isConnecting, connected]);
+    }, [isWalletModalOpen, connected, connecting, isConnecting]);
+
+    // Cleanup error state when starting a new connection
+    useEffect(() => {
+        if (isConnecting) {
+            setWalletError(null);
+        }
+    }, [isConnecting]);
     const handleWalletConnect = async () => {
         try {
             setIsConnecting(true);
@@ -83,14 +104,14 @@ export default function DeriverseWalletAsk({
         try {
             setIsCheckingWallet(true);
             setWalletError(null);
-            
+
             const existingWallet = await walletService.getWallet(address);
-            
+
             if (existingWallet) {
                 // Existing user - show success and navigate to dashboard
                 toast.success('Login successful! Welcome back to Deriverse Journal.');
                 setConnectedWalletAddress(address);
-                
+
                 // Smooth navigation to dashboard
                 setTimeout(() => {
                     onNavigateToDashboard?.();
@@ -110,7 +131,7 @@ export default function DeriverseWalletAsk({
 
     const handleNewUserChoice = async (choice: 'signup' | 'back') => {
         setShowNewUserModal(false);
-        
+
         if (choice === 'signup' && connectedWalletAddress) {
             try {
                 // Save new user wallet to Supabase
@@ -119,9 +140,9 @@ export default function DeriverseWalletAsk({
                     network: 'devnet',
                     method: 'wallet_connect'
                 });
-                
+
                 toast.success('Welcome to Deriverse Journal! Your wallet has been registered.');
-                
+
                 // Navigate to lookup screen
                 setTimeout(() => {
                     onNavigateToLookup?.(connectedWalletAddress);
@@ -167,9 +188,9 @@ export default function DeriverseWalletAsk({
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                     >
-                        <img 
-                            src="/assets/deriverse_j_hero_logo.png" 
-                            alt="Deriverse Journal" 
+                        <img
+                            src="/assets/deriverse_j_hero_logo.png"
+                            alt="Deriverse Journal"
                             className="h-auto"
                             style={{ width: '180px', height: 'auto' }}
                         />
@@ -185,12 +206,12 @@ export default function DeriverseWalletAsk({
                         <h1 className="text-xl font-mono uppercase tracking-wider text-white/80 mb-6">
                             {WalletAskContent.title}
                         </h1>
-                        
+
                         <div className="space-y-4">
                             <p className="text-sm leading-relaxed text-white/60 max-w-md mx-auto">
                                 {WalletAskContent.description1}
                             </p>
-                            
+
                             <p className="text-sm leading-relaxed text-white/60 max-w-md mx-auto">
                                 {WalletAskContent.description2}
                             </p>
@@ -209,25 +230,24 @@ export default function DeriverseWalletAsk({
                                 {walletError}
                             </motion.div>
                         )}
-                        
-                        {/* Loading State */}
-                        {(isConnecting || isCheckingWallet) && (
-                            <div className="flex items-center gap-3 text-zinc-400">
-                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
-                                <span className="text-sm">
-                                    {isConnecting ? 'Connecting wallet...' : 'Verifying wallet...'}
-                                </span>
-                            </div>
-                        )}
-                        
+
+
                         {/* Wallet Connect Button */}
-                        {!isConnecting && !isCheckingWallet && (
-                            <WelcomeButton onClick={handleWalletConnect}>
-                                {WalletAskContent.primaryButton}
-                            </WelcomeButton>
-                        )}
-                        
-                        <button 
+                        <WelcomeButton
+                            onClick={handleWalletConnect}
+                            disabled={isConnecting || isCheckingWallet}
+                        >
+                            {(isConnecting || isCheckingWallet) ? (
+                                <div className="flex items-center justify-center gap-3">
+                                    <div role="status" className="spinner small !border-white/30 !border-t-white"></div>
+                                    <span>{isConnecting ? 'Opening...' : 'Verifying...'}</span>
+                                </div>
+                            ) : (
+                                WalletAskContent.primaryButton
+                            )}
+                        </WelcomeButton>
+
+                        <button
                             className="text-white text-sm font-mono hover:text-white/80 transition-colors cursor-pointer"
                             onClick={() => onChoice('mock')}
                             disabled={isConnecting || isCheckingWallet}
@@ -240,7 +260,7 @@ export default function DeriverseWalletAsk({
 
             {/* Footer */}
             <WelcomeFooter />
-            
+
             {/* New User Modal */}
             <NewUserModal
                 isVisible={showNewUserModal}
