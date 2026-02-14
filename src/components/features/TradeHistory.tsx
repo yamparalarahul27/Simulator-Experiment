@@ -80,53 +80,59 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
     }
   };
 
-  const handleAddressSubmit = async (address: string) => {
+  const handleAddressSubmit = async (address: string, forceRefresh = false) => {
     setLoading(true);
     setError(null);
     setHasSearched(true);
-    setTransactions([]);
-    setDeriverseTrades([]);
+
+    // Only clear tables if we are doing a fresh lookup or forced refresh
+    if (forceRefresh || !hasCachedData) {
+      setTransactions([]);
+      setDeriverseTrades([]);
+    }
+
     setCurrentWalletAddress(address);
-    setDataSource('fresh');
-    setHasCachedData(false);
-    setWalletInfo(null);
+    if (forceRefresh) {
+      setDataSource('fresh');
+    }
 
     try {
-      // Save wallet to Supabase
-      let savedWallet;
+      // Save/Get wallet from Supabase
+      let currentWallet;
       try {
-        savedWallet = await walletService.saveWallet({
+        currentWallet = await walletService.saveWallet({
           address,
           network: 'devnet',
           provider: walletName || undefined,
           method: inputMode === 'wallet' ? 'wallet_connect' : 'manual',
         });
-        console.log('[Supabase] Wallet saved:', address);
-        setWalletInfo(savedWallet);
+        console.log('[Supabase] Wallet info sync:', address);
+        setWalletInfo(currentWallet);
       } catch (supabaseError) {
-        console.error('[Supabase] Failed to save wallet:', supabaseError);
-        // Don't block the trade fetch if Supabase fails
+        console.error('[Supabase] Failed to sync wallet info:', supabaseError);
       }
 
-      // Check for cached trades first
+      // Check for cached trades if not forced to refresh
       let cachedTrades: any[] = [];
-      try {
-        cachedTrades = await tradeService.getTrades(address);
-        if (cachedTrades.length > 0) {
-          console.log(`[Cache] Found ${cachedTrades.length} cached trades`);
-          setDeriverseTrades(cachedTrades);
-          setDataSource('cache');
-          setHasCachedData(true);
-          setLoadingDeriverse(false); // Cached data is already loaded
+      if (!forceRefresh) {
+        try {
+          cachedTrades = await tradeService.getTrades(address);
+          if (cachedTrades.length > 0) {
+            console.log(`[Cache] Found ${cachedTrades.length} cached trades`);
+            setDeriverseTrades(cachedTrades);
+            setDataSource('cache');
+            setHasCachedData(true);
+            setLoadingDeriverse(false);
+          }
+        } catch (cacheError) {
+          console.warn('[Cache] Failed to load cached trades:', cacheError);
         }
-      } catch (cacheError) {
-        console.warn('[Cache] Failed to load cached trades:', cacheError);
-        // Continue to fetch fresh data
       }
 
-      // If no cached data, fetch from blockchain
-      if (cachedTrades.length === 0) {
+      // Fetch fresh data if needed (forced or no cache)
+      if (forceRefresh || cachedTrades.length === 0) {
         const connection = getRpcConnection();
+        setDataSource('fresh');
 
         // Fetch Helius transactions
         setLoadingHelius(true);
@@ -146,14 +152,17 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
           .then(async (trades) => {
             setDeriverseTrades(trades);
             setLoadingDeriverse(false);
+            setHasCachedData(true); // Now we have data that CAN be cached
 
             // Update sync time after successful fetch
             try {
               await walletService.updateSyncTime(address);
+              // Refresh wallet info from DB to get NEW sync time
+              const updatedWallet = await walletService.getWallet(address);
+              if (updatedWallet) setWalletInfo(updatedWallet);
               console.log('[Supabase] Updated sync time for:', address);
             } catch (syncError) {
               console.warn('[Supabase] Failed to update sync time:', syncError);
-              // Non-critical error, don't show to user
             }
           })
           .catch(err => {
@@ -163,17 +172,8 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
 
         await Promise.all([heliusPromise, deriversePromise]);
       } else {
-        // We have cached data, but still fetch Helius transactions in parallel
-        setLoadingHelius(true);
-        heliusService.fetchAllTransactions(address)
-          .then(response => {
-            setTransactions(response.transactions);
-            setLoadingHelius(false);
-          })
-          .catch(err => {
-            console.error('[Helius] Error:', err);
-            setLoadingHelius(false);
-          });
+        // We are showing cached data. Skip Helius fetch to save RPC credits.
+        console.log('[Cache] Skipping Helius fetch to save RPC credits');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -284,11 +284,12 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                 </div>
               )}
               <button
-                onClick={() => walletAddress && handleAddressSubmit(walletAddress)}
+                onClick={() => walletAddress && handleAddressSubmit(walletAddress, hasCachedData)}
                 disabled={!walletAddress || loading}
-                className="px-6 py-3 bg-blue-600 text-white rounded-none font-semibold hover:bg-blue-700 transition disabled:bg-blue-900/40"
+                className={`px-6 py-3 text-white rounded-none font-semibold transition disabled:opacity-50 
+                  ${hasCachedData ? 'bg-zinc-800 hover:bg-zinc-700 border border-white/10' : 'bg-blue-600 hover:bg-blue-700'}`}
               >
-                {loading ? 'Running…' : walletAddress ? (hasCachedData ? 'Refresh' : 'Run Lookup') : 'Connect to Run'}
+                {loading ? 'Running…' : walletAddress ? (hasCachedData ? 'Force Refresh' : 'Run Lookup') : 'Connect to Run'}
               </button>
             </div>
           )}
@@ -351,8 +352,8 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                   </div>
                 ) : (
                   <>
-                    <DeriverseTradesTable 
-                      trades={deriverseTrades} 
+                    <DeriverseTradesTable
+                      trades={deriverseTrades}
                       onSaveTrades={handleSaveTrades}
                       savingTrades={savingTrades}
                       currentWalletAddress={currentWalletAddress}
@@ -372,10 +373,13 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                     </div>
                   </div>
                 ) : transactions.length === 0 ? (
-                  <div className="rounded-none border border-white/10 bg-black/80 backdrop-blur-xl p-12 text-center">
-                    <p className="text-zinc-400">No transactions found for this address</p>
-                    <p className="text-zinc-500 text-sm mt-2">
-                      This wallet may not have any activity on Solana Devnet
+                  <div className="rounded-none border border-white/10 bg-black/80 backdrop-blur-xl p-12 text-center max-w-2xl mx-auto">
+                    <p className="text-zinc-400 mb-2">Transaction history is not cached.</p>
+                    <p className="text-zinc-500 text-sm mb-6 italic">
+                      "Sorry for the inconvenience, we are working on limited resources, that's why this force refresh is enabled, to save Helius usage."
+                    </p>
+                    <p className="text-zinc-400 text-sm">
+                      Click <span className="text-white font-semibold">"Force Refresh"</span> above to fetch full transaction history from Helius.
                     </p>
                   </div>
                 ) : (

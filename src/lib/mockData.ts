@@ -197,19 +197,28 @@ export function generateMockTrades(): Trade[] {
     const trades: Trade[] = [];
     const rng = new SeededRandom(SEED);
 
-    // Use a fixed base date for deterministic generation (Feb 10, 2026)
-    const baseDate = new Date('2026-02-10T12:00:00Z');
+    // Use current date for generation to ensure "Today" trades exist
+    const baseDate = new Date();
 
-    for (let i = 0; i < TRADE_COUNT; i++) {
-        // Distribute trades over the history period
+    // 1. Distribute trades over the history period
+    for (let i = 0; i < TRADE_COUNT - 10; i++) {
         const daysAgo = rng.nextInt(0, HISTORY_DAYS - 1);
         const timestamp = subDays(baseDate, daysAgo);
-
-        // Random time of day
         timestamp.setHours(rng.nextInt(0, 23));
         timestamp.setMinutes(rng.nextInt(0, 59));
-
         trades.push(generateTrade(i, timestamp, rng));
+    }
+
+    // 2. GUARANTEE trades for the last 5 days to ensure streak works for demo
+    for (let d = 0; d < 5; d++) {
+        // Add 2 trades per day for the last 5 days
+        for (let j = 0; j < 2; j++) {
+            const timestamp = subDays(baseDate, d);
+            timestamp.setHours(rng.nextInt(9, 17)); // Trading hours
+            timestamp.setMinutes(rng.nextInt(0, 59));
+            const index = TRADE_COUNT + d * 2 + j;
+            trades.push(generateTrade(index, timestamp, rng));
+        }
     }
 
     // Sort by date (oldest first)

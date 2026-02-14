@@ -134,3 +134,35 @@ export function downloadAnnotations(trades: any[]): void {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
+
+/**
+ * Migration helper to move localStorage data to Supabase
+ */
+export async function migrateToSupabase(walletAddress: string, service: any): Promise<number> {
+    const localData = loadAnnotations();
+    const tradeIds = Object.keys(localData);
+
+    if (tradeIds.length === 0) return 0;
+
+    console.log(`[Migration] Found ${tradeIds.length} local annotations for wallet: ${walletAddress}`);
+
+    let migratedCount = 0;
+    for (const tradeId of tradeIds) {
+        try {
+            const local = localData[tradeId];
+            await service.saveAnnotation({
+                tradeId: tradeId,
+                notes: local.note,
+                tags: [], // Tags weren't supported in old version
+                lessonsLearned: ''
+            });
+            migratedCount++;
+            // Remove from local after successful migration to prevent double migration
+            deleteAnnotation(tradeId);
+        } catch (err) {
+            console.error(`[Migration] Failed to migrate trade ${tradeId}:`, err);
+        }
+    }
+
+    return migratedCount;
+}

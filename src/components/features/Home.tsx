@@ -29,6 +29,7 @@ import {
 } from '../../lib/tradeFilters';
 import { addDays, startOfDay, endOfDay, format, subDays } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
+import { loadAnnotations } from '../../lib/annotationStorage';
 
 /**
  * Main dashboard component displaying comprehensive trading analytics
@@ -60,6 +61,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
 
   // Real data state
   const [realTrades, setRealTrades] = useState<Trade[]>([]);
+  const [annotations, setAnnotations] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -76,8 +78,15 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
         setError(null);
         try {
           const service = new SupabaseTradeService();
-          const trades = await service.getTrades(analyzingWallet);
+          const annotationService = new (await import('../../services/SupabaseAnnotationService')).SupabaseAnnotationService();
+
+          const [trades, dbAnnotations] = await Promise.all([
+            service.getTrades(analyzingWallet),
+            annotationService.getAnnotationsForWallet(analyzingWallet)
+          ]);
+
           setRealTrades(trades);
+          setAnnotations(dbAnnotations);
 
           if (trades.length === 0) {
             toast.info('No trades found for this wallet on Devnet');
@@ -92,6 +101,21 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
       } else if (network === 'devnet' && !analyzingWallet) {
         // Devnet selected but no wallet -> Prompt user
         setRealTrades([]);
+        setAnnotations({});
+      } else {
+        // Mock mode - Load from localStorage
+        const localAnnotations = loadAnnotations();
+        const mappedAnnotations: Record<string, any> = {};
+        Object.keys(localAnnotations).forEach(id => {
+          const local = localAnnotations[id];
+          mappedAnnotations[id] = {
+            tradeId: id,
+            notes: local.note,
+            tags: [],
+            lessonsLearned: ''
+          };
+        });
+        setAnnotations(mappedAnnotations);
       }
     }
 
@@ -245,9 +269,9 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6">
         <div>
-          <img 
-            src="/assets/graphic_no_trade_data.png" 
-            alt="No trade data" 
+          <img
+            src="/assets/graphic_no_trade_data.png"
+            alt="No trade data"
             className="w-64"
           />
         </div>
@@ -311,7 +335,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
         <div className="flex items-center justify-center">
           <h2 className="text-white/60 text-sm font-mono uppercase tracking-wider">Portfolio Overview</h2>
         </div>
-        <div className="w-full">
+        <div className="w-full space-y-6">
           <PnLCard activeFilter={activeFilter} trades={filteredTrades} />
           {/* <DrawdownCard trades={filteredTrades} minHeight="min-h-[400px]" /> */}
         </div>
@@ -327,7 +351,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
                   <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">Win Rate</h3>
                   <InfoTooltip infoKey="winRate" />
                 </div>
-              </div> 
+              </div>
               <div className="flex flex-col items-start gap-2">
                 <span className="mt-2 text-num-48 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
                   {winStats.winRate}%
@@ -354,7 +378,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
           <h2 className="text-white/60 text-sm font-mono uppercase tracking-wider">Trading Behavior &amp; Risk</h2>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          
+
           <OrderTypeRatioCard trades={filteredTrades} />
 
           <CardWithCornerShine padding="lg" minHeight="min-h-[300px]">
@@ -365,13 +389,13 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
                   <InfoTooltip infoKey="longShortRatio" />
                 </div>
               </div>
-              <div className="mt-4"/>
+              <div className="mt-4" />
               <div className="space-y-2">
                 <div className="flex items-baseline gap-2">
                   <span className="text-num-48 text-green-400 drop-shadow-[0_0_5px_rgba(34,197,94,0.3)]">
                     {longShortRatio.longPercent}%
                   </span>
-                  
+
                   <span className="text-white/60 text-sm font-mono">Long</span>
                 </div>
                 <div className="flex items-baseline gap-2">
@@ -398,7 +422,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
                     <InfoTooltip infoKey="tradingVolume" />
                   </div>
                 </div>
-                <div className="mt-4"/>
+                <div className="mt-4" />
                 <div>
                   <span className="text-num-48 text-white/95 drop-shadow-[0_0_5px_rgba(255,255,255,0.1)]">
                     {formatCompactNumber(tradingVolume)}
@@ -415,7 +439,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
                     <InfoTooltip infoKey="avgWin" />
                   </div>
                 </div>
-                <div className="mt-4"/>
+                <div className="mt-4" />
                 <div>
                   <span className="text-num-48 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)] text-green-400">
                     +${Math.abs(avgWin).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -432,9 +456,9 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
                     <InfoTooltip infoKey="avgLoss" />
                   </div>
                 </div>
-                <div className="mt-4"/>
+                <div className="mt-4" />
                 <div
-          >
+                >
                   <span className="text-num-48 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)] text-red-400">
                     {avgLoss === 0
                       ? '$0.00'

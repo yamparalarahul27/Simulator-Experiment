@@ -29,11 +29,11 @@ const AssetIcon = ({ trade }: { trade: Trade }) => {
 
   return (
     <>
-      <img 
+      <img
         src={iconPath}
         alt={trade.symbol}
         className="w-[26px] h-[26px] mr-2"
-        onError={(e) => { 
+        onError={(e) => {
           console.log('Icon failed to load:', iconPath);
           // Hide broken image and show fallback
           e.currentTarget.style.display = 'none';
@@ -55,11 +55,11 @@ export default function LargestTradesCard({ trades }: LargestTradesCardProps) {
   const { bestTrade, worstTrade } = useMemo(() => {
     const winners = trades.filter((t) => t.pnl > 0);
     const losers = trades.filter((t) => t.pnl < 0);
-    
-    const bestTrade = winners.length > 0 
+
+    const bestTrade = winners.length > 0
       ? winners.reduce((best, t) => (t.pnl > best.pnl ? t : best), winners[0])
       : null;
-      
+
     const worstTrade = losers.length > 0
       ? losers.reduce((worst, t) => (t.pnl < worst.pnl ? t : worst), losers[0])
       : null;
@@ -67,18 +67,18 @@ export default function LargestTradesCard({ trades }: LargestTradesCardProps) {
     return { bestTrade, worstTrade };
   }, [trades]);
 
-  const bestPnlFormatted = bestTrade 
+  const bestPnlFormatted = bestTrade
     ? `+$${Math.abs(bestTrade.pnl).toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`
     : '+$0.00';
 
   const worstPnlFormatted = worstTrade
     ? `-$${Math.abs(worstTrade.pnl).toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`
     : '-$0.00';
 
   return (
@@ -99,7 +99,7 @@ export default function LargestTradesCard({ trades }: LargestTradesCardProps) {
             <div className="text-green-400 text-num-32 font-mono drop-shadow-[0_0_10px_rgba(34,197,94,0.25)]">
               {bestPnlFormatted}
             </div>
-            
+
             {bestTrade ? (
               <div className="space-y-0.5">
                 <div className="flex items-center justify-center gap-1 text-white/60 text-sm font-mono">
@@ -109,7 +109,7 @@ export default function LargestTradesCard({ trades }: LargestTradesCardProps) {
                     {bestTrade.side.toUpperCase()}
                   </span>
                 </div>
-                <div className="text-white/40 text-xs font-mono">
+                <div className="text-white/40 text-xs font-mono" suppressHydrationWarning>
                   Closed: {formatTimestamp(bestTrade.closedAt.getTime())}
                 </div>
               </div>
@@ -122,10 +122,10 @@ export default function LargestTradesCard({ trades }: LargestTradesCardProps) {
 
           {/* Worst Trade */}
           <div className="text-center space-y-2">
-            <div className="text-red-400 text-num-32 font-mono drop-shadow-[0_0_10px_rgba(248,113,113,0.25)]">
+            <div className="text-num-32 font-mono text-red-400 drop-shadow-[0_0_10px_rgba(248,113,113,0.25)]">
               {worstPnlFormatted}
             </div>
-            
+
             {worstTrade ? (
               <div className="space-y-0.5">
                 <div className="flex items-center justify-center gap-1 text-white/60 text-sm font-mono">
@@ -135,7 +135,7 @@ export default function LargestTradesCard({ trades }: LargestTradesCardProps) {
                     {worstTrade.side.toUpperCase()}
                   </span>
                 </div>
-                <div className="text-white/40 text-xs font-mono">
+                <div className="text-white/40 text-xs font-mono" suppressHydrationWarning>
                   Closed: {formatTimestamp(worstTrade.closedAt.getTime())}
                 </div>
               </div>
