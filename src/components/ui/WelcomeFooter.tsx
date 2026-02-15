@@ -56,7 +56,7 @@ export const WelcomeFooter = ({ className = '' }: WelcomeFooterProps) => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 1, ease: "easeOut" }}
             >
-                Designed & Engineered by Yamparala Rahul
+                Designed & Engineered by <a href="https://t.me/yamparalarahul1" target="_blank" rel="noopener noreferrer" className="hover:underline">Yamparala Rahul</a>
             </motion.div>
         </div>
     );
