@@ -47,7 +47,7 @@ export default function RoadmapScreen() {
                 >
                     <Image
                         src="/assets/CDJ.png"
-                        alt="Customer delight journey map"
+                        alt="Concept Deriverse Journal App"
                         width={1200}
                         height={680}
                         className="h-auto w-full object-contain"
