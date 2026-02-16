@@ -334,7 +334,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
             {!loading && trades.length === 0 && (
                 <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
                     <div>
-                        <img src="/assets/graphic_no_trade_data.png" alt="No trade data" className="w-64" />
+                        <img src="/assets/graphic_no_trade_data_onJournal.png" alt="No trade data" className="w-64" />
                     </div>
                     <h3 className="text-xl font-semibold text-white mb-2">Connect Wallet to view your Journal</h3>
                     <p className="text-white/60 max-w-md mb-6">
