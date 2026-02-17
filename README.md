@@ -1,21 +1,18 @@
-# Deriverse
+# Concept Deriverse Journal App 
 
 ## Live Apps
-- Main app: [https://deriverse.vercel.app](https://deriverse.vercel.app)
-- Supporting app (Concept DJ Playground): [https://conceptdj.vercel.app/playground](https://conceptdj.vercel.app/playground)
-- Supporting app repo: [https://github.com/yamparalarahul27/ConceptDJ](https://github.com/yamparalarahul27/ConceptDJ)
-
-## Demo Video
-Watch the product walkthrough: [https://youtu.be/765plgw8Nfo](https://youtu.be/765plgw8Nfo)
+- Main app: [https://conceptdj.vercel.app](https://conceptdj.vercel.app)
 
 ## Overview
-Deriverse is a trading analytics and journal experience for Solana Dex Traders. It supports devnet data for real trade analysis, with journaling, annotations, and fee/volume insights and mock data for exploration.
+Concept Deriverse is a UI only trading analytics and journal experience for Solana Dex Traders.
 
-## Features
-- Wallet lookup with mock/devnet modes
-- Trading analytics: win rate, avg win/loss, volume, fee composition, long/short ratio
-- Journaling with annotations, streak tracking, tag filters
-- Premium/Vibrant UI components (CardWithCornerShine, GlassmorphismNavbar, LivePulseIndicator)
+## Credits
+- Designed & Engineered by **Yamparala Rahul**
+- Telegram / X: **@yamparalarahul1**
+- Made for Superteam Earn bounty: [Design trading analytics dashboard with journal and portfolio analysis](https://superteam.fun/earn/listing/design-trading-analytics-dashboard-with-journal-and-portfolio-analysis)
+
+## New UIs
+- 15 analytical cards/widgets across performance, psychology, market depth, and utilities: Paper Hands Tracker, AI Tilt Meter, PnL & Funding Heatmaps, Risk Radar, Execution Quality, Asset Benchmark, Liquidity Heatmap, Orderbook Depth, Portfolio Performance & Fragility, Direction Bias, Market Volatility, Behavioral Log, TradingView Chart, and more premium UI components (CardWithCornerShine, GlassmorphismNavbar, LivePulseIndicator)
 
 ## Tech Stack
 - Next.js 16 (App Router), React 19, TypeScript
@@ -35,15 +32,6 @@ npm run dev
 - `npm run build` — production build
 - `npm run lint` — lint codebase
 
-## Environment
-Create `.env.local` with (examples):
-```
-NEXT_PUBLIC_RPC_HTTP=https://api.devnet.solana.com
-NEXT_PUBLIC_SUPABASE_URL=...
-NEXT_PUBLIC_SUPABASE_ANON_KEY=...
-```
-Check deployment.md for production envs.
-
 ## Documentation
 - `Documents/document-index.md` — index of all project docs
 - `Documents/architecture.md` — system overview
@@ -51,7 +39,3 @@ Check deployment.md for production envs.
 - `Documents/database.md` — Supabase schemas and caching
 - `Documents/process.md` — workflow and agent skills
 
-## Credits
-- Designed & Engineered by **Yamparala Rahul**
-- Telegram / X: **@yamparalarahul1**
-- Made for Superteam Earn bounty: [Design trading analytics dashboard with journal and portfolio analysis](https://superteam.fun/earn/listing/design-trading-analytics-dashboard-with-journal-and-portfolio-analysis)
