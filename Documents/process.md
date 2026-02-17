@@ -16,6 +16,13 @@
     - Automated: Run tests (see `Testing.md`).
     - Feedback: Use `Agentation` to annotate issues visually and feed them back into the task.
 
+### Agent Skills Used in This Project
+- `react-patterns` — for consistent React/Next patterns.
+- `typescript-expert` — for type-safe implementations.
+- `api-security-best-practices` — when touching API/service code.
+- `test-driven-development` and `find-bugs` — for testing and defect discovery.
+- `vercel-deployment` — for deployment troubleshooting.
+
 ## Documentation
 - Update `Backend.md` or `Frontend_UIUX.md` if architectural changes are made.
 - Keep `task.md` updated as the source of truth for progress.
