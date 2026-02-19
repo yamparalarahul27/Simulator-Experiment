@@ -8,13 +8,14 @@ import ProfileSettings from '../features/ProfileSettings';
 import AboutScreen from '../features/AboutScreen';
 import HelpScreen from '../features/HelpScreen';
 import RoadmapScreen from '../features/RoadmapScreen';
+import ExchangeManager from '../features/ExchangeManager';
 import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
 import Footer from './Footer';
 
-export type TabType = 'dashboard' | 'lookup' | 'journal' | 'appdocs' | 'help' | 'roadmap' | 'profile-settings';
+export type TabType = 'dashboard' | 'lookup' | 'journal' | 'exchange-manager' | 'appdocs' | 'help' | 'roadmap' | 'profile-settings';
 
 const DEFAULT_TAB: TabType = 'dashboard';
-const PERSISTABLE_TABS: TabType[] = ['dashboard', 'lookup', 'journal', 'appdocs', 'help', 'roadmap', 'profile-settings'];
+const PERSISTABLE_TABS: TabType[] = ['dashboard', 'lookup', 'journal', 'exchange-manager', 'appdocs', 'help', 'roadmap', 'profile-settings'];
 
 /**
  * TabNavigation Component
@@ -86,6 +87,12 @@ export default function TabNavigation() {
             onClick: () => setActiveTab('lookup')
         },
         {
+            title: 'Exchange Manager',
+            href: '#exchange-manager',
+            category: 'main',
+            onClick: () => setActiveTab('exchange-manager')
+        },
+        {
             title: 'About',
             href: '#appdocs',
             category: 'dropdown',
@@ -119,6 +126,8 @@ export default function TabNavigation() {
                 return <TradeHistory onSwitchToRealData={handleSwitchToRealData} />;
             case 'journal':
                 return <Journal network={network} analyzingWallet={analyzingWallet} onNavigateToLookup={() => setActiveTab('lookup')} />;
+            case 'exchange-manager':
+                return <ExchangeManager />;
             case 'appdocs':
                 return <AboutScreen />;
             case 'help':

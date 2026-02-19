@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DeriverseLogo } from '../layout/DeriverseLogo';
+import Image from 'next/image';
 import type { TabType } from '../layout/TabNavigation';
 import WelcomeScreen from './WelcomeScreen';
 import DeriverseWalletAsk from './DeriverseWalletAsk';
@@ -165,11 +165,19 @@ export default function LoadingScreen() {
                     {/* Logo Animation Phase */}
                     {currentPhase === 'logo' && (
                         <motion.div
+                            className="flex items-center justify-center"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.8, ease: "easeInOut" }}
                         >
-                            <DeriverseLogo />
+                            <Image
+                                src="/assets/LogoPath.svg"
+                                alt="YDEX logo"
+                                width={280}
+                                height={80}
+                                priority
+                                className="h-auto w-72"
+                            />
                         </motion.div>
                     )}
                 </motion.div>
