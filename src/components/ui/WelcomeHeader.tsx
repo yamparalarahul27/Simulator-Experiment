@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 /**
  * WelcomeHeader component for onboarding surfaces (Welcome + Wallet Ask).
@@ -13,7 +14,16 @@ import React from 'react';
 export default function WelcomeHeader() {
     return (
         <div className="absolute top-0 left-0 right-0 z-10 p-6">
-            {/* Clean header with no buttons - focused onboarding experience */}
+            <div className="flex items-center">
+                <Image
+                    src="/Logo.png"
+                    alt="YDEX logo"
+                    width={140}
+                    height={40}
+                    priority
+                    className="h-auto w-32"
+                />
+            </div>
         </div>
     );
 }
