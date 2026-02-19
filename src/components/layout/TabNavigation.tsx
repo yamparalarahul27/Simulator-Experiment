@@ -144,7 +144,7 @@ export default function TabNavigation() {
         <div className="min-h-screen text-white">
             {/* New Glassmorphism Navigation */}
             <GlassmorphismNavbar
-                logo="/assets/Deriverse_Journal_Logo.png"
+                logo="/Logo.png"
                 navItems={navItems}
                 activePath={`#${activeTab}`}
                 networkStatus={{

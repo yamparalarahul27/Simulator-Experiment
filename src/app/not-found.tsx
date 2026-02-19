@@ -72,7 +72,7 @@ export default function NotFound() {
           </div>
 
           <p className="text-center text-[12px] text-white/20 uppercase tracking-[0.3em] pt-8 font-bold">
-            © 2024 Deriverse Journal // SYSTEM V2.4.0
+            © 2024 YDEX // SYSTEM V2.4.0
           </p>
         </div>
       </div>

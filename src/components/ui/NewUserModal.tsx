@@ -14,8 +14,8 @@ interface NewUserModalProps {
 }
 
 const NewUserContent = {
-    title: "Welcome to Deriverse Journal!",
-    description: "It seems you are new here, as we didn't see your wallet being used on app before, would you like to continue with signup?",
+    title: "Welcome to YDEX!",
+    description: "It seems you are new here, as we didn't see your wallet being used on the app before. Would you like to continue with signup?",
     primaryButton: "Yes, continue to signup",
     secondaryOption: "No, go back"
 };
@@ -58,8 +58,8 @@ export default function NewUserModal({ isVisible, onChoice, walletAddress }: New
                                 transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                             >
                                 <img 
-                                    src="/assets/deriverse_j_hero_logo.png" 
-                                    alt="Deriverse Journal" 
+                                    src="/Logo.png" 
+                                    alt="YDEX Logo" 
                                     className="h-auto"
                                     style={{ width: '180px', height: 'auto' }}
                                 />

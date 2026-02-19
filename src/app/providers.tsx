@@ -29,10 +29,10 @@ export default function Providers({ children }: PropsWithChildren) {
         autoConnect: false,
         theme: 'dark',
         metadata: {
-            name: 'Deriverse Journal',
-            description: 'Deriverse Journal wallet connectivity',
+            name: 'YDEX',
+            description: 'YDEX wallet connectivity',
             url: APP_BASE_URL,
-            iconUrls: ['/assets/Deriverse_Journal_Logo.png']
+            iconUrls: ['/Logo.png']
         }
         // RPC URLs are configured per cluster via WALLET_CLUSTER_CONFIG.
     }) satisfies IUnifiedWalletConfig, [cluster]);

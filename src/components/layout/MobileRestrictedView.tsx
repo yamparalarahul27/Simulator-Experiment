@@ -14,8 +14,8 @@ export default function MobileRestrictedView() {
         >
             <div className="mb-8">
                 <Image
-                    src="/assets/deriverse_j_hero_logo.png"
-                    alt="Deriverse hero logo"
+                    src="/Logo.png"
+                    alt="YDEX logo"
                     width={180}
                     height={56}
                     priority
@@ -30,8 +30,8 @@ export default function MobileRestrictedView() {
                 <div className="relative z-10 flex flex-col items-center gap-6">
                     <div className="p-4 flex items-center justify-center">
                         <Image
-                            src="/assets/deriverse_desktop_icon.png"
-                            alt="Deriverse desktop icon"
+                            src="/Logo.png"
+                            alt="YDEX desktop icon"
                             width={192}
                             height={192}
                         />

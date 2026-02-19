@@ -32,7 +32,7 @@ export default function Footer() {
                                 >
                                     Yamparala Rahul
                                 </button>
-                                , © 2026 Powered by Deriverse.
+                                , © 2026 Powered by YDEX.
                             </p>
                         </div>
                     </div>
