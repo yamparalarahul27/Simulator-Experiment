@@ -189,8 +189,8 @@ export default function DeriverseWalletAsk({
                         transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                     >
                         <img
-                            src="/assets/deriverse_j_hero_logo.png"
-                            alt="Deriverse Journal"
+                            src="/Logo.png"
+                            alt="YDEX Logo"
                             className="h-auto"
                             style={{ width: '180px', height: 'auto' }}
                         />

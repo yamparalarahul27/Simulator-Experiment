@@ -30,8 +30,8 @@ interface WelcomeScreenProps {
 }
 
 const WelcomeContent = {
-    greeting: "Hi, welcome to Deriverse Journal",
-    description: "This app is made to help traders on Deriverse Dex to get in-depth analytics and journal their trades to become more discipline and profitable.",
+    greeting: "Hi, welcome to YDEX",
+    description: "This app is made to help traders on Solana DEXes get in-depth analytics and journal their trades to become more disciplined and profitable.",
     buttonText: "Awesome! Let's get started"
 };
 
@@ -85,8 +85,8 @@ export const WelcomeScreen = ({ onComplete, isVisible }: WelcomeScreenProps) => 
                                 transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                             >
                                 <img
-                                    src="/assets/deriverse_j_hero_logo.png"
-                                    alt="Deriverse Journal"
+                                    src="/Logo.png"
+                                    alt="YDEX Logo"
                                     className="h-auto"
                                     style={{ width: '180px', height: 'auto' }}
                                 />

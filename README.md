@@ -1,4 +1,4 @@
-# Deriverse
+# YDEX
 
 ## Live Apps
 - Main app: [https://deriverse.vercel.app](https://deriverse.vercel.app)
@@ -9,7 +9,7 @@
 Watch the product walkthrough: [https://youtu.be/odKifzz8NbI](https://youtu.be/odKifzz8NbI)
 
 ## Overview
-Deriverse is a trading analytics and journal experience for Solana Dex Traders. It supports devnet data for real trade analysis, with journaling, annotations, and fee/volume insights and mock data for exploration.
+YDEX is a trading analytics and journal experience for Solana Dex Traders. It supports devnet data for real trade analysis, with journaling, annotations, and fee/volume insights and mock data for exploration.
 Main Screens PDF Doc: [https://drive.google.com/file/d/1rKDJrtJwz-4fTcpLxoxOmnGv8XXFQblV/view?usp=drive_link](https://drive.google.com/file/d/1rKDJrtJwz-4fTcpLxoxOmnGv8XXFQblV/view?usp=drive_link)
 
 ## Features

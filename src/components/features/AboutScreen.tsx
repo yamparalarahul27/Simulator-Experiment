@@ -36,7 +36,7 @@ export default function AboutScreen() {
     return (
         <section className="mx-auto flex max-w-6xl flex-col gap-10 rounded-none p-6 sm:p-8 text-white/80 backdrop-blur">
             <header className="space-y-4">
-                <p className="text-center text-sm uppercase tracking-[0.4em] text-white/40">About Deriverse Journal</p>
+                <p className="text-center text-sm uppercase tracking-[0.4em] text-white/40">About YDEX</p>
                 <h1 className="text-center text-xl font-semibold text-white sm:text-3xl">
                     "Trade is not about Trading, it&apos;s about discipline"
                 
@@ -47,7 +47,7 @@ export default function AboutScreen() {
                         complicated.
                     </p>
                     <p>
-                        I built Deriverse Journal to change that narrative. Whether you&apos;re a seasoned trader or just starting
+                        I built YDEX to change that narrative. Whether you're a seasoned trader or just starting
                         out, this app brings clarity and structure to your trading journey through systematic journaling and
                         portfolio analysis.
                     </p>
@@ -68,7 +68,7 @@ export default function AboutScreen() {
                     },
                     {
                         title: 'Wallet(s)',
-                        body: 'Connect wallets manually or automatically, then search transactions across Deriverse DEX and other venues without leaving the app.'
+                        body: 'Connect wallets manually or automatically, then search transactions across YDEX DEX and other venues without leaving the app.'
                     }
                 ].map((card) => (
                     <div key={card.title} className="rounded-none border border-white/10 bg-black/40 p-5 shadow-inner shadow-black/10">
@@ -80,19 +80,19 @@ export default function AboutScreen() {
 
             <div className="space-y-4 rounded-none bg-gradient-to-r from-cyan-500/15 via-blue-500/15 to-purple-500/15 p-6 text-sm leading-relaxed text-white/85">
                 <p>
-                    Right now, I&apos;m focused on making Deriverse DEX trades measurable and actionable, powered by the Deriverse SDK
-                    and Solana Network. Check out the roadmap for what&apos;s shipping next.
+                    Right now, I'm focused on making YDEX DEX trades measurable and actionable, powered by the YDEX SDK
+                    and Solana Network. Check out the roadmap for what's shipping next.
                 </p>
                 <div>
                     <h3 className="text-base font-semibold text-white">How this gets built</h3>
                     <p className="mt-2">
-                        I&apos;m submitting Deriverse Journal to the Superteam Earn Deriverse bounty. If it wins, every dollar loops
+                        I'm submitting YDEX to the Superteam Earn YDEX bounty. If it wins, every dollar loops
                         back into sharper UX, richer insights, and tools that actually help you trade right.
                     </p>
                 </div>
                 <div className="space-y-3 rounded-none border border-white/10 bg-black/20 p-4 text-white/80">
                     <p>
-                        If you run a fund or just want to support what I&apos;m building, I&apos;d love to chat. Hit me up on Telegram or
+                        If you run a fund or just want to support what I'm building, I'd love to chat. Hit me up on Telegram or
                         scan the QR code.
                     </p>
                     <div className="flex flex-wrap items-center gap-3 text-white">

@@ -13,8 +13,11 @@ import Providers from "./providers";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  title: "Deriverse",
-  description: "Deriverse Trade Lookup and Analytics Platform",
+  title: "YDEX",
+  description: "YDEX Trade Lookup and Analytics Platform",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
