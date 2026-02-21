@@ -23,7 +23,7 @@ interface DeriverseWalletAskProps {
 
 const WalletAskContent = {
     title: "Before we begin…",
-    description1: "This app works best with wallets used on Deriverse DEX, but you can still explore without one.",
+    description1: "This app works best with wallets used on Solana Chain DEX, but you can still explore without one.",
     description2: "Choose what works for you:",
     primaryButton: "I have a wallet — continue",
     secondaryOption: "Explore with mock data"

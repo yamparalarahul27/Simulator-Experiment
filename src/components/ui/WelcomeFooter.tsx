@@ -40,8 +40,8 @@ export const WelcomeFooter = ({ className = '' }: WelcomeFooterProps) => {
                     <div className="powered-by flex items-center justify-center space-x-4 w-full mb-2">
                         <span className="text-white/40 text-sm font-mono uppercase tracking-wider">Powered by</span>
                         <img
-                            src="/Logo.png"
-                            alt="YDEX Logo"
+                            src="/assets/solana_network_logo.png"
+                            alt="Solana Network Logo"
                             className="h-4 w-auto opacity-80"
                         />
 
