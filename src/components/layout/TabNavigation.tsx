@@ -12,6 +12,7 @@ import ExchangeManager from '../features/ExchangeManager';
 import Market from '../features/Market';
 import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
 import Footer from './Footer';
+import { MarketTicker } from '../ui/MarketTicker';
 
 export type TabType = 'dashboard' | 'market' | 'lookup' | 'journal' | 'exchange-manager' | 'appdocs' | 'help' | 'roadmap' | 'profile-settings';
 
@@ -154,6 +155,8 @@ export default function TabNavigation() {
 
     return (
         <div className="min-h-screen text-white">
+            <MarketTicker />
+
             {/* New Glassmorphism Navigation */}
             <GlassmorphismNavbar
                 logo="/Logo.png"
@@ -172,7 +175,7 @@ export default function TabNavigation() {
             />
 
             {/* Content Area - Padding top added to account for fixed navbar */}
-            <div className="pt-36 p-4 max-w-7xl mx-auto">
+            <div className="pt-44 p-4 max-w-7xl mx-auto">
                 {renderTabContent()}
 
                 {/* Footer */}
