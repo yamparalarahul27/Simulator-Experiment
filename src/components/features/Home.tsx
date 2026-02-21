@@ -1,17 +1,31 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import PnLCard from './PnLCard';
+import useSWR from 'swr';
+import dynamic from 'next/dynamic';
 import TableUI_Demo from './TableUI_Demo';
 import FeeDistribution from './FeeDistribution';
 import CardWithCornerShine from '../ui/CardWithCornerShine';
 import TopBar from './TopBar';
 import InfoTooltip from '../ui/InfoTooltip';
 import LargestTradesCard from './LargestTradesCard';
-import DrawdownCard from './DrawdownCard';
-import OrderTypeRatioCard from './OrderTypeRatioCard';
-import AverageTradeDurationCard from './AverageTradeDurationCard';
-import TimeBasedPerformanceCard from './TimeBasedPerformanceCard';
 import MockDataBanner from '../ui/MockDataBanner';
 import { MOCK_TRADES, calculateFeeBreakdown } from '../../lib/mockData';
+
+// Dynamic Imports for Heavy Components
+const PnLCard = dynamic(() => import('./PnLCard'), {
+  loading: () => <div className="animate-pulse bg-white/5 h-[400px] w-full" />
+});
+const DrawdownCard = dynamic(() => import('./DrawdownCard'), {
+  loading: () => <div className="animate-pulse bg-white/5 h-[400px] w-full" />
+});
+const OrderTypeRatioCard = dynamic(() => import('./OrderTypeRatioCard'), {
+  loading: () => <div className="animate-pulse bg-white/5 h-[300px] w-full" />
+});
+const AverageTradeDurationCard = dynamic(() => import('./AverageTradeDurationCard'), {
+  loading: () => <div className="animate-pulse bg-white/5 h-[200px] w-full" />
+});
+const TimeBasedPerformanceCard = dynamic(() => import('./TimeBasedPerformanceCard'), {
+  loading: () => <div className="animate-pulse bg-white/5 h-[600px] w-full" />
+});
 import { SupabaseTradeService } from '../../services/SupabaseTradeService';
 import { SupabaseWalletService } from '../../services/SupabaseWalletService';
 import { Trade } from '../../lib/types';
@@ -45,108 +59,73 @@ interface HomeProps {
 
 export default function Home({ network = 'mock', analyzingWallet, onNavigateToLookup }: HomeProps = {}) {
   const [activeFilter, setActiveFilter] = useState<FilterType | undefined>('All');
-  const [lastIngestionAt, setLastIngestionAt] = useState<string | null>(null);
-  const [ingestionLoading, setIngestionLoading] = useState(false);
-  const [ingestionError, setIngestionError] = useState<string | null>(null);
   const [draftDateRange, setDraftDateRange] = useState<DateRange | undefined>(undefined);
   const [draftSelectedPairs, setDraftSelectedPairs] = useState<string[]>([]);
   const [appliedDateRange, setAppliedDateRange] = useState<DateRange | undefined>(undefined);
   const [appliedSelectedPairs, setAppliedSelectedPairs] = useState<string[]>([]);
 
-  // Real data state
-  const [realTrades, setRealTrades] = useState<Trade[]>([]);
+  // Real data state (via SWR)
   const [annotations, setAnnotations] = useState<Record<string, any>>({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
+  // SWR hook for trades
+  const {
+    data: realTrades = [],
+    isLoading: loading,
+    error
+  } = useSWR(
+    network === 'devnet' && analyzingWallet ? ['trades', analyzingWallet] : null,
+    async ([, wallet]: [string, string]) => {
+      const service = new SupabaseTradeService();
+      const trades = await service.getTrades(wallet);
+      if (trades.length === 0) {
+        toast.info('No trades found for this wallet on Devnet');
+      }
+      return trades;
+    }
+  );
 
   // Determine which trades to display
   const displayTrades = useMemo(() => {
     return network === 'devnet' ? realTrades : MOCK_TRADES;
   }, [network, realTrades]);
 
-  // Fetch real trades when in devnet mode
+  // Load local annotations for mock mode (side-effect isolated)
   useEffect(() => {
-    async function fetchRealTrades() {
-      if (network === 'devnet' && analyzingWallet) {
-        setLoading(true);
-        setError(null);
-        try {
-          const service = new SupabaseTradeService();
-          const trades = await service.getTrades(analyzingWallet);
-
-          setRealTrades(trades);
-          setAnnotations({}); // Reset annotations for real data in Home as they aren't used here
-
-          if (trades.length === 0) {
-            toast.info('No trades found for this wallet on Devnet');
-          }
-        } catch (err) {
-          console.error('Failed to load trades:', err);
-          setError('Failed to load trades from database');
-          toast.error('Failed to load trades');
-        } finally {
-          setLoading(false);
-        }
-      } else if (network === 'devnet' && !analyzingWallet) {
-        // Devnet selected but no wallet -> Prompt user
-        setRealTrades([]);
-        setAnnotations({});
-      } else {
-        // Mock mode - Load from localStorage
-        const localAnnotations = loadAnnotations();
-        const mappedAnnotations: Record<string, any> = {};
-        Object.keys(localAnnotations).forEach(id => {
-          const local = localAnnotations[id];
-          if (local && local.note) {
-            mappedAnnotations[id] = {
-              tradeId: id,
-              notes: local.note,
-              tags: [],
-              lessonsLearned: ''
-            };
-          }
-        });
-        setAnnotations(mappedAnnotations);
-      }
-    }
-
-    fetchRealTrades();
-  }, [network, analyzingWallet]);
-
-  useEffect(() => {
-    if (network !== 'devnet' || !analyzingWallet) {
-      setLastIngestionAt(null);
-      setIngestionLoading(false);
-      setIngestionError(null);
-      return;
-    }
-
-    let mounted = true;
-    const walletService = new SupabaseWalletService();
-
-    setIngestionLoading(true);
-    setIngestionError(null);
-    walletService
-      .getWallet(analyzingWallet)
-      .then((wallet) => {
-        if (!mounted) return;
-        setLastIngestionAt(wallet?.last_synced_at ?? null);
-      })
-      .catch(() => {
-        if (!mounted) return;
-        setIngestionError('Failed to load ingestion time');
-        setLastIngestionAt(null);
-      })
-      .finally(() => {
-        if (mounted) {
-          setIngestionLoading(false);
+    if (network !== 'devnet') {
+      const localAnnotations = loadAnnotations();
+      const mappedAnnotations: Record<string, any> = {};
+      Object.keys(localAnnotations).forEach(id => {
+        const local = localAnnotations[id];
+        if (local && local.note) {
+          mappedAnnotations[id] = {
+            tradeId: id,
+            notes: local.note,
+            tags: [],
+            lessonsLearned: ''
+          };
         }
       });
+      setAnnotations(mappedAnnotations);
+    } else {
+      setAnnotations({});
+    }
+  }, [network]);
 
-    return () => {
-      mounted = false;
-    };
-  }, [network, analyzingWallet]);
+  // SWR hook for wallet sync status
+  const {
+    data: lastIngestionAt = null,
+    isLoading: ingestionLoading,
+    error: ingestionErrorBase
+  } = useSWR(
+    network === 'devnet' && analyzingWallet ? ['wallet', analyzingWallet] : null,
+    async ([, wallet]: [string, string]) => {
+      const walletService = new SupabaseWalletService();
+      const data = await walletService.getWallet(wallet);
+      return data?.last_synced_at ?? null;
+    }
+  );
+
+  const ingestionError = ingestionErrorBase ? 'Failed to load ingestion time' : null;
 
   const availablePairs = useMemo(() => {
     const symbols = new Set<string>();

@@ -211,7 +211,7 @@ export const GlassmorphismNavbar = ({
     return (
         <>
             {/* Fixed navigation bar */}
-            <nav className={`fixed top-0 left-0 right-0 z-50 ${className}`}>
+            <nav className={`fixed top-10 left-0 right-0 z-50 ${className}`}>
                 <div className="px-3 sm:px-6 py-2 sm:py-3">
                     {/* Glassmorphism container */}
                     <div className="bg-black/80 max-w-7xl mx-auto backdrop-blur-xl border border-white/10 rounded-none px-3 sm:px-4 py-1.5 sm:py-2 shadow-2xl shadow-black/20">
@@ -453,7 +453,7 @@ export const GlassmorphismNavbar = ({
                     />
 
                     {/* Menu panel */}
-                    <div className="absolute top-14 bottom-4 left-3 right-3 bg-black/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-top duration-300">
+                    <div className="absolute top-24 bottom-4 left-3 right-3 bg-black/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-top duration-300">
                         {/* Scrollable content */}
                         <div className="flex-1 overflow-y-auto p-6 space-y-6">
                             {/* Main navigation */}
