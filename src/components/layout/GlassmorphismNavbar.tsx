@@ -82,6 +82,8 @@ export interface GlassmorphismNavbarProps {
     onNetworkChange?: (network: 'devnet' | 'mainnet' | 'mock') => void;
     /** Callback for Profile & Settings button click */
     onProfileSettingsClick?: () => void;
+    /** Callback for Exchange Manager click */
+    onExchangeManagerClick?: () => void;
     /** Additional CSS classes for nav container */
     className?: string;
 }
@@ -128,13 +130,16 @@ export const GlassmorphismNavbar = ({
     dropdownTitle = 'More',
     onNetworkChange,
     onProfileSettingsClick,
+    onExchangeManagerClick,
     className = '',
 }: GlassmorphismNavbarProps) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isNetworkDropdownOpen, setIsNetworkDropdownOpen] = useState(false);
+    const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const networkDropdownRef = useRef<HTMLDivElement>(null);
+    const profileDropdownRef = useRef<HTMLDivElement>(null);
 
     // Categorize nav items
     const mainItems = navItems.filter((item) => item.category === 'main' || !item.category);
@@ -166,6 +171,9 @@ export const GlassmorphismNavbar = ({
             }
             if (networkDropdownRef.current && !networkDropdownRef.current.contains(event.target as Node)) {
                 setIsNetworkDropdownOpen(false);
+            }
+            if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target as Node)) {
+                setIsProfileDropdownOpen(false);
             }
         };
 
@@ -380,13 +388,45 @@ export const GlassmorphismNavbar = ({
                                     </div>
                                 )}
 
-                                <button
-                                    onClick={onProfileSettingsClick}
-                                    className="hidden sm:flex items-center justify-center w-8 h-8 rounded-full"
-                                    aria-label="Profile and Settings"
+                                <div
+                                    className="hidden sm:block relative"
+                                    ref={profileDropdownRef}
+                                    onMouseEnter={() => setIsProfileDropdownOpen(true)}
+                                    onMouseLeave={() => setIsProfileDropdownOpen(false)}
                                 >
-                                    <img src="/assets/Profile_icon.png" alt="Profile &amp; Settings" className="w-6 h-6 opacity-80 hover:opacity-100 transition-opacity" />
-                                </button>
+                                    <button
+                                        onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                                        className="flex items-center justify-center w-8 h-8 rounded-full cursor-pointer"
+                                        aria-label="Profile Options"
+                                    >
+                                        <img src="/assets/Profile_icon.png" alt="Profile &amp; Settings" className="w-6 h-6 opacity-80 hover:opacity-100 transition-opacity" />
+                                    </button>
+
+                                    {isProfileDropdownOpen && (
+                                        <div className="absolute top-full right-0 pt-2 min-w-[200px]">
+                                            <div className="bg-black/95 backdrop-blur-xl border border-white/10 rounded-none shadow-2xl overflow-hidden flex flex-col">
+                                                <button
+                                                    onClick={() => {
+                                                        setIsProfileDropdownOpen(false);
+                                                        onProfileSettingsClick?.();
+                                                    }}
+                                                    className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${activePath === '#profile-settings' ? 'text-white bg-white/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
+                                                >
+                                                    Profile &amp; Settings
+                                                </button>
+                                                <button
+                                                    onClick={() => {
+                                                        setIsProfileDropdownOpen(false);
+                                                        onExchangeManagerClick?.();
+                                                    }}
+                                                    className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${activePath === '#exchange-manager' ? 'text-white bg-white/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
+                                                >
+                                                    Exchange Manager
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
 
                                 {/* Hamburger button (mobile only) */}
                                 <div className="lg:hidden">
@@ -502,6 +542,37 @@ export const GlassmorphismNavbar = ({
                                     </div>
                                 </div>
                             )}
+
+                            {/* Mobile specific extra items */}
+                            <div>
+                                <p className="text-xs text-white/40 uppercase tracking-wider mb-3">Settings</p>
+                                <div className="space-y-1">
+                                    <a
+                                        href="#profile-settings"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            onProfileSettingsClick?.();
+                                            setIsMobileMenuOpen(false);
+                                        }}
+                                        className={`flex items-center gap-3 px-4 py-3 rounded-none transition-all ${activePath === '#profile-settings' ? 'text-white bg-white/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
+                                    >
+                                        <span className={`w-1.5 h-1.5 rounded-full ${activePath === '#profile-settings' ? 'bg-white' : 'bg-white/20'}`} />
+                                        Profile &amp; Settings
+                                    </a>
+                                    <a
+                                        href="#exchange-manager"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            onExchangeManagerClick?.();
+                                            setIsMobileMenuOpen(false);
+                                        }}
+                                        className={`flex items-center gap-3 px-4 py-3 rounded-none transition-all ${activePath === '#exchange-manager' ? 'text-white bg-white/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
+                                    >
+                                        <span className={`w-1.5 h-1.5 rounded-full ${activePath === '#exchange-manager' ? 'bg-white' : 'bg-white/20'}`} />
+                                        Exchange Manager
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

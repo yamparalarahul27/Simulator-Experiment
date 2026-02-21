@@ -9,13 +9,14 @@ import AboutScreen from '../features/AboutScreen';
 import HelpScreen from '../features/HelpScreen';
 import RoadmapScreen from '../features/RoadmapScreen';
 import ExchangeManager from '../features/ExchangeManager';
+import Market from '../features/Market';
 import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
 import Footer from './Footer';
 
-export type TabType = 'dashboard' | 'lookup' | 'journal' | 'exchange-manager' | 'appdocs' | 'help' | 'roadmap' | 'profile-settings';
+export type TabType = 'dashboard' | 'market' | 'lookup' | 'journal' | 'exchange-manager' | 'appdocs' | 'help' | 'roadmap' | 'profile-settings';
 
 const DEFAULT_TAB: TabType = 'dashboard';
-const PERSISTABLE_TABS: TabType[] = ['dashboard', 'lookup', 'journal', 'exchange-manager', 'appdocs', 'help', 'roadmap', 'profile-settings'];
+const PERSISTABLE_TABS: TabType[] = ['dashboard', 'market', 'lookup', 'journal', 'exchange-manager', 'appdocs', 'help', 'roadmap', 'profile-settings'];
 
 /**
  * TabNavigation Component
@@ -75,6 +76,12 @@ export default function TabNavigation() {
             onClick: () => setActiveTab('dashboard')
         },
         {
+            title: 'Market',
+            href: '#market',
+            category: 'main',
+            onClick: () => setActiveTab('market')
+        },
+        {
             title: 'Journal',
             href: '#journal',
             category: 'main',
@@ -85,12 +92,6 @@ export default function TabNavigation() {
             href: '#lookup',
             category: 'main',
             onClick: () => setActiveTab('lookup')
-        },
-        {
-            title: 'Exchange Manager',
-            href: '#exchange-manager',
-            category: 'main',
-            onClick: () => setActiveTab('exchange-manager')
         },
         {
             title: 'About',
@@ -122,6 +123,8 @@ export default function TabNavigation() {
         switch (activeTab) {
             case 'dashboard':
                 return <Home network={network} analyzingWallet={analyzingWallet} onNavigateToLookup={() => setActiveTab('lookup')} />;
+            case 'market':
+                return <Market />;
             case 'lookup':
                 return <TradeHistory onSwitchToRealData={handleSwitchToRealData} />;
             case 'journal':
@@ -163,6 +166,7 @@ export default function TabNavigation() {
                 }}
                 onNetworkChange={setNetwork}
                 onProfileSettingsClick={() => setActiveTab('profile-settings')}
+                onExchangeManagerClick={() => setActiveTab('exchange-manager')}
                 onLogoClick={() => setActiveTab('dashboard')}
                 className="mb-8"
             />
