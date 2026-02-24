@@ -11,6 +11,7 @@ import LoadingScreen from "@/components/ui/LoadingScreen";
 import MobileRestrictedView from "@/components/layout/MobileRestrictedView";
 import Providers from "./providers";
 import { Toaster } from "sonner";
+import AssistantModal from "@/components/ui/AssistantModal";
 
 export const metadata: Metadata = {
   title: "YDEX",
@@ -41,6 +42,7 @@ export default function RootLayout({
             {children}
           </div>
           <LoadingScreen />
+          <AssistantModal />
         </Providers>
         <Toaster
           position="top-right"

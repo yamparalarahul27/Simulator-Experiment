@@ -12,6 +12,7 @@
     "@deriverse/kit": "^1.0.39",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@google/generative-ai": "^0.24.1",
     "@jup-ag/wallet-adapter": "^0.2.6",
     "@mui/material": "^7.3.7",
     "@mui/x-charts": "^8.27.0",

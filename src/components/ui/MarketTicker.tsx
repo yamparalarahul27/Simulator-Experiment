@@ -82,9 +82,9 @@ export const MarketTicker: React.FC = () => {
             }
         };
 
-        ws.onerror = (error) => {
-            console.error("Binance WebSocket Error:", error);
-            console.dir(error);
+        ws.onerror = (error: any) => {
+            // Log a more readable error instead of a generic {}
+            console.error("Binance WebSocket Error:", error?.message || error?.type || 'Unknown connection error');
             setIsConnecting(false);
         };
 
@@ -95,9 +95,10 @@ export const MarketTicker: React.FC = () => {
         }, 500);
 
         // Important: Teardown connection & interval on unmount
+        // Also cleanup global WebSocket reference if it exists
         return () => {
             clearInterval(intervalId);
-            if (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) {
+            if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
                 ws.close();
             }
         };
