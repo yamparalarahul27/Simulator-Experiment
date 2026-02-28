@@ -19,7 +19,7 @@ export default function ControlPanel({ isOpen, onClose, trade }: ControlPanelPro
     const { settings, livePrices, wsDisabled, setPriceOverride, resetAllOverrides, updateCurrency, updateUsdInrRate, resetBalancesToDefault } = trade;
 
     return (
-        <div className="fixed right-0 top-0 bottom-0 w-80 bg-black/95 backdrop-blur-xl border-l border-white/10 z-40 overflow-y-auto shadow-2xl shadow-black/50">
+        <div className="fixed right-0 top-0 bottom-0 w-80 bg-black/95 backdrop-blur-xl border-l border-white/10 z-[70] overflow-y-auto shadow-2xl shadow-black/50">
             {/* Header */}
             <div className="sticky top-0 bg-black/95 backdrop-blur-xl border-b border-white/10 px-4 py-3 flex items-center justify-between z-10">
                 <h3 className="text-heading-14 text-white">Control Panel</h3>
@@ -129,8 +129,8 @@ export default function ControlPanel({ isOpen, onClose, trade }: ControlPanelPro
                             <button
                                 onClick={() => updateCurrency('USD')}
                                 className={`flex-1 py-2 text-xs font-mono font-medium transition-all border ${settings?.currency === 'USD'
-                                        ? 'bg-green-500/20 border-green-500/30 text-green-400'
-                                        : 'bg-white/5 border-white/10 text-white/40 hover:text-white/60'
+                                    ? 'bg-green-500/20 border-green-500/30 text-green-400'
+                                    : 'bg-white/5 border-white/10 text-white/40 hover:text-white/60'
                                     }`}
                             >
                                 $ USD
@@ -138,8 +138,8 @@ export default function ControlPanel({ isOpen, onClose, trade }: ControlPanelPro
                             <button
                                 onClick={() => updateCurrency('INR')}
                                 className={`flex-1 py-2 text-xs font-mono font-medium transition-all border ${settings?.currency === 'INR'
-                                        ? 'bg-orange-500/20 border-orange-500/30 text-orange-400'
-                                        : 'bg-white/5 border-white/10 text-white/40 hover:text-white/60'
+                                    ? 'bg-orange-500/20 border-orange-500/30 text-orange-400'
+                                    : 'bg-white/5 border-white/10 text-white/40 hover:text-white/60'
                                     }`}
                             >
                                 ₹ INR
