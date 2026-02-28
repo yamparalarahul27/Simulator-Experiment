@@ -43,8 +43,8 @@ export default function DemoMarket({ walletAddress }: { walletAddress?: string |
                     <button
                         onClick={() => setControlPanelOpen(prev => !prev)}
                         className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono border transition-all ${controlPanelOpen
-                                ? 'bg-purple-500/20 border-purple-500/40 text-purple-300'
-                                : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white'
+                            ? 'bg-purple-500/20 border-purple-500/40 text-purple-300'
+                            : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white'
                             }`}
                     >
                         <Settings size={14} />
@@ -58,8 +58,8 @@ export default function DemoMarket({ walletAddress }: { walletAddress?: string |
                 <button
                     onClick={() => setActiveTab('spot')}
                     className={`px-6 py-3 text-sm font-mono font-medium transition-all border-b-2 ${activeTab === 'spot'
-                            ? 'text-white border-purple-500'
-                            : 'text-white/40 border-transparent hover:text-white/70'
+                        ? 'text-white border-purple-500'
+                        : 'text-white/40 border-transparent hover:text-white/70'
                         }`}
                 >
                     Spot
@@ -67,8 +67,8 @@ export default function DemoMarket({ walletAddress }: { walletAddress?: string |
                 <button
                     onClick={() => setActiveTab('future')}
                     className={`px-6 py-3 text-sm font-mono font-medium transition-all border-b-2 ${activeTab === 'future'
-                            ? 'text-white border-purple-500'
-                            : 'text-white/40 border-transparent hover:text-white/70'
+                        ? 'text-white border-purple-500'
+                        : 'text-white/40 border-transparent hover:text-white/70'
                         }`}
                 >
                     Future
@@ -78,7 +78,7 @@ export default function DemoMarket({ walletAddress }: { walletAddress?: string |
             {/* Tab Content */}
             <div className="flex gap-0">
                 {/* Main Content */}
-                <div className={`flex-1 transition-all duration-300 ${controlPanelOpen ? 'mr-80' : ''}`}>
+                <div className="flex-1">
                     {activeTab === 'spot' ? (
                         <SpotTrade trade={spotTrade} />
                     ) : (
