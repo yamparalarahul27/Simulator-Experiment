@@ -6,16 +6,18 @@ import SpotOrderBook from './SpotOrderBook';
 import SpotOrderForm from './SpotOrderForm';
 import SpotTradeHistory from './SpotTradeHistory';
 import { DEMO_PAIRS } from '@/lib/hooks/useSpotTrade';
-import { ChevronDown, Wifi, WifiOff } from 'lucide-react';
+import { ChevronDown, Wifi, WifiOff, Settings } from 'lucide-react';
 
 interface SpotTradeProps {
     trade: ReturnType<typeof import('@/lib/hooks/useSpotTrade').useSpotTrade>;
+    controlPanelOpen: boolean;
+    onToggleControlPanel: () => void;
 }
 
 /**
  * SpotTrade — Main trading terminal layout
  */
-export default function SpotTrade({ trade }: SpotTradeProps) {
+export default function SpotTrade({ trade, controlPanelOpen, onToggleControlPanel }: SpotTradeProps) {
     const {
         selectedPair, setSelectedPair, currentPrice, livePrices,
         orderBook, balances, openOrders, filledOrders,
@@ -114,12 +116,24 @@ export default function SpotTrade({ trade }: SpotTradeProps) {
                     </div>
                 </div>
 
-                {/* Currency indicator */}
-                {settings && (
-                    <div className="text-[10px] font-mono text-white/30">
-                        {settings.currency === 'INR' ? `1 USD = ₹${settings.usdInrRate.toFixed(2)}` : 'USD'}
-                    </div>
-                )}
+                {/* Currency indicator + Control button */}
+                <div className="flex items-center gap-3">
+                    {settings && (
+                        <div className="text-[10px] font-mono text-white/30">
+                            {settings.currency === 'INR' ? `1 USD = ₹${settings.usdInrRate.toFixed(2)}` : 'USD'}
+                        </div>
+                    )}
+                    <button
+                        onClick={onToggleControlPanel}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono border transition-all ${controlPanelOpen
+                            ? 'bg-purple-500/20 border-purple-500/40 text-purple-300'
+                            : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white'
+                            }`}
+                    >
+                        <Settings size={14} />
+                        Control
+                    </button>
+                </div>
             </div>
 
             {/* ─── Main Grid: Chart | OrderBook | OrderForm ──── */}
