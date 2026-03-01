@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import SpotTrade from './SpotTrade';
+import FutureConcepts from './FutureConcepts';
 import ControlPanel from './ControlPanel';
 import { useSpotTrade } from '@/lib/hooks/useSpotTrade';
 import { Settings } from 'lucide-react';
@@ -81,17 +82,7 @@ export default function DemoMarket({ walletAddress }: { walletAddress?: string |
                             onToggleControlPanel={() => setControlPanelOpen(prev => !prev)}
                         />
                     ) : (
-                        <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
-                            <div className="p-8 bg-black/40 backdrop-blur-xl border border-white/10">
-                                <h2 className="text-heading-20 text-white/80 mb-3">Futures Trading</h2>
-                                <p className="text-copy-14 text-white/40 max-w-md">
-                                    Perpetual futures with leverage are coming soon. Stay tuned for leveraged demo trading.
-                                </p>
-                                <div className="mt-6 inline-block px-4 py-2 text-xs font-mono text-yellow-400 bg-yellow-500/10 border border-yellow-500/20">
-                                    COMING SOON
-                                </div>
-                            </div>
-                        </div>
+                        <FutureConcepts livePrices={spotTrade.livePrices} />
                     )}
                 </div>
 
