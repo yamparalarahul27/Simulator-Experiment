@@ -15,41 +15,36 @@ export default function DemoMarket({ walletAddress }: { walletAddress?: string |
 
     const spotTrade = useSpotTrade(walletAddress ?? null);
 
+    // Fallback defaults when wallet is not connected (settings is null)
+    const currency = spotTrade.settings?.currency ?? 'USD';
+    const usdInrRate = spotTrade.settings?.usdInrRate ?? 90.98;
+
     return (
         <div className="relative">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-4">
-                    <h1 className="text-heading-24 text-white">Demo Market</h1>
-                    <span className="px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-widest bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-none">
-                        Demo Mode
-                    </span>
+                <div>
+                    <div className="flex items-center gap-4">
+                        <h1 className="text-heading-24 text-white">Demo Market Simulator</h1>
+                        <span className="px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-widest bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-none">
+                            Demo Mode
+                        </span>
+                    </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex flex-col items-end gap-1">
                     {/* Currency Toggle */}
-                    {spotTrade.settings && (
-                        <button
-                            onClick={() => spotTrade.updateCurrency(spotTrade.settings!.currency === 'USD' ? 'INR' : 'USD')}
-                            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-white/70 hover:text-white"
-                        >
-                            <span className={spotTrade.settings.currency === 'USD' ? 'text-green-400' : 'text-white/40'}>USD</span>
-                            <span className="text-white/20">⇄</span>
-                            <span className={spotTrade.settings.currency === 'INR' ? 'text-orange-400' : 'text-white/40'}>INR</span>
-                        </button>
-                    )}
-
-                    {/* Control Panel Toggle */}
                     <button
-                        onClick={() => setControlPanelOpen(prev => !prev)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono border transition-all ${controlPanelOpen
-                            ? 'bg-purple-500/20 border-purple-500/40 text-purple-300'
-                            : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white'
-                            }`}
+                        onClick={() => spotTrade.settings && spotTrade.updateCurrency(currency === 'USD' ? 'INR' : 'USD')}
+                        className="flex items-center gap-2 px-3 py-2 text-xs font-mono bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-white/70 hover:text-white"
                     >
-                        <Settings size={14} />
-                        Control
+                        <span className={currency === 'USD' ? 'text-green-400' : 'text-white/40'}>USD</span>
+                        <span className="text-white/20">⇄</span>
+                        <span className={currency === 'INR' ? 'text-orange-400' : 'text-white/40'}>INR</span>
                     </button>
+                    <span className="text-[10px] font-mono text-white">
+                        1 USD = ₹{usdInrRate.toFixed(2)}
+                    </span>
                 </div>
             </div>
 
@@ -71,7 +66,7 @@ export default function DemoMarket({ walletAddress }: { walletAddress?: string |
                         : 'text-white/40 border-transparent hover:text-white/70'
                         }`}
                 >
-                    Future
+                    Future Concepts
                 </button>
             </div>
 
@@ -80,7 +75,11 @@ export default function DemoMarket({ walletAddress }: { walletAddress?: string |
                 {/* Main Content */}
                 <div className="flex-1">
                     {activeTab === 'spot' ? (
-                        <SpotTrade trade={spotTrade} />
+                        <SpotTrade
+                            trade={spotTrade}
+                            controlPanelOpen={controlPanelOpen}
+                            onToggleControlPanel={() => setControlPanelOpen(prev => !prev)}
+                        />
                     ) : (
                         <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
                             <div className="p-8 bg-black/40 backdrop-blur-xl border border-white/10">
