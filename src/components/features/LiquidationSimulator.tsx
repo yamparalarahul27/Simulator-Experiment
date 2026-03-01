@@ -14,6 +14,8 @@ import type { PriceData } from '@/lib/hooks/useSpotTrade';
 
 interface LiquidationSimulatorProps {
     livePrices: Record<string, PriceData>;
+    currency: 'USD' | 'INR';
+    usdInrRate: number;
 }
 
 type PositionSide = 'long' | 'short';
@@ -70,7 +72,7 @@ function getStatus(consumed: number): LiqStatus {
 
 // ─── Component ────────────────────────────────
 
-export default function LiquidationSimulator({ livePrices }: LiquidationSimulatorProps) {
+export default function LiquidationSimulator({ livePrices, currency, usdInrRate }: LiquidationSimulatorProps) {
     // Inputs
     const xrpPrice = livePrices['XRP']?.price ?? 0;
     const [quantity, setQuantity] = useState<number>(100);
@@ -195,7 +197,10 @@ export default function LiquidationSimulator({ livePrices }: LiquidationSimulato
     }, [isDragging, handleSliderInteraction]);
 
     // ─── Format helpers ───────────────────────
-    const fmt = (n: number, d = 2) => `$${n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d })}`;
+    const isINR = currency === 'INR';
+    const symbol = isINR ? '₹' : '$';
+    const convert = (n: number) => isINR ? n * usdInrRate : n;
+    const fmt = (n: number, d = 2) => `${symbol}${convert(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d })}`;
     const fmtPct = (n: number) => `${n >= 0 ? '+' : ''}${n.toFixed(2)}%`;
 
     // ─── Render ───────────────────────────────
@@ -297,7 +302,7 @@ export default function LiquidationSimulator({ livePrices }: LiquidationSimulato
                     <div className="p-3 bg-purple-500/10 border border-purple-500/20">
                         <div className="text-[10px] font-mono text-purple-300/60 uppercase tracking-wider mb-1">Margin Required</div>
                         <div className="text-sm font-mono text-purple-200 font-bold">
-                            💰 {fmt(marginRequired)} USDC
+                            💰 {fmt(marginRequired)} {isINR ? 'INR' : 'USDC'}
                         </div>
                         <div className="text-[9px] font-mono text-white/20 mt-0.5">Qty × Price ÷ Leverage</div>
                     </div>
@@ -397,7 +402,7 @@ export default function LiquidationSimulator({ livePrices }: LiquidationSimulato
                                     {results.pnl >= 0 ? '+' : ''}{fmt(results.pnl)}
                                 </div>
                                 <div className={`text-xs font-mono mt-0.5 ${results.roe >= 0 ? 'text-green-400/60' : 'text-red-400/60'}`}>
-                                    ROE: {fmtPct(results.roe)}
+                                    Return on Margin: {fmtPct(results.roe)}
                                 </div>
                             </div>
 

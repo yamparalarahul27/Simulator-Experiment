@@ -120,56 +120,7 @@ export default function ControlPanel({ isOpen, onClose, trade }: ControlPanelPro
                     </div>
                 </section>
 
-                {/* ─── Currency Settings ──────────── */}
-                <section>
-                    <h4 className="text-label-12 text-white/50 uppercase tracking-wider mb-3">Currency Settings</h4>
-                    <div className="bg-white/5 border border-white/5 p-3 space-y-3">
-                        {/* Toggle */}
-                        <div className="flex items-center gap-2">
-                            <button
-                                onClick={() => updateCurrency('USD')}
-                                className={`flex-1 py-2 text-xs font-mono font-medium transition-all border ${settings?.currency === 'USD'
-                                    ? 'bg-green-500/20 border-green-500/30 text-green-400'
-                                    : 'bg-white/5 border-white/10 text-white/40 hover:text-white/60'
-                                    }`}
-                            >
-                                $ USD
-                            </button>
-                            <button
-                                onClick={() => updateCurrency('INR')}
-                                className={`flex-1 py-2 text-xs font-mono font-medium transition-all border ${settings?.currency === 'INR'
-                                    ? 'bg-orange-500/20 border-orange-500/30 text-orange-400'
-                                    : 'bg-white/5 border-white/10 text-white/40 hover:text-white/60'
-                                    }`}
-                            >
-                                ₹ INR
-                            </button>
-                        </div>
-
-                        {/* Exchange Rate */}
-                        <div>
-                            <label className="text-[10px] font-mono text-white/40 block mb-1">
-                                Exchange Rate (1 USD = ? INR)
-                            </label>
-                            <input
-                                type="number"
-                                step="0.01"
-                                value={settings?.usdInrRate ?? 90.98}
-                                onChange={(e) => updateUsdInrRate(parseFloat(e.target.value) || 90.98)}
-                                className="w-full bg-black/50 border border-white/10 text-white text-xs font-mono px-2 py-1.5 focus:outline-none focus:border-purple-500/50"
-                            />
-                            <p className="mt-1 text-[9px] font-mono text-white/30">
-                                1 USD = {settings?.usdInrRate?.toFixed(2) ?? '90.98'} INR
-                            </p>
-                        </div>
-
-                        {settings?.currency === 'INR' && (
-                            <div className="text-[10px] font-mono text-orange-400/70 bg-orange-500/10 px-2 py-1.5 border border-orange-500/10">
-                                Currently showing prices in ₹ INR
-                            </div>
-                        )}
-                    </div>
-                </section>
+                {/* Currency settings moved to dedicated modal (⚙️ icon in header) */}
 
                 {/* ─── Balance Reset ────────────────── */}
                 <section>

@@ -14,11 +14,13 @@ import type { PriceData, DemoToken } from '@/lib/hooks/useSpotTrade';
 
 interface FutureConceptsProps {
     livePrices: Record<string, PriceData>;
+    currency: 'USD' | 'INR';
+    usdInrRate: number;
 }
 
 type Section = 'liquidation' | 'funding' | 'leverage';
 
-export default function FutureConcepts({ livePrices }: FutureConceptsProps) {
+export default function FutureConcepts({ livePrices, currency, usdInrRate }: FutureConceptsProps) {
     const [activeSection, setActiveSection] = useState<Section>('liquidation');
 
     const sections: { id: Section; label: string; enabled: boolean }[] = [
@@ -37,10 +39,10 @@ export default function FutureConcepts({ livePrices }: FutureConceptsProps) {
                         onClick={() => enabled && setActiveSection(id)}
                         disabled={!enabled}
                         className={`px-4 py-2 text-xs font-mono font-medium transition-all ${activeSection === id
-                                ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
-                                : enabled
-                                    ? 'text-white/50 hover:text-white/80 hover:bg-white/5 border border-transparent'
-                                    : 'text-white/20 cursor-not-allowed border border-transparent'
+                            ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                            : enabled
+                                ? 'text-white/50 hover:text-white/80 hover:bg-white/5 border border-transparent'
+                                : 'text-white/20 cursor-not-allowed border border-transparent'
                             }`}
                     >
                         {label}
@@ -53,7 +55,7 @@ export default function FutureConcepts({ livePrices }: FutureConceptsProps) {
 
             {/* Section Content */}
             {activeSection === 'liquidation' && (
-                <LiquidationSimulator livePrices={livePrices} />
+                <LiquidationSimulator livePrices={livePrices} currency={currency} usdInrRate={usdInrRate} />
             )}
 
             {/* TODO: Funding Rate section */}
