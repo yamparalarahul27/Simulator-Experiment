@@ -188,7 +188,7 @@ export function useSpotTrade(walletAddress: string | null) {
         };
 
         ws.onerror = (err: any) => {
-            console.error('[useSpotTrade] WS error:', err?.message || err?.type || 'Unknown');
+            console.warn('[useSpotTrade] WS connection failed (expected in demo mode):', err?.message || err?.type || 'Unknown');
         };
 
         // Throttle state updates to ~2/sec

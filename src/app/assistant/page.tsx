@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Bot, User, Send, Sparkles, ArrowLeft } from "lucide-react";
+import { Telescope, User, Send, ArrowLeft, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -18,7 +18,7 @@ export default function AssistantPage() {
         {
             id: "1",
             role: "assistant",
-            content: "Hello! I am your AI assistant powered by Gemini. How can I help you regarding Deriverse or the markets today?",
+            content: "Hello! I am your AI assistant powered by Gemini. How can I help you regarding trades or the markets today?",
         },
     ]);
     const [input, setInput] = useState("");
@@ -81,25 +81,25 @@ export default function AssistantPage() {
 
     return (
         <div className="min-h-screen bg-[#0B0E14] flex flex-col pt-20">
-            {/* Header */}
             <header className="fixed top-0 left-0 right-0 h-20 bg-[#0B0E14]/80 backdrop-blur-xl border-b border-white/10 z-40 px-6 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                    <button
-                        onClick={() => router.back()}
-                        className="p-2 rounded-none bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors"
-                    >
-                        <ArrowLeft className="w-5 h-5" />
-                    </button>
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-none bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg shadow-purple-500/20">
-                            <Sparkles className="w-5 h-5 text-white" />
-                        </div>
-                        <div>
-                            <h1 className="text-lg font-semibold text-white">YDEX AI Assistant</h1>
-                            <p className="text-xs text-zinc-400">Powered by Gemini 2.5 Flash</p>
-                        </div>
-                    </div>
+                <button
+                    onClick={() => router.back()}
+                    className="p-2 rounded-none bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors shrink-0 z-10"
+                >
+                    <ArrowLeft className="w-5 h-5" />
+                </button>
+
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
+                    <h1 className="text-lg font-semibold text-white">YDEX AI Assistant</h1>
+                    <p className="text-xs text-zinc-400">Powered by Gemini 2.5 Flash</p>
                 </div>
+
+                <button
+                    onClick={() => router.back()}
+                    className="p-2 rounded-none bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors shrink-0 z-10"
+                >
+                    <X className="w-5 h-5" />
+                </button>
             </header>
 
             {/* Chat Container */}
@@ -120,7 +120,7 @@ export default function AssistantPage() {
                                 ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
                                 : "bg-purple-500/20 text-purple-400 border border-purple-500/30"
                                 }`}>
-                                {message.role === "user" ? <User className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
+                                {message.role === "user" ? <User className="w-5 h-5" /> : <Telescope className="w-5 h-5" />}
                             </div>
 
                             <div
@@ -143,7 +143,7 @@ export default function AssistantPage() {
                     >
                         <div className="flex gap-4">
                             <div className="flex-shrink-0 w-10 h-10 rounded-none flex items-center justify-center mt-1 bg-purple-500/20 text-purple-400 border border-purple-500/30">
-                                <Bot className="w-5 h-5" />
+                                <Telescope className="w-5 h-5" />
                             </div>
                             <div className="px-6 py-5 border border-white/10 rounded-none bg-white/5 flex items-center gap-2">
                                 <motion.div className="w-2 h-2 rounded-none bg-purple-400" animate={{ y: [0, -6, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0 }} />
@@ -184,6 +184,6 @@ export default function AssistantPage() {
                     </p>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

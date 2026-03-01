@@ -118,9 +118,9 @@ export default function SpotTrade({ trade, controlPanelOpen, onToggleControlPane
 
                 {/* Currency indicator + Control button */}
                 <div className="flex items-center gap-3">
-                    {settings && (
-                        <div className="text-[10px] font-mono text-white/30">
-                            {settings.currency === 'INR' ? `1 USD = ₹${settings.usdInrRate.toFixed(2)}` : 'USD'}
+                    {settings?.currency === 'INR' && (
+                        <div className="text-[9px] font-mono text-orange-400/70 bg-orange-500/10 px-2 py-1 border border-orange-500/10">
+                            INR rates not available for Spot
                         </div>
                     )}
                     <button
