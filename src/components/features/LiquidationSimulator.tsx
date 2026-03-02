@@ -153,9 +153,11 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
     const sliderRange = useMemo(() => {
         if (!simResult) return { min: 0, max: 0 };
         const entry = simResult.entryPrice;
+        const liq = simResult.liquidationPrice;
+        // Expand the scale to always include the liquidation price (with 5% padding)
         return {
-            min: entry * 0.8,
-            max: entry * 1.2,
+            min: Math.min(entry * 0.8, liq * 0.95),
+            max: Math.max(entry * 1.2, liq * 1.05),
         };
     }, [simResult]);
 
@@ -481,18 +483,16 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                                     </span>
                                 </div>
 
-                                {/* Liquidation price line */}
-                                {priceToPercent(simResult.liquidationPrice) >= 0 && priceToPercent(simResult.liquidationPrice) <= 100 && (
-                                    <div
-                                        className="absolute left-0 right-0 flex items-center gap-2"
-                                        style={{ top: `${priceToPercent(simResult.liquidationPrice)}%` }}
-                                    >
-                                        <div className="flex-1 h-px bg-red-500/60" />
-                                        <span className="text-[9px] font-mono text-red-400 whitespace-nowrap">
-                                            {fmt(simResult.liquidationPrice, 4)} Liq 🔴
-                                        </span>
-                                    </div>
-                                )}
+                                {/* Liquidation price line — always visible; scale auto-expands to fit */}
+                                <div
+                                    className="absolute left-0 right-0 flex items-center gap-2"
+                                    style={{ top: `${priceToPercent(simResult.liquidationPrice)}%` }}
+                                >
+                                    <div className="flex-1 h-px bg-red-500/60" />
+                                    <span className="text-[9px] font-mono text-red-400 whitespace-nowrap">
+                                        {fmt(simResult.liquidationPrice, 4)} Liq 🔴
+                                    </span>
+                                </div>
 
                                 {/* Draggable knob */}
                                 <div
