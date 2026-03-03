@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import SpotTrade from './SpotTrade';
+import SpotConcepts from './SpotConcepts';
 import FutureConcepts from './FutureConcepts';
 import ControlPanel from './ControlPanel';
 import CurrencySettingsModal from './CurrencySettingsModal';
@@ -95,7 +95,7 @@ export default function DemoMarket({ walletAddress }: { walletAddress?: string |
                         : 'text-white/40 border-transparent hover:text-white/70'
                         }`}
                 >
-                    Spot Terminal
+                    Spot Concepts
                 </button>
             </div>
 
@@ -104,7 +104,7 @@ export default function DemoMarket({ walletAddress }: { walletAddress?: string |
                 {/* Main Content */}
                 <div className="flex-1">
                     {activeTab === 'spot' ? (
-                        <SpotTrade
+                        <SpotConcepts
                             trade={spotTrade}
                             controlPanelOpen={controlPanelOpen}
                             onToggleControlPanel={() => setControlPanelOpen(prev => !prev)}

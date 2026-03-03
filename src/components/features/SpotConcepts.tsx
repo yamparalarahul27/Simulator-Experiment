@@ -1,30 +1,36 @@
 'use client';
 
 import React from 'react';
-import SpotTradeChart from './SpotTradeChart';
 import SpotOrderBook from './SpotOrderBook';
 import SpotOrderForm from './SpotOrderForm';
 import SpotTradeHistory from './SpotTradeHistory';
+import OrderFlowVisualiser from './OrderFlowVisualiser';
 import { DEMO_PAIRS } from '@/lib/hooks/useSpotTrade';
+import type { DemoOrderType } from '@/services/SupabaseDemoService';
 import { ChevronDown, Wifi, WifiOff, Settings } from 'lucide-react';
 
-interface SpotTradeProps {
+interface SpotConceptsProps {
     trade: ReturnType<typeof import('@/lib/hooks/useSpotTrade').useSpotTrade>;
     controlPanelOpen: boolean;
     onToggleControlPanel: () => void;
 }
 
 /**
- * SpotTrade — Main trading terminal layout
+ * SpotConcepts — Main trading terminal layout
  */
-export default function SpotTrade({ trade, controlPanelOpen, onToggleControlPanel }: SpotTradeProps) {
+export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlPanel }: SpotConceptsProps) {
     const {
         selectedPair, setSelectedPair, currentPrice, livePrices,
         orderBook, balances, openOrders, filledOrders,
-        formatPrice, executeTrade, cancelOrder, settings, wsDisabled,
+        formatPrice, executeTrade, cancelOrder, settings,
     } = trade;
 
     const [pairDropdownOpen, setPairDropdownOpen] = React.useState(false);
+    const [activePanel, setActivePanel] = React.useState<'orderbook' | 'orderform'>('orderform');
+    const [orderType, setOrderType] = React.useState<DemoOrderType>('market');
+    const [side, setSide] = React.useState<'buy' | 'sell'>('buy');
+    const [tpEnabled, setTpEnabled] = React.useState(false);
+    const [slEnabled, setSlEnabled] = React.useState(false);
     const dropdownRef = React.useRef<HTMLDivElement>(null);
 
     // Close dropdown on outside click
@@ -37,8 +43,6 @@ export default function SpotTrade({ trade, controlPanelOpen, onToggleControlPane
         document.addEventListener('mousedown', handler);
         return () => document.removeEventListener('mousedown', handler);
     }, []);
-
-    const currentToken = selectedPair.split('/')[0];
 
     if (trade.isLoading) {
         return (
@@ -54,7 +58,7 @@ export default function SpotTrade({ trade, controlPanelOpen, onToggleControlPane
     return (
         <div className="space-y-4">
             {/* ─── Token Selector Bar ──────────── */}
-            <div className="flex items-center justify-between bg-black/60 backdrop-blur-xl border border-white/10 px-4 py-3">
+            <div className="relative z-10 flex items-center justify-between bg-black/60 backdrop-blur-xl border border-white/10 px-4 py-3">
                 <div className="flex items-center gap-6">
                     {/* Pair selector */}
                     <div className="relative" ref={dropdownRef}>
@@ -136,36 +140,65 @@ export default function SpotTrade({ trade, controlPanelOpen, onToggleControlPane
                 </div>
             </div>
 
-            {/* ─── Main Grid: Chart | OrderBook | OrderForm ──── */}
-            <div className="grid grid-cols-12 gap-4">
-                {/* Chart */}
-                <div className="col-span-5 bg-black/60 backdrop-blur-xl border border-white/10 p-4 min-h-[400px]">
-                    <SpotTradeChart
-                        currentPrice={currentPrice.price}
-                        pair={selectedPair}
-                        formatPrice={formatPrice}
-                    />
-                </div>
+            {/* ─── Sub-tab strip ──────────────────────────────── */}
+            <div className="flex items-center gap-1 bg-black/40 backdrop-blur-xl border border-white/10 p-1">
+                {([
+                    { id: 'orderform', label: 'Order Form' },
+                    { id: 'orderbook', label: 'Order Book' },
+                ] as const).map(({ id, label }) => (
+                    <button
+                        key={id}
+                        onClick={() => setActivePanel(id)}
+                        className={`px-4 py-2 text-xs font-mono font-medium transition-all ${activePanel === id
+                            ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                            : 'text-white/50 hover:text-white/80 hover:bg-white/5 border border-transparent'
+                            }`}
+                    >
+                        {label}
+                    </button>
+                ))}
+            </div>
 
-                {/* Order Book */}
-                <div className="col-span-3 bg-black/60 backdrop-blur-xl border border-white/10 p-3 min-h-[400px]">
+            {/* ─── Panel Content ──────────────────────────────── */}
+            <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-4 min-h-[400px]">
+                {activePanel === 'orderbook' ? (
                     <SpotOrderBook
                         orderBook={orderBook}
                         formatPrice={formatPrice}
                         onPriceClick={() => { }}
                     />
-                </div>
+                ) : (
+                    <div className="flex gap-0 h-full">
+                        {/* Order Form */}
+                        <div className="w-[350px] flex-shrink-0 border-r border-white/10 pr-4">
+                            <SpotOrderForm
+                                pair={selectedPair}
+                                currentPrice={currentPrice.price}
+                                balances={balances}
+                                executeTrade={executeTrade}
+                                formatPrice={formatPrice}
+                                orderType={orderType}
+                                onOrderTypeChange={setOrderType}
+                                side={side}
+                                onSideChange={setSide}
+                                tpEnabled={tpEnabled}
+                                onTpEnabledChange={setTpEnabled}
+                                slEnabled={slEnabled}
+                                onSlEnabledChange={setSlEnabled}
+                            />
+                        </div>
 
-                {/* Order Form */}
-                <div className="col-span-4 bg-black/60 backdrop-blur-xl border border-white/10 p-4 min-h-[400px]">
-                    <SpotOrderForm
-                        pair={selectedPair}
-                        currentPrice={currentPrice.price}
-                        balances={balances}
-                        executeTrade={executeTrade}
-                        formatPrice={formatPrice}
-                    />
-                </div>
+                        {/* Order Visualiser */}
+                        <div className="flex-1 pl-4 min-w-0 overflow-auto">
+                            <OrderFlowVisualiser
+                                orderType={orderType}
+                                side={side}
+                                tpEnabled={tpEnabled}
+                                slEnabled={slEnabled}
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* ─── Bottom Panel: Orders / History / Balances ── */}

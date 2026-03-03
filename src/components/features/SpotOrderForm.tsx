@@ -10,6 +10,27 @@ interface SpotOrderFormProps {
     balances: DemoBalance[];
     executeTrade: (params: CreateOrderParams) => Promise<any>;
     formatPrice: (amount: number, decimals?: number) => string;
+    orderType: DemoOrderType;
+    onOrderTypeChange: (v: DemoOrderType) => void;
+    side: 'buy' | 'sell';
+    onSideChange: (v: 'buy' | 'sell') => void;
+    tpEnabled: boolean;
+    onTpEnabledChange: (v: boolean) => void;
+    slEnabled: boolean;
+    onSlEnabledChange: (v: boolean) => void;
+    // Lifted form values for Order Flow Visualiser
+    price: string;
+    onPriceChange: (v: string) => void;
+    stopPrice: string;
+    onStopPriceChange: (v: string) => void;
+    limitPrice: string;
+    onLimitPriceChange: (v: string) => void;
+    amount: string;
+    onAmountChange: (v: string) => void;
+    tpPrice: string;
+    onTpPriceChange: (v: string) => void;
+    slPrice: string;
+    onSlPriceChange: (v: string) => void;
 }
 
 const ORDER_TYPES: { value: DemoOrderType; label: string }[] = [
@@ -21,22 +42,10 @@ const ORDER_TYPES: { value: DemoOrderType; label: string }[] = [
     { value: 'twap', label: 'TWAP' },
 ];
 
-export default function SpotOrderForm({ pair, currentPrice, balances, executeTrade, formatPrice }: SpotOrderFormProps) {
-    const [side, setSide] = useState<'buy' | 'sell'>('buy');
-    const [orderType, setOrderType] = useState<DemoOrderType>('market');
-    const [price, setPrice] = useState('');
-    const [stopPrice, setStopPrice] = useState('');
-    const [limitPrice, setLimitPrice] = useState('');
-    const [amount, setAmount] = useState('');
+export default function SpotOrderForm({ pair, currentPrice, balances, executeTrade, formatPrice, orderType, onOrderTypeChange, side, onSideChange, tpEnabled, onTpEnabledChange, slEnabled, onSlEnabledChange, price, onPriceChange, stopPrice, onStopPriceChange, limitPrice, onLimitPriceChange, amount, onAmountChange, tpPrice, onTpPriceChange, slPrice, onSlPriceChange }: SpotOrderFormProps) {
     const [visibleQty, setVisibleQty] = useState('');
     const [twapDuration, setTwapDuration] = useState('60');
     const [twapIntervals, setTwapIntervals] = useState('6');
-
-    // TP/SL
-    const [tpEnabled, setTpEnabled] = useState(false);
-    const [slEnabled, setSlEnabled] = useState(false);
-    const [tpPrice, setTpPrice] = useState('');
-    const [slPrice, setSlPrice] = useState('');
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -77,10 +86,10 @@ export default function SpotOrderForm({ pair, currentPrice, balances, executeTra
     const quickFill = (pct: number) => {
         if (side === 'buy') {
             const maxAmount = (usdcBalance * pct / 100) / effectivePrice;
-            setAmount(maxAmount.toFixed(6));
+            onAmountChange(maxAmount.toFixed(6));
         } else {
             const maxAmount = tokenBalance * pct / 100;
-            setAmount(maxAmount.toFixed(6));
+            onAmountChange(maxAmount.toFixed(6));
         }
     };
 
@@ -105,15 +114,15 @@ export default function SpotOrderForm({ pair, currentPrice, balances, executeTra
             });
 
             // Reset form
-            setAmount('');
-            setPrice('');
-            setStopPrice('');
-            setLimitPrice('');
+            onAmountChange('');
+            onPriceChange('');
+            onStopPriceChange('');
+            onLimitPriceChange('');
             setVisibleQty('');
-            setTpPrice('');
-            setSlPrice('');
-            setTpEnabled(false);
-            setSlEnabled(false);
+            onTpPriceChange('');
+            onSlPriceChange('');
+            onTpEnabledChange(false);
+            onSlEnabledChange(false);
         } finally {
             setIsSubmitting(false);
         }
@@ -124,7 +133,7 @@ export default function SpotOrderForm({ pair, currentPrice, balances, executeTra
             {/* Buy/Sell Toggle */}
             <div className="grid grid-cols-2 gap-0 mb-4">
                 <button
-                    onClick={() => setSide('buy')}
+                    onClick={() => onSideChange('buy')}
                     className={`py-2.5 text-sm font-mono font-bold transition-all ${side === 'buy'
                             ? 'bg-green-500/20 text-green-400 border border-green-500/30'
                             : 'bg-white/5 text-white/40 border border-white/10 hover:text-white/60'
@@ -133,7 +142,7 @@ export default function SpotOrderForm({ pair, currentPrice, balances, executeTra
                     BUY
                 </button>
                 <button
-                    onClick={() => setSide('sell')}
+                    onClick={() => onSideChange('sell')}
                     className={`py-2.5 text-sm font-mono font-bold transition-all ${side === 'sell'
                             ? 'bg-red-500/20 text-red-400 border border-red-500/30'
                             : 'bg-white/5 text-white/40 border border-white/10 hover:text-white/60'
@@ -148,7 +157,7 @@ export default function SpotOrderForm({ pair, currentPrice, balances, executeTra
                 {ORDER_TYPES.map(ot => (
                     <button
                         key={ot.value}
-                        onClick={() => setOrderType(ot.value)}
+                        onClick={() => onOrderTypeChange(ot.value)}
                         className={`px-2 py-1 text-[10px] font-mono font-medium transition-all border ${orderType === ot.value
                                 ? 'bg-purple-500/20 text-purple-300 border-purple-500/30'
                                 : 'text-white/30 border-white/5 hover:text-white/60 hover:border-white/10'
@@ -172,7 +181,7 @@ export default function SpotOrderForm({ pair, currentPrice, balances, executeTra
                             step="any"
                             placeholder="0.00"
                             value={orderType === 'stop_limit' ? limitPrice : price}
-                            onChange={(e) => orderType === 'stop_limit' ? setLimitPrice(e.target.value) : setPrice(e.target.value)}
+                            onChange={(e) => orderType === 'stop_limit' ? onLimitPriceChange(e.target.value) : onPriceChange(e.target.value)}
                             className="w-full bg-black/50 border border-white/10 text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-purple-500/50 placeholder:text-white/15"
                         />
                     </div>
@@ -187,7 +196,7 @@ export default function SpotOrderForm({ pair, currentPrice, balances, executeTra
                             step="any"
                             placeholder="Trigger price..."
                             value={stopPrice}
-                            onChange={(e) => setStopPrice(e.target.value)}
+                            onChange={(e) => onStopPriceChange(e.target.value)}
                             className="w-full bg-black/50 border border-white/10 text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-purple-500/50 placeholder:text-white/15"
                         />
                     </div>
@@ -203,7 +212,7 @@ export default function SpotOrderForm({ pair, currentPrice, balances, executeTra
                         step="any"
                         placeholder="0.00"
                         value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
+                        onChange={(e) => onAmountChange(e.target.value)}
                         className="w-full bg-black/50 border border-white/10 text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-purple-500/50 placeholder:text-white/15"
                     />
                     {/* Quick fill buttons */}
@@ -266,7 +275,7 @@ export default function SpotOrderForm({ pair, currentPrice, balances, executeTra
                             <input
                                 type="checkbox"
                                 checked={tpEnabled}
-                                onChange={(e) => setTpEnabled(e.target.checked)}
+                                onChange={(e) => onTpEnabledChange(e.target.checked)}
                                 className="accent-green-500 w-3 h-3"
                             />
                             <span className="text-[10px] font-mono text-green-400">TP</span>
@@ -275,7 +284,7 @@ export default function SpotOrderForm({ pair, currentPrice, balances, executeTra
                             <input
                                 type="checkbox"
                                 checked={slEnabled}
-                                onChange={(e) => setSlEnabled(e.target.checked)}
+                                onChange={(e) => onSlEnabledChange(e.target.checked)}
                                 className="accent-red-500 w-3 h-3"
                             />
                             <span className="text-[10px] font-mono text-red-400">SL</span>
@@ -289,7 +298,7 @@ export default function SpotOrderForm({ pair, currentPrice, balances, executeTra
                                 step="any"
                                 placeholder="Take Profit price..."
                                 value={tpPrice}
-                                onChange={(e) => setTpPrice(e.target.value)}
+                                onChange={(e) => onTpPriceChange(e.target.value)}
                                 className="w-full bg-black/50 border border-green-500/20 text-white text-xs font-mono px-2 py-1.5 focus:outline-none focus:border-green-500/50 placeholder:text-white/15"
                             />
                             {tpPnl && (
@@ -307,7 +316,7 @@ export default function SpotOrderForm({ pair, currentPrice, balances, executeTra
                                 step="any"
                                 placeholder="Stop Loss price..."
                                 value={slPrice}
-                                onChange={(e) => setSlPrice(e.target.value)}
+                                onChange={(e) => onSlPriceChange(e.target.value)}
                                 className="w-full bg-black/50 border border-red-500/20 text-white text-xs font-mono px-2 py-1.5 focus:outline-none focus:border-red-500/50 placeholder:text-white/15"
                             />
                             {slPnl && (
