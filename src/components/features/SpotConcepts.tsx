@@ -3,11 +3,11 @@
 import React from 'react';
 import SpotOrderBook from './SpotOrderBook';
 import SpotOrderForm from './SpotOrderForm';
-import OrderFlowVisualiser from './OrderFlowVisualiser';
+import OrderFlowVisualiser, { getSliderRange, computeKnobColor } from './OrderFlowVisualiser';
 import type { SimConfig } from './OrderFlowVisualiser';
 import { DEMO_PAIRS } from '@/lib/hooks/useSpotTrade';
 import type { DemoOrderType } from '@/services/SupabaseDemoService';
-import { ChevronDown, Wifi, WifiOff, Settings } from 'lucide-react';
+import { ChevronDown, Wifi, WifiOff, Activity, Settings } from 'lucide-react';
 
 interface SpotConceptsProps {
     trade: ReturnType<typeof import('@/lib/hooks/useSpotTrade').useSpotTrade>;
@@ -25,10 +25,66 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
     const [activePanel, setActivePanel] = React.useState<'orderbook' | 'orderform'>('orderform');
     const [orderType, setOrderType] = React.useState<DemoOrderType>('market');
     const [side, setSide] = React.useState<'buy' | 'sell'>('buy');
-    const [tpEnabled, setTpEnabled] = React.useState(false);
-    const [slEnabled, setSlEnabled] = React.useState(false);
     const [simSnapshot, setSimSnapshot] = React.useState<SimConfig | null>(null);
     const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+    // ─── Price Scale slider state ────────────────────────────────────────────────
+    const [simPrice, setSimPrice] = React.useState(0);
+    const [isDragging, setIsDragging] = React.useState(false);
+    const sliderRef = React.useRef<HTMLDivElement>(null);
+
+    // Reset simPrice when new snapshot is set
+    React.useEffect(() => {
+        if (simSnapshot) setSimPrice(simSnapshot.entryPrice);
+    }, [simSnapshot]);
+
+    const sliderRange = React.useMemo(
+        () => getSliderRange(simSnapshot, currentPrice.price),
+        [simSnapshot, currentPrice.price]
+    );
+
+    const priceToPercent = React.useCallback((price: number) => {
+        const { min, max } = sliderRange;
+        if (max === min) return 50;
+        return ((max - price) / (max - min)) * 100;
+    }, [sliderRange]);
+
+    const percentToPrice = React.useCallback((pct: number) => {
+        const { min, max } = sliderRange;
+        return max - (pct / 100) * (max - min);
+    }, [sliderRange]);
+
+    const handleSliderInteraction = React.useCallback((clientY: number) => {
+        if (!sliderRef.current || !simSnapshot) return;
+        const rect = sliderRef.current.getBoundingClientRect();
+        const pct = Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100));
+        setSimPrice(percentToPrice(pct));
+    }, [percentToPrice, simSnapshot]);
+
+    const handleMouseDown = React.useCallback((e: React.MouseEvent) => {
+        setIsDragging(true);
+        handleSliderInteraction(e.clientY);
+    }, [handleSliderInteraction]);
+
+    React.useEffect(() => {
+        if (!isDragging) return;
+        const onMove = (e: MouseEvent) => handleSliderInteraction(e.clientY);
+        const onUp = () => setIsDragging(false);
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onUp);
+        return () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
+    }, [isDragging, handleSliderInteraction]);
+
+    const knobColor = React.useMemo(
+        () => computeKnobColor(simSnapshot, simPrice),
+        [simSnapshot, simPrice]
+    );
+
+    const simPriceChange = simSnapshot && simSnapshot.entryPrice > 0
+        ? ((simPrice - simSnapshot.entryPrice) / simSnapshot.entryPrice) * 100
+        : 0;
+
+    // ─── Other effects ───────────────────────────────────────────────────────────
 
     // Clear simulation when order type or side changes (stale snapshot)
     React.useEffect(() => { setSimSnapshot(null); }, [orderType, side]);
@@ -111,6 +167,11 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                                 <WifiOff size={10} className="text-yellow-400" />
                                 <span className="text-[9px] font-mono text-yellow-400">MANUAL</span>
                             </>
+                        ) : trade.wsSource === 'rest' ? (
+                            <>
+                                <Activity size={10} className="text-blue-400" />
+                                <span className="text-[9px] font-mono text-blue-400">REST</span>
+                            </>
                         ) : (
                             <>
                                 <Wifi size={10} className="text-green-400" />
@@ -160,48 +221,139 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
             </div>
 
             {/* ─── Panel Content ──────────────────────────────── */}
-            <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-4 min-h-[500px]">
-                {activePanel === 'orderbook' ? (
+            {activePanel === 'orderbook' ? (
+                <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-4 min-h-[500px]">
                     <SpotOrderBook
                         orderBook={orderBook}
                         formatPrice={formatPrice}
                         onPriceClick={() => { }}
                     />
-                ) : (
-                    <div className="flex gap-0 h-full min-h-[460px]">
-                        {/* Order Form */}
-                        <div className="w-[320px] flex-shrink-0 border-r border-white/10 pr-4">
-                            <SpotOrderForm
-                                pair={selectedPair}
-                                currentPrice={currentPrice.price}
-                                formatPrice={formatPrice}
-                                orderType={orderType}
-                                onOrderTypeChange={setOrderType}
-                                side={side}
-                                onSideChange={setSide}
-                                tpEnabled={tpEnabled}
-                                onTpEnabledChange={setTpEnabled}
-                                slEnabled={slEnabled}
-                                onSlEnabledChange={setSlEnabled}
-                                onRunSimulation={setSimSnapshot}
-                            />
-                        </div>
+                </div>
+            ) : (
+                <div className="flex gap-3 items-stretch min-h-[500px]">
 
-                        {/* Order Flow Visualiser */}
-                        <div className="flex-1 pl-4 min-w-0">
-                            <OrderFlowVisualiser
-                                orderType={orderType}
-                                side={side}
-                                tpEnabled={tpEnabled}
-                                slEnabled={slEnabled}
-                                simSnapshot={simSnapshot}
-                                currentPrice={currentPrice.price}
-                                formatPrice={formatPrice}
-                            />
-                        </div>
+                    {/* ── Box 1: Order Form ── */}
+                    <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-4 w-[300px] flex-shrink-0 flex flex-col">
+                        <p className="text-[10px] font-mono text-white/40 uppercase tracking-wider mb-3">Order Form</p>
+                        <SpotOrderForm
+                            pair={selectedPair}
+                            currentPrice={currentPrice.price}
+                            formatPrice={formatPrice}
+                            orderType={orderType}
+                            onOrderTypeChange={setOrderType}
+                            side={side}
+                            onSideChange={setSide}
+                            onRunSimulation={setSimSnapshot}
+                        />
                     </div>
-                )}
-            </div>
+
+                    {/* ── Box 2: Order Flow ── */}
+                    <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-4 flex-1 min-w-0 flex flex-col">
+                        <OrderFlowVisualiser
+                            orderType={orderType}
+                            side={side}
+                            tpEnabled={false}
+                            slEnabled={false}
+                            simSnapshot={simSnapshot}
+                            simPrice={simPrice}
+                            currentPrice={currentPrice.price}
+                            formatPrice={formatPrice}
+                        />
+                    </div>
+
+                    {/* ── Box 3: Price Scale ── */}
+                    <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-4 w-[120px] flex-shrink-0 flex flex-col">
+                        <p className="text-[10px] font-mono text-white/40 uppercase tracking-wider mb-3">Price Scale</p>
+                        {!simSnapshot ? (
+                            <div className="flex-1 flex items-center justify-center">
+                                <div className="text-white/15 text-[9px] font-mono text-center leading-relaxed">
+                                    Run<br />Simulation<br />to start
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex-1 flex flex-col">
+                                {/* Current simPrice */}
+                                <div className="text-center mb-2 flex-shrink-0">
+                                    <div className="text-xs font-mono text-white font-bold">{formatPrice(simPrice)}</div>
+                                    <div className={`text-[10px] font-mono ${simPriceChange >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                        {simPriceChange >= 0 ? '▲' : '▼'} {Math.abs(simPriceChange).toFixed(2)}%
+                                    </div>
+                                </div>
+
+                                {/* Slider track */}
+                                <div
+                                    ref={sliderRef}
+                                    onMouseDown={handleMouseDown}
+                                    className="relative flex-1 min-h-[200px] cursor-pointer select-none"
+                                    style={{ marginTop: '16px', marginBottom: '16px' }}
+                                >
+                                    <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-white/10" />
+
+                                    <div className="absolute -top-5 left-0 right-0 text-center">
+                                        <span className="text-[8px] font-mono text-white/20">{formatPrice(sliderRange.max)}</span>
+                                    </div>
+
+                                    {/* Entry price line */}
+                                    <div className="absolute left-0 right-0 flex items-center gap-1"
+                                        style={{ top: `${priceToPercent(simSnapshot.entryPrice)}%` }}>
+                                        <div className="flex-1 border-t border-dashed border-white/30" />
+                                        <span className="text-[8px] font-mono text-white/40 whitespace-nowrap">entry</span>
+                                    </div>
+
+                                    {simSnapshot.stopPrice != null && (
+                                        <div className="absolute left-0 right-0 flex items-center gap-1"
+                                            style={{ top: `${priceToPercent(simSnapshot.stopPrice)}%` }}>
+                                            <div className="flex-1 h-px bg-orange-500/55" />
+                                            <span className="text-[8px] font-mono text-orange-400/70 whitespace-nowrap">stop</span>
+                                        </div>
+                                    )}
+
+                                    {(simSnapshot.price != null || simSnapshot.limitPrice != null) && (
+                                        <div className="absolute left-0 right-0 flex items-center gap-1"
+                                            style={{ top: `${priceToPercent(simSnapshot.price ?? simSnapshot.limitPrice!)}%` }}>
+                                            <div className="flex-1 h-px bg-blue-500/55" />
+                                            <span className="text-[8px] font-mono text-blue-400/70 whitespace-nowrap">limit</span>
+                                        </div>
+                                    )}
+
+                                    {simSnapshot.tpPrice != null && (
+                                        <div className="absolute left-0 right-0 flex items-center gap-1"
+                                            style={{ top: `${priceToPercent(simSnapshot.tpPrice)}%` }}>
+                                            <div className="flex-1 h-px bg-green-500/55" />
+                                            <span className="text-[8px] font-mono text-green-400/70 whitespace-nowrap">TP</span>
+                                        </div>
+                                    )}
+
+                                    {simSnapshot.slPrice != null && (
+                                        <div className="absolute left-0 right-0 flex items-center gap-1"
+                                            style={{ top: `${priceToPercent(simSnapshot.slPrice)}%` }}>
+                                            <div className="flex-1 h-px bg-red-500/55" />
+                                            <span className="text-[8px] font-mono text-red-400/70 whitespace-nowrap">SL</span>
+                                        </div>
+                                    )}
+
+                                    {/* Draggable knob */}
+                                    <div
+                                        className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
+                                        style={{ top: `${priceToPercent(simPrice)}%` }}
+                                    >
+                                        <div className={`w-4 h-4 border-2 ring-2 ring-black/50 cursor-grab active:cursor-grabbing shadow-lg ${knobColor}`} />
+                                    </div>
+
+                                    <div className="absolute -bottom-5 left-0 right-0 text-center">
+                                        <span className="text-[8px] font-mono text-white/20">{formatPrice(sliderRange.min)}</span>
+                                    </div>
+                                </div>
+
+                                <div className="text-center mt-1 flex-shrink-0">
+                                    <span className="text-[9px] font-mono text-white/20">Drag to simulate</span>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                </div>
+            )}
         </div>
     );
 }

@@ -128,6 +128,10 @@ export function useSpotTrade(walletAddress: string | null) {
     const [wsDisabled, setWsDisabled] = useState<Record<string, boolean>>({});
     const wsRef = useRef<WebSocket | null>(null);
 
+    // Price feed source: 'ws' = Binance WebSocket, 'rest' = CoinGecko fallback, null = connecting
+    const [wsSource, setWsSource] = useState<'ws' | 'rest' | null>(null);
+    const restIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
     // Order book seed changes to animate
     const [obSeed, setObSeed] = useState(42);
 
@@ -187,8 +191,36 @@ export function useSpotTrade(walletAddress: string | null) {
             }
         };
 
+        ws.onopen = () => {
+            setWsSource('ws');
+            // Cancel REST polling if WS recovers
+            if (restIntervalRef.current) {
+                clearInterval(restIntervalRef.current);
+                restIntervalRef.current = null;
+            }
+        };
+
         ws.onerror = (err: any) => {
-            console.warn('[useSpotTrade] WS connection failed (expected in demo mode):', err?.message || err?.type || 'Unknown');
+            console.warn('[useSpotTrade] WS connection failed, switching to CoinGecko REST fallback:', err?.message || err?.type || 'Unknown');
+            setWsSource('rest');
+
+            // Start REST polling if not already running
+            if (!restIntervalRef.current) {
+                const fetchRestPrices = async () => {
+                    try {
+                        const res = await fetch('/api/prices');
+                        if (!res.ok) return;
+                        const data: Record<string, { price: number; change: number }> = await res.json();
+                        for (const [token, pd] of Object.entries(data)) {
+                            livePricesRef.current[token] = pd;
+                        }
+                    } catch (e) {
+                        console.warn('[useSpotTrade] REST fetch failed:', e);
+                    }
+                };
+                fetchRestPrices(); // immediate first fetch
+                restIntervalRef.current = setInterval(fetchRestPrices, 4000);
+            }
         };
 
         // Throttle state updates to ~2/sec
@@ -226,6 +258,10 @@ export function useSpotTrade(walletAddress: string | null) {
 
         return () => {
             clearInterval(interval);
+            if (restIntervalRef.current) {
+                clearInterval(restIntervalRef.current);
+                restIntervalRef.current = null;
+            }
             if (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) {
                 ws.close();
             }
@@ -727,6 +763,7 @@ export function useSpotTrade(walletAddress: string | null) {
         currentPrice,
         orderBook,
         wsDisabled,
+        wsSource,
 
         // Helpers
         formatPrice,
