@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, useRef, useEffect, useCallback } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import type { DemoOrderType } from '@/services/SupabaseDemoService';
 
 // ─── Exported Types ────────────────────────────────────────────────────────────
@@ -318,6 +318,33 @@ function computeActiveNode(snap: SimConfig, simPrice: number): {
     return { activeIds, completedIds, cancelledIds };
 }
 
+// ─── Exported Utilities ────────────────────────────────────────────────────────
+
+export function getSliderRange(simSnapshot: SimConfig | null, currentPrice: number): { min: number; max: number } {
+    if (!simSnapshot || simSnapshot.entryPrice <= 0) return { min: currentPrice * 0.85, max: currentPrice * 1.15 };
+    const prices = [
+        simSnapshot.entryPrice,
+        simSnapshot.price,
+        simSnapshot.stopPrice,
+        simSnapshot.limitPrice,
+        simSnapshot.tpPrice,
+        simSnapshot.slPrice,
+    ].filter((p): p is number => p !== null && p > 0);
+    const lo = Math.min(...prices);
+    const hi = Math.max(...prices);
+    return { min: lo * 0.85, max: hi * 1.15 };
+}
+
+export function computeKnobColor(snap: SimConfig | null, simPrice: number): string {
+    if (!snap) return 'bg-white/20 border-white/30';
+    const { activeIds } = computeActiveNode(snap, simPrice);
+    if (activeIds.includes('tp_filled'))       return 'bg-emerald-400 border-emerald-300';
+    if (activeIds.includes('sl_filled'))       return 'bg-red-500 border-red-400';
+    if (activeIds.includes('filled'))          return 'bg-green-500 border-green-400';
+    if (activeIds.some(id => id === 'cancel')) return 'bg-gray-600 border-gray-500';
+    return 'bg-blue-500 border-blue-400';
+}
+
 // ─── Layout ────────────────────────────────────────────────────────────────────
 
 function computeLayout(graph: FlowGraph): ComputedLayout {
@@ -495,6 +522,7 @@ interface Props {
     tpEnabled: boolean;
     slEnabled: boolean;
     simSnapshot: SimConfig | null;
+    simPrice: number;
     currentPrice: number;
     formatPrice: (n: number, d?: number) => string;
 }
@@ -510,17 +538,9 @@ const ORDER_TYPE_LABELS: Record<DemoOrderType, string> = {
 
 export default function OrderFlowVisualiser({
     orderType, side, tpEnabled, slEnabled,
-    simSnapshot, currentPrice, formatPrice,
+    simSnapshot, simPrice, formatPrice,
 }: Props) {
     const [zoom, setZoom] = useState(1);
-    const [simPrice, setSimPrice] = useState(0);
-    const [isDragging, setIsDragging] = useState(false);
-    const sliderRef = useRef<HTMLDivElement>(null);
-
-    // Reset slider price when new simulation is run
-    useEffect(() => {
-        if (simSnapshot) setSimPrice(simSnapshot.entryPrice);
-    }, [simSnapshot]);
 
     // Build graph — apply sim values only when snapshot exists
     const graph = useMemo(() => {
@@ -531,84 +551,19 @@ export default function OrderFlowVisualiser({
 
     const layout = useMemo(() => computeLayout(graph), [graph]);
 
-    // Compute per-node states based on slider price
+    // Compute per-node states based on simPrice (controlled from parent)
     const nodeStates = useMemo((): Record<string, NodeState> => {
         if (!simSnapshot) return {};
         const { activeIds, completedIds, cancelledIds } = computeActiveNode(simSnapshot, simPrice);
         const states: Record<string, NodeState> = {};
         layout.nodes.forEach(n => {
-            if (activeIds.includes(n.id))    states[n.id] = 'active';
+            if (activeIds.includes(n.id))         states[n.id] = 'active';
             else if (completedIds.includes(n.id)) states[n.id] = 'completed';
             else if (cancelledIds.includes(n.id)) states[n.id] = 'cancelled';
-            else                              states[n.id] = 'future';
+            else                                  states[n.id] = 'future';
         });
         return states;
     }, [simSnapshot, simPrice, layout]);
-
-    // Slider range — covers all relevant price levels
-    const sliderRange = useMemo(() => {
-        const ref = simSnapshot?.entryPrice ?? currentPrice;
-        if (!simSnapshot || ref <= 0) return { min: 0, max: 1 };
-        const prices = [
-            simSnapshot.entryPrice,
-            simSnapshot.price,
-            simSnapshot.stopPrice,
-            simSnapshot.limitPrice,
-            simSnapshot.tpPrice,
-            simSnapshot.slPrice,
-        ].filter((p): p is number => p !== null && p > 0);
-        const lo = Math.min(...prices);
-        const hi = Math.max(...prices);
-        return { min: lo * 0.85, max: hi * 1.15 };
-    }, [simSnapshot, currentPrice]);
-
-    const priceToPercent = useCallback((price: number) => {
-        const { min, max } = sliderRange;
-        if (max === min) return 50;
-        return ((max - price) / (max - min)) * 100;
-    }, [sliderRange]);
-
-    const percentToPrice = useCallback((pct: number) => {
-        const { min, max } = sliderRange;
-        return max - (pct / 100) * (max - min);
-    }, [sliderRange]);
-
-    const handleSliderInteraction = useCallback((clientY: number) => {
-        if (!sliderRef.current || !simSnapshot) return;
-        const rect = sliderRef.current.getBoundingClientRect();
-        const pct = Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100));
-        setSimPrice(percentToPrice(pct));
-    }, [percentToPrice, simSnapshot]);
-
-    const handleMouseDown = useCallback((e: React.MouseEvent) => {
-        setIsDragging(true);
-        handleSliderInteraction(e.clientY);
-    }, [handleSliderInteraction]);
-
-    useEffect(() => {
-        if (!isDragging) return;
-        const onMove = (e: MouseEvent) => handleSliderInteraction(e.clientY);
-        const onUp = () => setIsDragging(false);
-        window.addEventListener('mousemove', onMove);
-        window.addEventListener('mouseup', onUp);
-        return () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
-    }, [isDragging, handleSliderInteraction]);
-
-    // Derive knob colour from active node kind
-    const knobColor = useMemo(() => {
-        if (!simSnapshot) return 'bg-white/20 border-white/30';
-        const activeId = Object.entries(nodeStates).find(([, s]) => s === 'active')?.[0];
-        const kind = layout.nodes.find(n => n.id === activeId)?.kind ?? 'state';
-        if (kind === 'terminal') return 'bg-green-500 border-green-400';
-        if (kind === 'tp')       return 'bg-emerald-400 border-emerald-300';
-        if (kind === 'sl')       return 'bg-red-500 border-red-400';
-        if (kind === 'cancel')   return 'bg-gray-600 border-gray-500';
-        return 'bg-blue-500 border-blue-400';
-    }, [nodeStates, layout, simSnapshot]);
-
-    const simPriceChange = simSnapshot && simSnapshot.entryPrice > 0
-        ? ((simPrice - simSnapshot.entryPrice) / simSnapshot.entryPrice) * 100
-        : 0;
 
     return (
         <div className="flex flex-col h-full">
@@ -638,141 +593,41 @@ export default function OrderFlowVisualiser({
                 </div>
             </div>
 
-            {/* Main area: diagram + price slider */}
-            <div className="flex flex-1 gap-3 min-h-0">
-                {/* Diagram */}
-                <div className="flex-1 overflow-auto">
-                    <div style={{
-                        transform: `scale(${zoom})`,
-                        transformOrigin: 'top left',
-                        width: layout.width * zoom,
-                        height: layout.height * zoom,
-                    }}>
-                        <svg width={layout.width} height={layout.height}
-                            viewBox={`0 0 ${layout.width} ${layout.height}`}
-                            style={{ display: 'block' }}>
-                            <defs>
-                                <marker id="arr-neutral" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
-                                    <path d="M0,0 L0,6 L7,3 z" fill="rgba(255,255,255,0.35)" />
-                                </marker>
-                                <marker id="arr-tp" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
-                                    <path d="M0,0 L0,6 L7,3 z" fill="rgba(74,222,128,0.75)" />
-                                </marker>
-                                <marker id="arr-sl" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
-                                    <path d="M0,0 L0,6 L7,3 z" fill="rgba(248,113,113,0.75)" />
-                                </marker>
-                                <marker id="arr-dashed" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
-                                    <path d="M0,0 L0,6 L7,3 z" fill="rgba(255,255,255,0.18)" />
-                                </marker>
-                            </defs>
-                            {layout.edges.map((e, i) => <EdgeLine key={i} edge={e} />)}
-                            {layout.nodes.map(n => (
-                                <NodeBox
-                                    key={n.id}
-                                    node={n}
-                                    side={side}
-                                    nodeState={simSnapshot ? (nodeStates[n.id] ?? 'future') : 'skeleton'}
-                                />
-                            ))}
-                        </svg>
-                    </div>
-                </div>
-
-                {/* Price Slider */}
-                <div className="w-[88px] flex-shrink-0 flex flex-col border-l border-white/5 pl-3">
-                    {!simSnapshot ? (
-                        <div className="h-full flex items-center justify-center">
-                            <div className="text-white/15 text-[9px] font-mono text-center leading-relaxed">
-                                Run<br />Simulation<br />to start
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="h-full flex flex-col">
-                            {/* Current simPrice */}
-                            <div className="text-center mb-2 flex-shrink-0">
-                                <div className="text-xs font-mono text-white font-bold">{formatPrice(simPrice)}</div>
-                                <div className={`text-[10px] font-mono ${simPriceChange >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                                    {simPriceChange >= 0 ? '▲' : '▼'} {Math.abs(simPriceChange).toFixed(2)}%
-                                </div>
-                            </div>
-
-                            {/* Slider track */}
-                            <div
-                                ref={sliderRef}
-                                onMouseDown={handleMouseDown}
-                                className="relative flex-1 min-h-[160px] cursor-pointer select-none"
-                                style={{ marginTop: '16px', marginBottom: '16px' }}
-                            >
-                                {/* Track background */}
-                                <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-white/10" />
-
-                                {/* Max label */}
-                                <div className="absolute -top-5 left-0 right-0 text-center">
-                                    <span className="text-[8px] font-mono text-white/20">{formatPrice(sliderRange.max)}</span>
-                                </div>
-
-                                {/* Entry price line */}
-                                <div className="absolute left-0 right-0 flex items-center gap-1"
-                                    style={{ top: `${priceToPercent(simSnapshot.entryPrice)}%` }}>
-                                    <div className="flex-1 border-t border-dashed border-white/30" />
-                                    <span className="text-[8px] font-mono text-white/40 whitespace-nowrap">entry</span>
-                                </div>
-
-                                {/* Stop price line */}
-                                {simSnapshot.stopPrice != null && (
-                                    <div className="absolute left-0 right-0 flex items-center gap-1"
-                                        style={{ top: `${priceToPercent(simSnapshot.stopPrice)}%` }}>
-                                        <div className="flex-1 h-px bg-orange-500/55" />
-                                        <span className="text-[8px] font-mono text-orange-400/70 whitespace-nowrap">stop</span>
-                                    </div>
-                                )}
-
-                                {/* Limit price line */}
-                                {(simSnapshot.price != null || simSnapshot.limitPrice != null) && (
-                                    <div className="absolute left-0 right-0 flex items-center gap-1"
-                                        style={{ top: `${priceToPercent(simSnapshot.price ?? simSnapshot.limitPrice!)}%` }}>
-                                        <div className="flex-1 h-px bg-blue-500/55" />
-                                        <span className="text-[8px] font-mono text-blue-400/70 whitespace-nowrap">limit</span>
-                                    </div>
-                                )}
-
-                                {/* TP price line */}
-                                {simSnapshot.tpPrice != null && (
-                                    <div className="absolute left-0 right-0 flex items-center gap-1"
-                                        style={{ top: `${priceToPercent(simSnapshot.tpPrice)}%` }}>
-                                        <div className="flex-1 h-px bg-green-500/55" />
-                                        <span className="text-[8px] font-mono text-green-400/70 whitespace-nowrap">TP</span>
-                                    </div>
-                                )}
-
-                                {/* SL price line */}
-                                {simSnapshot.slPrice != null && (
-                                    <div className="absolute left-0 right-0 flex items-center gap-1"
-                                        style={{ top: `${priceToPercent(simSnapshot.slPrice)}%` }}>
-                                        <div className="flex-1 h-px bg-red-500/55" />
-                                        <span className="text-[8px] font-mono text-red-400/70 whitespace-nowrap">SL</span>
-                                    </div>
-                                )}
-
-                                {/* Draggable knob */}
-                                <div
-                                    className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
-                                    style={{ top: `${priceToPercent(simPrice)}%` }}
-                                >
-                                    <div className={`w-4 h-4 border-2 ring-2 ring-black/50 cursor-grab active:cursor-grabbing shadow-lg ${knobColor}`} />
-                                </div>
-
-                                {/* Min label */}
-                                <div className="absolute -bottom-5 left-0 right-0 text-center">
-                                    <span className="text-[8px] font-mono text-white/20">{formatPrice(sliderRange.min)}</span>
-                                </div>
-                            </div>
-
-                            <div className="text-center mt-1 flex-shrink-0">
-                                <span className="text-[9px] font-mono text-white/20">Drag to simulate</span>
-                            </div>
-                        </div>
-                    )}
+            {/* Diagram (centered) */}
+            <div className="flex-1 overflow-auto flex items-start justify-center min-h-0">
+                <div style={{
+                    transform: `scale(${zoom})`,
+                    transformOrigin: 'top left',
+                    width: layout.width * zoom,
+                    height: layout.height * zoom,
+                }}>
+                    <svg width={layout.width} height={layout.height}
+                        viewBox={`0 0 ${layout.width} ${layout.height}`}
+                        style={{ display: 'block' }}>
+                        <defs>
+                            <marker id="arr-neutral" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L7,3 z" fill="rgba(255,255,255,0.35)" />
+                            </marker>
+                            <marker id="arr-tp" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L7,3 z" fill="rgba(74,222,128,0.75)" />
+                            </marker>
+                            <marker id="arr-sl" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L7,3 z" fill="rgba(248,113,113,0.75)" />
+                            </marker>
+                            <marker id="arr-dashed" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L7,3 z" fill="rgba(255,255,255,0.18)" />
+                            </marker>
+                        </defs>
+                        {layout.edges.map((e, i) => <EdgeLine key={i} edge={e} />)}
+                        {layout.nodes.map(n => (
+                            <NodeBox
+                                key={n.id}
+                                node={n}
+                                side={side}
+                                nodeState={simSnapshot ? (nodeStates[n.id] ?? 'future') : 'skeleton'}
+                            />
+                        ))}
+                    </svg>
                 </div>
             </div>
 
