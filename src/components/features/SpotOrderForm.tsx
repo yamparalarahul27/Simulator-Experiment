@@ -86,17 +86,6 @@ export default function SpotOrderForm({
             tpEnabled,
             slEnabled,
         });
-
-        // Reset form
-        setAmount('');
-        setPrice('');
-        setStopPrice('');
-        setLimitPrice('');
-        setVisibleQty('');
-        setTpPrice('');
-        setSlPrice('');
-        onTpEnabledChange(false);
-        onSlEnabledChange(false);
     };
 
     return (
