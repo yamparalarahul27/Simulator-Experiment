@@ -3,8 +3,8 @@
 import React from 'react';
 import SpotOrderBook from './SpotOrderBook';
 import SpotOrderForm from './SpotOrderForm';
-import SpotTradeHistory from './SpotTradeHistory';
 import OrderFlowVisualiser from './OrderFlowVisualiser';
+import type { SimConfig } from './OrderFlowVisualiser';
 import { DEMO_PAIRS } from '@/lib/hooks/useSpotTrade';
 import type { DemoOrderType } from '@/services/SupabaseDemoService';
 import { ChevronDown, Wifi, WifiOff, Settings } from 'lucide-react';
@@ -15,14 +15,10 @@ interface SpotConceptsProps {
     onToggleControlPanel: () => void;
 }
 
-/**
- * SpotConcepts — Main trading terminal layout
- */
 export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlPanel }: SpotConceptsProps) {
     const {
         selectedPair, setSelectedPair, currentPrice, livePrices,
-        orderBook, balances, openOrders, filledOrders,
-        formatPrice, executeTrade, cancelOrder, settings,
+        orderBook, formatPrice, settings,
     } = trade;
 
     const [pairDropdownOpen, setPairDropdownOpen] = React.useState(false);
@@ -31,7 +27,11 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
     const [side, setSide] = React.useState<'buy' | 'sell'>('buy');
     const [tpEnabled, setTpEnabled] = React.useState(false);
     const [slEnabled, setSlEnabled] = React.useState(false);
+    const [simSnapshot, setSimSnapshot] = React.useState<SimConfig | null>(null);
     const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+    // Clear simulation when order type or side changes (stale snapshot)
+    React.useEffect(() => { setSimSnapshot(null); }, [orderType, side]);
 
     // Close dropdown on outside click
     React.useEffect(() => {
@@ -143,7 +143,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
             {/* ─── Sub-tab strip ──────────────────────────────── */}
             <div className="flex items-center gap-1 bg-black/40 backdrop-blur-xl border border-white/10 p-1">
                 {([
-                    { id: 'orderform', label: 'Order Form' },
+                    { id: 'orderform', label: 'Order Simulator' },
                     { id: 'orderbook', label: 'Order Book' },
                 ] as const).map(({ id, label }) => (
                     <button
@@ -160,7 +160,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
             </div>
 
             {/* ─── Panel Content ──────────────────────────────── */}
-            <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-4 min-h-[400px]">
+            <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-4 min-h-[500px]">
                 {activePanel === 'orderbook' ? (
                     <SpotOrderBook
                         orderBook={orderBook}
@@ -168,14 +168,12 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                         onPriceClick={() => { }}
                     />
                 ) : (
-                    <div className="flex gap-0 h-full">
+                    <div className="flex gap-0 h-full min-h-[460px]">
                         {/* Order Form */}
-                        <div className="w-[350px] flex-shrink-0 border-r border-white/10 pr-4">
+                        <div className="w-[320px] flex-shrink-0 border-r border-white/10 pr-4">
                             <SpotOrderForm
                                 pair={selectedPair}
                                 currentPrice={currentPrice.price}
-                                balances={balances}
-                                executeTrade={executeTrade}
                                 formatPrice={formatPrice}
                                 orderType={orderType}
                                 onOrderTypeChange={setOrderType}
@@ -185,32 +183,24 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                                 onTpEnabledChange={setTpEnabled}
                                 slEnabled={slEnabled}
                                 onSlEnabledChange={setSlEnabled}
+                                onRunSimulation={setSimSnapshot}
                             />
                         </div>
 
-                        {/* Order Visualiser */}
-                        <div className="flex-1 pl-4 min-w-0 overflow-auto">
+                        {/* Order Flow Visualiser */}
+                        <div className="flex-1 pl-4 min-w-0">
                             <OrderFlowVisualiser
                                 orderType={orderType}
                                 side={side}
                                 tpEnabled={tpEnabled}
                                 slEnabled={slEnabled}
+                                simSnapshot={simSnapshot}
+                                currentPrice={currentPrice.price}
+                                formatPrice={formatPrice}
                             />
                         </div>
                     </div>
                 )}
-            </div>
-
-            {/* ─── Bottom Panel: Orders / History / Balances ── */}
-            <div className="bg-black/60 backdrop-blur-xl border border-white/10">
-                <SpotTradeHistory
-                    openOrders={openOrders}
-                    filledOrders={filledOrders}
-                    balances={balances}
-                    cancelOrder={cancelOrder}
-                    formatPrice={formatPrice}
-                    livePrices={livePrices}
-                />
             </div>
         </div>
     );
