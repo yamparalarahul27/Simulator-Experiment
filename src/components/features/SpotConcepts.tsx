@@ -8,6 +8,7 @@ import type { SimConfig } from './OrderFlowVisualiser';
 import { DEMO_PAIRS } from '@/lib/hooks/useSpotTrade';
 import type { DemoOrderType } from '@/services/SupabaseDemoService';
 import { ChevronDown, Wifi, WifiOff, Activity, Settings } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
 
 interface SpotConceptsProps {
     trade: ReturnType<typeof import('@/lib/hooks/useSpotTrade').useSpotTrade>;
@@ -161,24 +162,37 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                     </div>
 
                     {/* WS Status */}
-                    <div className="flex items-center gap-1.5">
-                        {currentPrice.isOverridden ? (
-                            <>
-                                <WifiOff size={10} className="text-yellow-400" />
-                                <span className="text-[9px] font-mono text-yellow-400">MANUAL</span>
-                            </>
-                        ) : trade.wsSource === 'rest' ? (
-                            <>
-                                <Activity size={10} className="text-blue-400" />
-                                <span className="text-[9px] font-mono text-blue-400">REST</span>
-                            </>
-                        ) : (
-                            <>
-                                <Wifi size={10} className="text-green-400" />
-                                <span className="text-[9px] font-mono text-green-400">LIVE</span>
-                            </>
-                        )}
-                    </div>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <div className="flex items-center gap-1.5 cursor-help">
+                                    {currentPrice.isOverridden ? (
+                                        <>
+                                            <WifiOff size={10} className="text-yellow-400" />
+                                            <span className="text-[9px] font-mono text-yellow-400">MANUAL</span>
+                                        </>
+                                    ) : trade.wsSource === 'rest' ? (
+                                        <>
+                                            <Activity size={10} className="text-blue-400" />
+                                            <span className="text-[9px] font-mono text-blue-400">REST</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Wifi size={10} className="text-green-400" />
+                                            <span className="text-[9px] font-mono text-green-400">LIVE</span>
+                                        </>
+                                    )}
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                {currentPrice.isOverridden
+                                    ? 'Prices manually overridden via Set Manual Prices panel.'
+                                    : trade.wsSource === 'rest'
+                                    ? 'WebSocket unavailable. Using CoinGecko REST API (updates every 4s).'
+                                    : 'Connected to Binance WebSocket. Prices update in real-time.'}
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 </div>
 
                 {/* Currency indicator + Control button */}
@@ -196,7 +210,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                             }`}
                     >
                         <Settings size={14} />
-                        Control
+                        Set Manual Prices
                     </button>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useRef, useCallback, useEffect } from 'react';
 import type { DemoOrderType } from '@/services/SupabaseDemoService';
 
 // ─── Exported Types ────────────────────────────────────────────────────────────
@@ -40,7 +40,7 @@ const NODE_W = 108;
 const NODE_H = 54;
 const DEPTH_GAP = 80;
 const SIBLING_GAP = 52;
-const PAD = 32;
+const PAD = 56;
 
 // ─── Graph Data ────────────────────────────────────────────────────────────────
 
@@ -542,6 +542,36 @@ export default function OrderFlowVisualiser({
 }: Props) {
     const [zoom, setZoom] = useState(1);
 
+    // ─── Drag-to-pan ─────────────────────────────────────────────────────────────
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [isPanning, setIsPanning] = useState(false);
+    const dragStart = useRef<{ x: number; y: number; scrollLeft: number; scrollTop: number } | null>(null);
+
+    const handleMouseDown = useCallback((e: React.MouseEvent) => {
+        if (!containerRef.current) return;
+        setIsPanning(true);
+        dragStart.current = {
+            x: e.clientX,
+            y: e.clientY,
+            scrollLeft: containerRef.current.scrollLeft,
+            scrollTop: containerRef.current.scrollTop,
+        };
+        e.preventDefault();
+    }, []);
+
+    useEffect(() => {
+        if (!isPanning) return;
+        const onMove = (e: MouseEvent) => {
+            if (!containerRef.current || !dragStart.current) return;
+            containerRef.current.scrollLeft = dragStart.current.scrollLeft - (e.clientX - dragStart.current.x);
+            containerRef.current.scrollTop  = dragStart.current.scrollTop  - (e.clientY - dragStart.current.y);
+        };
+        const onUp = () => { setIsPanning(false); dragStart.current = null; };
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onUp);
+        return () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
+    }, [isPanning]);
+
     // Build graph — apply sim values only when snapshot exists
     const graph = useMemo(() => {
         const base = buildGraph(orderType, tpEnabled, slEnabled);
@@ -594,7 +624,11 @@ export default function OrderFlowVisualiser({
             </div>
 
             {/* Diagram (centered) */}
-            <div className="flex-1 overflow-auto flex items-start justify-center min-h-0">
+            <div
+                ref={containerRef}
+                onMouseDown={handleMouseDown}
+                className={`flex-1 overflow-auto flex items-start justify-center min-h-0 select-none ${isPanning ? 'cursor-grabbing' : 'cursor-grab'}`}
+            >
                 <div style={{
                     transform: `scale(${zoom})`,
                     transformOrigin: 'top left',
