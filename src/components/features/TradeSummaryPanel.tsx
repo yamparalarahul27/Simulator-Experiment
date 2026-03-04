@@ -236,7 +236,7 @@ export default function TradeSummaryPanel({ simSnapshot, formatPrice }: Props) {
                                     </span>
                                 </div>
                             </div>
-                            <p className="text-[9px] font-mono text-white/20">
+                            <p className="text-[9px] font-mono text-white/50">
                                 For every $1 risked, potential gain is ${rrRatio}
                             </p>
                         </>

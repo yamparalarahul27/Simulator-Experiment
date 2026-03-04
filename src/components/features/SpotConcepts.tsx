@@ -77,10 +77,10 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
         return () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
     }, [isDragging, handleSliderInteraction]);
 
-    // For the global knob color, we can just pass simPrice as maxExtremum and session min/max 
+    // For the global knob color, we can just pass simPrice as maxExtremum and session min/max
     // since the track itself handles its own extremum in OrderFlowVisualiser internally
     const knobColor = React.useMemo(
-        () => computeKnobColor(simSnapshot, simPrice, simPrice, simPrice, simPrice),
+        () => computeKnobColor(simSnapshot, simPrice, simPrice, simPrice, simPrice, simPrice, simPrice),
         [simSnapshot, simPrice]
     );
 
@@ -247,149 +247,152 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                     />
                 </div>
             ) : (
-                <div className="flex gap-3 items-stretch min-h-[500px]">
+                <div className="flex flex-col gap-3">
+                    {/* ── Top row: Order Form + Order Flow + Price Scale ── */}
+                    <div className="flex gap-3 items-stretch min-h-[500px]">
 
-                    {/* ── Box 1: Order Form ── */}
-                    <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-4 w-[300px] flex-shrink-0 flex flex-col">
-                        <p className="text-[10px] font-mono text-white/40 uppercase tracking-wider mb-3">Order Form</p>
-                        <SpotOrderForm
-                            pair={selectedPair}
-                            currentPrice={currentPrice.price}
-                            formatPrice={formatPrice}
-                            orderType={orderType}
-                            onOrderTypeChange={setOrderType}
-                            side={side}
-                            onSideChange={setSide}
-                            onRunSimulation={setSimSnapshot}
-                        />
-                    </div>
+                        {/* ── Box 1: Order Form ── */}
+                        <div className="bg-black border border-white/10 p-4 w-[300px] flex-shrink-0 flex flex-col">
+                            <p className="text-[10px] font-mono text-white/40 uppercase tracking-wider mb-3">Order Form</p>
+                            <SpotOrderForm
+                                pair={selectedPair}
+                                currentPrice={currentPrice.price}
+                                formatPrice={formatPrice}
+                                orderType={orderType}
+                                onOrderTypeChange={setOrderType}
+                                side={side}
+                                onSideChange={setSide}
+                                onRunSimulation={setSimSnapshot}
+                            />
+                        </div>
 
-                    {/* ── Box 2: Order Flow ── */}
-                    <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-4 flex-1 min-w-0 flex flex-col">
-                        <OrderFlowVisualiser
-                            orderType={orderType}
-                            side={side}
-                            tpEnabled={simSnapshot?.tpEnabled ?? false}
-                            slEnabled={simSnapshot?.slEnabled ?? false}
-                            simSnapshot={simSnapshot}
-                            simPrice={simPrice}
-                            currentPrice={currentPrice.price}
-                            formatPrice={formatPrice}
-                        />
-                    </div>
+                        {/* ── Box 2: Order Flow ── */}
+                        <div className="bg-black border border-white/10 p-4 flex-1 min-w-0 flex flex-col">
+                            <OrderFlowVisualiser
+                                orderType={orderType}
+                                side={side}
+                                tpEnabled={simSnapshot?.tpEnabled ?? false}
+                                slEnabled={simSnapshot?.slEnabled ?? false}
+                                simSnapshot={simSnapshot}
+                                simPrice={simPrice}
+                                currentPrice={currentPrice.price}
+                                formatPrice={formatPrice}
+                            />
+                        </div>
 
-                    {/* ── Box 3: Price Scale ── */}
-                    <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-4 w-[120px] flex-shrink-0 flex flex-col">
-                        <p className="text-[10px] font-mono text-white/40 uppercase tracking-wider mb-3">Price Scale</p>
-                        {!simSnapshot ? (
-                            <div className="flex-1 flex items-center justify-center">
-                                <div className="text-white/15 text-[9px] font-mono text-center leading-relaxed">
-                                    Run<br />Simulation<br />to start
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="flex-1 flex flex-col">
-                                {/* Current simPrice */}
-                                <div className="text-center mb-2 flex-shrink-0">
-                                    <div className="text-xs font-mono text-white font-bold">{formatPrice(simPrice)}</div>
-                                    <div className={`text-[10px] font-mono ${simPriceChange >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                                        {simPriceChange >= 0 ? '▲' : '▼'} {Math.abs(simPriceChange).toFixed(2)}%
+                        {/* ── Box 3: Price Scale ── */}
+                        <div className="bg-black border border-white/10 p-4 w-[120px] flex-shrink-0 flex flex-col">
+                            <p className="text-[10px] font-mono text-white/40 uppercase tracking-wider mb-3">Price Scale</p>
+                            {!simSnapshot ? (
+                                <div className="flex-1 flex items-center justify-center">
+                                    <div className="text-white/15 text-[9px] font-mono text-center leading-relaxed">
+                                        Run<br />Simulation<br />to start
                                     </div>
                                 </div>
-
-                                {/* Slider track */}
-                                <div
-                                    ref={sliderRef}
-                                    onMouseDown={handleMouseDown}
-                                    className="relative flex-1 min-h-[200px] cursor-pointer select-none"
-                                    style={{ marginTop: '16px', marginBottom: '16px' }}
-                                >
-                                    <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-white/10" />
-
-                                    <div className="absolute -top-5 left-0 right-0 text-center">
-                                        <span className="text-[8px] font-mono text-white/20">{formatPrice(sliderRange.max)}</span>
+                            ) : (
+                                <div className="flex-1 flex flex-col">
+                                    {/* Current simPrice */}
+                                    <div className="text-center mb-2 flex-shrink-0">
+                                        <div className="text-xs font-mono text-white font-bold">{formatPrice(simPrice)}</div>
+                                        <div className={`text-[10px] font-mono ${simPriceChange >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                            {simPriceChange >= 0 ? '▲' : '▼'} {Math.abs(simPriceChange).toFixed(2)}%
+                                        </div>
                                     </div>
 
-                                    {/* Entry price line */}
-                                    <div className="absolute left-0 right-0 flex items-center gap-1"
-                                        style={{ top: `${priceToPercent(simSnapshot.entryPrice)}%` }}>
-                                        <div className="flex-1 border-t border-dashed border-white/30" />
-                                        <span className="text-[8px] font-mono text-white/40 whitespace-nowrap">entry</span>
-                                    </div>
-
-                                    {/* Don't show stop line for trailing_stop — stopPrice is a % value, not a real price */}
-                                    {simSnapshot.stopPrice != null && simSnapshot.orderType !== 'trailing_stop' && (
-                                        <div className="absolute left-0 right-0 flex items-center gap-1"
-                                            style={{ top: `${priceToPercent(simSnapshot.stopPrice)}%` }}>
-                                            <div className="flex-1 h-px bg-orange-500/55" />
-                                            <span className="text-[8px] font-mono text-orange-400/70 whitespace-nowrap">stop</span>
-                                        </div>
-                                    )}
-                                    {/* For trailing stop, show trailing delta label instead */}
-                                    {simSnapshot.orderType === 'trailing_stop' && simSnapshot.stopPrice != null && (
-                                        <div className="absolute bottom-0 left-0 right-0 text-center">
-                                            <span className="text-[8px] font-mono text-orange-400/70">trail {simSnapshot.stopPrice}%</span>
-                                        </div>
-                                    )}
-
-                                    {(simSnapshot.price != null || simSnapshot.limitPrice != null) && (
-                                        <div className="absolute left-0 right-0 flex items-center gap-1"
-                                            style={{ top: `${priceToPercent(simSnapshot.price ?? simSnapshot.limitPrice!)}%` }}>
-                                            <div className="flex-1 h-px bg-blue-500/55" />
-                                            <span className="text-[8px] font-mono text-blue-400/70 whitespace-nowrap">limit</span>
-                                        </div>
-                                    )}
-
-                                    {simSnapshot.tpPrice != null && (
-                                        <div className="absolute left-0 right-0 flex items-center gap-1"
-                                            style={{ top: `${priceToPercent(simSnapshot.tpPrice)}%` }}>
-                                            <div className="flex-1 h-px bg-green-500/55" />
-                                            <span className="text-[8px] font-mono text-green-400/70 whitespace-nowrap">TP</span>
-                                        </div>
-                                    )}
-
-                                    {simSnapshot.slPrice != null && (
-                                        <div className="absolute left-0 right-0 flex items-center gap-1"
-                                            style={{ top: `${priceToPercent(simSnapshot.slPrice)}%` }}>
-                                            <div className="flex-1 h-px bg-red-500/55" />
-                                            <span className="text-[8px] font-mono text-red-400/70 whitespace-nowrap">SL</span>
-                                        </div>
-                                    )}
-
-                                    {/* Draggable knob */}
+                                    {/* Slider track */}
                                     <div
-                                        className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
-                                        style={{ top: `${priceToPercent(simPrice)}%` }}
+                                        ref={sliderRef}
+                                        onMouseDown={handleMouseDown}
+                                        className="relative flex-1 min-h-[200px] cursor-pointer select-none"
+                                        style={{ marginTop: '16px', marginBottom: '16px' }}
                                     >
-                                        <div className={`w-4 h-4 border-2 ring-2 ring-black/50 cursor-grab active:cursor-grabbing shadow-lg ${knobColor}`} />
+                                        <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-white/10" />
+
+                                        <div className="absolute -top-5 left-0 right-0 text-center">
+                                            <span className="text-[8px] font-mono text-white/50">{formatPrice(sliderRange.max)}</span>
+                                        </div>
+
+                                        {/* Entry price line */}
+                                        <div className="absolute left-0 right-0 flex items-center gap-1"
+                                            style={{ top: `${priceToPercent(simSnapshot.entryPrice)}%` }}>
+                                            <div className="flex-1 border-t border-dashed border-white/30" />
+                                            <span className="text-[8px] font-mono text-white/40 whitespace-nowrap">entry</span>
+                                        </div>
+
+                                        {/* Don't show stop line for trailing_stop — stopPrice is a % value, not a real price */}
+                                        {simSnapshot.stopPrice != null && simSnapshot.orderType !== 'trailing_stop' && (
+                                            <div className="absolute left-0 right-0 flex items-center gap-1"
+                                                style={{ top: `${priceToPercent(simSnapshot.stopPrice)}%` }}>
+                                                <div className="flex-1 h-px bg-orange-500/55" />
+                                                <span className="text-[8px] font-mono text-orange-400/70 whitespace-nowrap">stop</span>
+                                            </div>
+                                        )}
+                                        {/* For trailing stop, show trailing delta label instead */}
+                                        {simSnapshot.orderType === 'trailing_stop' && simSnapshot.stopPrice != null && (
+                                            <div className="absolute bottom-0 left-0 right-0 text-center">
+                                                <span className="text-[8px] font-mono text-orange-400/70">trail {simSnapshot.stopPrice}%</span>
+                                            </div>
+                                        )}
+
+                                        {(simSnapshot.price != null || simSnapshot.limitPrice != null) && (
+                                            <div className="absolute left-0 right-0 flex items-center gap-1"
+                                                style={{ top: `${priceToPercent(simSnapshot.price ?? simSnapshot.limitPrice!)}%` }}>
+                                                <div className="flex-1 h-px bg-blue-500/55" />
+                                                <span className="text-[8px] font-mono text-blue-400/70 whitespace-nowrap">limit</span>
+                                            </div>
+                                        )}
+
+                                        {simSnapshot.tpPrice != null && (
+                                            <div className="absolute left-0 right-0 flex items-center gap-1"
+                                                style={{ top: `${priceToPercent(simSnapshot.tpPrice)}%` }}>
+                                                <div className="flex-1 h-px bg-green-500/55" />
+                                                <span className="text-[8px] font-mono text-green-400/70 whitespace-nowrap">TP</span>
+                                            </div>
+                                        )}
+
+                                        {simSnapshot.slPrice != null && (
+                                            <div className="absolute left-0 right-0 flex items-center gap-1"
+                                                style={{ top: `${priceToPercent(simSnapshot.slPrice)}%` }}>
+                                                <div className="flex-1 h-px bg-red-500/55" />
+                                                <span className="text-[8px] font-mono text-red-400/70 whitespace-nowrap">SL</span>
+                                            </div>
+                                        )}
+
+                                        {/* Draggable knob */}
+                                        <div
+                                            className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
+                                            style={{ top: `${priceToPercent(simPrice)}%` }}
+                                        >
+                                            <div className={`w-4 h-4 border-2 ring-2 ring-black/50 cursor-grab active:cursor-grabbing shadow-lg ${knobColor}`} />
+                                        </div>
+
+                                        <div className="absolute -bottom-5 left-0 right-0 text-center">
+                                            <span className="text-[8px] font-mono text-white/50">{formatPrice(sliderRange.min)}</span>
+                                        </div>
                                     </div>
 
-                                    <div className="absolute -bottom-5 left-0 right-0 text-center">
-                                        <span className="text-[8px] font-mono text-white/20">{formatPrice(sliderRange.min)}</span>
+                                    <div className="text-center mt-1 flex-shrink-0">
+                                        <span className="text-[9px] font-mono text-white/50">Drag to simulate</span>
                                     </div>
                                 </div>
-
-                                <div className="text-center mt-1 flex-shrink-0">
-                                    <span className="text-[9px] font-mono text-white/20">Drag to simulate</span>
-                                </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
-                    {/* ── Box 4: Trade Summary ── */}
-                    <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-4 w-[240px] flex-shrink-0 overflow-y-auto custom-scrollbar">
+
+                    {/* ── Bottom row: Trade Summary (full width) ── */}
+                    <div className="bg-black border border-white/10 p-4 overflow-y-auto custom-scrollbar">
                         <TradeSummaryPanel
                             simSnapshot={simSnapshot}
                             formatPrice={formatPrice}
                         />
                         {!simSnapshot && (
-                            <div className="flex-1 flex items-center justify-center h-full">
+                            <div className="flex items-center justify-center py-4">
                                 <div className="text-white/15 text-[9px] font-mono text-center leading-relaxed">
-                                    Run<br />Simulation<br />to see<br />summary
+                                    Run Simulation to see summary
                                 </div>
                             </div>
                         )}
                     </div>
-
                 </div>
             )}
         </div>
