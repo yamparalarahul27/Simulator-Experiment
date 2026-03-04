@@ -4,7 +4,7 @@ import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 // Types
 // ============================================
 
-export type DemoOrderType = 'market' | 'limit' | 'stop_market' | 'stop_limit' | 'iceberg' | 'twap';
+export type DemoOrderType = 'market' | 'limit' | 'stop_market' | 'stop_limit' | 'iceberg' | 'twap' | 'trailing_stop' | 'oco';
 export type DemoOrderSide = 'buy' | 'sell';
 export type DemoOrderStatus = 'pending' | 'partial' | 'filled' | 'cancelled' | 'triggered';
 

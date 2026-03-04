@@ -12,7 +12,7 @@ Central reference for key project documents (kebab-case filenames in `Documents/
 - **api-structure.md** — API/service architecture reference (mock data, annotation storage, planned Helius/Deriverse services). Importance: Medium.
 - **database.md** — Supabase data/persistence strategy, schemas (`user_wallets`, planned `trades`/`trade_annotations`), caching rules. Importance: High.
 - **multi-wallet-discussion.md** — Wallet-centric vs user-centric design tradeoffs for multi-wallet analytics/auth. Importance: Medium.
-- **product-prd.md** — Product vision and core features/roadmap. Importance: Medium.
+- **SpotOrderLogic.md** — Validation rules and definitions for Spot Trading orders. Importance: High.
 - **deployment.md** — Vercel/Node deployment notes and env vars. Importance: Medium.
 - **testing.md** — Testing strategy (manual dev check, Agentation, unit tests). Importance: Medium.
 - **task.md** — Active task tracker and progress log. Importance: High.

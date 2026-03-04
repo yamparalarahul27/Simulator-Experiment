@@ -5,6 +5,7 @@ import SpotOrderBook from './SpotOrderBook';
 import SpotOrderForm from './SpotOrderForm';
 import OrderFlowVisualiser, { getSliderRange, computeKnobColor } from './OrderFlowVisualiser';
 import type { SimConfig } from './OrderFlowVisualiser';
+import TradeSummaryPanel from './TradeSummaryPanel';
 import { DEMO_PAIRS } from '@/lib/hooks/useSpotTrade';
 import type { DemoOrderType } from '@/services/SupabaseDemoService';
 import { ChevronDown, Wifi, WifiOff, Activity, Settings } from 'lucide-react';
@@ -76,8 +77,10 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
         return () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
     }, [isDragging, handleSliderInteraction]);
 
+    // For the global knob color, we can just pass simPrice as maxExtremum and session min/max 
+    // since the track itself handles its own extremum in OrderFlowVisualiser internally
     const knobColor = React.useMemo(
-        () => computeKnobColor(simSnapshot, simPrice),
+        () => computeKnobColor(simSnapshot, simPrice, simPrice, simPrice, simPrice),
         [simSnapshot, simPrice]
     );
 
@@ -188,8 +191,8 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                                 {currentPrice.isOverridden
                                     ? 'Prices manually overridden via Set Manual Prices panel.'
                                     : trade.wsSource === 'rest'
-                                    ? 'WebSocket unavailable. Using CoinGecko REST API (updates every 4s).'
-                                    : 'Connected to Binance WebSocket. Prices update in real-time.'}
+                                        ? 'WebSocket unavailable. Using CoinGecko REST API (updates every 4s).'
+                                        : 'Connected to Binance WebSocket. Prices update in real-time.'}
                             </TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
@@ -266,8 +269,8 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                         <OrderFlowVisualiser
                             orderType={orderType}
                             side={side}
-                            tpEnabled={false}
-                            slEnabled={false}
+                            tpEnabled={simSnapshot?.tpEnabled ?? false}
+                            slEnabled={simSnapshot?.slEnabled ?? false}
                             simSnapshot={simSnapshot}
                             simPrice={simPrice}
                             currentPrice={currentPrice.price}
@@ -314,11 +317,18 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                                         <span className="text-[8px] font-mono text-white/40 whitespace-nowrap">entry</span>
                                     </div>
 
-                                    {simSnapshot.stopPrice != null && (
+                                    {/* Don't show stop line for trailing_stop — stopPrice is a % value, not a real price */}
+                                    {simSnapshot.stopPrice != null && simSnapshot.orderType !== 'trailing_stop' && (
                                         <div className="absolute left-0 right-0 flex items-center gap-1"
                                             style={{ top: `${priceToPercent(simSnapshot.stopPrice)}%` }}>
                                             <div className="flex-1 h-px bg-orange-500/55" />
                                             <span className="text-[8px] font-mono text-orange-400/70 whitespace-nowrap">stop</span>
+                                        </div>
+                                    )}
+                                    {/* For trailing stop, show trailing delta label instead */}
+                                    {simSnapshot.orderType === 'trailing_stop' && simSnapshot.stopPrice != null && (
+                                        <div className="absolute bottom-0 left-0 right-0 text-center">
+                                            <span className="text-[8px] font-mono text-orange-400/70">trail {simSnapshot.stopPrice}%</span>
                                         </div>
                                     )}
 
@@ -361,6 +371,20 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
 
                                 <div className="text-center mt-1 flex-shrink-0">
                                     <span className="text-[9px] font-mono text-white/20">Drag to simulate</span>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    {/* ── Box 4: Trade Summary ── */}
+                    <div className="bg-black/60 backdrop-blur-xl border border-white/10 p-4 w-[240px] flex-shrink-0 overflow-y-auto custom-scrollbar">
+                        <TradeSummaryPanel
+                            simSnapshot={simSnapshot}
+                            formatPrice={formatPrice}
+                        />
+                        {!simSnapshot && (
+                            <div className="flex-1 flex items-center justify-center h-full">
+                                <div className="text-white/15 text-[9px] font-mono text-center leading-relaxed">
+                                    Run<br />Simulation<br />to see<br />summary
                                 </div>
                             </div>
                         )}
