@@ -297,6 +297,42 @@ function applySimValues(graph: FlowGraph, snap: SimConfig, fp: (n: number) => st
     };
 }
 
+// ─── Main Fill Detection (lightweight helper for post-fill extrema tracking) ──
+
+function checkMainFilled(
+    snap: SimConfig, simPrice: number, maxExtremum: number,
+    sessionMin: number, sessionMax: number,
+): boolean {
+    const { orderType, side, price: lp, stopPrice: sp, limitPrice: slp, entryPrice: ep } = snap;
+    switch (orderType) {
+        case 'market': return true;
+        case 'limit':
+        case 'iceberg':
+            return side === 'buy' ? sessionMin <= (lp ?? ep) : sessionMax >= (lp ?? ep);
+        case 'stop_market':
+            return side === 'buy' ? sessionMax >= (sp ?? ep) : sessionMin <= (sp ?? ep);
+        case 'stop_limit': {
+            const triggered = side === 'buy' ? sessionMax >= (sp ?? ep) : sessionMin <= (sp ?? ep);
+            return triggered && (side === 'buy' ? sessionMin <= (slp ?? ep) : sessionMax >= (slp ?? ep));
+        }
+        case 'twap': return false;
+        case 'trailing_stop': {
+            const act = lp ?? ep;
+            const activated = side === 'buy' ? sessionMin <= act : sessionMax >= act;
+            if (!activated) return false;
+            const pct = (sp ?? 0) / 100;
+            const vt = side === 'buy' ? maxExtremum * (1 + pct) : maxExtremum * (1 - pct);
+            return side === 'buy' ? simPrice >= vt : simPrice <= vt;
+        }
+        case 'oco': {
+            const targetHit = side === 'buy' ? sessionMin <= (lp ?? ep) : sessionMax >= (lp ?? ep);
+            const stopHit = side === 'buy' ? sessionMax >= (sp ?? ep) : sessionMin <= (sp ?? ep);
+            return targetHit || stopHit;
+        }
+        default: return false;
+    }
+}
+
 // ─── Active Node Logic ─────────────────────────────────────────────────────────
 
 function computeActiveNode(
@@ -305,6 +341,8 @@ function computeActiveNode(
     maxExtremum: number,
     sessionMin: number,
     sessionMax: number,
+    postFillMin: number,
+    postFillMax: number,
 ): {
     activeIds: string[];
     completedIds: string[];
@@ -437,17 +475,21 @@ function computeActiveNode(
         }
     }
 
-    // TP/SL logic: use session extrema so TP/SL stay fired even if price retraces
+    // TP/SL logic: use post-fill extrema so TP/SL only trigger from price movement AFTER fill
     if ((mainFilled || orderType === 'twap') && (tpEnabled || slEnabled)) {
         const prevActive = activeIds;
         completedIds = [...completedIds];
         activeIds = [];
 
-        // TP/SL hit = session extremum ever reached the target (after fill)
+        // For TWAP (no single fill), use session extrema; otherwise use post-fill extrema
+        const tpSlMin = orderType === 'twap' ? sessionMin : postFillMin;
+        const tpSlMax = orderType === 'twap' ? sessionMax : postFillMax;
+
+        // TP/SL hit = post-fill extremum ever reached the target
         const tpHit = tpEnabled && tpPrice !== null &&
-            (side === 'buy' ? sessionMax >= tpPrice : sessionMin <= tpPrice);
+            (side === 'buy' ? tpSlMax >= tpPrice : tpSlMin <= tpPrice);
         const slHit = slEnabled && slPrice !== null &&
-            (side === 'buy' ? sessionMin <= slPrice : sessionMax >= slPrice);
+            (side === 'buy' ? tpSlMin <= slPrice : tpSlMax >= slPrice);
 
         if (tpHit && !slHit) {
             // TP triggered: filled node = position (done), tp path = filled_terminal
@@ -502,9 +544,9 @@ export function getSliderRange(simSnapshot: SimConfig | null, currentPrice: numb
     return { min: lo * 0.85, max: hi * 1.15 };
 }
 
-export function computeKnobColor(snap: SimConfig | null, simPrice: number, maxExtremum: number, sessionMin: number, sessionMax: number): string {
+export function computeKnobColor(snap: SimConfig | null, simPrice: number, maxExtremum: number, sessionMin: number, sessionMax: number, postFillMin: number, postFillMax: number): string {
     if (!snap) return 'bg-white/20 border-white/30';
-    const { activeIds } = computeActiveNode(snap, simPrice, maxExtremum, sessionMin, sessionMax);
+    const { activeIds } = computeActiveNode(snap, simPrice, maxExtremum, sessionMin, sessionMax, postFillMin, postFillMax);
 
     if (activeIds.includes('tp_filled')) return 'bg-emerald-400 border-emerald-300';
     if (activeIds.includes('sl_filled')) return 'bg-red-500 border-red-400';
@@ -763,22 +805,59 @@ export default function OrderFlowVisualiser({
     const [savedMin, setSavedMin] = useState(simPrice);
     const [savedMax, setSavedMax] = useState(simPrice);
 
+    // ─── Post-Fill Extrema (for TP/SL — only tracks price movement AFTER main fill) ──
+    const [savedPostFillMin, setSavedPostFillMin] = useState(simPrice);
+    const [savedPostFillMax, setSavedPostFillMax] = useState(simPrice);
+    const [wasMainFilled, setWasMainFilled] = useState(false);
+
     let sessionMin = savedMin;
     let sessionMax = savedMax;
+    let postFillMin = savedPostFillMin;
+    let postFillMax = savedPostFillMax;
 
     if (simSnapshot !== prevSnap) {
+        // New snapshot → reset all extrema
         setPrevSnap(simSnapshot);
         setSavedMin(simPrice);
         setSavedMax(simPrice);
+        setSavedPostFillMin(simPrice);
+        setSavedPostFillMax(simPrice);
+        setWasMainFilled(false);
         sessionMin = simPrice;
         sessionMax = simPrice;
+        postFillMin = simPrice;
+        postFillMax = simPrice;
     } else {
+        // Latch session extrema (for main order fill detection)
         let changed = false;
         if (simPrice < sessionMin) { sessionMin = simPrice; changed = true; }
         if (simPrice > sessionMax) { sessionMax = simPrice; changed = true; }
         if (changed) {
             setSavedMin(sessionMin);
             setSavedMax(sessionMax);
+        }
+
+        // Track post-fill extrema (for TP/SL detection)
+        const mainFilled = simSnapshot
+            ? checkMainFilled(simSnapshot, simPrice, maxExtremum, sessionMin, sessionMax)
+            : false;
+
+        if (mainFilled && !wasMainFilled) {
+            // Main order just filled — start post-fill tracking from current price
+            setWasMainFilled(true);
+            postFillMin = simPrice;
+            postFillMax = simPrice;
+            setSavedPostFillMin(simPrice);
+            setSavedPostFillMax(simPrice);
+        } else if (mainFilled && wasMainFilled) {
+            // Continue latching post-fill extrema
+            let pfChanged = false;
+            if (simPrice < postFillMin) { postFillMin = simPrice; pfChanged = true; }
+            if (simPrice > postFillMax) { postFillMax = simPrice; pfChanged = true; }
+            if (pfChanged) {
+                setSavedPostFillMin(postFillMin);
+                setSavedPostFillMax(postFillMax);
+            }
         }
     }
 
@@ -830,18 +909,18 @@ export default function OrderFlowVisualiser({
         const base = buildGraph(orderType, tpEnabled, slEnabled);
         if (!simSnapshot) return base;
         // Compute mainFilled to pass to applySimValues (needed for wallet context sublabels)
-        const { activeIds } = computeActiveNode(simSnapshot, simPrice, maxExtremum, sessionMin, sessionMax);
+        const { activeIds } = computeActiveNode(simSnapshot, simPrice, maxExtremum, sessionMin, sessionMax, postFillMin, postFillMax);
         const mainFilled = activeIds.includes('filled') || activeIds.includes('tp_filled') || activeIds.includes('sl_filled')
             || activeIds.includes('limit_filled') || activeIds.includes('stop_filled');
         return applySimValues(base, simSnapshot, formatPrice, maxExtremum, mainFilled);
-    }, [orderType, tpEnabled, slEnabled, simSnapshot, formatPrice, maxExtremum, simPrice, sessionMin, sessionMax]);
+    }, [orderType, tpEnabled, slEnabled, simSnapshot, formatPrice, maxExtremum, simPrice, sessionMin, sessionMax, postFillMin, postFillMax]);
 
     const layout = useMemo(() => computeLayout(graph), [graph]);
 
     // Compute per-node states based on simPrice
     const nodeStates = useMemo((): Record<string, NodeState> => {
         if (!simSnapshot) return {};
-        const { activeIds, completedIds, cancelledIds } = computeActiveNode(simSnapshot, simPrice, maxExtremum, sessionMin, sessionMax);
+        const { activeIds, completedIds, cancelledIds } = computeActiveNode(simSnapshot, simPrice, maxExtremum, sessionMin, sessionMax, postFillMin, postFillMax);
         const hasTpSl = simSnapshot.tpEnabled || simSnapshot.slEnabled;
         const states: Record<string, NodeState> = {};
         layout.nodes.forEach(n => {
@@ -863,7 +942,17 @@ export default function OrderFlowVisualiser({
             }
         });
         return states;
-    }, [simSnapshot, simPrice, maxExtremum, layout, sessionMin, sessionMax]);
+    }, [simSnapshot, simPrice, maxExtremum, layout, sessionMin, sessionMax, postFillMin, postFillMax]);
+
+    // Detect when the order flow has reached its terminal state
+    const isFlowDone = useMemo(() => {
+        if (!simSnapshot) return false;
+        const hasTpSl = simSnapshot.tpEnabled || simSnapshot.slEnabled;
+        if (hasTpSl) {
+            return nodeStates['tp_filled'] === 'filled_terminal' || nodeStates['sl_filled'] === 'filled_terminal';
+        }
+        return nodeStates['filled'] === 'active' || nodeStates['limit_filled'] === 'active' || nodeStates['stop_filled'] === 'active';
+    }, [simSnapshot, nodeStates]);
 
     return (
         <div className="flex flex-col h-full">
@@ -886,7 +975,7 @@ export default function OrderFlowVisualiser({
                 )}
                 <div className="ml-auto flex items-center gap-1">
                     {zoom === 1 && (
-                        <span className="text-[9px] font-mono text-white/20 italic mr-1">zoom in to pan</span>
+                        <span className="text-[9px] font-mono text-white/50 italic mr-1">zoom in to pan</span>
                     )}
                     <button onClick={() => setZoom(z => Math.max(0.5, parseFloat((z - 0.25).toFixed(2))))}
                         className="w-6 h-6 flex items-center justify-center text-xs font-mono text-white/40 hover:text-white/70 bg-white/5 border border-white/10 hover:border-white/20 transition-colors">−</button>
@@ -900,16 +989,19 @@ export default function OrderFlowVisualiser({
             <div
                 ref={containerRef}
                 onMouseDown={handleMouseDown}
-                className={`flex-1 overflow-auto flex items-start justify-center min-h-0 select-none cursor-grab custom-scrollbar`}
+                className="flex-1 overflow-auto min-h-0 select-none cursor-grab custom-scrollbar"
             >
                 <div style={{
                     transform: `scale(${zoom})`,
                     transformOrigin: 'top left',
                     width: layout.width * zoom,
                     height: layout.height * zoom,
+                    minWidth: '100%',
+                    minHeight: '100%',
                 }}>
-                    <svg width={layout.width} height={layout.height}
+                    <svg width="100%" height="100%"
                         viewBox={`0 0 ${layout.width} ${layout.height}`}
+                        preserveAspectRatio="xMidYMid meet"
                         style={{ display: 'block' }}>
                         <defs>
                             <marker id="arr-neutral" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
@@ -937,6 +1029,15 @@ export default function OrderFlowVisualiser({
                     </svg>
                 </div>
             </div>
+
+            {/* Flow Done Banner */}
+            {isFlowDone && (
+                <div className="flex items-center justify-center gap-2 py-2 mt-1 border border-green-500/15 bg-green-500/5">
+                    <span className="text-[10px] font-mono text-green-400/70">Order flow complete</span>
+                    <span className="text-[10px] font-mono text-white/30">—</span>
+                    <span className="text-[10px] font-mono text-white/40">Re-run Simulation to replay</span>
+                </div>
+            )}
 
             {/* Legend */}
             <div className="flex items-center gap-3 mt-3 pt-2 border-t border-white/5 flex-wrap">
