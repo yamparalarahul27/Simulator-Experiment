@@ -12,7 +12,7 @@ How to create and maintain project docs for Deriverse. Use kebab-case filenames 
 - **api-structure.md**: Service patterns (mock data, annotation storage, planned external services).
 - **database.md**: Supabase schemas, caching rules, persistence strategy.
 - **multi-wallet-discussion.md**: Wallet-centric vs user-centric tradeoffs.
-- **product-prd.md**: Vision, core features, roadmap seeds.
+- **SpotOrderLogic.md**: Rules, validation, and expected behavior for all Spot Order types.
 - **deployment.md**: Vercel/Node setup, env vars.
 - **testing.md**: Testing strategy (manual dev check, Agentation, unit tests).
 
