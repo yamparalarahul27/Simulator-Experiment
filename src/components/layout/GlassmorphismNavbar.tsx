@@ -84,6 +84,10 @@ export interface GlassmorphismNavbarProps {
     onProfileSettingsClick?: () => void;
     /** Callback for Exchange Manager click */
     onExchangeManagerClick?: () => void;
+    /** Callback to switch between Analytica/Pedia modes */
+    onSwitchMode?: () => void;
+    /** Current user mode */
+    userMode?: 'analytica' | 'pedia';
     /** Additional CSS classes for nav container */
     className?: string;
 }
@@ -131,6 +135,8 @@ export const GlassmorphismNavbar = ({
     onNetworkChange,
     onProfileSettingsClick,
     onExchangeManagerClick,
+    onSwitchMode,
+    userMode,
     className = '',
 }: GlassmorphismNavbarProps) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -423,6 +429,20 @@ export const GlassmorphismNavbar = ({
                                                 >
                                                     Exchange Manager
                                                 </button>
+                                                {onSwitchMode && (
+                                                    <>
+                                                        <div className="border-t border-white/10" />
+                                                        <button
+                                                            onClick={() => {
+                                                                setIsProfileDropdownOpen(false);
+                                                                onSwitchMode();
+                                                            }}
+                                                            className="w-full text-left px-4 py-2.5 text-sm text-purple-400/80 hover:text-purple-300 hover:bg-purple-500/10 transition-colors"
+                                                        >
+                                                            Switch to {userMode === 'pedia' ? 'Analytica' : 'Pedia'}
+                                                        </button>
+                                                    </>
+                                                )}
                                             </div>
                                         </div>
                                     )}
@@ -571,6 +591,18 @@ export const GlassmorphismNavbar = ({
                                         <span className={`w-1.5 h-1.5 rounded-full ${activePath === '#exchange-manager' ? 'bg-white' : 'bg-white/20'}`} />
                                         Exchange Manager
                                     </a>
+                                    {onSwitchMode && (
+                                        <button
+                                            onClick={() => {
+                                                onSwitchMode();
+                                                setIsMobileMenuOpen(false);
+                                            }}
+                                            className="flex items-center gap-3 px-4 py-3 rounded-none transition-all text-purple-400/80 hover:text-purple-300 hover:bg-purple-500/10"
+                                        >
+                                            <span className="w-1.5 h-1.5 rounded-full bg-purple-400/40" />
+                                            Switch to {userMode === 'pedia' ? 'Analytica' : 'Pedia'}
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         </div>

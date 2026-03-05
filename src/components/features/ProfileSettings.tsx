@@ -24,6 +24,7 @@ export default function ProfileSettings() {
         setTimeout(() => {
             if (typeof window !== 'undefined') {
                 window.localStorage.removeItem('deriverse.activeTab');
+                window.localStorage.removeItem('deriverse.userMode');
                 window.dispatchEvent(
                     new CustomEvent<TabType>('deriverse:set-active-tab', {
                         detail: DEFAULT_TAB,
