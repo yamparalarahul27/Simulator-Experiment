@@ -113,7 +113,7 @@ export default function LoadingScreen() {
     };
 
     const handleNavigateToDashboard = () => {
-        // Navigate to dashboard tab
+        // Navigate to dashboard tab (Analytica mode)
         dispatchTabChange('dashboard');
         setCurrentPhase('logo');
     };
@@ -138,6 +138,12 @@ export default function LoadingScreen() {
         setCurrentPhase('logo');
     };
 
+    const handlePediaSkip = () => {
+        // Path B: skip wallet/mock, go straight to logo → Web3 tab
+        dispatchTabChange('web3');
+        setCurrentPhase('logo');
+    };
+
     return (
         <AnimatePresence>
             {isVisible && (
@@ -159,6 +165,7 @@ export default function LoadingScreen() {
                             onNavigateToDashboard={handleNavigateToDashboard}
                             onNavigateToLookup={handleNavigateToLookup}
                             onReturnToWelcome={handleReturnToWelcome}
+                            onPediaSkip={handlePediaSkip}
                         />
                     )}
 

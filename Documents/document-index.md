@@ -2,6 +2,7 @@
 
 Central reference for key project documents (kebab-case filenames in `Documents/`).
 
+- **ydex-prd.md** — Product Requirements Document: vision, two-pillar feature inventory with status, phased roadmap, design principles. Importance: Critical.
 - **ai-working-context.md** — Meta-instructions for AI agents; read core docs first, use installed skills, keep `task.md` updated, prioritize Agentation feedback, follow backend/UI guidelines. Importance: High.
 - **process.md** — Development process, Conventional Commits, workflow expectations. Importance: High.
 - **backend.md** — Backend patterns and on-chain data flow notes; references Helius/Deriverse services (cross-check with Supabase services in code). Importance: Medium.

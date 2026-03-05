@@ -10,14 +10,23 @@ import HelpScreen from '../features/HelpScreen';
 import RoadmapScreen from '../features/RoadmapScreen';
 import ExchangeManager from '../features/ExchangeManager';
 import Market from '../features/Market';
+import Web3Hub from '../features/Web3Hub';
 import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
 import Footer from './Footer';
 import { MarketTicker } from '../ui/MarketTicker';
+import { toast } from 'sonner';
 
-export type TabType = 'dashboard' | 'market' | 'lookup' | 'journal' | 'exchange-manager' | 'appdocs' | 'help' | 'roadmap' | 'profile-settings';
+export type TabType = 'dashboard' | 'market' | 'lookup' | 'journal' | 'web3' | 'exchange-manager' | 'appdocs' | 'help' | 'roadmap' | 'profile-settings';
+export type UserMode = 'analytica' | 'pedia';
 
-const DEFAULT_TAB: TabType = 'dashboard';
-const PERSISTABLE_TABS: TabType[] = ['dashboard', 'market', 'lookup', 'journal', 'exchange-manager', 'appdocs', 'help', 'roadmap', 'profile-settings'];
+const PERSISTABLE_TABS: TabType[] = ['dashboard', 'market', 'lookup', 'journal', 'web3', 'exchange-manager', 'appdocs', 'help', 'roadmap', 'profile-settings'];
+
+const ANALYTICA_TABS: TabType[] = ['dashboard', 'lookup', 'journal'];
+const PEDIA_TABS: TabType[] = ['web3', 'lookup', 'market'];
+
+function getDefaultTab(mode: UserMode): TabType {
+    return mode === 'pedia' ? 'web3' : 'dashboard';
+}
 
 /**
  * TabNavigation Component
@@ -34,16 +43,34 @@ const PERSISTABLE_TABS: TabType[] = ['dashboard', 'market', 'lookup', 'journal',
  * - Dynamic rendering of feature screens based on selection
  */
 export default function TabNavigation() {
-    const [activeTab, setActiveTab] = useState<TabType>(DEFAULT_TAB);
+    const [userMode, setUserMode] = useState<UserMode>('analytica');
+    const [activeTab, setActiveTab] = useState<TabType>('dashboard');
     const [network, setNetwork] = useState<'devnet' | 'mainnet' | 'mock'>('mock');
     const [analyzingWallet, setAnalyzingWallet] = useState<string | null>(null);
 
+    // Restore userMode and activeTab from localStorage
     useEffect(() => {
         if (typeof window === 'undefined') return;
+
+        const persistedMode = window.localStorage.getItem('deriverse.userMode') as UserMode | null;
+        const mode = persistedMode === 'pedia' ? 'pedia' : 'analytica';
+        setUserMode(mode);
+
         const persistedRaw = window.localStorage.getItem('deriverse.activeTab');
         const migrated = persistedRaw === 'settings' ? 'profile-settings' : persistedRaw;
+
+        const allowedMain = mode === 'pedia' ? PEDIA_TABS : ANALYTICA_TABS;
+        // Allow persisted tab if it's a valid tab (main, dropdown, or utility)
         if (migrated && (PERSISTABLE_TABS as string[]).includes(migrated)) {
-            setActiveTab(migrated as TabType);
+            // If tab is a main tab that doesn't belong to current mode, redirect to default
+            const isMainTab = [...ANALYTICA_TABS, ...PEDIA_TABS].includes(migrated as TabType);
+            if (isMainTab && !allowedMain.includes(migrated as TabType)) {
+                setActiveTab(getDefaultTab(mode));
+            } else {
+                setActiveTab(migrated as TabType);
+            }
+        } else {
+            setActiveTab(getDefaultTab(mode));
         }
     }, []);
 
@@ -57,9 +84,20 @@ export default function TabNavigation() {
             }
         };
 
+        const handleUserModeChange = (event: Event) => {
+            const mode = (event as CustomEvent<UserMode>).detail;
+            if (mode) {
+                setUserMode(mode);
+                window.localStorage.setItem('deriverse.userMode', mode);
+                setActiveTab(getDefaultTab(mode));
+            }
+        };
+
         window.addEventListener('deriverse:set-active-tab', handleExternalTabChange as EventListener);
+        window.addEventListener('deriverse:set-user-mode', handleUserModeChange as EventListener);
         return () => {
             window.removeEventListener('deriverse:set-active-tab', handleExternalTabChange as EventListener);
+            window.removeEventListener('deriverse:set-user-mode', handleUserModeChange as EventListener);
         };
     }, []);
 
@@ -68,56 +106,45 @@ export default function TabNavigation() {
         window.localStorage.setItem('deriverse.activeTab', activeTab);
     }, [activeTab]);
 
-    // Clean navigation items configuration
-    const navItems: NavItem[] = [
-        {
-            title: 'Analytics',
-            href: '#dashboard',
-            category: 'main',
-            onClick: () => setActiveTab('dashboard')
-        },
-        {
-            title: 'Market',
-            href: '#market',
-            category: 'main',
-            onClick: () => setActiveTab('market')
-        },
-        {
-            title: 'Journal',
-            href: '#journal',
-            category: 'main',
-            onClick: () => setActiveTab('journal')
-        },
-        {
-            title: 'Wallet(s)',
-            href: '#lookup',
-            category: 'main',
-            onClick: () => setActiveTab('lookup')
-        },
-        {
-            title: 'About',
-            href: '#appdocs',
-            category: 'dropdown',
-            onClick: () => setActiveTab('appdocs')
-        },
-        {
-            title: 'Help',
-            href: '#help',
-            category: 'dropdown',
-            onClick: () => setActiveTab('help')
-        },
-        {
-            title: 'Roadmap',
-            href: '#roadmap',
-            category: 'dropdown',
-            onClick: () => setActiveTab('roadmap')
-        },
-    ];
+    // Persist userMode
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        window.localStorage.setItem('deriverse.userMode', userMode);
+    }, [userMode]);
+
+    // Mode-conditional navigation items
+    const navItems: NavItem[] = userMode === 'pedia'
+        ? [
+            { title: 'Web3', href: '#web3', category: 'main', onClick: () => setActiveTab('web3') },
+            { title: 'Wallet(s)', href: '#lookup', category: 'main', onClick: () => setActiveTab('lookup') },
+            { title: 'Trade', href: '#market', category: 'main', onClick: () => setActiveTab('market') },
+            { title: 'About', href: '#appdocs', category: 'dropdown', onClick: () => setActiveTab('appdocs') },
+            { title: 'Help', href: '#help', category: 'dropdown', onClick: () => setActiveTab('help') },
+            { title: 'Roadmap', href: '#roadmap', category: 'dropdown', onClick: () => setActiveTab('roadmap') },
+        ]
+        : [
+            { title: 'Analytics', href: '#dashboard', category: 'main', onClick: () => setActiveTab('dashboard') },
+            { title: 'Wallet(s)', href: '#lookup', category: 'main', onClick: () => setActiveTab('lookup') },
+            { title: 'Journal', href: '#journal', category: 'main', onClick: () => setActiveTab('journal') },
+            { title: 'About', href: '#appdocs', category: 'dropdown', onClick: () => setActiveTab('appdocs') },
+            { title: 'Help', href: '#help', category: 'dropdown', onClick: () => setActiveTab('help') },
+            { title: 'Roadmap', href: '#roadmap', category: 'dropdown', onClick: () => setActiveTab('roadmap') },
+        ];
 
     const handleSwitchToRealData = (walletAddress: string) => {
         setAnalyzingWallet(walletAddress);
         setNetwork('devnet');
-        setActiveTab('dashboard');
+        if (userMode === 'pedia') {
+            toast.success('Trades saved! Switch to Analytica to view analytics.');
+        } else {
+            setActiveTab('dashboard');
+        }
+    };
+
+    const handleSwitchMode = () => {
+        const newMode: UserMode = userMode === 'analytica' ? 'pedia' : 'analytica';
+        setUserMode(newMode);
+        setActiveTab(getDefaultTab(newMode));
     };
 
     const renderTabContent = () => {
@@ -126,6 +153,8 @@ export default function TabNavigation() {
                 return <Home network={network} analyzingWallet={analyzingWallet} onNavigateToLookup={() => setActiveTab('lookup')} />;
             case 'market':
                 return <Market />;
+            case 'web3':
+                return <Web3Hub />;
             case 'lookup':
                 return <TradeHistory onSwitchToRealData={handleSwitchToRealData} />;
             case 'journal':
@@ -170,7 +199,9 @@ export default function TabNavigation() {
                 onNetworkChange={setNetwork}
                 onProfileSettingsClick={() => setActiveTab('profile-settings')}
                 onExchangeManagerClick={() => setActiveTab('exchange-manager')}
-                onLogoClick={() => setActiveTab('dashboard')}
+                onLogoClick={() => setActiveTab(getDefaultTab(userMode))}
+                onSwitchMode={handleSwitchMode}
+                userMode={userMode}
                 className="mb-8"
             />
 

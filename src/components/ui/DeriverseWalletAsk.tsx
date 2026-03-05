@@ -19,7 +19,16 @@ interface DeriverseWalletAskProps {
     onNavigateToDashboard?: () => void;
     onNavigateToLookup?: (walletAddress: string) => void;
     onReturnToWelcome?: () => void;
+    onPediaSkip?: () => void;
 }
+
+const DexFamiliarityContent = {
+    title: "How familiar are you with Decentralised Exchanges?",
+    optionA: "I am Familiar with DEX",
+    optionADesc: "I've traded on Jupiter, Raydium, or other Solana DEXes before",
+    optionB: "I am New to DEX",
+    optionBDesc: "I want to learn how DEX trading works before diving in",
+};
 
 const WalletAskContent = {
     title: "Before we begin…",
@@ -33,8 +42,12 @@ export default function DeriverseWalletAsk({
     onChoice,
     onNavigateToDashboard,
     onNavigateToLookup,
-    onReturnToWelcome
+    onReturnToWelcome,
+    onPediaSkip
 }: DeriverseWalletAskProps) {
+    // Sub-phase: 'dex-question' or 'wallet-choice'
+    const [subPhase, setSubPhase] = useState<'dex-question' | 'wallet-choice'>('dex-question');
+
     // Wallet connection state
     const [isConnecting, setIsConnecting] = useState(false);
     const [isCheckingWallet, setIsCheckingWallet] = useState(false);
@@ -162,6 +175,96 @@ export default function DeriverseWalletAsk({
         onChoice('mock');
     };
 
+    // DEX Familiarity question screen
+    if (subPhase === 'dex-question') {
+        return (
+            <motion.div
+                className="welcome-screen fixed inset-0 z-50 flex items-center justify-center"
+                style={{
+                    backgroundImage: 'url(/assets/background_wallpaper_dot.png)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat'
+                }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
+            >
+                <WelcomeHeader />
+
+                <div className="flex flex-col items-center gap-8">
+                    <WelcomeCard>
+                        {/* Hero Logo */}
+                        <motion.div
+                            className="flex justify-center mb-8"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                        >
+                            <img
+                                src="/Logo.png"
+                                alt="YDEX Logo"
+                                className="h-auto"
+                                style={{ width: '180px', height: 'auto' }}
+                            />
+                        </motion.div>
+
+                        <motion.div
+                            className="text-center space-y-6 flex-1 flex flex-col justify-center"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+                        >
+                            <h1 className="text-lg font-mono uppercase tracking-wider text-white/80 mb-2">
+                                {DexFamiliarityContent.title}
+                            </h1>
+                        </motion.div>
+
+                        <motion.div
+                            className="flex flex-col items-center gap-4 mt-6"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+                        >
+                            {/* Option A: Familiar */}
+                            <button
+                                onClick={() => {
+                                    if (typeof window !== 'undefined') {
+                                        window.localStorage.setItem('deriverse.userMode', 'analytica');
+                                        window.dispatchEvent(new CustomEvent('deriverse:set-user-mode', { detail: 'analytica' }));
+                                    }
+                                    setSubPhase('wallet-choice');
+                                }}
+                                className="w-full max-w-sm bg-white/5 border border-white/10 hover:border-white/30 hover:bg-white/10 transition-all px-6 py-4 text-left"
+                            >
+                                <span className="block text-sm font-mono font-semibold text-white">{DexFamiliarityContent.optionA}</span>
+                                <span className="block text-xs font-mono text-white/40 mt-1">{DexFamiliarityContent.optionADesc}</span>
+                            </button>
+
+                            {/* Option B: New */}
+                            <button
+                                onClick={() => {
+                                    if (typeof window !== 'undefined') {
+                                        window.localStorage.setItem('deriverse.userMode', 'pedia');
+                                        window.dispatchEvent(new CustomEvent('deriverse:set-user-mode', { detail: 'pedia' }));
+                                    }
+                                    onPediaSkip?.();
+                                }}
+                                className="w-full max-w-sm bg-white/5 border border-white/10 hover:border-white/30 hover:bg-white/10 transition-all px-6 py-4 text-left"
+                            >
+                                <span className="block text-sm font-mono font-semibold text-white">{DexFamiliarityContent.optionB}</span>
+                                <span className="block text-xs font-mono text-white/40 mt-1">{DexFamiliarityContent.optionBDesc}</span>
+                            </button>
+                        </motion.div>
+                    </WelcomeCard>
+                </div>
+
+                <WelcomeFooter />
+            </motion.div>
+        );
+    }
+
+    // Wallet/Mock choice screen (Path A only)
     return (
         <motion.div
             className="welcome-screen fixed inset-0 z-50 flex items-center justify-center"
