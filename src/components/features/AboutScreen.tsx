@@ -38,37 +38,70 @@ export default function AboutScreen() {
             <header className="space-y-4">
                 <p className="text-center text-sm uppercase tracking-[0.4em] text-white/40">About YDEX</p>
                 <h1 className="text-center text-xl font-semibold text-white sm:text-3xl">
-                    "Trade is not about Trading, it&apos;s about discipline"
-                
+                    Make Decentralised Exchanges easy to understand for the New Age Traders on Solana.
                 </h1>
                 <div className="text-center space-y-6 text-md leading-relaxed text-white/80">
                     <p>
-                        Hey there, I&apos;m Rahul—a design engineer who believes trading doesn&apos;t have to feel overwhelming or
-                        complicated.
+                        Hey there, I&apos;m Rahul — a design engineer who believes trading doesn&apos;t have to feel overwhelming or
+                        complicated. YDEX bridges the knowledge gap between centralised exchange UX and decentralised exchange
+                        complexity by combining real DEX data with interactive education tools.
                     </p>
                     <p>
-                        I built YDEX to change that narrative. Whether you're a seasoned trader or just starting
-                        out, this app brings clarity and structure to your trading journey through systematic journaling and
-                        portfolio analysis.
+                        Whether you&apos;re a seasoned trader or just starting out, YDEX helps you learn, simulate, and eventually
+                        execute trades on Solana DEXes — all from one place.
                     </p>
                 </div>
-                <div className="mt-12"></div>
-                <h2 className="text-xl text-center font-semibold text-white">What&apos;s inside v0.0.1 Alpha</h2>
             </header>
+
+            {/* Two Pillars */}
+            <div className="grid gap-6 md:grid-cols-2">
+                <div className="rounded-none border border-white/10 bg-black/40 p-5 shadow-inner shadow-black/10">
+                    <p className="text-sm uppercase tracking-[0.3em] text-cyan-400/70">Pillar 1</p>
+                    <p className="mt-1 text-base font-semibold text-white">DEX Integration & Insights</p>
+                    <p className="mt-3 text-sm leading-relaxed text-white/70">
+                        Integrate Solana DEXes into the app and surface useful analytics from real on-chain trades.
+                    </p>
+                </div>
+                <div className="rounded-none border border-white/10 bg-black/40 p-5 shadow-inner shadow-black/10">
+                    <p className="text-sm uppercase tracking-[0.3em] text-purple-400/70">Pillar 2</p>
+                    <p className="mt-1 text-base font-semibold text-white">Education & Simulation</p>
+                    <p className="mt-3 text-sm leading-relaxed text-white/70">
+                        Make complex trading concepts simple so traders can simulate setups, and in future execute from the platform on their preferred DEX.
+                    </p>
+                </div>
+            </div>
+
+            {/* Feature Inventory */}
+            <div className="space-y-2">
+                <h2 className="text-xl text-center font-semibold text-white">What&apos;s Built</h2>
+                <p className="text-center text-sm text-white/40">Phase 0 + Phase 1 complete</p>
+            </div>
 
             <div className="grid gap-6 md:grid-cols-3">
                 {[
                     {
-                        title: 'Analytics',
-                        body: 'Track PnL, drawdown, win rate, trade duration, biggest wins/losses, time segments, order types, long/short ratio, volume, average win/loss, and fee distribution—all in one place.'
+                        title: 'Analytics & Insights',
+                        body: 'PnL card, equity curve, drawdown, session performance, order type ratios, fee distribution, largest trades, win rate — all powered by Helius RPC and on-chain parsing.'
                     },
                     {
-                        title: 'Journaling',
-                        body: 'Build consistency with journal streaks, structured prompts, and detailed trade notes so you can reflect on what is working (and what is not).'
+                        title: 'Trade Journal',
+                        body: 'Annotations, tags, lessons learned, streak tracking, and pagination. Build consistency with structured prompts and detailed trade notes.'
                     },
                     {
-                        title: 'Wallet(s)',
-                        body: 'Connect wallets manually or automatically, then search transactions across YDEX DEX and other venues without leaving the app.'
+                        title: 'Wallet Lookup',
+                        body: 'Enter or connect a wallet, fetch trades via Helius RPC + Deriverse on-chain parsing. Full sortable and filterable trade history.'
+                    },
+                    {
+                        title: 'Spot Order Simulator',
+                        body: '8 order types — Market, Limit, Stop Market, Stop Limit, Iceberg, TWAP, Trailing Stop, OCO. Interactive simulation with live Binance prices.'
+                    },
+                    {
+                        title: 'Order Flow Visualiser',
+                        body: 'Interactive node-graph state machine showing order lifecycle for all 8 types, with drag-to-pan, zoom, and price scale slider simulation.'
+                    },
+                    {
+                        title: 'Live Price Feeds',
+                        body: 'Binance WebSocket for real-time prices with CoinGecko REST fallback. 6 spot pairs (SOL, BTC, ETH, JUP, BONK, XRP vs USDC) plus ticker display.'
                     }
                 ].map((card) => (
                     <div key={card.title} className="rounded-none border border-white/10 bg-black/40 p-5 shadow-inner shadow-black/10">
@@ -78,18 +111,30 @@ export default function AboutScreen() {
                 ))}
             </div>
 
+            {/* Design Principles */}
+            <div className="space-y-4 rounded-none border border-white/10 bg-black/40 p-6">
+                <h3 className="text-base font-semibold text-white">Design Principles</h3>
+                <div className="grid gap-3 md:grid-cols-2">
+                    {[
+                        { label: 'Education-first', desc: 'Every feature teaches something.' },
+                        { label: 'Simulate before you execute', desc: 'Build confidence through simulation before risking real capital.' },
+                        { label: 'Progressive disclosure', desc: 'Simple on the surface, deep on demand.' },
+                        { label: 'Solana-native', desc: 'Built for the Solana DeFi ecosystem.' },
+                        { label: 'Visual-first', desc: 'Interactive diagrams, sliders, and gauges over walls of text.' },
+                    ].map((p) => (
+                        <div key={p.label} className="flex items-start gap-2">
+                            <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-cyan-400 flex-shrink-0" />
+                            <p className="text-sm text-white/70"><span className="text-white/90 font-medium">{p.label}</span> — {p.desc}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
             <div className="space-y-4 rounded-none bg-gradient-to-r from-cyan-500/15 via-blue-500/15 to-purple-500/15 p-6 text-sm leading-relaxed text-white/85">
                 <p>
-                    Right now, I'm focused on making YDEX DEX trades measurable and actionable, powered by the YDEX SDK
-                    and Solana Network. Check out the roadmap for what's shipping next.
+                    Check out the Roadmap tab for what&apos;s shipping next — from funding rate explainers and multi-DEX support
+                    to paper trading and live trade execution via Jupiter.
                 </p>
-                <div>
-                    <h3 className="text-base font-semibold text-white">How this gets built</h3>
-                    <p className="mt-2">
-                        I'm submitting YDEX to the Superteam Earn YDEX bounty. If it wins, every dollar loops
-                        back into sharper UX, richer insights, and tools that actually help you trade right.
-                    </p>
-                </div>
                 <div className="space-y-3 rounded-none border border-white/10 bg-black/20 p-4 text-white/80">
                     <p>
                         If you run a fund or just want to support what I'm building, I'd love to chat. Hit me up on Telegram or
