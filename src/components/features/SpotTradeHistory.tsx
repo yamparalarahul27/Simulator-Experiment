@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import type { DemoOrder, DemoBalance } from '@/services/SupabaseDemoService';
-import type { PriceData, DemoToken } from '@/lib/hooks/useSpotTrade';
+import type { DemoToken } from '@/lib/hooks/useSpotTrade';
+import { useLivePrices } from '@/lib/context/LivePricesContext';
 
 interface SpotTradeHistoryProps {
     openOrders: DemoOrder[];
@@ -10,14 +11,14 @@ interface SpotTradeHistoryProps {
     balances: DemoBalance[];
     cancelOrder: (orderId: string) => Promise<void>;
     formatPrice: (amount: number, decimals?: number) => string;
-    livePrices: Record<string, PriceData>;
 }
 
 type BottomTab = 'open' | 'history' | 'balances';
 
-export default function SpotTradeHistory({
-    openOrders, filledOrders, balances, cancelOrder, formatPrice, livePrices,
+const SpotTradeHistory = React.memo(function SpotTradeHistory({
+    openOrders, filledOrders, balances, cancelOrder, formatPrice,
 }: SpotTradeHistoryProps) {
+    const { livePrices } = useLivePrices();
     const [tab, setTab] = useState<BottomTab>('open');
     const [cancellingId, setCancellingId] = useState<string | null>(null);
 
@@ -280,4 +281,5 @@ export default function SpotTradeHistory({
             </div>
         </div>
     );
-}
+});
+export default SpotTradeHistory;

@@ -60,7 +60,7 @@ function generateChartData(basePrice: number, timeframe: Timeframe): { time: str
     return data;
 }
 
-export default function SpotTradeChart({ currentPrice, pair, formatPrice }: SpotTradeChartProps) {
+const SpotTradeChart = React.memo(function SpotTradeChart({ currentPrice, pair, formatPrice }: SpotTradeChartProps) {
     const [timeframe, setTimeframe] = useState<Timeframe>('5m');
 
     const data = useMemo(
@@ -157,4 +157,5 @@ export default function SpotTradeChart({ currentPrice, pair, formatPrice }: Spot
             </div>
         </div>
     );
-}
+});
+export default SpotTradeChart;

@@ -9,8 +9,14 @@ interface SpotOrderBookProps {
     onPriceClick: (price: number) => void;
 }
 
-export default function SpotOrderBook({ orderBook, formatPrice, onPriceClick }: SpotOrderBookProps) {
+const SpotOrderBook = React.memo(function SpotOrderBook({ orderBook, formatPrice, onPriceClick }: SpotOrderBookProps) {
     const { asks, bids, spread, spreadPercent } = orderBook;
+
+    // Single handler reads price from data attribute (avoids N inline closures)
+    const handlePriceClick = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+        const price = Number(e.currentTarget.dataset.price);
+        if (price > 0) onPriceClick(price);
+    }, [onPriceClick]);
 
     // Max total for depth bar width calculation
     const maxTotal = Math.max(
@@ -51,7 +57,8 @@ export default function SpotOrderBook({ orderBook, formatPrice, onPriceClick }: 
                 {[...asks].reverse().map((level, i) => (
                     <button
                         key={`ask-${i}`}
-                        onClick={() => onPriceClick(level.price)}
+                        data-price={level.price}
+                        onClick={handlePriceClick}
                         className="relative grid grid-cols-3 gap-1 text-[10px] font-mono py-0.5 px-1 hover:bg-white/5 transition-colors cursor-pointer group"
                     >
                         {/* Depth bar */}
@@ -81,7 +88,8 @@ export default function SpotOrderBook({ orderBook, formatPrice, onPriceClick }: 
                 {bids.map((level, i) => (
                     <button
                         key={`bid-${i}`}
-                        onClick={() => onPriceClick(level.price)}
+                        data-price={level.price}
+                        onClick={handlePriceClick}
                         className="relative grid grid-cols-3 gap-1 text-[10px] font-mono py-0.5 px-1 hover:bg-white/5 transition-colors cursor-pointer w-full group"
                     >
                         {/* Depth bar */}
@@ -97,4 +105,5 @@ export default function SpotOrderBook({ orderBook, formatPrice, onPriceClick }: 
             </div>
         </div>
     );
-}
+});
+export default SpotOrderBook;

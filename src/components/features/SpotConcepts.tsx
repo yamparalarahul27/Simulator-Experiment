@@ -7,9 +7,14 @@ import OrderFlowVisualiser, { getSliderRange, computeKnobColor } from './OrderFl
 import type { SimConfig } from './OrderFlowVisualiser';
 import TradeSummaryPanel from './TradeSummaryPanel';
 import { DEMO_PAIRS } from '@/lib/hooks/useSpotTrade';
+import { useLivePrices } from '@/lib/context/LivePricesContext';
 import type { DemoOrderType } from '@/services/SupabaseDemoService';
 import { ChevronDown, Wifi, WifiOff, Activity, Settings } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
+
+// Static style constant (avoids creating a new object on every render)
+const SLIDER_MARGIN_STYLE = { marginTop: '16px', marginBottom: '16px' } as const;
+const NOOP_PRICE_CLICK = () => {};
 
 interface SpotConceptsProps {
     trade: ReturnType<typeof import('@/lib/hooks/useSpotTrade').useSpotTrade>;
@@ -19,9 +24,10 @@ interface SpotConceptsProps {
 
 export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlPanel }: SpotConceptsProps) {
     const {
-        selectedPair, setSelectedPair, currentPrice, livePrices,
+        selectedPair, setSelectedPair, currentPrice,
         orderBook, formatPrice, settings,
     } = trade;
+    const { livePrices, wsSource } = useLivePrices();
 
     const [pairDropdownOpen, setPairDropdownOpen] = React.useState(false);
     const [activePanel, setActivePanel] = React.useState<'orderbook' | 'orderform'>('orderform');
@@ -174,7 +180,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                                             <WifiOff size={10} className="text-yellow-400" />
                                             <span className="text-[9px] font-mono text-yellow-400">MANUAL</span>
                                         </>
-                                    ) : trade.wsSource === 'rest' ? (
+                                    ) : wsSource === 'rest' ? (
                                         <>
                                             <Activity size={10} className="text-blue-400" />
                                             <span className="text-[9px] font-mono text-blue-400">REST</span>
@@ -190,7 +196,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                             <TooltipContent>
                                 {currentPrice.isOverridden
                                     ? 'Prices manually overridden via Set Manual Prices panel.'
-                                    : trade.wsSource === 'rest'
+                                    : wsSource === 'rest'
                                         ? 'WebSocket unavailable. Using CoinGecko REST API (updates every 4s).'
                                         : 'Connected to Binance WebSocket. Prices update in real-time.'}
                             </TooltipContent>
@@ -243,7 +249,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                     <SpotOrderBook
                         orderBook={orderBook}
                         formatPrice={formatPrice}
-                        onPriceClick={() => { }}
+                        onPriceClick={NOOP_PRICE_CLICK}
                     />
                 </div>
             ) : (
@@ -304,7 +310,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                                         ref={sliderRef}
                                         onMouseDown={handleMouseDown}
                                         className="relative flex-1 min-h-[200px] cursor-pointer select-none"
-                                        style={{ marginTop: '16px', marginBottom: '16px' }}
+                                        style={SLIDER_MARGIN_STYLE}
                                     >
                                         <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-white/10" />
 

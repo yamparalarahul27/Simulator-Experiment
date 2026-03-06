@@ -1,17 +1,28 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import SpotConcepts from './SpotConcepts';
 import FutureConcepts from './FutureConcepts';
 import ControlPanel from './ControlPanel';
 import CurrencySettingsModal from './CurrencySettingsModal';
 import { useSpotTrade } from '@/lib/hooks/useSpotTrade';
+import { LivePricesProvider } from '@/lib/context/LivePricesContext';
 import { Settings } from 'lucide-react';
 
 /**
- * DemoMarket — Page shell with Spot/Future tabs and Control Panel drawer
+ * DemoMarket — Page shell with Spot/Future tabs and Control Panel drawer.
+ * LivePricesProvider wraps the tree so useSpotTrade (and any child) can
+ * consume live prices from context without prop-drilling.
  */
 export default function DemoMarket({ walletAddress }: { walletAddress?: string | null }) {
+    return (
+        <LivePricesProvider>
+            <DemoMarketInner walletAddress={walletAddress} />
+        </LivePricesProvider>
+    );
+}
+
+function DemoMarketInner({ walletAddress }: { walletAddress?: string | null }) {
     const [activeTab, setActiveTab] = useState<'spot' | 'future'>('future');
     const [controlPanelOpen, setControlPanelOpen] = useState(false);
     const [currencyModalOpen, setCurrencyModalOpen] = useState(false);
@@ -24,20 +35,24 @@ export default function DemoMarket({ walletAddress }: { walletAddress?: string |
     const currency = spotTrade.settings?.currency ?? localCurrency;
     const usdInrRate = spotTrade.settings?.usdInrRate ?? localUsdInrRate;
 
-    const toggleCurrency = () => {
+    const toggleCurrency = useCallback(() => {
         const next = currency === 'USD' ? 'INR' : 'USD';
         setLocalCurrency(next);
         if (spotTrade.settings) {
             spotTrade.updateCurrency(next);
         }
-    };
+    }, [currency, spotTrade]);
 
-    const handleRateApply = (newRate: number) => {
+    const handleRateApply = useCallback((newRate: number) => {
         setLocalUsdInrRate(newRate);
         if (spotTrade.settings) {
             spotTrade.updateUsdInrRate(newRate);
         }
-    };
+    }, [spotTrade]);
+
+    const toggleControlPanel = useCallback(() => setControlPanelOpen(prev => !prev), []);
+    const closeControlPanel = useCallback(() => setControlPanelOpen(false), []);
+    const closeCurrencyModal = useCallback(() => setCurrencyModalOpen(false), []);
 
     return (
         <div className="relative">
@@ -107,24 +122,24 @@ export default function DemoMarket({ walletAddress }: { walletAddress?: string |
                         <SpotConcepts
                             trade={spotTrade}
                             controlPanelOpen={controlPanelOpen}
-                            onToggleControlPanel={() => setControlPanelOpen(prev => !prev)}
+                            onToggleControlPanel={toggleControlPanel}
                         />
                     ) : (
-                        <FutureConcepts livePrices={spotTrade.livePrices} currency={currency} usdInrRate={usdInrRate} />
+                        <FutureConcepts currency={currency} usdInrRate={usdInrRate} />
                     )}
                 </div>
 
                 {/* Control Panel (side drawer) */}
                 <ControlPanel
                     isOpen={controlPanelOpen}
-                    onClose={() => setControlPanelOpen(false)}
+                    onClose={closeControlPanel}
                     trade={spotTrade}
                 />
             </div>
             {/* Currency Settings Modal */}
             <CurrencySettingsModal
                 isOpen={currencyModalOpen}
-                onClose={() => setCurrencyModalOpen(false)}
+                onClose={closeCurrencyModal}
                 currentRate={usdInrRate}
                 onApply={handleRateApply}
             />

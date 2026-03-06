@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import LiquidationSimulator from './LiquidationSimulator';
-import type { PriceData, DemoToken } from '@/lib/hooks/useSpotTrade';
+import { useLivePrices } from '@/lib/context/LivePricesContext';
 
 /**
  * FutureConcepts — Educational section shell for the "Future Concepts" tab.
@@ -13,14 +13,14 @@ import type { PriceData, DemoToken } from '@/lib/hooks/useSpotTrade';
  */
 
 interface FutureConceptsProps {
-    livePrices: Record<string, PriceData>;
     currency: 'USD' | 'INR';
     usdInrRate: number;
 }
 
 type Section = 'liquidation' | 'funding' | 'leverage';
 
-export default function FutureConcepts({ livePrices, currency, usdInrRate }: FutureConceptsProps) {
+export default function FutureConcepts({ currency, usdInrRate }: FutureConceptsProps) {
+    const { livePrices } = useLivePrices();
     const [activeSection, setActiveSection] = useState<Section>('liquidation');
 
     const sections: { id: Section; label: string; enabled: boolean }[] = [

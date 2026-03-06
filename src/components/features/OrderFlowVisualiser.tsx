@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, useRef, useCallback, useEffect } from 'react';
+import React, { useMemo, useState, useRef, useCallback, useEffect } from 'react';
 import type { DemoOrderType } from '@/services/SupabaseDemoService';
 
 // ─── Exported Types ────────────────────────────────────────────────────────────
@@ -781,7 +781,7 @@ const ORDER_TYPE_LABELS: Record<DemoOrderType, string> = {
     oco: 'OCO',
 };
 
-export default function OrderFlowVisualiser({
+const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
     orderType, side, tpEnabled, slEnabled,
     simSnapshot, simPrice, formatPrice,
 }: Props) {
@@ -1067,4 +1067,5 @@ export default function OrderFlowVisualiser({
             </div>
         </div>
     );
-}
+});
+export default OrderFlowVisualiser;
