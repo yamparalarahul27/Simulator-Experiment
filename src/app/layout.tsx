@@ -14,8 +14,8 @@ import { Toaster } from "sonner";
 import AssistantModal from "@/components/ui/AssistantModal";
 
 export const metadata: Metadata = {
-  title: "YDEX",
-  description: "YDEX Trade Lookup and Analytics Platform",
+  title: "Y(Why)DEX",
+  description: "YDex is a app engineered by Yamparala Rahul to make TRADING simple.",
   icons: {
     icon: "/favicon.png",
   },
