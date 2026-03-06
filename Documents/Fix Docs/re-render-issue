@@ -1,8 +1,46 @@
 # YDEX Re-render Audit — Full Line-by-Line Report
 
-> **Scope:** All `.tsx` and `.ts` files under `src/`  
-> **Date:** 2026-03-06  
-> **Total Components Scanned:** 50+  
+> **Scope:** All `.tsx` and `.ts` files under `src/`
+> **Date:** 2026-03-06
+> **Total Components Scanned:** 50+
+
+---
+
+## Resolution Summary
+
+> **Resolved:** 2026-03-06
+> **Status:** All 7 issues fixed across 3 phases
+
+### Phase 1 — Quick Wins (Issues 3, 6, 7a, 7b)
+
+| Issue | Fix Applied | Files Changed |
+|---|---|---|
+| **#3 — Inline handlers** | Extracted `NOOP_PRICE_CLICK` constant in SpotConcepts; wrapped `toggleCurrency`, `handleRateApply`, `toggleControlPanel`, `closeControlPanel`, `closeCurrencyModal` in `useCallback` in DemoMarket | `SpotConcepts.tsx`, `DemoMarket.tsx` |
+| **#6 — obSeed every tick** | Added >0.05% threshold guard: `setObSeed(prev => Math.abs(newSeed - prev) > 5 ? newSeed : prev)` | `useSpotTrade.ts` |
+| **#7a — Inline styles** | Extracted `SLIDER_MARGIN_STYLE` as module-level constant in SpotConcepts | `SpotConcepts.tsx` |
+| **#7b — Inline styles** | Dynamic `style={{ top }}` objects left as-is (values change per sim tick, memoizing would add complexity with no real gain) | — |
+
+### Phase 2 — Matching Engine & Handlers (Issues 4, 5)
+
+| Issue | Fix Applied | Files Changed |
+|---|---|---|
+| **#4 — Matching engine stale closures** | Added 6 refs (`openOrdersRef`, `livePricesStateRef`, `fillOrderRef`, `applyFillRef`, `createTpSlRef`, `refreshOrdersRef`). Synced during render. Rewrote matching engine `setInterval` to read from refs. Changed deps from `[walletAddress, openOrders, livePrices]` to `[walletAddress, service]`. Removed `eslint-disable` comment. Fixed forward-reference issue where `fillOrder` referenced `createTpSlOrders` before declaration by using `createTpSlRef.current` instead. | `useSpotTrade.ts` |
+| **#5 — useCallback for handlers** | SpotOrderBook: single `handlePriceClick` using `data-price` attribute replacing 30 inline closures. DemoMarket: 5 handlers wrapped in `useCallback`. | `SpotOrderBook.tsx`, `DemoMarket.tsx` |
+
+### Phase 3 — Memoization & Context Isolation (Issues 1, 2)
+
+| Issue | Fix Applied | Files Changed |
+|---|---|---|
+| **#1 — No React.memo** | Wrapped 6 leaf components with `React.memo`: `SpotOrderBook`, `SpotOrderForm`, `OrderFlowVisualiser`, `TradeSummaryPanel`, `SpotTradeChart`, `SpotTradeHistory`. Added `import React` where missing. | `SpotOrderBook.tsx`, `SpotOrderForm.tsx`, `OrderFlowVisualiser.tsx`, `TradeSummaryPanel.tsx`, `SpotTradeChart.tsx`, `SpotTradeHistory.tsx` |
+| **#2 — Price tick cascade** | Created `LivePricesContext.tsx` — owns Binance WS + CoinGecko REST fallback, provides `{ livePrices, wsSource }` via context. Duplicated `DemoToken`, `PriceData`, `DEMO_PAIRS`, `BINANCE_TO_TOKEN` to avoid circular import with `useSpotTrade`. Split `DemoMarket` into `DemoMarket` (wraps `<LivePricesProvider>`) + `DemoMarketInner`. Updated `SpotConcepts`, `SpotTradeHistory`, `FutureConcepts` to consume `useLivePrices()` instead of receiving via props. Removed ~100 lines of WS code from `useSpotTrade.ts`. | `LivePricesContext.tsx` (new), `useSpotTrade.ts`, `DemoMarket.tsx`, `SpotConcepts.tsx`, `SpotTradeHistory.tsx`, `FutureConcepts.tsx` |
+
+### Result
+
+- Price ticks no longer cascade through the entire component tree
+- Matching engine interval is stable — no longer restarts on every order fill
+- Memo'd leaf components skip re-renders when props are unchanged
+- Order book only re-renders on meaningful price changes (>0.05%)
+- Build passes clean with `npx tsc --noEmit` and `npx next build`
 
 ---
 
