@@ -4,8 +4,23 @@ import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import type { Cluster } from '@solana/web3.js';
 import type { IUnifiedWalletConfig } from '@jup-ag/wallet-adapter/dist/types/contexts/WalletConnectionProvider';
 import { APP_BASE_URL, DEFAULT_WALLET_CLUSTER, SupportedCluster, WALLET_CLUSTER_CONFIG } from '@/lib/constants';
+import { AppearanceProvider } from '@/lib/context/AppearanceContext';
+import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 
 type UnifiedWalletProviderType = typeof import('@jup-ag/wallet-adapter')['UnifiedWalletProvider'];
+
+/**
+ * Inner wrapper that reads the wallet address (requires WalletProvider above it)
+ * and passes it to AppearanceProvider.
+ */
+function AppearanceWrapper({ children }: PropsWithChildren) {
+    const { walletAddress } = useWalletConnection();
+    return (
+        <AppearanceProvider walletAddress={walletAddress}>
+            {children}
+        </AppearanceProvider>
+    );
+}
 
 export default function Providers({ children }: PropsWithChildren) {
     const [WalletProvider, setWalletProvider] = useState<UnifiedWalletProviderType | null>(null);
@@ -38,7 +53,12 @@ export default function Providers({ children }: PropsWithChildren) {
     }) satisfies IUnifiedWalletConfig, [cluster]);
 
     if (!WalletProvider) {
-        return <>{children}</>;
+        // Wallet not loaded yet — still provide AppearanceProvider with null wallet
+        return (
+            <AppearanceProvider walletAddress={null}>
+                {children}
+            </AppearanceProvider>
+        );
     }
 
     return (
@@ -47,7 +67,7 @@ export default function Providers({ children }: PropsWithChildren) {
             config={walletConfig}
             localStorageKey={`deriverse.wallet.${cluster}`}
         >
-            {children}
+            <AppearanceWrapper>{children}</AppearanceWrapper>
         </WalletProvider>
     );
 }

@@ -197,11 +197,7 @@
 }
 
 body {
-  background-image: url('/assets/background.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-attachment: fixed;
-  background-size: cover;
+  background-color: var(--ds-bg-dark, #0D0D21);
   font-family: var(--font-geist-mono), monospace;
 }
 

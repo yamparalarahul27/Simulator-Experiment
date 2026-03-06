@@ -9,6 +9,7 @@ import '@pqina/flip/dist/flip.min.css';
 import { Agentation } from "agentation";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import MobileRestrictedView from "@/components/layout/MobileRestrictedView";
+import AppBackground from "@/components/layout/AppBackground";
 import Providers from "./providers";
 import { Toaster } from "sonner";
 import AssistantModal from "@/components/ui/AssistantModal";
@@ -38,6 +39,7 @@ export default function RootLayout({
         `}
       >
         <Providers>
+          <AppBackground />
           <div className="hidden md:block h-full">
             {children}
           </div>

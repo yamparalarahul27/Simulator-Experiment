@@ -148,7 +148,8 @@ export default function LoadingScreen() {
         <AnimatePresence>
             {isVisible && (
                 <motion.div
-                    className="loading-screen fixed inset-0 z-50 flex items-center justify-center"
+                    className="loading-screen fixed inset-0 z-50 flex items-center justify-center bg-cover bg-center bg-no-repeat"
+                    style={{ backgroundImage: "url('/assets/background.png')" }}
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
                 >
