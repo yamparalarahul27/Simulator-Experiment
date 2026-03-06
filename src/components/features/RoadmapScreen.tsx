@@ -1,26 +1,57 @@
-import Image from 'next/image';
-
 const phases = [
     {
-        title: 'Phase 01 – 1 to 20th Feb 2026',
+        title: 'Phase 0 — Foundation',
+        status: 'done' as const,
+        subtitle: 'Analytics, Journal, Wallet Lookup',
         items: [
-            'Wallet SignUp/SignIn',
-            'Strong Analytics with filters',
-            'TASTE & CRAFT Driven Design'
+            'Trading analytics dashboard — PnL, drawdown, session performance, fee distribution',
+            'Trade journal with annotations, tags, streak tracking',
+            'Wallet lookup via Helius RPC + Deriverse on-chain parsing',
+            'Mock and devnet data modes',
+            'Supabase cloud persistence',
+            'Premium glassmorphism dark UI',
         ]
     },
     {
-        title: 'Phase 02 – Next 30 days',
+        title: 'Phase 1 — Education Engine',
+        status: 'done' as const,
+        subtitle: 'Spot Simulator, Order Flow, Liquidation',
         items: [
-            'Multi-Wallet Analytics',
-            'AI Assistant',
-            'Learning Module'
+            'Spot order simulator — 8 order types (Market, Limit, Stop Market, Stop Limit, Iceberg, TWAP, Trailing Stop, OCO)',
+            'Interactive order flow visualiser with state machine diagrams',
+            'Price scale slider with TP/SL simulation and post-fill extrema tracking',
+            'Liquidation simulator with visual margin gauge',
+            'Live price feeds — Binance WebSocket + CoinGecko REST fallback',
+            'Trade summary panel with R:R analysis',
+            'AI assistant powered by Gemini',
         ]
     },
     {
-        title: 'Phase 03 – On the horizon',
+        title: 'Phase 2 — Expand & Polish',
+        status: 'next' as const,
+        subtitle: 'More concepts, more DEXes, mainnet',
         items: [
-            'Community Feature Request',
+            'Funding Rate interactive explainer',
+            'Leverage Mechanics visual explainer',
+            'Slippage & Price Impact simulator',
+            'Multi-DEX integration (Jupiter, Raydium, Orca)',
+            'Mainnet wallet support',
+            'User accounts (wallet-based auth)',
+            'Mobile responsive layout',
+            'Position-level PnL grouping',
+        ]
+    },
+    {
+        title: 'Phase 3 — Execute & Scale',
+        status: 'future' as const,
+        subtitle: 'From simulation to real trading',
+        items: [
+            'Paper trading mode — simulated fills against real orderbooks',
+            'Live trade execution via Jupiter aggregator',
+            'Multi-wallet portfolio aggregation',
+            'Real-time portfolio tracking (balances, unrealised PnL)',
+            'Push notifications and price alerts',
+            'Social features — share setups, leaderboards',
         ]
     }
 ];
@@ -30,40 +61,54 @@ export default function RoadmapScreen() {
         <section className="mx-auto flex max-w-6xl flex-col gap-8 p-8 text-white/80">
             <div className="flex w-full flex-col gap-6 md:flex-row md:items-center md:justify-between">
                 <header className="text-left max-w-6xl md:flex-1">
-                    
                     <h1 className="mt-3 text-4xl font-semibold text-white">Development Roadmap</h1>
-                    <p className="mt-2 text-sm uppercase tracking-[0.4em] text-white/40">Trade anything, Trust your Journal</p>
+                    <p className="mt-2 text-sm uppercase tracking-[0.4em] text-white/40">From simulation to real trading</p>
                     <p className="mt-4 text-md leading-relaxed text-white/70">
-                        Plan for next features & updates.
+                        YDEX is built in phases — each one expands capabilities while keeping education at the core.
                     </p>
                 </header>
 
-                <a
-                    href="https://conceptdj.vercel.app/playground"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="block px-4 py-4 overflow-hidden rounded-none border border-white/10 bg-white/5 shadow-lg mx-auto max-w-3xl md:ml-auto"
-                    style={{ width: '200px', maxWidth: '100%' }}
-                >
-                    <Image
-                        src="/assets/CDJ.png"
-                        alt="Concept Deriverse Journal App"
-                        width={1200}
-                        height={680}
-                        className="h-auto w-full object-contain"
-                        priority
-                    />
-                </a>
             </div>
 
             <div className="space-y-6">
                 {phases.map((phase) => (
-                    <div key={phase.title} className="rounded-none border border-white/10 bg-white/5 p-6">
-                        <p className="text-sm uppercase tracking-[0.3em] text-white/40">{phase.title}</p>
+                    <div
+                        key={phase.title}
+                        className={`rounded-none border p-6 ${
+                            phase.status === 'done'
+                                ? 'border-cyan-500/20 bg-cyan-500/5'
+                                : phase.status === 'next'
+                                  ? 'border-purple-500/20 bg-purple-500/5'
+                                  : 'border-white/10 bg-white/5'
+                        }`}
+                    >
+                        <div className="flex items-center gap-3">
+                            <p className="text-sm uppercase tracking-[0.3em] text-white/40">{phase.title}</p>
+                            <span
+                                className={`rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${
+                                    phase.status === 'done'
+                                        ? 'bg-cyan-500/15 text-cyan-400'
+                                        : phase.status === 'next'
+                                          ? 'bg-purple-500/15 text-purple-400'
+                                          : 'bg-white/10 text-white/40'
+                                }`}
+                            >
+                                {phase.status === 'done' ? 'Complete' : phase.status === 'next' ? 'Up Next' : 'Planned'}
+                            </span>
+                        </div>
+                        <p className="mt-1 text-sm text-white/50">{phase.subtitle}</p>
                         <ul className="mt-4 space-y-2 text-base text-white/75">
                             {phase.items.map((item) => (
                                 <li key={item} className="flex items-start gap-3">
-                                    <span className="mt-1 h-2 w-2 rounded-full bg-cyan-400" />
+                                    <span
+                                        className={`mt-1.5 h-2 w-2 rounded-full ${
+                                            phase.status === 'done'
+                                                ? 'bg-cyan-400'
+                                                : phase.status === 'next'
+                                                  ? 'bg-purple-400'
+                                                  : 'bg-white/30'
+                                        }`}
+                                    />
                                     <span>{item}</span>
                                 </li>
                             ))}
