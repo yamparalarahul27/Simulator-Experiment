@@ -236,3 +236,76 @@ CREATE TABLE trades (
 - User clicks "Save Trades" button in UI
 - No auto-save (user control)
 - Upsert logic (safe to save multiple times)
+
+---
+
+## Simulation Data Strategy (Pedia App)
+
+The application includes an internal paper-trading simulation engine (used in the Pedia / Concepts tabs). This engine relies on three dedicated tables to track virtual funds, open/historical orders, and user preferences within the simulation environment.
+
+These tables are exclusively used by `src/services/SupabaseDemoService.ts` and **do not** interact with real blockchain data or the main `trades` table.
+
+### Table: `demo_balances`
+
+**Purpose**: Tracks the fake virtual balances (e.g., $10,000 USD, 5 BTC) allocated to a connected wallet for use in the Spot and Futures simulation environments.
+
+```sql
+CREATE TABLE demo_balances (
+  wallet_address TEXT NOT NULL,
+  token TEXT NOT NULL,
+  available NUMERIC NOT NULL DEFAULT 0,
+  in_order NUMERIC NOT NULL DEFAULT 0,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (wallet_address, token)
+);
+```
+*Note: `in_order` tracks funds currently locked up in open Limit or Stop orders.*
+
+### Table: `demo_orders`
+
+**Purpose**: Stores the lifecycle of all paper trades executed within the simulation environment. Supports advanced order types like Iceberg, TWAP, and OCO.
+
+```sql
+CREATE TABLE demo_orders (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  wallet_address TEXT NOT NULL,
+  pair TEXT NOT NULL, -- e.g., 'BTC/USD'
+  side TEXT NOT NULL, -- 'buy' or 'sell'
+  order_type TEXT NOT NULL, -- 'market', 'limit', 'stop_market', 'iceberg', etc.
+  status TEXT NOT NULL, -- 'pending', 'partial', 'filled', 'cancelled'
+  price NUMERIC, -- The requested price
+  stop_price NUMERIC, -- Trigger price for stop orders
+  limit_price NUMERIC, -- Execution price constraint for stop_limit
+  fill_price NUMERIC, -- Actual execution price
+  quantity NUMERIC NOT NULL,
+  filled_quantity NUMERIC NOT NULL DEFAULT 0,
+  tp_price NUMERIC, -- Take Profit
+  sl_price NUMERIC, -- Stop Loss
+  visible_qty NUMERIC, -- For Iceberg orders
+  twap_duration INTEGER, -- Seconds
+  twap_intervals INTEGER,
+  twap_next_slice_at TIMESTAMPTZ,
+  parent_order_id UUID, -- For conditional chains
+  fee NUMERIC NOT NULL DEFAULT 0,
+  fee_currency TEXT NOT NULL,
+  pnl NUMERIC,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  filled_at TIMESTAMPTZ
+);
+```
+
+### Table: `demo_settings`
+
+**Purpose**: Stores the user's specific preferences restricted to the simulation environment, primarily regarding display currency toggles and mock price overrides. (Global app settings should use `user_preferences`).
+
+```sql
+CREATE TABLE demo_settings (
+  wallet_address TEXT PRIMARY KEY,
+  currency TEXT NOT NULL DEFAULT 'USD',
+  usd_inr_rate NUMERIC NOT NULL,
+  price_overrides JSONB, -- Record<string, number | null>
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+```

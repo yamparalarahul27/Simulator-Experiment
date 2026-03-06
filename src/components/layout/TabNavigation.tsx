@@ -184,7 +184,7 @@ export default function TabNavigation() {
 
     return (
         <div className="min-h-screen text-white">
-            <MarketTicker />
+            {userMode === 'analytica' && <MarketTicker />}
 
             {/* New Glassmorphism Navigation */}
             <GlassmorphismNavbar
