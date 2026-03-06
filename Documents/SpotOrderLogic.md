@@ -79,3 +79,77 @@ The Order Flow Visualiser provides an interactive slider to scrub price and visu
 - **Latching Execution:** Once the simulated market crosses an order's trigger (e.g., Limit Price, TP, or SL), the node execution state "latches." 
   - If a Limit buy order is hit, the simulation enters a `position` state (assets shown in wallet). Even if the user scrolls the price back up, the order remains filled.
   - If the price subsequently reaches the TP or SL target, the chain advances to a `filled_terminal` state displaying exact P&L, permanently closing the trade for the session.
+
+---
+## 10. Real-Time Price Matching Engine
+
+The matching engine lives in `src/lib/hooks/useSpotTrade.ts` (lines 327–458). It is the **execution** counterpart to the visual simulation in Section 9.
+
+### 10.1 Overview
+- **Polling interval:** 2-second `setInterval`
+- **Price source:** Live Binance WebSocket prices (`livePrices`)
+- **Activation:** Only runs when the `useSpotTrade` hook is mounted **and** there are open orders (`openOrders.length > 0`)
+- **Scope:** Iterates all orders with status `pending`, `partial`, or `triggered`. Skips `filled` and `cancelled`.
+- **On change:** If any order transitions state, calls `refreshOrders()` to re-fetch all orders and balances from Supabase.
+
+### 10.2 Order-Type Matching Rules
+
+Each poll cycle checks every open order against the current live price:
+
+| Order Type | Current Status | Buy Trigger | Sell Trigger | Result |
+|---|---|---|---|---|
+| **Limit** | `pending` | price ≤ limitPrice | price ≥ limitPrice | → `filled` |
+| **Stop Market** | `pending` | price ≥ stopPrice | price ≤ stopPrice | → `filled` (at market) |
+| **Stop Limit** (stage 1) | `pending` | price ≥ stopPrice | price ≤ stopPrice | → `triggered` |
+| **Stop Limit** (stage 2) | `triggered` | price ≤ limitPrice | price ≥ limitPrice | → `filled` |
+| **Iceberg** | `pending` / `partial` | price ≤ limitPrice | price ≥ limitPrice | → `partial` (one slice) or `filled` (last slice) |
+| **TWAP** | `pending` / `partial` | time ≥ nextSliceAt | time ≥ nextSliceAt | → `partial` (one slice) or `filled` (last slice) |
+
+**Iceberg** fills one `visibleQty` slice per cycle until `filledQuantity ≥ quantity`.
+**TWAP** fills one slice per time interval (`twapDuration / twapIntervals`), price-independent.
+
+### 10.3 Fill Process — `fillOrder()`
+
+**Location:** `useSpotTrade.ts` lines 517–530
+
+When an order meets its trigger condition:
+1. **Update order** in Supabase: `status → 'filled'`, set `filledQuantity`, `fillPrice`, `filledAt`
+2. **Settle balances** via `applyFill()`
+3. **Spawn TP/SL child orders** via `createTpSlOrders()` (if attached)
+4. **Toast notification:** `"Order Filled: BUY 5.2 SOL/USDC @ $145.75"`
+
+### 10.4 Balance Settlement — `applyFill()`
+
+**Location:** `useSpotTrade.ts` lines 474–515
+
+| Side | USDC | Token |
+|------|------|-------|
+| **Buy** | `inOrder` decreases by `notional + fee` | `available` increases by `qty` |
+| **Sell** | `available` increases by `notional - fee` | `inOrder` decreases by `qty` |
+
+- **Fee rate:** 0.1% of notional (`qty × fillPrice × 0.001`)
+- **Note:** For non-market orders, USDC/token was already reserved in `inOrder` at order creation time (lines 596–616). The fill moves funds from `inOrder` to their final destination.
+
+### 10.5 TP/SL Child Orders — `createTpSlOrders()`
+
+**Location:** `useSpotTrade.ts` lines 532–561
+
+After a parent order fills, if it has TP or SL prices attached:
+- **Take Profit** → spawns an opposite-side **Limit** order at `tpPrice`
+- **Stop Loss** → spawns an opposite-side **Stop Market** order at `slPrice`
+- Both carry `parentOrderId` referencing the filled parent
+- These child orders enter the `openOrders` list and are picked up by the same matching engine on subsequent cycles
+
+**Restriction:** TP/SL is only available on Limit orders (see Section 6), so child orders are only created for filled Limit parent orders.
+
+### 10.6 Simulation vs Execution
+
+These are **two independent systems** that should not be confused:
+
+| | Section 9: Simulation | Section 10: Execution |
+|---|---|---|
+| **Where** | SpotConcepts page (Price Scale slider) | `useSpotTrade` hook (any page using it) |
+| **Price source** | Manual slider drag | Live Binance WebSocket |
+| **Persistence** | None — visual only | Supabase (orders + balances) |
+| **Balance changes** | No | Yes |
+| **Purpose** | Learn how order types behave | Execute demo trades against live prices |

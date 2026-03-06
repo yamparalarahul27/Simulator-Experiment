@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { TrendingUp, TrendingDown, Info, ChevronDown, ChevronUp } from 'lucide-react';
 import type { SimConfig } from './OrderFlowVisualiser';
 
@@ -146,7 +146,7 @@ function ScenarioBlock({
 
 // ─── Main Component ────────────────────────────────────────────────────────────
 
-export default function TradeSummaryPanel({ simSnapshot, formatPrice }: Props) {
+const TradeSummaryPanel = React.memo(function TradeSummaryPanel({ simSnapshot, formatPrice }: Props) {
     const [eduOpen, setEduOpen] = useState(false);
 
     const data = useMemo(() => {
@@ -291,4 +291,5 @@ export default function TradeSummaryPanel({ simSnapshot, formatPrice }: Props) {
             )}
         </div>
     );
-}
+});
+export default TradeSummaryPanel;

@@ -23,54 +23,80 @@ const SUPPORTED_TOKENS = [
     { display: 'RAY', binance: 'RAYUSDT' }
 ];
 
+// Shared price formatter (used by both WS and REST paths)
+const formatPrice = (priceNum: number): string => {
+    if (priceNum > 1000) {
+        return priceNum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    } else if (priceNum < 0.01) {
+        return priceNum.toFixed(7);
+    }
+    return priceNum.toFixed(4);
+};
+
 export const MarketTicker: React.FC = () => {
     // Dictionary state for O(1) performance updates
     const [tickerMap, setTickerMap] = useState<Record<string, TickerItem>>({});
     const [isConnecting, setIsConnecting] = useState(true);
+    const [dataSource, setDataSource] = useState<'ws' | 'rest' | null>(null);
 
     // Use a ref to store the latest incoming data without triggering constant re-renders
     const latestDataRef = useRef<Record<string, TickerItem>>({});
     const isConnectingRef = useRef(true);
+    const restIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
 
-        // Construct the combined stream URL for all tokens
+        // ─── REST fallback fetcher ───
+        const fetchRestPrices = async () => {
+            try {
+                const res = await fetch('/api/prices');
+                if (!res.ok) return;
+                const data: Record<string, { price: number; change: number }> = await res.json();
+
+                for (const tokenConfig of SUPPORTED_TOKENS) {
+                    const restData = data[tokenConfig.display];
+                    if (restData) {
+                        latestDataRef.current[tokenConfig.binance] = {
+                            symbol: `${tokenConfig.display}/USDT`,
+                            targetSymbol: tokenConfig.binance,
+                            price: formatPrice(restData.price),
+                            change: Number(restData.change.toFixed(2)),
+                        };
+                    }
+                }
+
+                if (isConnectingRef.current && Object.keys(latestDataRef.current).length >= SUPPORTED_TOKENS.length / 2) {
+                    isConnectingRef.current = false;
+                    setIsConnecting(false);
+                }
+            } catch (e) {
+                console.warn('[MarketTicker] REST fetch failed:', e);
+            }
+        };
+
+        // ─── Binance WebSocket ───
         const streams = SUPPORTED_TOKENS.map(t => `${t.binance.toLowerCase()}@ticker`).join('/');
         const wsUrl = `wss://stream.binance.com:9443/stream?streams=${streams}`;
-
         const ws = new WebSocket(wsUrl);
 
         ws.onmessage = (event) => {
             try {
                 const message = JSON.parse(event.data);
                 if (message.data) {
-                    const data = message.data;
-                    const binanceSymbol = data.s; // 's' is the symbol in Binance payloads
+                    const d = message.data;
+                    const binanceSymbol = d.s;
                     const token = SUPPORTED_TOKENS.find(t => t.binance === binanceSymbol);
 
                     if (token) {
-                        const priceNum = parseFloat(data.c); // 'c' is current price
-                        let formattedPrice = data.c;
-
-                        // Dynamic formatting logic based on asset value
-                        if (priceNum > 1000) {
-                            formattedPrice = priceNum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                        } else if (priceNum < 0.01) {
-                            formattedPrice = priceNum.toFixed(7);
-                        } else {
-                            formattedPrice = priceNum.toFixed(4);
-                        }
-
-                        // Update ref (synchronous, no re-render)
+                        const priceNum = parseFloat(d.c);
                         latestDataRef.current[binanceSymbol] = {
                             symbol: `${token.display}/USDT`,
                             targetSymbol: binanceSymbol,
-                            price: formattedPrice,
-                            change: Number(parseFloat(data.P).toFixed(2)) // 'P' is price change %
+                            price: formatPrice(priceNum),
+                            change: Number(parseFloat(d.P).toFixed(2)),
                         };
 
-                        // Check connection logic
                         if (isConnectingRef.current && Object.keys(latestDataRef.current).length >= SUPPORTED_TOKENS.length / 2) {
                             isConnectingRef.current = false;
                             setIsConnecting(false);
@@ -78,26 +104,40 @@ export const MarketTicker: React.FC = () => {
                     }
                 }
             } catch (err) {
-                console.error("Error parsing Binance websocket message", err);
+                console.error('[MarketTicker] WS parse error', err);
+            }
+        };
+
+        ws.onopen = () => {
+            setDataSource('ws');
+            if (restIntervalRef.current) {
+                clearInterval(restIntervalRef.current);
+                restIntervalRef.current = null;
             }
         };
 
         ws.onerror = (error: any) => {
-            // Log a more readable error instead of a generic {}
-            console.error("Binance WebSocket Error:", error?.message || error?.type || 'Unknown connection error');
-            setIsConnecting(false);
+            console.warn('[MarketTicker] WS failed, switching to CoinGecko REST:',
+                error?.message || error?.type || 'Unknown');
+            setDataSource('rest');
+
+            if (!restIntervalRef.current) {
+                fetchRestPrices();
+                restIntervalRef.current = setInterval(fetchRestPrices, 5000);
+            }
         };
 
-        // Throttle React state updates to ~2 times a second to prevent excessive re-renders
-        // Vercel Best Practice: rerender-use-ref-transient-values
+        // Throttle React state updates to ~2 times a second
         const intervalId = setInterval(() => {
             setTickerMap({ ...latestDataRef.current });
         }, 500);
 
-        // Important: Teardown connection & interval on unmount
-        // Also cleanup global WebSocket reference if it exists
         return () => {
             clearInterval(intervalId);
+            if (restIntervalRef.current) {
+                clearInterval(restIntervalRef.current);
+                restIntervalRef.current = null;
+            }
             if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
                 ws.close();
             }
@@ -126,7 +166,9 @@ export const MarketTicker: React.FC = () => {
             {isLoading ? (
                 <div className="flex items-center justify-center w-full z-20">
                     <span className="text-[10px] font-mono font-bold text-white/40 uppercase tracking-widest animate-pulse">
-                        Connecting to Binance Live Stream...
+                        {dataSource === 'rest'
+                            ? 'Fetching prices from CoinGecko...'
+                            : 'Connecting to Binance Live Stream...'}
                     </span>
                 </div>
             ) : (

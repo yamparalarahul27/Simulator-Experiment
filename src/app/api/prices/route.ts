@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const COINGECKO_IDS = 'solana,bitcoin,ethereum,jupiter-exchange-solana,bonk,ripple';
+const COINGECKO_IDS = 'solana,bitcoin,ethereum,jupiter-exchange-solana,bonk,ripple,pyth-network,jito-governance-token,dogwifhat,raydium';
 
 const CG_TO_TOKEN: Record<string, string> = {
     'solana':                   'SOL',
@@ -9,6 +9,10 @@ const CG_TO_TOKEN: Record<string, string> = {
     'jupiter-exchange-solana':  'JUP',
     'bonk':                     'BONK',
     'ripple':                   'XRP',
+    'pyth-network':             'PYTH',
+    'jito-governance-token':    'JTO',
+    'dogwifhat':                'WIF',
+    'raydium':                  'RAY',
 };
 
 export async function GET() {

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useLivePrices } from '@/lib/context/LivePricesContext';
 import {
     SupabaseDemoService,
     DemoOrder,
@@ -45,9 +46,6 @@ export const DEMO_PAIRS: { token: DemoToken; pair: string; binance: string }[] =
     { token: 'BONK', pair: 'BONK/USDC', binance: 'BONKUSDT' },
     { token: 'XRP', pair: 'XRP/USDC', binance: 'XRPUSDT' },
 ];
-
-const BINANCE_TO_TOKEN: Record<string, DemoToken> = {};
-DEMO_PAIRS.forEach(p => { BINANCE_TO_TOKEN[p.binance] = p.token; });
 
 const FEE_RATE = 0.001; // 0.1% trading fee
 
@@ -114,26 +112,35 @@ export function useSpotTrade(walletAddress: string | null) {
 
     // ─── State ──────────────────────────────
     const [selectedPair, setSelectedPair] = useState<string>('SOL/USDC');
-    const [balances, setBalances] = useState<DemoBalance[]>([]);
-    const [openOrders, setOpenOrders] = useState<DemoOrder[]>([]);
-    const [filledOrders, setFilledOrders] = useState<DemoOrder[]>([]);
+
+    // Batched orders + balances state (single setter = 1 render instead of 3)
+    interface OrdersState { openOrders: DemoOrder[]; filledOrders: DemoOrder[]; balances: DemoBalance[]; }
+    const [ordersState, setOrdersState] = useState<OrdersState>({
+        openOrders: [], filledOrders: [], balances: [],
+    });
+    const { openOrders, filledOrders, balances } = ordersState;
+
     const [settings, setSettings] = useState<DemoSettings | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Live prices from Binance WS (token → price data)
-    const [livePrices, setLivePrices] = useState<Record<string, PriceData>>({});
-    const livePricesRef = useRef<Record<string, { price: number; change: number }>>({});
+    // Live prices from context (WS/REST managed by LivePricesProvider)
+    const { livePrices, wsSource } = useLivePrices();
 
-    // Track which tokens have WS disabled (overridden by Control Panel)
+    // Track which tokens have price overrides (used by ControlPanel)
     const [wsDisabled, setWsDisabled] = useState<Record<string, boolean>>({});
-    const wsRef = useRef<WebSocket | null>(null);
-
-    // Price feed source: 'ws' = Binance WebSocket, 'rest' = CoinGecko fallback, null = connecting
-    const [wsSource, setWsSource] = useState<'ws' | 'rest' | null>(null);
-    const restIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     // Order book seed changes to animate
     const [obSeed, setObSeed] = useState(42);
+
+    // ─── Refs for matching engine (stable 2s interval, no restart on tick) ─
+    const openOrdersRef = useRef<DemoOrder[]>(openOrders);
+    openOrdersRef.current = openOrders;
+    const livePricesStateRef = useRef<Record<string, PriceData>>(livePrices);
+    livePricesStateRef.current = livePrices;
+    const fillOrderRef = useRef<(order: DemoOrder, fillPrice: number) => Promise<void>>(async () => {});
+    const applyFillRef = useRef<(order: DemoOrder, qty: number, fillPrice: number) => Promise<void>>(async () => {});
+    const createTpSlRef = useRef<(parentOrder: DemoOrder, fillPrice: number) => Promise<void>>(async () => {});
+    const refreshOrdersRef = useRef<() => Promise<void>>(async () => {});
 
     // ─── Current pair info ──────────────────
     const currentPairInfo = useMemo(
@@ -164,124 +171,22 @@ export function useSpotTrade(walletAddress: string | null) {
         return `${symbol}${value.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d })}`;
     }, [settings]);
 
-    // ─── Binance WebSocket ──────────────────
-    useEffect(() => {
-        if (typeof window === 'undefined') return;
-
-        const streams = DEMO_PAIRS.map(p => `${p.binance.toLowerCase()}@ticker`).join('/');
-        const wsUrl = `wss://stream.binance.com:9443/stream?streams=${streams}`;
-        const ws = new WebSocket(wsUrl);
-        wsRef.current = ws;
-
-        ws.onmessage = (event) => {
-            try {
-                const message = JSON.parse(event.data);
-                if (message.data) {
-                    const d = message.data;
-                    const token = BINANCE_TO_TOKEN[d.s];
-                    if (token) {
-                        livePricesRef.current[token] = {
-                            price: parseFloat(d.c),
-                            change: parseFloat(d.P),
-                        };
-                    }
-                }
-            } catch (err) {
-                console.error('[useSpotTrade] WS parse error', err);
-            }
-        };
-
-        ws.onopen = () => {
-            setWsSource('ws');
-            // Cancel REST polling if WS recovers
-            if (restIntervalRef.current) {
-                clearInterval(restIntervalRef.current);
-                restIntervalRef.current = null;
-            }
-        };
-
-        ws.onerror = (err: any) => {
-            console.warn('[useSpotTrade] WS connection failed, switching to CoinGecko REST fallback:', err?.message || err?.type || 'Unknown');
-            setWsSource('rest');
-
-            // Start REST polling if not already running
-            if (!restIntervalRef.current) {
-                const fetchRestPrices = async () => {
-                    try {
-                        const res = await fetch('/api/prices');
-                        if (!res.ok) return;
-                        const data: Record<string, { price: number; change: number }> = await res.json();
-                        for (const [token, pd] of Object.entries(data)) {
-                            livePricesRef.current[token] = pd;
-                        }
-                    } catch (e) {
-                        console.warn('[useSpotTrade] REST fetch failed:', e);
-                    }
-                };
-                fetchRestPrices(); // immediate first fetch
-                restIntervalRef.current = setInterval(fetchRestPrices, 4000);
-            }
-        };
-
-        // Throttle state updates to ~2/sec
-        const interval = setInterval(() => {
-            const newPrices: Record<string, PriceData> = {};
-            DEMO_PAIRS.forEach(p => {
-                const live = livePricesRef.current[p.token];
-                const overridePrice = settings?.priceOverrides?.[p.token];
-                const isOverridden = overridePrice != null && overridePrice > 0;
-
-                if (isOverridden) {
-                    newPrices[p.token] = {
-                        price: overridePrice!,
-                        change: 0,
-                        isOverridden: true,
-                    };
-                } else if (live) {
-                    newPrices[p.token] = {
-                        price: live.price,
-                        change: live.change,
-                        isOverridden: false,
-                    };
-                }
-            });
-            setLivePrices(prev => {
-                // Simple shallow equality check to avoid unnecessary renders
-                const keys = Object.keys(newPrices);
-                if (keys.length === Object.keys(prev).length &&
-                    keys.every(k => prev[k]?.price === newPrices[k]?.price)) {
-                    return prev;
-                }
-                return newPrices;
-            });
-        }, 500);
-
-        return () => {
-            clearInterval(interval);
-            if (restIntervalRef.current) {
-                clearInterval(restIntervalRef.current);
-                restIntervalRef.current = null;
-            }
-            if (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) {
-                ws.close();
-            }
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    // Update order book seed when price changes
+    // Update order book seed only when price shifts by ≥ 0.05% (avoids regeneration every 500ms tick)
+    const lastObPriceRef = useRef(0);
     useEffect(() => {
         if (currentPrice.price > 0) {
-            setObSeed(Math.floor(currentPrice.price * 1000) % 10000);
+            const prev = lastObPriceRef.current;
+            if (prev === 0 || Math.abs(currentPrice.price - prev) / prev >= 0.0005) {
+                lastObPriceRef.current = currentPrice.price;
+                setObSeed(Math.floor(currentPrice.price * 1000) % 10000);
+            }
         }
     }, [currentPrice.price]);
 
     // ─── Load data on wallet connect ────────
     useEffect(() => {
         if (!walletAddress) {
-            setBalances([]);
-            setOpenOrders([]);
-            setFilledOrders([]);
+            setOrdersState({ openOrders: [], filledOrders: [], balances: [] });
             setSettings(null);
             setIsLoading(false);
             return;
@@ -300,9 +205,7 @@ export function useSpotTrade(walletAddress: string | null) {
                 ]);
 
                 if (!mounted) return;
-                setBalances(bals);
-                setOpenOrders(opens);
-                setFilledOrders(filled);
+                setOrdersState({ openOrders: opens, filledOrders: filled, balances: bals });
                 setSettings(sett);
 
                 // Apply price overrides from settings
@@ -324,18 +227,22 @@ export function useSpotTrade(walletAddress: string | null) {
         return () => { mounted = false; };
     }, [walletAddress, service]);
 
-    // ─── Price matching engine (2s interval) ─
+    // ─── Price matching engine (2s interval, reads from refs) ─
     useEffect(() => {
-        if (!walletAddress || openOrders.length === 0) return;
+        if (!walletAddress) return;
 
         const interval = setInterval(async () => {
+            const orders = openOrdersRef.current;
+            const prices = livePricesStateRef.current;
+            if (orders.length === 0) return;
+
             let changed = false;
 
-            for (const order of openOrders) {
+            for (const order of orders) {
                 if (order.status === 'cancelled' || order.status === 'filled') continue;
 
                 const token = order.pair.split('/')[0] as DemoToken;
-                const price = livePrices[token]?.price;
+                const price = prices[token]?.price;
                 if (!price || price <= 0) continue;
 
                 try {
@@ -346,7 +253,7 @@ export function useSpotTrade(walletAddress: string | null) {
                             : price >= order.price;
 
                         if (shouldFill) {
-                            await fillOrder(order, price);
+                            await fillOrderRef.current(order, price);
                             changed = true;
                         }
                     }
@@ -358,7 +265,7 @@ export function useSpotTrade(walletAddress: string | null) {
                             : price <= order.stopPrice;
 
                         if (triggered) {
-                            await fillOrder(order, price);
+                            await fillOrderRef.current(order, price);
                             changed = true;
                         }
                     }
@@ -370,7 +277,6 @@ export function useSpotTrade(walletAddress: string | null) {
                             : price <= order.stopPrice;
 
                         if (triggered) {
-                            // Convert to limit order (triggered status)
                             await service.updateOrder(order.id, { status: 'triggered' });
                             changed = true;
                         }
@@ -383,7 +289,7 @@ export function useSpotTrade(walletAddress: string | null) {
                             : price >= order.limitPrice;
 
                         if (shouldFill) {
-                            await fillOrder(order, price);
+                            await fillOrderRef.current(order, price);
                             changed = true;
                         }
                     }
@@ -408,9 +314,8 @@ export function useSpotTrade(walletAddress: string | null) {
                                 filledAt: isDone ? new Date().toISOString() : undefined,
                             });
 
-                            // Update balance for this slice
-                            await applyFill(order, sliceQty, price);
-                            if (isDone) await createTpSlOrders(order, price);
+                            await applyFillRef.current(order, sliceQty, price);
+                            if (isDone) await createTpSlRef.current(order, price);
                             changed = true;
                         }
                     }
@@ -425,7 +330,7 @@ export function useSpotTrade(walletAddress: string | null) {
                             const remaining = order.quantity - order.filledQuantity;
                             const actualSlice = Math.min(sliceQty, remaining);
                             const newFilled = order.filledQuantity + actualSlice;
-                            const isDone = newFilled >= order.quantity * 0.999; // floating point tolerance
+                            const isDone = newFilled >= order.quantity * 0.999;
 
                             const sliceIntervalMs = (order.twapDuration * 1000) / order.twapIntervals;
                             const nextSliceAt = new Date(now.getTime() + sliceIntervalMs);
@@ -438,8 +343,8 @@ export function useSpotTrade(walletAddress: string | null) {
                                 twapNextSliceAt: isDone ? undefined : nextSliceAt.toISOString(),
                             });
 
-                            await applyFill(order, actualSlice, price);
-                            if (isDone) await createTpSlOrders(order, price);
+                            await applyFillRef.current(order, actualSlice, price);
+                            if (isDone) await createTpSlRef.current(order, price);
                             changed = true;
                         }
                     }
@@ -449,13 +354,12 @@ export function useSpotTrade(walletAddress: string | null) {
             }
 
             if (changed) {
-                await refreshOrders();
+                await refreshOrdersRef.current();
             }
         }, 2000);
 
         return () => clearInterval(interval);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [walletAddress, openOrders, livePrices]);
+    }, [walletAddress, service]);
 
     // ─── Helpers ────────────────────────────
 
@@ -466,9 +370,7 @@ export function useSpotTrade(walletAddress: string | null) {
             service.getOrders(walletAddress, ['filled', 'cancelled']),
             service.getBalances(walletAddress),
         ]);
-        setOpenOrders(opens);
-        setFilledOrders(filled);
-        setBalances(bals);
+        setOrdersState({ openOrders: opens, filledOrders: filled, balances: bals });
     }, [walletAddress, service]);
 
     const applyFill = useCallback(async (order: DemoOrder, qty: number, fillPrice: number) => {
@@ -523,10 +425,9 @@ export function useSpotTrade(walletAddress: string | null) {
         });
 
         await applyFill(order, order.quantity, fillPrice);
-        await createTpSlOrders(order, fillPrice);
+        await createTpSlRef.current(order, fillPrice);
 
         toast.success(`Order Filled: ${order.side.toUpperCase()} ${order.quantity} ${order.pair} @ ${formatPrice(fillPrice)}`);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [service, applyFill, formatPrice]);
 
     const createTpSlOrders = useCallback(async (parentOrder: DemoOrder, fillPrice: number) => {
@@ -559,6 +460,12 @@ export function useSpotTrade(walletAddress: string | null) {
             });
         }
     }, [walletAddress, service]);
+
+    // Sync function refs for matching engine
+    refreshOrdersRef.current = refreshOrders;
+    applyFillRef.current = applyFill;
+    fillOrderRef.current = fillOrder;
+    createTpSlRef.current = createTpSlOrders;
 
     // ─── Public API ─────────────────────────
 
@@ -744,7 +651,7 @@ export function useSpotTrade(walletAddress: string | null) {
     const resetBalancesToDefault = useCallback(async () => {
         if (!walletAddress) return;
         const bals = await service.resetBalances(walletAddress);
-        setBalances(bals);
+        setOrdersState(prev => ({ ...prev, balances: bals }));
         toast.success('Balances reset to defaults');
     }, [walletAddress, service]);
 

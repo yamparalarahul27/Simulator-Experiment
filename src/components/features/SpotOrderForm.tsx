@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Play, AlertTriangle } from 'lucide-react';
 import type { DemoOrderType } from '@/services/SupabaseDemoService';
 import type { SimConfig } from './OrderFlowVisualiser';
@@ -27,56 +27,62 @@ const ORDER_TYPES: { value: DemoOrderType; label: string }[] = [
     { value: 'oco', label: 'OCO' },
 ];
 
-export default function SpotOrderForm({
+// Consolidated form state (avoids 13 separate useState calls)
+interface FormState {
+    price: string;
+    stopPrice: string;
+    limitPrice: string;
+    amount: string;
+    visibleQty: string;
+    tpEnabled: boolean;
+    slEnabled: boolean;
+    tpPrice: string;
+    slPrice: string;
+    activationPrice: string;
+    trailingPercent: string;
+    twapDuration: string;
+    twapIntervals: string;
+}
+
+const INITIAL_FORM: FormState = {
+    price: '', stopPrice: '', limitPrice: '', amount: '', visibleQty: '',
+    tpEnabled: false, slEnabled: false, tpPrice: '', slPrice: '',
+    activationPrice: '', trailingPercent: '',
+    twapDuration: '60', twapIntervals: '6',
+};
+
+const SpotOrderForm = React.memo(function SpotOrderForm({
     pair, currentPrice, formatPrice,
     orderType, onOrderTypeChange,
     side, onSideChange,
     onRunSimulation,
 }: SpotOrderFormProps) {
-    // Fields
-    const [price, setPrice] = useState('');
-    const [stopPrice, setStopPrice] = useState('');
-    const [limitPrice, setLimitPrice] = useState('');
-    const [amount, setAmount] = useState('');
-    const [visibleQty, setVisibleQty] = useState('');
+    const [form, setForm] = useState<FormState>(INITIAL_FORM);
 
-    // TP/SL
-    const [tpEnabled, setTpEnabled] = useState(false);
-    const [slEnabled, setSlEnabled] = useState(false);
-    const [tpPrice, setTpPrice] = useState('');
-    const [slPrice, setSlPrice] = useState('');
-
-    // Trailing Stop specific
-    const [activationPrice, setActivationPrice] = useState('');
-    const [trailingPercent, setTrailingPercent] = useState('');
-
-    // TWAP
-    const [twapDuration, setTwapDuration] = useState('60');
-    const [twapIntervals, setTwapIntervals] = useState('6');
+    const handleField = useCallback(<K extends keyof FormState>(key: K, value: FormState[K]) => {
+        setForm(prev => ({ ...prev, [key]: value }));
+    }, []);
 
     const token = pair.split('/')[0];
-    const amountNum = parseFloat(amount) || 0;
+    const amountNum = parseFloat(form.amount) || 0;
 
     // TP/SL is only supported for Limit orders in Spot
     const handleOrderTypeChange = (v: DemoOrderType) => {
         if (v !== 'limit') {
-            setTpEnabled(false);
-            setSlEnabled(false);
-            setTpPrice('');
-            setSlPrice('');
+            setForm(prev => ({ ...prev, tpEnabled: false, slEnabled: false, tpPrice: '', slPrice: '' }));
         }
         onOrderTypeChange(v);
     };
 
     // Parsed values for validation
-    const pPrice = parseFloat(price) || 0;
-    const pStop = parseFloat(stopPrice) || 0;
-    const pLimit = parseFloat(limitPrice) || 0;
-    const pTp = parseFloat(tpPrice) || 0;
-    const pSl = parseFloat(slPrice) || 0;
-    const pAct = parseFloat(activationPrice) || 0;
-    const pPct = parseFloat(trailingPercent) || 0;
-    const pVis = parseFloat(visibleQty) || 0;
+    const pPrice = parseFloat(form.price) || 0;
+    const pStop = parseFloat(form.stopPrice) || 0;
+    const pLimit = parseFloat(form.limitPrice) || 0;
+    const pTp = parseFloat(form.tpPrice) || 0;
+    const pSl = parseFloat(form.slPrice) || 0;
+    const pAct = parseFloat(form.activationPrice) || 0;
+    const pPct = parseFloat(form.trailingPercent) || 0;
+    const pVis = parseFloat(form.visibleQty) || 0;
 
     // --- Validation Logic ---
     let warning: string | null = null;
@@ -85,24 +91,24 @@ export default function SpotOrderForm({
     if (currentPrice > 0) {
         if (orderType === 'limit') {
             if (side === 'buy' && pPrice > currentPrice) {
-                warning = "Limit price > market price. Order will fill instantly as Market Buy.";
+                warning = "Limit price is greater than market price. Order will fill instantly as Market Buy.";
             } else if (side === 'sell' && pPrice > 0 && pPrice < currentPrice) {
-                warning = "Limit price < market price. Order will fill instantly as Market Sell.";
+                warning = "Limit price is less than market price. Order will fill instantly as Market Sell.";
             }
         }
 
         if (orderType === 'stop_market' || orderType === 'stop_limit') {
             if (side === 'buy' && pStop > 0 && pStop < currentPrice) {
-                warning = "Stop price < market price. Order will trigger instantly.";
+                warning = "Stop price is less than market price. Order will trigger instantly.";
                 isInvalid = true; // Hard block standard Spot logic
             } else if (side === 'sell' && pStop > currentPrice) {
-                warning = "Stop price > market price. Order will trigger instantly.";
+                warning = "Stop price is greater than market price. Order will trigger instantly.";
                 isInvalid = true;
             }
             if (orderType === 'stop_limit' && side === 'buy' && pLimit > 0 && pLimit < pStop) {
-                warning = "Buy Stop-Limit: Limit price should be >= Stop price.";
+                warning = "Buy Stop-Limit: Limit price should be greater than or equal to Stop price.";
             } else if (orderType === 'stop_limit' && side === 'sell' && pLimit > pStop) {
-                warning = "Sell Stop-Limit: Limit price should be <= Stop price.";
+                warning = "Sell Stop-Limit: Limit price should be less than or equal to Stop price.";
             }
         }
 
@@ -125,19 +131,19 @@ export default function SpotOrderForm({
 
         if (orderType === 'oco') {
             if (side === 'buy' && pPrice > 0 && pPrice >= currentPrice) {
-                warning = "Buy OCO: Limit Price must be < Market Price.";
+                warning = "Buy OCO: Limit Price must be less than Market Price.";
                 isInvalid = true;
             }
             if (side === 'buy' && pStop > 0 && pStop <= currentPrice) {
-                warning = "Buy OCO: Stop Price must be > Market Price.";
+                warning = "Buy OCO: Stop Price must be greater than Market Price.";
                 isInvalid = true;
             }
             if (side === 'sell' && pPrice > 0 && pPrice <= currentPrice) {
-                warning = "Sell OCO: Limit Price must be > Market Price.";
+                warning = "Sell OCO: Limit Price must be greater than Market Price.";
                 isInvalid = true;
             }
             if (side === 'sell' && pStop > 0 && pStop >= currentPrice) {
-                warning = "Sell OCO: Stop Price must be < Market Price.";
+                warning = "Sell OCO: Stop Price must be less than Market Price.";
                 isInvalid = true;
             }
         }
@@ -150,11 +156,11 @@ export default function SpotOrderForm({
         }
 
         // Attached TP/SL Validation (if enabled)
-        if (tpEnabled && (!pTp || pTp <= 0)) {
+        if (form.tpEnabled && (!pTp || pTp <= 0)) {
             warning = "Take Profit is enabled but no price has been set.";
             isInvalid = true;
         }
-        if (slEnabled && (!pSl || pSl <= 0)) {
+        if (form.slEnabled && (!pSl || pSl <= 0)) {
             warning = "Stop Loss is enabled but no price has been set.";
             isInvalid = true;
         }
@@ -162,21 +168,21 @@ export default function SpotOrderForm({
         // For limit orders, use "Limit Price" in messages since that is the actual fill price, not the current market price
         const entryLabel = orderType === 'limit' ? 'Limit Price' : 'Entry Price';
         if (entryRef > 0) {
-            if (tpEnabled && pTp > 0) {
+            if (form.tpEnabled && pTp > 0) {
                 if (side === 'buy' && pTp <= entryRef) {
-                    warning = `Take Profit price must be > ${entryLabel}.`;
+                    warning = `Take Profit price must be greater than ${entryLabel}.`;
                     isInvalid = true;
                 } else if (side === 'sell' && pTp >= entryRef) {
-                    warning = `Take Profit price must be < ${entryLabel}.`;
+                    warning = `Take Profit price must be less than ${entryLabel}.`;
                     isInvalid = true;
                 }
             }
-            if (slEnabled && pSl > 0) {
+            if (form.slEnabled && pSl > 0) {
                 if (side === 'buy' && pSl >= entryRef) {
-                    warning = `Stop Loss price must be < ${entryLabel}.`;
+                    warning = `Stop Loss price must be less than ${entryLabel}.`;
                     isInvalid = true;
                 } else if (side === 'sell' && pSl <= entryRef) {
-                    warning = `Stop Loss price must be > ${entryLabel}.`;
+                    warning = `Stop Loss price must be greater than ${entryLabel}.`;
                     isInvalid = true;
                 }
             }
@@ -203,10 +209,10 @@ export default function SpotOrderForm({
                 stopPrice: pPct || null, // We overload stopPrice with the percentage for the simulator
             }),
             amount: amountNum,
-            tpPrice: tpEnabled ? (pTp || null) : null,
-            slPrice: slEnabled ? (pSl || null) : null,
-            tpEnabled,
-            slEnabled,
+            tpPrice: form.tpEnabled ? (pTp || null) : null,
+            slPrice: form.slEnabled ? (pSl || null) : null,
+            tpEnabled: form.tpEnabled,
+            slEnabled: form.slEnabled,
         });
     };
 
@@ -277,8 +283,8 @@ export default function SpotOrderForm({
                             type="number"
                             step="any"
                             placeholder="0.00"
-                            value={price}
-                            onChange={(e) => setPrice(e.target.value)}
+                            value={form.price}
+                            onChange={(e) => handleField('price', e.target.value)}
                             className="w-full bg-black/50 border border-white/10 text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-purple-500/50 placeholder:text-white/15"
                         />
                     </div>
@@ -292,10 +298,17 @@ export default function SpotOrderForm({
                             type="number"
                             step="any"
                             placeholder="Trigger price..."
-                            value={stopPrice}
-                            onChange={(e) => setStopPrice(e.target.value)}
+                            value={form.stopPrice}
+                            onChange={(e) => handleField('stopPrice', e.target.value)}
                             className="w-full bg-black/50 border border-white/10 text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-purple-500/50 placeholder:text-white/15"
                         />
+                        {orderType !== 'oco' && (
+                            <p className="text-[9px] font-mono text-white/25 mt-1">
+                                {side === 'buy'
+                                    ? 'Buy Stop triggers on upward breakout — stop price must be above market.'
+                                    : 'Sell Stop triggers on downward move — stop price must be below market.'}
+                            </p>
+                        )}
                     </div>
                 )}
 
@@ -309,8 +322,8 @@ export default function SpotOrderForm({
                             type="number"
                             step="any"
                             placeholder="Max execution price..."
-                            value={limitPrice}
-                            onChange={(e) => setLimitPrice(e.target.value)}
+                            value={form.limitPrice}
+                            onChange={(e) => handleField('limitPrice', e.target.value)}
                             className="w-full bg-black/50 border border-white/10 text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-purple-500/50 placeholder:text-white/15"
                         />
                     </div>
@@ -325,8 +338,8 @@ export default function SpotOrderForm({
                                 type="number"
                                 step="any"
                                 placeholder={side === 'buy' ? 'Must be > Market' : 'Must be < Market'}
-                                value={activationPrice}
-                                onChange={(e) => setActivationPrice(e.target.value)}
+                                value={form.activationPrice}
+                                onChange={(e) => handleField('activationPrice', e.target.value)}
                                 className="w-full bg-black/50 border border-white/10 text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-purple-500/50 placeholder:text-white/15"
                             />
                         </div>
@@ -336,8 +349,8 @@ export default function SpotOrderForm({
                                 type="number"
                                 step="0.1"
                                 placeholder="0.1 - 20.0"
-                                value={trailingPercent}
-                                onChange={(e) => setTrailingPercent(e.target.value)}
+                                value={form.trailingPercent}
+                                onChange={(e) => handleField('trailingPercent', e.target.value)}
                                 className="w-full bg-black/50 border border-white/10 text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-purple-500/50 placeholder:text-white/15"
                             />
                         </div>
@@ -348,46 +361,46 @@ export default function SpotOrderForm({
                 {orderType === 'limit' && (
                     <div className="flex items-center gap-4 mt-2">
                         <label className="flex items-center gap-2 cursor-pointer group">
-                            <input type="checkbox" checked={tpEnabled} onChange={e => setTpEnabled(e.target.checked)} className="accent-purple-500 cursor-pointer" />
+                            <input type="checkbox" checked={form.tpEnabled} onChange={e => handleField('tpEnabled', e.target.checked)} className="accent-purple-500 cursor-pointer" />
                             <span className="text-[10px] font-mono text-white/60 group-hover:text-white/80 transition-colors">TP</span>
                         </label>
                         <label className="flex items-center gap-2 cursor-pointer group">
-                            <input type="checkbox" checked={slEnabled} onChange={e => setSlEnabled(e.target.checked)} className="accent-purple-500 cursor-pointer" />
+                            <input type="checkbox" checked={form.slEnabled} onChange={e => handleField('slEnabled', e.target.checked)} className="accent-purple-500 cursor-pointer" />
                             <span className="text-[10px] font-mono text-white/60 group-hover:text-white/80 transition-colors">SL</span>
                         </label>
                     </div>
                 )}
 
                 {/* TP/SL Specific Inputs */}
-                {tpEnabled && orderType === 'limit' && (
+                {form.tpEnabled && orderType === 'limit' && (
                     <div>
                         <label className="text-[10px] font-mono text-white/40 block mb-1 text-green-400/80">Take Profit Price</label>
                         <input
                             type="number"
                             step="any"
                             placeholder="Target profit price..."
-                            value={tpPrice}
-                            onChange={(e) => setTpPrice(e.target.value)}
+                            value={form.tpPrice}
+                            onChange={(e) => handleField('tpPrice', e.target.value)}
                             className="w-full bg-black/50 border border-green-500/20 text-white text-xs font-mono px-3 py-2 flex items-center justify-between focus:outline-none focus:border-green-500/50 placeholder:text-white/15"
                         />
                     </div>
                 )}
-                {slEnabled && orderType === 'limit' && (
+                {form.slEnabled && orderType === 'limit' && (
                     <div>
                         <label className="text-[10px] font-mono text-white/40 block mb-1 text-red-400/80">Stop Loss Price</label>
                         <input
                             type="number"
                             step="any"
                             placeholder="Stop loss trigger..."
-                            value={slPrice}
-                            onChange={(e) => setSlPrice(e.target.value)}
+                            value={form.slPrice}
+                            onChange={(e) => handleField('slPrice', e.target.value)}
                             className="w-full bg-black/50 border border-red-500/20 text-white text-xs font-mono px-3 py-2 flex items-center justify-between focus:outline-none focus:border-red-500/50 placeholder:text-white/15"
                         />
                     </div>
                 )}
 
                 {/* Live R:R Badge — shown when both TP and SL are entered for Limit orders */}
-                {tpEnabled && slEnabled && orderType === 'limit' && pTp > 0 && pSl > 0 && pPrice > 0 && (() => {
+                {form.tpEnabled && form.slEnabled && orderType === 'limit' && pTp > 0 && pSl > 0 && pPrice > 0 && (() => {
                     const gain = Math.abs(pTp - pPrice);
                     const risk = Math.abs(pSl - pPrice);
                     if (risk === 0) return null;
@@ -412,8 +425,8 @@ export default function SpotOrderForm({
                         type="number"
                         step="any"
                         placeholder="0.00"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
+                        value={form.amount}
+                        onChange={(e) => handleField('amount', e.target.value)}
                         className="w-full bg-black/50 border border-white/10 text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-purple-500/50 placeholder:text-white/15"
                     />
                 </div>
@@ -426,8 +439,8 @@ export default function SpotOrderForm({
                             type="number"
                             step="any"
                             placeholder="Publicly visible chunk..."
-                            value={visibleQty}
-                            onChange={(e) => setVisibleQty(e.target.value)}
+                            value={form.visibleQty}
+                            onChange={(e) => handleField('visibleQty', e.target.value)}
                             className="w-full bg-black/50 border border-white/10 text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-purple-500/50 placeholder:text-white/15"
                         />
                     </div>
@@ -440,8 +453,8 @@ export default function SpotOrderForm({
                             <label className="text-[10px] font-mono text-white/40 block mb-1">Duration (sec)</label>
                             <input
                                 type="number"
-                                value={twapDuration}
-                                onChange={(e) => setTwapDuration(e.target.value)}
+                                value={form.twapDuration}
+                                onChange={(e) => handleField('twapDuration', e.target.value)}
                                 className="w-full bg-black/50 border border-white/10 text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-purple-500/50"
                             />
                         </div>
@@ -449,8 +462,8 @@ export default function SpotOrderForm({
                             <label className="text-[10px] font-mono text-white/40 block mb-1">Intervals</label>
                             <input
                                 type="number"
-                                value={twapIntervals}
-                                onChange={(e) => setTwapIntervals(e.target.value)}
+                                value={form.twapIntervals}
+                                onChange={(e) => handleField('twapIntervals', e.target.value)}
                                 className="w-full bg-black/50 border border-white/10 text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-purple-500/50"
                             />
                         </div>
@@ -473,5 +486,6 @@ export default function SpotOrderForm({
             </button>
         </div>
     );
-}
+});
 
+export default SpotOrderForm;
