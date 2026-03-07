@@ -217,7 +217,7 @@ export const GlassmorphismNavbar = ({
     return (
         <>
             {/* Fixed navigation bar */}
-            <nav className={`fixed top-10 left-0 right-0 z-50 ${className}`}>
+            <nav className={`fixed left-0 right-0 z-50 ${userMode === 'pedia' ? 'top-2.5' : 'top-10'} ${className}`}>
                 <div className="px-3 sm:px-6 py-2 sm:py-3">
                     {/* Glassmorphism container */}
                     <div className="bg-black/80 max-w-7xl mx-auto backdrop-blur-xl border border-white/10 rounded-none px-3 sm:px-4 py-1.5 sm:py-2 shadow-2xl shadow-black/20">
