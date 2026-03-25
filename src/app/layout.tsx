@@ -15,10 +15,15 @@ import { Toaster } from "sonner";
 import AssistantModal from "@/components/ui/AssistantModal";
 
 export const metadata: Metadata = {
-  title: "Y(Why)DEX",
-  description: "YDex is a app engineered by Yamparala Rahul to make TRADING simple.",
+  title: "YDEX — Solving Why of DEX",
+  description: "Learn DEX trading through interactive simulators and guided lessons. Understand order types, risk management, and the Solana ecosystem — hands-on.",
   icons: {
     icon: "/favicon.png",
+  },
+  openGraph: {
+    title: "YDEX — Solving Why of DEX",
+    description: "Learn DEX trading through interactive simulators and guided lessons.",
+    siteName: "YDEX",
   },
 };
 

@@ -7,7 +7,7 @@ import { useAppearance } from '@/lib/context/AppearanceContext';
 import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 import type { AppearancePreferences } from '@/services/SupabaseProfileService';
 
-const DEFAULT_TAB: TabType = 'dashboard';
+const DEFAULT_TAB: TabType = 'learn';
 
 // ============================================
 // Appearance Section
@@ -294,7 +294,6 @@ export default function ProfileSettings() {
         setTimeout(() => {
             if (typeof window !== 'undefined') {
                 window.localStorage.removeItem('deriverse.activeTab');
-                window.localStorage.removeItem('deriverse.userMode');
                 window.dispatchEvent(
                     new CustomEvent<TabType>('deriverse:set-active-tab', {
                         detail: DEFAULT_TAB,

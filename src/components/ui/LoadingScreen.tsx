@@ -113,14 +113,13 @@ export default function LoadingScreen() {
     };
 
     const handleNavigateToDashboard = () => {
-        // Navigate to dashboard tab (Analytica mode)
-        dispatchTabChange('dashboard');
+        dispatchTabChange('learn');
         setCurrentPhase('logo');
     };
 
     const handleNavigateToLookup = (walletAddress: string) => {
-        // Navigate to lookup tab with wallet address
-        dispatchTabChange('lookup');
+        // Navigate to learn tab (wallet lookup is now part of education)
+        dispatchTabChange('learn');
         setCurrentPhase('logo');
     };
 
@@ -129,18 +128,8 @@ export default function LoadingScreen() {
     };
 
     const handleWalletChoice = (choice: 'wallet' | 'mock') => {
-        // Route users to lookup (wallet) or dashboard (mock) tabs
-        const nextTab: TabType = choice === 'wallet' ? 'lookup' : 'dashboard';
-        dispatchTabChange(nextTab);
-
-        // Both choices now lead to the logo animation
-        // The actual wallet connection/data fetching happens in the app
-        setCurrentPhase('logo');
-    };
-
-    const handlePediaSkip = () => {
-        // Path B: skip wallet/mock, go straight to logo → Web3 tab
-        dispatchTabChange('web3');
+        // All paths lead to the Learn hub
+        dispatchTabChange('learn');
         setCurrentPhase('logo');
     };
 
@@ -166,7 +155,6 @@ export default function LoadingScreen() {
                             onNavigateToDashboard={handleNavigateToDashboard}
                             onNavigateToLookup={handleNavigateToLookup}
                             onReturnToWelcome={handleReturnToWelcome}
-                            onPediaSkip={handlePediaSkip}
                         />
                     )}
 
