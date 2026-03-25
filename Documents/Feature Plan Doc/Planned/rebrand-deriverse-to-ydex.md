@@ -20,9 +20,7 @@ Below is the definitive list of UI text strings that will be updated. Code logic
 This screen handles both "All Solana" trades and the specific platform trades. The tab label and empty states need updating.
 
 - **Line 310:** `Deriverse Trades` → `YDEX Trades` (Tab label)
-- **Line 350:** `Parsing Deriverse trades...` → `Parsing YDEX trades...` (Loading text)
 - **Line 418:** `tx.type.includes('Deriverse')` → `tx.type.includes('YDEX')` (UI Tag label matching)
-- **Line 473:** `🎯 Deriverse Trades: Parsed on-chain...` → `🎯 YDEX Trades: Parsed on-chain...` (Help text)
 
 *Note: The internal state `activeTab === 'deriverse'` will remain unchanged to prevent breaking the tab state machine.*
 
