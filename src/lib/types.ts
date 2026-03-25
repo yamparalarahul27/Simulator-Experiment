@@ -92,3 +92,32 @@ export interface TimeOfDayBucket {
     trades: number;
     winRate: number;
 }
+
+// ============================================
+// Learning Module Types
+// ============================================
+
+export interface SimulatorPreset {
+    orderType?: string;
+    pair?: string;
+    side?: 'buy' | 'sell';
+}
+
+export interface LessonConfig {
+    lessonSlug: string;
+    title: string;
+    description: string;
+    simulatorPreset?: SimulatorPreset;
+}
+
+export interface LearningModule {
+    moduleSlug: string;
+    title: string;
+    description: string;
+    icon: string;
+    difficulty: 'beginner' | 'intermediate' | 'advanced';
+    simulatorKind?: 'spot' | 'futures';
+    lessons: LessonConfig[];
+    comingSoon: boolean;
+    walletRequired: boolean;
+}
