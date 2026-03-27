@@ -1,13 +1,11 @@
 'use client';
 
 import React, { useCallback, useRef, useState } from 'react';
-import type { TabType } from '../layout/TabNavigation';
+import { useRouter } from '@/i18n/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import { useAppearance } from '@/lib/context/AppearanceContext';
 import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 import type { AppearancePreferences } from '@/services/SupabaseProfileService';
-
-const DEFAULT_TAB: TabType = 'learn';
 
 // ============================================
 // Appearance Section
@@ -278,6 +276,7 @@ function AppearanceSection() {
 
 export default function ProfileSettings() {
     const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const router = useRouter();
 
     const handleLogout = async () => {
         if (isLoggingOut) return;
@@ -294,14 +293,10 @@ export default function ProfileSettings() {
         setTimeout(() => {
             if (typeof window !== 'undefined') {
                 window.localStorage.removeItem('deriverse.activeTab');
-                window.dispatchEvent(
-                    new CustomEvent<TabType>('deriverse:set-active-tab', {
-                        detail: DEFAULT_TAB,
-                    })
-                );
                 window.dispatchEvent(new Event('deriverse:show-welcome'));
             }
 
+            router.push('/');
             setIsLoggingOut(false);
         }, 800);
     };

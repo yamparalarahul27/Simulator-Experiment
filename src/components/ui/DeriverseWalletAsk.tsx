@@ -10,7 +10,6 @@ import NewUserModal from './NewUserModal';
 import { useWalletConnection } from '../../lib/hooks/useWalletConnection';
 import { SupabaseWalletService } from '../../services/SupabaseWalletService';
 import { toast } from 'sonner';
-import type { TabType } from '../layout/TabNavigation';
 
 // Custom spinner styles are now in globals.css
 

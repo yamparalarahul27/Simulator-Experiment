@@ -1,0 +1,39 @@
+{
+    "nav": {
+        "learn": "Learn",
+        "about": "About",
+        "help": "Help",
+        "roadmap": "Roadmap",
+        "profileSettings": "Profile & Settings",
+        "exchangeManager": "Exchange Manager",
+        "more": "More",
+        "challenges": "Challenges",
+        "perks": "Perks",
+        "simulator": "Simulator"
+    },
+    "home": {
+        "title": "Learn",
+        "subtitle": "Solving Why of DEX — interactive lessons & simulators"
+    },
+    "lessons": {
+        "title": "Lessons",
+        "subtitle": "Master DEX trading through guided, interactive modules"
+    },
+    "challenges": {
+        "title": "Challenges",
+        "subtitle": "Test your skills with real-world trading scenarios"
+    },
+    "perks": {
+        "title": "Perks",
+        "subtitle": "Rewards and benefits for your learning journey"
+    },
+    "simulator": {
+        "title": "Simulator",
+        "subtitle": "Practice trading in a risk-free environment"
+    },
+    "notFound": {
+        "title": "SIGNAL LOST",
+        "description": "The requested coordinate does not exist within the current simulation grid.",
+        "action": "Reestablish Connection"
+    }
+}
