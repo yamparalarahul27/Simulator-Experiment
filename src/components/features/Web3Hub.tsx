@@ -1,89 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import type { LearningModule } from '@/lib/types';
-
-// Lesson components (lazy loaded when needed)
-import OrderTypesOverview from './lessons/OrderTypesOverview';
-
-// ============================================
-// Module Registry
-// ============================================
-
-const MODULES: LearningModule[] = [
-    {
-        moduleSlug: 'order-types',
-        title: 'Order Types',
-        description: 'Market, Limit, Stop, OCO — when and why to use each',
-        icon: '⚡',
-        difficulty: 'beginner',
-        simulatorKind: 'spot',
-        comingSoon: false,
-        walletRequired: false,
-        lessons: [
-            { lessonSlug: 'overview', title: 'What are Order Types?', description: 'Overview of all 8 order types and when to use each' },
-            { lessonSlug: 'market', title: 'Market Order', description: 'Execute immediately at best available price', simulatorPreset: { orderType: 'market' } },
-            { lessonSlug: 'limit', title: 'Limit Order', description: 'Buy/sell at a specific price or better', simulatorPreset: { orderType: 'limit' } },
-            { lessonSlug: 'stop-market', title: 'Stop Market', description: 'Trigger a market order when price hits your stop', simulatorPreset: { orderType: 'stop_market' } },
-            { lessonSlug: 'stop-limit', title: 'Stop Limit', description: 'Trigger a limit order when price hits your stop', simulatorPreset: { orderType: 'stop_limit' } },
-            { lessonSlug: 'iceberg', title: 'Iceberg Order', description: 'Hide large orders behind smaller visible quantities', simulatorPreset: { orderType: 'iceberg' } },
-            { lessonSlug: 'twap', title: 'TWAP Order', description: 'Split orders across time intervals to reduce market impact', simulatorPreset: { orderType: 'twap' } },
-            { lessonSlug: 'trailing-stop', title: 'Trailing Stop', description: 'Dynamic stop that follows price movement', simulatorPreset: { orderType: 'trailing_stop' } },
-            { lessonSlug: 'oco', title: 'OCO Order', description: 'One-Cancels-Other — pair a take-profit with a stop-loss', simulatorPreset: { orderType: 'oco' } },
-        ],
-    },
-    {
-        moduleSlug: 'risk-management',
-        title: 'Risk Management',
-        description: 'Position sizing, stop losses, TP/SL, R:R ratios',
-        icon: '🛡️',
-        difficulty: 'intermediate',
-        simulatorKind: 'futures',
-        comingSoon: true,
-        walletRequired: false,
-        lessons: [],
-    },
-    {
-        moduleSlug: 'what-is-a-dex',
-        title: 'What is a DEX?',
-        description: 'CEX vs DEX, how AMMs work, liquidity pools',
-        icon: '🔄',
-        difficulty: 'beginner',
-        comingSoon: true,
-        walletRequired: false,
-        lessons: [],
-    },
-    {
-        moduleSlug: 'wallets-and-keys',
-        title: 'Wallets & Keys',
-        description: 'Public/private keys, connecting to dApps, transaction signing',
-        icon: '🔑',
-        difficulty: 'beginner',
-        comingSoon: true,
-        walletRequired: false,
-        lessons: [],
-    },
-    {
-        moduleSlug: 'solana-ecosystem',
-        title: 'Solana Ecosystem',
-        description: 'Jupiter, Raydium, Orca — the DEX landscape',
-        icon: '🌐',
-        difficulty: 'beginner',
-        comingSoon: true,
-        walletRequired: false,
-        lessons: [],
-    },
-    {
-        moduleSlug: 'trading-psychology',
-        title: 'Trading Psychology',
-        description: 'FOMO, revenge trading, discipline, journaling',
-        icon: '🧠',
-        difficulty: 'intermediate',
-        comingSoon: true,
-        walletRequired: false,
-        lessons: [],
-    },
-];
+import { MODULES } from '@/lib/modules';
+import { useRouter } from '@/i18n/navigation';
 
 // ============================================
 // Difficulty Badge
@@ -207,28 +126,12 @@ function HeroSection({ onStartLearning }: { onStartLearning: () => void }) {
 // ============================================
 
 export default function Web3Hub() {
-    const [activeModule, setActiveModule] = useState<string | null>(null);
+    const router = useRouter();
 
-    // Find the active module config
-    const currentModule = activeModule ? MODULES.find(m => m.moduleSlug === activeModule) : null;
+    const navigateToModule = (slug: string) => {
+        router.push(`/lessons/${slug}`);
+    };
 
-    // Render lesson view if a module is selected
-    if (currentModule && !currentModule.comingSoon) {
-        switch (currentModule.moduleSlug) {
-            case 'order-types':
-                return (
-                    <OrderTypesOverview
-                        module={currentModule}
-                        onBack={() => setActiveModule(null)}
-                    />
-                );
-            default:
-                setActiveModule(null);
-                return null;
-        }
-    }
-
-    // Hub view
     return (
         <div className="space-y-8">
             {/* Header */}
@@ -240,7 +143,7 @@ export default function Web3Hub() {
             </div>
 
             {/* Featured Hero */}
-            <HeroSection onStartLearning={() => setActiveModule('order-types')} />
+            <HeroSection onStartLearning={() => navigateToModule('order-types')} />
 
             {/* Module Grid */}
             <div>
@@ -252,7 +155,7 @@ export default function Web3Hub() {
                         <ModuleCard
                             key={module.moduleSlug}
                             module={module}
-                            onClick={() => setActiveModule(module.moduleSlug)}
+                            onClick={() => navigateToModule(module.moduleSlug)}
                         />
                     ))}
                 </div>

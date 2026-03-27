@@ -3,8 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Telescope, User, Send, ArrowLeft, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter } from '@/i18n/navigation';
 
 type Message = {
     id: string;
@@ -67,11 +66,11 @@ export default function AssistantPage() {
             };
 
             setMessages((prev) => [...prev, assistantMessage]);
-        } catch (error: any) {
+        } catch (error: unknown) {
             const errorMessage: Message = {
                 id: (Date.now() + 1).toString(),
                 role: "assistant",
-                content: `Error: ${error.message}. Please check if GEMINI_API_KEY is configured correctly.`,
+                content: `Error: ${error instanceof Error ? error.message : 'Unknown error'}. Please check if GEMINI_API_KEY is configured correctly.`,
             };
             setMessages((prev) => [...prev, errorMessage]);
         } finally {
@@ -109,12 +108,10 @@ export default function AssistantPage() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         key={message.id}
-                        className={`flex ${message.role === "user" ? "justify-end" : "justify-start"
-                            }`}
+                        className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                     >
                         <div
-                            className={`flex gap-4 max-w-[85%] md:max-w-[75%] ${message.role === "user" ? "flex-row-reverse" : "flex-row"
-                                }`}
+                            className={`flex gap-4 max-w-[85%] md:max-w-[75%] ${message.role === "user" ? "flex-row-reverse" : "flex-row"}`}
                         >
                             <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mt-1 ${message.role === "user"
                                 ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
@@ -184,6 +181,6 @@ export default function AssistantPage() {
                     </p>
                 </div>
             </div>
-        </div >
+        </div>
     );
 }

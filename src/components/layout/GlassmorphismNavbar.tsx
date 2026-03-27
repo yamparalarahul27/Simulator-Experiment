@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, ReactNode } from 'react';
+import { Link } from '@/i18n/navigation';
 import { LivePulseIndicator } from '../ui/LivePulseIndicator';
 import { HamburgerButton } from './HamburgerButton';
 
@@ -217,7 +218,7 @@ export const GlassmorphismNavbar = ({
                     <div className="bg-black/80 max-w-7xl mx-auto backdrop-blur-xl border border-white/10 rounded-none px-3 sm:px-4 py-1.5 sm:py-2 shadow-2xl shadow-black/20">
                         <div className="flex items-center justify-between">
                             {/* Logo */}
-                            <a
+                            <Link
                                 href={logoHref}
                                 onClick={(event) => {
                                     if (onLogoClick) {
@@ -228,13 +229,13 @@ export const GlassmorphismNavbar = ({
                                 className="flex-shrink-0"
                             >
                                 {renderLogo()}
-                            </a>
+                            </Link>
 
                             {/* Desktop Navigation */}
                             <div className="hidden lg:flex items-center gap-0.5 xl:gap-1">
                                 {/* Main navigation items */}
                                 {mainItems.map((item) => (
-                                    <a
+                                    <Link
                                         key={item.href}
                                         href={item.href}
                                         onClick={(e) => {
@@ -244,12 +245,12 @@ export const GlassmorphismNavbar = ({
                                             }
                                         }}
                                         className={`px-3 xl:px-4 py-1.5 xl:py-2 rounded-none text-sm xl:text-base font-medium transition-all duration-300 border-b-2 ${isActive(item.href)
-                                            ? 'text-white border-purple-500' // Purple stroke, no fill
+                                            ? 'text-white border-purple-500'
                                             : 'text-white/60 border-transparent hover:text-white hover:bg-white/5'
                                             }`}
                                     >
                                         {item.title}
-                                    </a>
+                                    </Link>
                                 ))}
 
                                 {/* Dropdown menu (desktop) */}
@@ -281,15 +282,15 @@ export const GlassmorphismNavbar = ({
                                             <div className="absolute top-full right-0 pt-2 min-w-[200px]">
                                                 <div className="bg-black/95 backdrop-blur-xl border border-white/10 rounded-none shadow-2xl overflow-hidden">
                                                     {dropdownItems.map((item) => (
-                                                        <a
+                                                        <Link
                                                             key={item.href}
                                                             href={item.href}
                                                             onClick={(e) => {
                                                                 if (item.onClick) {
                                                                     e.preventDefault();
                                                                     item.onClick(e);
-                                                                    setIsDropdownOpen(false);
                                                                 }
+                                                                setIsDropdownOpen(false);
                                                             }}
                                                             className={`block px-4 py-2.5 text-sm transition-colors ${isActive(item.href)
                                                                 ? 'text-white bg-white/10'
@@ -297,7 +298,7 @@ export const GlassmorphismNavbar = ({
                                                                 }`}
                                                         >
                                                             {item.title}
-                                                        </a>
+                                                        </Link>
                                                     ))}
                                                 </div>
                                             </div>
@@ -307,7 +308,7 @@ export const GlassmorphismNavbar = ({
 
                                 {/* Info items */}
                                 {infoItems.map((item) => (
-                                    <a
+                                    <Link
                                         key={item.href}
                                         href={item.href}
                                         onClick={(e) => {
@@ -317,12 +318,12 @@ export const GlassmorphismNavbar = ({
                                             }
                                         }}
                                         className={`px-3 xl:px-4 py-1.5 xl:py-2 rounded-none text-sm xl:text-base font-medium transition-all duration-300 border-b-2 ${isActive(item.href)
-                                            ? 'text-white border-purple-500' // Purple stroke, no fill
+                                            ? 'text-white border-purple-500'
                                             : 'text-white/60 border-transparent hover:text-white hover:bg-white/5'
                                             }`}
                                     >
                                         {item.title}
-                                    </a>
+                                    </Link>
                                 ))}
                             </div>
 
@@ -405,24 +406,26 @@ export const GlassmorphismNavbar = ({
                                     {isProfileDropdownOpen && (
                                         <div className="absolute top-full right-0 pt-2 min-w-[200px]">
                                             <div className="bg-black/95 backdrop-blur-xl border border-white/10 rounded-none shadow-2xl overflow-hidden flex flex-col">
-                                                <button
+                                                <Link
+                                                    href="/profile-settings"
                                                     onClick={() => {
                                                         setIsProfileDropdownOpen(false);
                                                         onProfileSettingsClick?.();
                                                     }}
-                                                    className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${activePath === '#profile-settings' ? 'text-white bg-white/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
+                                                    className={`block w-full text-left px-4 py-2.5 text-sm transition-colors ${activePath === '/profile-settings' ? 'text-white bg-white/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
                                                 >
                                                     Profile &amp; Settings
-                                                </button>
-                                                <button
+                                                </Link>
+                                                <Link
+                                                    href="/exchange-manager"
                                                     onClick={() => {
                                                         setIsProfileDropdownOpen(false);
                                                         onExchangeManagerClick?.();
                                                     }}
-                                                    className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${activePath === '#exchange-manager' ? 'text-white bg-white/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
+                                                    className={`block w-full text-left px-4 py-2.5 text-sm transition-colors ${activePath === '/exchange-manager' ? 'text-white bg-white/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
                                                 >
                                                     Exchange Manager
-                                                </button>
+                                                </Link>
                                             </div>
                                         </div>
                                     )}
@@ -462,15 +465,15 @@ export const GlassmorphismNavbar = ({
                                     <p className="text-xs text-white/40 uppercase tracking-wider mb-3">Main</p>
                                     <div className="space-y-1">
                                         {mainItems.map((item) => (
-                                            <a
+                                            <Link
                                                 key={item.href}
                                                 href={item.href}
                                                 onClick={(e) => {
                                                     if (item.onClick) {
                                                         e.preventDefault();
                                                         item.onClick(e);
-                                                        setIsMobileMenuOpen(false);
                                                     }
+                                                    setIsMobileMenuOpen(false);
                                                 }}
                                                 className={`flex items-center gap-3 px-4 py-3 rounded-none transition-all ${isActive(item.href)
                                                     ? 'text-white bg-white/10'
@@ -479,7 +482,7 @@ export const GlassmorphismNavbar = ({
                                             >
                                                 <span className={`w-1.5 h-1.5 rounded-full ${isActive(item.href) ? 'bg-white' : 'bg-white/20'}`} />
                                                 {item.title}
-                                            </a>
+                                            </Link>
                                         ))}
                                     </div>
                                 </div>
@@ -491,15 +494,15 @@ export const GlassmorphismNavbar = ({
                                     <p className="text-xs text-white/40 uppercase tracking-wider mb-3">{dropdownTitle}</p>
                                     <div className="space-y-1">
                                         {dropdownItems.map((item) => (
-                                            <a
+                                            <Link
                                                 key={item.href}
                                                 href={item.href}
                                                 onClick={(e) => {
                                                     if (item.onClick) {
                                                         e.preventDefault();
                                                         item.onClick(e);
-                                                        setIsMobileMenuOpen(false);
                                                     }
+                                                    setIsMobileMenuOpen(false);
                                                 }}
                                                 className={`flex items-center gap-3 px-4 py-3 rounded-none transition-all ${isActive(item.href)
                                                     ? 'text-white bg-white/10'
@@ -508,7 +511,7 @@ export const GlassmorphismNavbar = ({
                                             >
                                                 <span className={`w-1.5 h-1.5 rounded-full ${isActive(item.href) ? 'bg-white' : 'bg-white/20'}`} />
                                                 {item.title}
-                                            </a>
+                                            </Link>
                                         ))}
                                     </div>
                                 </div>
@@ -520,15 +523,15 @@ export const GlassmorphismNavbar = ({
                                     <p className="text-xs text-white/40 uppercase tracking-wider mb-3">Information</p>
                                     <div className="space-y-1">
                                         {infoItems.map((item) => (
-                                            <a
+                                            <Link
                                                 key={item.href}
                                                 href={item.href}
                                                 onClick={(e) => {
                                                     if (item.onClick) {
                                                         e.preventDefault();
                                                         item.onClick(e);
-                                                        setIsMobileMenuOpen(false);
                                                     }
+                                                    setIsMobileMenuOpen(false);
                                                 }}
                                                 className={`flex items-center gap-3 px-4 py-3 rounded-none transition-all ${isActive(item.href)
                                                     ? 'text-white bg-white/10'
@@ -537,7 +540,7 @@ export const GlassmorphismNavbar = ({
                                             >
                                                 <span className={`w-1.5 h-1.5 rounded-full ${isActive(item.href) ? 'bg-white' : 'bg-white/20'}`} />
                                                 {item.title}
-                                            </a>
+                                            </Link>
                                         ))}
                                     </div>
                                 </div>
@@ -547,30 +550,28 @@ export const GlassmorphismNavbar = ({
                             <div>
                                 <p className="text-xs text-white/40 uppercase tracking-wider mb-3">Settings</p>
                                 <div className="space-y-1">
-                                    <a
-                                        href="#profile-settings"
-                                        onClick={(e) => {
-                                            e.preventDefault();
+                                    <Link
+                                        href="/profile-settings"
+                                        onClick={() => {
                                             onProfileSettingsClick?.();
                                             setIsMobileMenuOpen(false);
                                         }}
-                                        className={`flex items-center gap-3 px-4 py-3 rounded-none transition-all ${activePath === '#profile-settings' ? 'text-white bg-white/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
+                                        className={`flex items-center gap-3 px-4 py-3 rounded-none transition-all ${activePath === '/profile-settings' ? 'text-white bg-white/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
                                     >
-                                        <span className={`w-1.5 h-1.5 rounded-full ${activePath === '#profile-settings' ? 'bg-white' : 'bg-white/20'}`} />
+                                        <span className={`w-1.5 h-1.5 rounded-full ${activePath === '/profile-settings' ? 'bg-white' : 'bg-white/20'}`} />
                                         Profile &amp; Settings
-                                    </a>
-                                    <a
-                                        href="#exchange-manager"
-                                        onClick={(e) => {
-                                            e.preventDefault();
+                                    </Link>
+                                    <Link
+                                        href="/exchange-manager"
+                                        onClick={() => {
                                             onExchangeManagerClick?.();
                                             setIsMobileMenuOpen(false);
                                         }}
-                                        className={`flex items-center gap-3 px-4 py-3 rounded-none transition-all ${activePath === '#exchange-manager' ? 'text-white bg-white/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
+                                        className={`flex items-center gap-3 px-4 py-3 rounded-none transition-all ${activePath === '/exchange-manager' ? 'text-white bg-white/10' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
                                     >
-                                        <span className={`w-1.5 h-1.5 rounded-full ${activePath === '#exchange-manager' ? 'bg-white' : 'bg-white/20'}`} />
+                                        <span className={`w-1.5 h-1.5 rounded-full ${activePath === '/exchange-manager' ? 'bg-white' : 'bg-white/20'}`} />
                                         Exchange Manager
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
