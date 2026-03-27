@@ -97,12 +97,12 @@ export default function LoadingScreen() {
     };
 
     const handleNavigateToDashboard = () => {
-        router.push('/');
+        router.push('/lessons');
         setCurrentPhase('logo');
     };
 
     const handleNavigateToLookup = (walletAddress: string) => {
-        router.push('/');
+        router.push('/lessons');
         setCurrentPhase('logo');
     };
 
@@ -111,7 +111,7 @@ export default function LoadingScreen() {
     };
 
     const handleWalletChoice = (choice: 'wallet' | 'mock') => {
-        router.push('/');
+        router.push('/lessons');
         setCurrentPhase('logo');
     };
 

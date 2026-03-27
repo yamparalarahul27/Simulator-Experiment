@@ -1,5 +1,5 @@
-import Web3Hub from '@/components/features/Web3Hub';
+import { redirect } from 'next/navigation';
 
 export default function HomePage() {
-    return <Web3Hub />;
+    redirect('/lessons');
 }
