@@ -296,7 +296,7 @@ export default function ProfileSettings() {
                 window.dispatchEvent(new Event('deriverse:show-welcome'));
             }
 
-            router.push('/');
+            router.push('/lessons');
             setIsLoggingOut(false);
         }, 800);
     };

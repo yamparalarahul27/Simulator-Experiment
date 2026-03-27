@@ -1,15 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { usePathname } from '@/i18n/navigation';
+import { usePathname, useRouter } from '@/i18n/navigation';
 import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
-import { useRouter } from '@/i18n/navigation';
 
 const NAV_ITEMS: NavItem[] = [
-    { title: 'Learn', href: '/', category: 'main' },
+    { title: 'Learn', href: '/lessons', category: 'main' },
+    { title: 'Simulator', href: '/simulator', category: 'main' },
+    { title: 'Perks', href: '/perks', category: 'main' },
+    { title: 'Help', href: '/help', category: 'main' },
     { title: 'About', href: '/about', category: 'dropdown' },
-    { title: 'Help', href: '/help', category: 'dropdown' },
     { title: 'Roadmap', href: '/roadmap', category: 'dropdown' },
+    { title: 'Exchange Manager', href: '/exchange-manager', category: 'dropdown' },
 ];
 
 function getNetworkName(net: 'devnet' | 'mainnet' | 'mock') {
@@ -22,15 +24,18 @@ function getNetworkName(net: 'devnet' | 'mainnet' | 'mock') {
 
 /**
  * Resolve the activePath for the navbar based on current pathname.
- * Lessons and sub-routes highlight "Learn" (/).
+ * Maps sub-routes to their parent nav item.
  */
 function resolveActivePath(pathname: string): string {
-    if (pathname === '/' || pathname.startsWith('/lessons')) return '/';
-    if (pathname.startsWith('/about')) return '/about';
+    if (pathname === '/' || pathname.startsWith('/lessons')) return '/lessons';
+    if (pathname.startsWith('/simulator')) return '/simulator';
+    if (pathname.startsWith('/perks')) return '/perks';
     if (pathname.startsWith('/help')) return '/help';
+    if (pathname.startsWith('/about')) return '/about';
     if (pathname.startsWith('/roadmap')) return '/roadmap';
-    if (pathname.startsWith('/profile-settings')) return '/profile-settings';
     if (pathname.startsWith('/exchange-manager')) return '/exchange-manager';
+    if (pathname.startsWith('/profile-settings')) return '/profile-settings';
+    if (pathname.startsWith('/challenges')) return '/challenges';
     return pathname;
 }
 
@@ -54,7 +59,7 @@ export default function RouteBasedNavbar() {
             onNetworkChange={setNetwork}
             onProfileSettingsClick={() => router.push('/profile-settings')}
             onExchangeManagerClick={() => router.push('/exchange-manager')}
-            onLogoClick={() => router.push('/')}
+            onLogoClick={() => router.push('/lessons')}
             className="mb-8"
         />
     );
