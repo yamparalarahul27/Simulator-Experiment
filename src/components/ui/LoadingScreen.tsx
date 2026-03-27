@@ -3,32 +3,16 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import type { TabType } from '../layout/TabNavigation';
+import { useRouter } from '@/i18n/navigation';
 import WelcomeScreen from './WelcomeScreen';
 import DeriverseWalletAsk from './DeriverseWalletAsk';
 
 type LoadingPhase = 'welcome' | 'wallet-ask' | 'logo' | 'complete';
 
-// Navigation event types
-type NavigationEvent = {
-    navigateToDashboard?: () => void;
-    navigateToLookup?: (walletAddress: string) => void;
-    returnToWelcome?: () => void;
-};
-
 const dispatchShowWelcome = () => {
     if (typeof window === 'undefined') return;
     window.dispatchEvent(
         new CustomEvent('deriverse:show-welcome')
-    );
-};
-
-const dispatchTabChange = (tab: TabType) => {
-    if (typeof window === 'undefined') return;
-    window.dispatchEvent(
-        new CustomEvent<TabType>('deriverse:set-active-tab', {
-            detail: tab,
-        })
     );
 };
 
@@ -49,7 +33,7 @@ const dispatchTabChange = (tab: TabType) => {
 export default function LoadingScreen() {
     const [currentPhase, setCurrentPhase] = useState<LoadingPhase>('welcome');
     const [isVisible, setIsVisible] = useState(true);
-    const [navigationCallbacks, setNavigationCallbacks] = useState<NavigationEvent>({});
+    const router = useRouter();
 
     useEffect(() => {
         // Only set up logo timer after welcome is completed by user
@@ -113,13 +97,12 @@ export default function LoadingScreen() {
     };
 
     const handleNavigateToDashboard = () => {
-        dispatchTabChange('learn');
+        router.push('/');
         setCurrentPhase('logo');
     };
 
     const handleNavigateToLookup = (walletAddress: string) => {
-        // Navigate to learn tab (wallet lookup is now part of education)
-        dispatchTabChange('learn');
+        router.push('/');
         setCurrentPhase('logo');
     };
 
@@ -128,8 +111,7 @@ export default function LoadingScreen() {
     };
 
     const handleWalletChoice = (choice: 'wallet' | 'mock') => {
-        // All paths lead to the Learn hub
-        dispatchTabChange('learn');
+        router.push('/');
         setCurrentPhase('logo');
     };
 
