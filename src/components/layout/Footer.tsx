@@ -21,7 +21,7 @@ export default function Footer() {
                     <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-purple-100/40"></div>
 
                     {/* Content */}
-                    <div className="relative z-10 py-6 px-">
+                    <div className="relative z-10 py-4 px-4 md:py-6 md:px-6">
                         <div className="flex flex-col items-center justify-center gap-2">
                             <p className="text-white/60 text-sm font-mono text-center">
                                 Design & Engineered by{' '}

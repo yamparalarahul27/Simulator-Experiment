@@ -19,13 +19,17 @@ export default function ControlPanel({ isOpen, onClose, trade }: ControlPanelPro
     const { settings, livePrices, wsDisabled, setPriceOverride, resetAllOverrides, updateCurrency, updateUsdInrRate, resetBalancesToDefault } = trade;
 
     return (
-        <div className="fixed right-0 top-0 bottom-0 w-80 bg-black/95 backdrop-blur-xl border-l border-white/10 z-[70] overflow-y-auto shadow-2xl shadow-black/50">
+        <div className="fixed inset-x-0 bottom-0 max-h-[80vh] md:inset-x-auto md:bottom-auto md:top-0 md:right-0 md:max-h-none md:h-full w-full md:w-80 bg-black/95 backdrop-blur-xl border-t md:border-t-0 md:border-l border-white/10 z-[70] overflow-y-auto shadow-2xl shadow-black/50 rounded-t-2xl md:rounded-none">
+            {/* Drag handle (mobile) */}
+            <div className="flex justify-center pt-2 pb-1 md:hidden">
+                <div className="w-10 h-1 rounded-full bg-white/20" />
+            </div>
             {/* Header */}
             <div className="sticky top-0 bg-black/95 backdrop-blur-xl border-b border-white/10 px-4 py-3 flex items-center justify-between z-10">
                 <h3 className="text-heading-14 text-white">Control Panel</h3>
                 <button
                     onClick={onClose}
-                    className="text-white/40 hover:text-white text-lg transition-colors"
+                    className="text-white/40 hover:text-white text-lg transition-colors p-1"
                 >
                     ✕
                 </button>

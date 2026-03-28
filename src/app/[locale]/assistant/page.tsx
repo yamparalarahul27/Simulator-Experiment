@@ -79,30 +79,30 @@ export default function AssistantPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#0B0E14] flex flex-col pt-20">
-            <header className="fixed top-0 left-0 right-0 h-20 bg-[#0B0E14]/80 backdrop-blur-xl border-b border-white/10 z-40 px-6 flex items-center justify-between">
+        <div className="min-h-screen bg-[#0B0E14] flex flex-col pt-14 md:pt-20">
+            <header className="fixed top-0 left-0 right-0 h-14 md:h-20 bg-[#0B0E14]/80 backdrop-blur-xl border-b border-white/10 z-40 px-4 md:px-6 flex items-center justify-between">
                 <button
                     onClick={() => router.back()}
-                    className="p-2 rounded-none bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors shrink-0 z-10"
+                    className="p-3 md:p-2 rounded-none bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors shrink-0 z-10"
                 >
                     <ArrowLeft className="w-5 h-5" />
                 </button>
 
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
-                    <h1 className="text-lg font-semibold text-white">YDEX AI Assistant</h1>
-                    <p className="text-xs text-zinc-400">Powered by Gemini 2.5 Flash</p>
+                    <h1 className="text-base md:text-lg font-semibold text-white">YDEX AI Assistant</h1>
+                    <p className="text-[10px] md:text-xs text-zinc-400">Powered by Gemini 2.5 Flash</p>
                 </div>
 
                 <button
                     onClick={() => router.back()}
-                    className="p-2 rounded-none bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors shrink-0 z-10"
+                    className="p-3 md:p-2 rounded-none bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors shrink-0 z-10"
                 >
                     <X className="w-5 h-5" />
                 </button>
             </header>
 
             {/* Chat Container */}
-            <main className="flex-1 max-w-4xl w-full mx-auto p-4 md:p-8 pb-32 flex flex-col gap-6 overflow-y-auto">
+            <main className="flex-1 max-w-4xl w-full mx-auto p-4 md:p-8 pb-40 md:pb-32 flex flex-col gap-4 md:gap-6 overflow-y-auto">
                 {messages.map((message) => (
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
@@ -154,7 +154,7 @@ export default function AssistantPage() {
             </main>
 
             {/* Input Fixed at Bottom */}
-            <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-[#0B0E14] via-[#0B0E14] to-transparent pt-10 pb-6 px-4 z-40 pointer-events-none">
+            <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-[#0B0E14] via-[#0B0E14] to-transparent pt-6 md:pt-10 pb-4 md:pb-6 px-4 z-40 pointer-events-none">
                 <div className="max-w-4xl mx-auto pointer-events-auto">
                     <form
                         onSubmit={handleSubmit}
@@ -164,7 +164,7 @@ export default function AssistantPage() {
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            placeholder="Ask Gemini to analyze markets, explain strategies, or fetch data..."
+                            placeholder="Ask about trades or markets..."
                             disabled={isLoading}
                             className="w-full bg-[#1A1E26]/90 backdrop-blur-md border border-white/10 rounded-none py-4 pl-6 pr-14 text-[15px] text-white placeholder:text-zinc-500 focus:outline-none focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 disabled:opacity-50 transition-all shadow-inner shadow-black/20"
                         />

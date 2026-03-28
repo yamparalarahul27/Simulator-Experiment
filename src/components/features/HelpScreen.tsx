@@ -53,11 +53,11 @@ export default function HelpScreen() {
     }, []);
 
     return (
-        <section className="mx-auto flex max-w-4xl flex-col gap-8 rounded-none text-white/80 backdrop-blur">
+        <section className="mx-auto flex max-w-4xl flex-col gap-6 md:gap-8 rounded-none text-white/80 backdrop-blur">
             <header className="space-y-3">
-                <p className="text-sm uppercase tracking-[0.4em] text-white/40">Need a hand?</p>
-                <h1 className="text-4xl font-semibold text-white">Help Center</h1>
-                <p className="text-lg leading-relaxed text-white/70">
+                <p className="text-xs md:text-sm uppercase tracking-[0.4em] text-white/40">Need a hand?</p>
+                <h1 className="text-2xl md:text-4xl font-semibold text-white">Help Center</h1>
+                <p className="text-base md:text-lg leading-relaxed text-white/70">
                     Quick answers to the most common questions.
                 </p>
             </header>
@@ -70,7 +70,7 @@ export default function HelpScreen() {
             >
                 {FAQ_ITEMS.map((item) => (
                     <AccordionItem key={item.value} value={item.value} className="px-4">
-                        <AccordionTrigger className="text-white text-lg">
+                        <AccordionTrigger className="text-white text-base md:text-lg">
                             {item.title}
                         </AccordionTrigger>
                         <AccordionContent className="text-white/70 text-sm">
@@ -80,13 +80,13 @@ export default function HelpScreen() {
                 ))}
             </Accordion>
 
-            <footer className="space-y-4 rounded-none bg-gradient-to-r from-cyan-500/15 via-blue-500/15 to-purple-500/15 p-6 text-sm leading-relaxed text-white/85">
-            
+            <footer className="space-y-4 rounded-none bg-gradient-to-r from-cyan-500/15 via-blue-500/15 to-purple-500/15 p-4 md:p-6 text-sm leading-relaxed text-white/85">
+
                 <div className="text-center space-y-3 rounded-none border border-white/10 bg-black/20 p-4 text-white/80">
                     <p>
                         If you have any other question or need help, connect with me on Telegram
                     </p>
-                    <div className="flex justify-center flex flex-wrap items-center gap-3 text-white">
+                    <div className="flex flex-col sm:flex-row justify-center flex-wrap items-center gap-2 sm:gap-3 text-white">
                         <a
                             href={TELEGRAM_URL}
                             target="_blank"

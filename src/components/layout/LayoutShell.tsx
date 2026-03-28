@@ -17,8 +17,8 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
     return (
         <div className="min-h-screen text-white">
             <RouteBasedNavbar />
-            <div className="hidden md:block h-full">
-                <div className="pt-44 p-4 max-w-7xl mx-auto">
+            <div className="h-full">
+                <div className="pt-20 md:pt-44 px-4 pb-4 max-w-7xl mx-auto">
                     {children}
                     <Footer />
                 </div>

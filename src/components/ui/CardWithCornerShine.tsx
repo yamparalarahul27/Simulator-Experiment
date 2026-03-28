@@ -115,7 +115,7 @@ const CornerAccents = () => {
 export const CardWithCornerShine = ({
     children,
     className = '',
-    minHeight = 'min-h-[320px] sm:min-h-[340px]',
+    minHeight = 'min-h-[200px] sm:min-h-[320px] md:min-h-[340px]',
     showHoverShadow = true,
     padding = 'md',
     bgOpacity = 0,

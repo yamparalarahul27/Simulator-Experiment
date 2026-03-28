@@ -57,17 +57,15 @@ function DemoMarketInner({ walletAddress }: { walletAddress?: string | null }) {
     return (
         <div className="relative">
             {/* Header */}
-            <div className="flex items-center justify-between mb-6">
-                <div>
-                    <div className="flex items-center gap-4">
-                        <h1 className="text-heading-24 text-white">Demo Market Simulator</h1>
-                        <span className="px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-widest bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-none">
-                            Experiment
-                        </span>
-                    </div>
+            <div className="flex flex-col gap-3 mb-4 md:mb-6 md:flex-row md:items-center md:justify-between">
+                <div className="flex items-center gap-2 md:gap-4 min-w-0">
+                    <h1 className="text-lg md:text-heading-24 text-white truncate">Demo Market Simulator</h1>
+                    <span className="px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-widest bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-none shrink-0">
+                        Experiment
+                    </span>
                 </div>
 
-                <div className="flex flex-col items-end gap-1">
+                <div className="flex items-center justify-between gap-2 md:flex-col md:items-end md:gap-1">
                     {/* Currency Toggle + Settings Icon */}
                     <div className="flex items-center gap-1.5">
                         <button
@@ -93,10 +91,10 @@ function DemoMarketInner({ walletAddress }: { walletAddress?: string | null }) {
             </div>
 
             {/* Spot / Future Tabs */}
-            <div className="flex border-b border-white/10 mb-6">
+            <div className="flex border-b border-white/10 mb-4 md:mb-6">
                 <button
                     onClick={() => setActiveTab('future')}
-                    className={`px-6 py-3 text-sm font-mono font-medium transition-all border-b-2 ${activeTab === 'future'
+                    className={`flex-1 md:flex-none px-4 md:px-6 py-3 text-sm font-mono font-medium transition-all border-b-2 ${activeTab === 'future'
                         ? 'text-white border-purple-500'
                         : 'text-white/40 border-transparent hover:text-white/70'
                         }`}
@@ -105,7 +103,7 @@ function DemoMarketInner({ walletAddress }: { walletAddress?: string | null }) {
                 </button>
                 <button
                     onClick={() => setActiveTab('spot')}
-                    className={`px-6 py-3 text-sm font-mono font-medium transition-all border-b-2 ${activeTab === 'spot'
+                    className={`flex-1 md:flex-none px-4 md:px-6 py-3 text-sm font-mono font-medium transition-all border-b-2 ${activeTab === 'spot'
                         ? 'text-white border-purple-500'
                         : 'text-white/40 border-transparent hover:text-white/70'
                         }`}
