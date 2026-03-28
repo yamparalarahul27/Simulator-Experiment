@@ -124,8 +124,8 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
     return (
         <div className="space-y-4">
             {/* ─── Token Selector Bar ──────────── */}
-            <div className="relative z-10 flex items-center justify-between bg-black/60 backdrop-blur-xl border border-white/10 px-4 py-3">
-                <div className="flex items-center gap-6">
+            <div className="relative z-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between bg-black/60 backdrop-blur-xl border border-white/10 px-3 sm:px-4 py-3">
+                <div className="flex items-center gap-3 sm:gap-6 flex-wrap">
                     {/* Pair selector */}
                     <div className="relative" ref={dropdownRef}>
                         <button
@@ -213,13 +213,14 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                     )}
                     <button
                         onClick={onToggleControlPanel}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono border transition-all ${controlPanelOpen
+                        className={`flex items-center gap-1.5 px-3 py-2 text-xs font-mono border transition-all ${controlPanelOpen
                             ? 'bg-purple-500/20 border-purple-500/40 text-purple-300'
                             : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white'
                             }`}
                     >
                         <Settings size={14} />
-                        Set Manual Prices
+                        <span className="hidden sm:inline">Set Manual Prices</span>
+                        <span className="sm:hidden">Prices</span>
                     </button>
                 </div>
             </div>
@@ -255,10 +256,10 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
             ) : (
                 <div className="flex flex-col gap-3">
                     {/* ── Top row: Order Form + Order Flow + Price Scale ── */}
-                    <div className="flex gap-3 items-stretch min-h-[500px]">
+                    <div className="flex flex-col gap-3 md:flex-row md:items-stretch md:min-h-[500px]">
 
                         {/* ── Box 1: Order Form ── */}
-                        <div className="bg-black border border-white/10 p-4 w-[300px] flex-shrink-0 flex flex-col">
+                        <div className="bg-black border border-white/10 p-4 w-full md:w-[300px] md:flex-shrink-0 flex flex-col">
                             <p className="text-[10px] font-mono text-white/40 uppercase tracking-wider mb-3">Order Form</p>
                             <SpotOrderForm
                                 pair={selectedPair}
@@ -273,7 +274,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                         </div>
 
                         {/* ── Box 2: Order Flow ── */}
-                        <div className="bg-black border border-white/10 p-4 flex-1 min-w-0 flex flex-col">
+                        <div className="bg-black border border-white/10 p-4 flex-1 min-w-0 flex flex-col min-h-[300px] md:min-h-0">
                             <OrderFlowVisualiser
                                 orderType={orderType}
                                 side={side}
@@ -287,7 +288,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                         </div>
 
                         {/* ── Box 3: Price Scale ── */}
-                        <div className="bg-black border border-white/10 p-4 w-[120px] flex-shrink-0 flex flex-col">
+                        <div className="bg-black border border-white/10 p-4 w-full md:w-[120px] md:flex-shrink-0 flex flex-col">
                             <p className="text-[10px] font-mono text-white/40 uppercase tracking-wider mb-3">Price Scale</p>
                             {!simSnapshot ? (
                                 <div className="flex-1 flex items-center justify-center">

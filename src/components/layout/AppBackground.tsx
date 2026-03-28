@@ -20,8 +20,7 @@ export default function AppBackground() {
             : DEFAULT_BG;
 
     return (
-        // hidden on mobile — MobileRestrictedView has its own background
-        <div className="hidden md:block">
+        <div>
             {/* Base Layer */}
             {showImage ? (
                 <div

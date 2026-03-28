@@ -58,23 +58,23 @@ const phases = [
 
 export default function RoadmapScreen() {
     return (
-        <section className="mx-auto flex max-w-6xl flex-col gap-8 p-8 text-white/80">
-            <div className="flex w-full flex-col gap-6 md:flex-row md:items-center md:justify-between">
+        <section className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-8 p-4 md:p-8 text-white/80">
+            <div className="flex w-full flex-col gap-4 md:gap-6 md:flex-row md:items-center md:justify-between">
                 <header className="text-left max-w-6xl md:flex-1">
-                    <h1 className="mt-3 text-4xl font-semibold text-white">Development Roadmap</h1>
-                    <p className="mt-2 text-sm uppercase tracking-[0.4em] text-white/40">From simulation to real trading</p>
-                    <p className="mt-4 text-md leading-relaxed text-white/70">
+                    <h1 className="mt-2 md:mt-3 text-2xl md:text-4xl font-semibold text-white">Development Roadmap</h1>
+                    <p className="mt-1 md:mt-2 text-xs md:text-sm uppercase tracking-[0.4em] text-white/40">From simulation to real trading</p>
+                    <p className="mt-3 md:mt-4 text-sm md:text-base leading-relaxed text-white/70">
                         YDEX is built in phases — each one expands capabilities while keeping education at the core.
                     </p>
                 </header>
 
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
                 {phases.map((phase) => (
                     <div
                         key={phase.title}
-                        className={`rounded-none border p-6 ${
+                        className={`rounded-none border p-4 md:p-6 ${
                             phase.status === 'done'
                                 ? 'border-cyan-500/20 bg-cyan-500/5'
                                 : phase.status === 'next'
@@ -97,7 +97,7 @@ export default function RoadmapScreen() {
                             </span>
                         </div>
                         <p className="mt-1 text-sm text-white/50">{phase.subtitle}</p>
-                        <ul className="mt-4 space-y-2 text-base text-white/75">
+                        <ul className="mt-3 md:mt-4 space-y-2 text-sm md:text-base text-white/75">
                             {phase.items.map((item) => (
                                 <li key={item} className="flex items-start gap-3">
                                     <span

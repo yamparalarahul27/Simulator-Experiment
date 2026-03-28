@@ -5,54 +5,40 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from '@/i18n/navigation';
 import WelcomeScreen from './WelcomeScreen';
-import DeriverseWalletAsk from './DeriverseWalletAsk';
 
-type LoadingPhase = 'welcome' | 'wallet-ask' | 'logo' | 'complete';
+type LoadingPhase = 'welcome' | 'logo' | 'complete';
 
 const dispatchShowWelcome = () => {
     if (typeof window === 'undefined') return;
-    window.dispatchEvent(
-        new CustomEvent('deriverse:show-welcome')
-    );
+    window.dispatchEvent(new CustomEvent('deriverse:show-welcome'));
 };
 
 /**
  * LoadingScreen Component
- * 
- * PURPOSE:
- * Manages the initial multi-phase app entry sequence.
- * Orchestrates transitions between the Welcome screen, Wallet connection prompt,
- * and the final Logo animation.
- * 
- * PHASES:
- * 1. 'welcome': Display branding and app introduction
- * 2. 'wallet-ask': Prompt user for network/wallet choice
- * 3. 'logo': Play the primary branding animation
- * 4. 'complete': Transition to the main dashboard
+ *
+ * Manages the app entry sequence:
+ * 1. 'welcome': Single hero landing page with Get Started + Connect Wallet
+ * 2. 'logo': Branding animation
+ * 3. 'complete': Transition to main app
  */
 export default function LoadingScreen() {
     const [currentPhase, setCurrentPhase] = useState<LoadingPhase>('welcome');
     const [isVisible, setIsVisible] = useState(true);
     const router = useRouter();
 
-    useEffect(() => {
-        // Only set up logo timer after welcome is completed by user
-        // No automatic transition from welcome screen
-    }, []);
-
-    // This effect will be called when welcome screen is completed by user
+    // Logo animation timer
     useEffect(() => {
         if (currentPhase === 'logo') {
-            // Phase 2: Logo Animation (4.8 seconds)
             const logoTimer = setTimeout(() => {
                 setCurrentPhase('complete');
                 setIsVisible(false);
-            }, 4800); // Logo animation time only
+            }, 4800);
 
             return () => clearTimeout(logoTimer);
         }
     }, [currentPhase]);
 
+    // Listen for show-welcome event (e.g. from NewUserModal "go back")
     useEffect(() => {
         if (typeof window === 'undefined') return;
 
@@ -62,16 +48,13 @@ export default function LoadingScreen() {
         };
 
         window.addEventListener('deriverse:show-welcome', handleShowWelcome);
-        return () => {
-            window.removeEventListener('deriverse:show-welcome', handleShowWelcome);
-        };
+        return () => window.removeEventListener('deriverse:show-welcome', handleShowWelcome);
     }, []);
 
-    // Hide all body content while loading
+    // Hide body content while loading
     useEffect(() => {
         if (isVisible) {
             document.body.style.overflow = 'hidden';
-            // Hide all children except the loading screen
             const bodyChildren = Array.from(document.body.children);
             bodyChildren.forEach((child) => {
                 if (!child.classList.contains('loading-screen')) {
@@ -79,7 +62,6 @@ export default function LoadingScreen() {
                 }
             });
         } else {
-            // Add a small buffer before showing content to ensure smooth transition
             const bufferTimer = setTimeout(() => {
                 document.body.style.overflow = '';
                 const bodyChildren = Array.from(document.body.children);
@@ -93,24 +75,6 @@ export default function LoadingScreen() {
     }, [isVisible]);
 
     const handleWelcomeComplete = () => {
-        setCurrentPhase('wallet-ask');
-    };
-
-    const handleNavigateToDashboard = () => {
-        router.push('/lessons');
-        setCurrentPhase('logo');
-    };
-
-    const handleNavigateToLookup = (walletAddress: string) => {
-        router.push('/lessons');
-        setCurrentPhase('logo');
-    };
-
-    const handleReturnToWelcome = () => {
-        dispatchShowWelcome();
-    };
-
-    const handleWalletChoice = (choice: 'wallet' | 'mock') => {
         router.push('/lessons');
         setCurrentPhase('logo');
     };
@@ -124,23 +88,13 @@ export default function LoadingScreen() {
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
                 >
-                    {/* Welcome Screen Phase */}
+                    {/* Welcome / Hero Landing */}
                     <WelcomeScreen
                         isVisible={currentPhase === 'welcome'}
                         onComplete={handleWelcomeComplete}
                     />
 
-                    {/* Wallet Ask Phase */}
-                    {currentPhase === 'wallet-ask' && (
-                        <DeriverseWalletAsk
-                            onChoice={handleWalletChoice}
-                            onNavigateToDashboard={handleNavigateToDashboard}
-                            onNavigateToLookup={handleNavigateToLookup}
-                            onReturnToWelcome={handleReturnToWelcome}
-                        />
-                    )}
-
-                    {/* Logo Animation Phase */}
+                    {/* Logo Animation */}
                     {currentPhase === 'logo' && (
                         <motion.div
                             className="flex items-center justify-center"

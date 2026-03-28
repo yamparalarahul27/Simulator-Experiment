@@ -34,13 +34,13 @@ export default function AboutScreen() {
     }, []);
 
     return (
-        <section className="mx-auto flex max-w-6xl flex-col gap-10 rounded-none p-6 sm:p-8 text-white/80 backdrop-blur">
+        <section className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-10 rounded-none px-4 py-4 sm:p-8 text-white/80 backdrop-blur">
             <header className="space-y-4">
                 <p className="text-center text-sm uppercase tracking-[0.4em] text-white/40">About YDEX</p>
-                <h1 className="text-center text-xl font-semibold text-white sm:text-3xl">
+                <h1 className="text-center text-lg font-semibold text-white sm:text-xl md:text-3xl">
                     Make Decentralised Exchanges easy to understand for the New Age Traders on Solana.
                 </h1>
-                <div className="text-center space-y-6 text-md leading-relaxed text-white/80">
+                <div className="text-center space-y-4 md:space-y-6 text-sm md:text-base leading-relaxed text-white/80">
                     <p>
                         Hey there, I&apos;m Rahul — a design engineer who believes trading doesn&apos;t have to feel overwhelming or
                         complicated. YDEX bridges the knowledge gap between centralised exchange UX and decentralised exchange
@@ -77,7 +77,7 @@ export default function AboutScreen() {
                 <p className="text-center text-sm text-white/40">Phase 0 + Phase 1 complete</p>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-3">
+            <div className="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
                 {[
                     {
                         title: 'Analytics & Insights',
@@ -112,9 +112,9 @@ export default function AboutScreen() {
             </div>
 
             {/* Design Principles */}
-            <div className="space-y-4 rounded-none border border-white/10 bg-black/40 p-6">
+            <div className="space-y-4 rounded-none border border-white/10 bg-black/40 p-4 md:p-6">
                 <h3 className="text-base font-semibold text-white">Design Principles</h3>
-                <div className="grid gap-3 md:grid-cols-2">
+                <div className="grid gap-3 grid-cols-1 md:grid-cols-2">
                     {[
                         { label: 'Education-first', desc: 'Every feature teaches something.' },
                         { label: 'Simulate before you execute', desc: 'Build confidence through simulation before risking real capital.' },
@@ -130,7 +130,7 @@ export default function AboutScreen() {
                 </div>
             </div>
 
-            <div className="space-y-4 rounded-none bg-gradient-to-r from-cyan-500/15 via-blue-500/15 to-purple-500/15 p-6 text-sm leading-relaxed text-white/85">
+            <div className="space-y-4 rounded-none bg-gradient-to-r from-cyan-500/15 via-blue-500/15 to-purple-500/15 p-4 md:p-6 text-sm leading-relaxed text-white/85">
                 <p>
                     Check out the Roadmap tab for what&apos;s shipping next — from funding rate explainers and multi-DEX support
                     to paper trading and live trade execution via Jupiter.
@@ -171,8 +171,8 @@ export default function AboutScreen() {
             </div>
 
             {isQrOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center px-">
-                    <div className="absolute" onClick={() => setIsQrOpen(false)} />
+                <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+                    <div className="absolute inset-0 bg-black/70" onClick={() => setIsQrOpen(false)} />
                     <div className="relative z-10 w-full max-w-sm rounded-none border border-white/10 bg-[#05050c]/95 p-6 text-center shadow-2xl">
                         <h4 className="text-lg font-semibold text-white">Scan to say Hi!</h4>
                         <p className="mt-2 text-sm text-white/70">Waiting to talk to you soon.</p>
