@@ -6,17 +6,17 @@ import { WifiOff, Terminal as TerminalIcon } from 'lucide-react';
 
 export default function NotFound() {
     return (
-        <div className="min-h-screen flex items-center justify-center p-6 font-mono selection:bg-red-500/30 selection:text-red-500">
+        <div className="min-h-screen flex items-center justify-center p-4 md:p-6 font-mono selection:bg-red-500/30 selection:text-red-500">
             <div className="max-w-xl w-full">
                 {/* Terminal Header */}
-                <div className="border border-white/10 bg-white/5 p-4 flex items-center justify-between mb-8 overflow-hidden relative">
-                    <div className="flex items-center gap-3">
-                        <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-                        <span className="text-[12px] text-white/40 uppercase tracking-widest leading-none font-bold">
+                <div className="border border-white/10 bg-white/5 p-3 md:p-4 flex items-center justify-between mb-6 md:mb-8 overflow-hidden relative gap-2">
+                    <div className="flex items-center gap-2 md:gap-3 min-w-0">
+                        <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse shrink-0"></div>
+                        <span className="text-[10px] md:text-[12px] text-white/40 uppercase tracking-widest leading-none font-bold truncate">
                             Status: Critical Malfunction
                         </span>
                     </div>
-                    <div className="text-[12px] text-white/20 uppercase tracking-widest leading-none font-bold">Ref: ER_VOID_404</div>
+                    <div className="text-[10px] md:text-[12px] text-white/20 uppercase tracking-widest leading-none font-bold shrink-0">Ref: ER_VOID_404</div>
 
                     {/* Subtle Glitch Lines */}
                     <div className="absolute inset-0 pointer-events-none opacity-10">
@@ -27,13 +27,13 @@ export default function NotFound() {
 
                 {/* Error Content */}
                 <div className="space-y-8">
-                    <div className="flex items-start gap-6">
-                        <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-500 mt-1">
-                            <WifiOff size={32} />
+                    <div className="flex items-start gap-4 md:gap-6">
+                        <div className="p-3 md:p-4 bg-red-500/10 border border-red-500/20 text-red-500 mt-1 shrink-0">
+                            <WifiOff size={24} className="md:w-8 md:h-8" />
                         </div>
-                        <div className="space-y-4">
-                            <h1 className="text-4xl font-bold text-white uppercase tracking-tighter leading-none">SIGNAL LOST</h1>
-                            <p className="text-white/40 text-sm leading-relaxed uppercase tracking-tighter">
+                        <div className="space-y-3 md:space-y-4 min-w-0">
+                            <h1 className="text-2xl md:text-4xl font-bold text-white uppercase tracking-tighter leading-none">SIGNAL LOST</h1>
+                            <p className="text-white/40 text-xs md:text-sm leading-relaxed uppercase tracking-tighter">
                                 The requested coordinate does not exist within the current simulation grid. Packet loss at 100%.
                                 Data retrieval failed.
                             </p>
@@ -41,7 +41,7 @@ export default function NotFound() {
                     </div>
 
                     {/* Diagnostic Stats */}
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="p-4 bg-white/5 border border-white/10">
                             <span className="text-[12px] text-white/20 uppercase block mb-1 font-bold">Error Code</span>
                             <span className="text-sm font-bold text-white">404_PAGE_NOT_FOUND</span>

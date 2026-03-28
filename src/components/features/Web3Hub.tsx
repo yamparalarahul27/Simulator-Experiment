@@ -86,7 +86,7 @@ function HeroSection({ onStartLearning }: { onStartLearning: () => void }) {
                 }}
             />
 
-            <div className="relative p-8 md:p-12">
+            <div className="relative p-4 sm:p-8 md:p-12">
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                     <div className="space-y-3">
                         <div className="flex items-center gap-2">
@@ -94,7 +94,7 @@ function HeroSection({ onStartLearning }: { onStartLearning: () => void }) {
                                 Featured Lab
                             </span>
                         </div>
-                        <h2 className="text-2xl md:text-3xl font-mono font-bold text-white">
+                        <h2 className="text-xl sm:text-2xl md:text-3xl font-mono font-bold text-white">
                             Order Types Lab
                         </h2>
                         <p className="text-sm font-mono text-white/50 max-w-lg leading-relaxed">
@@ -150,7 +150,7 @@ export default function Web3Hub() {
                 <h3 className="text-xs font-mono uppercase tracking-widest text-white/30 mb-4">
                     Learning Modules
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {MODULES.map((module) => (
                         <ModuleCard
                             key={module.moduleSlug}

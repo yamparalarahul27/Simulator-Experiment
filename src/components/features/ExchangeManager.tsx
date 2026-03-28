@@ -58,11 +58,11 @@ export default function ExchangeManager() {
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-sm uppercase tracking-[0.2em] text-white/40">Exchange Manager</p>
-            <h1 className="text-3xl font-semibold text-white">Connect and manage exchanges</h1>
-            <p className="text-white/60 mt-2 max-w-2xl">
+            <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-white/40">Exchange Manager</p>
+            <h1 className="text-xl md:text-3xl font-semibold text-white">Connect and manage exchanges</h1>
+            <p className="text-white/60 mt-2 max-w-2xl text-sm md:text-base">
               Control centralized and decentralized exchange connections in one place. Add API keys, refresh balances,
               and keep your trade data in sync across networks.
             </p>
@@ -92,30 +92,32 @@ export default function ExchangeManager() {
 
       <div className="border border-white/10 bg-white/5">
         <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
-          <h2 className="text-lg font-semibold text-white">Connections</h2>
-          <span className="text-xs text-white/50">Status · Network · Accounts · Last Sync</span>
+          <h2 className="text-base md:text-lg font-semibold text-white">Connections</h2>
+          <span className="text-xs text-white/50 hidden md:inline">Status · Network · Accounts · Last Sync</span>
         </div>
         <div className="divide-y divide-white/10">
           {exchanges.map((exchange) => (
-            <div key={exchange.name} className="flex flex-wrap items-center gap-4 px-4 py-3">
-              <div className="flex-1 min-w-[200px]">
-                <p className="text-white font-medium">{exchange.name}</p>
-                <p className="text-white/50 text-sm">{exchange.network}</p>
+            <div key={exchange.name} className="flex flex-col gap-3 px-4 py-3 md:flex-row md:flex-wrap md:items-center md:gap-4">
+              <div className="flex-1 min-w-0 md:min-w-[200px]">
+                <p className="text-white font-medium text-sm md:text-base">{exchange.name}</p>
+                <p className="text-white/50 text-xs md:text-sm truncate">{exchange.network}</p>
               </div>
-              <div className="flex items-center gap-2 min-w-[120px]">
-                <span
-                  className={`h-2 w-2 rounded-full ${exchange.status === 'connected' ? 'bg-emerald-400' : 'bg-orange-400'}`}
-                  aria-hidden
-                />
-                <span className="text-white/70 text-sm capitalize">{exchange.status}</span>
+              <div className="flex items-center justify-between gap-4 md:contents">
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`h-2 w-2 rounded-full ${exchange.status === 'connected' ? 'bg-emerald-400' : 'bg-orange-400'}`}
+                    aria-hidden
+                  />
+                  <span className="text-white/70 text-sm capitalize">{exchange.status}</span>
+                </div>
+                <div className="text-white/70 text-sm">{exchange.accounts} accounts</div>
+                <div className="text-white/50 text-sm">{exchange.lastSynced}</div>
               </div>
-              <div className="text-white/70 text-sm min-w-[120px]">{exchange.accounts} accounts</div>
-              <div className="text-white/50 text-sm min-w-[120px]">{exchange.lastSynced}</div>
-              <div className="flex items-center gap-2 ml-auto">
-                <button className="px-3 py-2 text-xs uppercase tracking-wide border border-white/20 text-white hover:border-white/50">
+              <div className="flex items-center gap-2 md:ml-auto">
+                <button className="flex-1 md:flex-none px-3 py-2 text-xs uppercase tracking-wide border border-white/20 text-white hover:border-white/50">
                   Manage
                 </button>
-                <button className="px-3 py-2 text-xs uppercase tracking-wide border border-white/20 text-white hover:border-white/50">
+                <button className="flex-1 md:flex-none px-3 py-2 text-xs uppercase tracking-wide border border-white/20 text-white hover:border-white/50">
                   Sync
                 </button>
               </div>

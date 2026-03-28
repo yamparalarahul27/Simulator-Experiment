@@ -63,7 +63,7 @@ export const WelcomeCard = ({ children, className = '' }: WelcomeCardProps) => {
         <motion.div
             className={`
                 group relative
-                min-h-[400px]
+                min-h-0 sm:min-h-[400px]
                 w-full max-w-[500px]
                 rounded-none
                 bg-black/40
@@ -71,7 +71,7 @@ export const WelcomeCard = ({ children, className = '' }: WelcomeCardProps) => {
                 hover:border-white/20
                 hover:shadow-lg hover:shadow-white/5
                 transition-all duration-300
-                p-8
+                p-5 sm:p-8
                 ${className}
             `}
             initial={{ opacity: 0, y: 20 }}

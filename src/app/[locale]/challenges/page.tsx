@@ -13,7 +13,7 @@ export default function ChallengesPage() {
             </div>
 
             <CardWithCornerShine>
-                <div className="flex flex-col items-center justify-center py-16 text-center">
+                <div className="flex flex-col items-center justify-center py-8 md:py-16 text-center px-4">
                     <span className="text-4xl mb-4">🏆</span>
                     <h2 className="text-lg font-mono font-semibold text-white mb-2">Coming Soon</h2>
                     <p className="text-sm font-mono text-white/40 max-w-md">

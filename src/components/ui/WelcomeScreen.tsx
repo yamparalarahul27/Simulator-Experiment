@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
-import MobileRestrictedView from '../layout/MobileRestrictedView';
 import WelcomeCard from './WelcomeCard';
 import WelcomeButton from './WelcomeButton';
 import WelcomeFooter from './WelcomeFooter';
@@ -24,8 +23,6 @@ const HeroContent = {
 };
 
 export default function WelcomeScreen({ onComplete, isVisible }: WelcomeScreenProps) {
-    const [isMobile, setIsMobile] = useState(false);
-
     // Wallet connection state
     const [isConnecting, setIsConnecting] = useState(false);
     const [isCheckingWallet, setIsCheckingWallet] = useState(false);
@@ -43,13 +40,6 @@ export default function WelcomeScreen({ onComplete, isVisible }: WelcomeScreenPr
     } = useWalletConnection();
 
     const walletService = new SupabaseWalletService();
-
-    useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth < 768);
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
-        return () => window.removeEventListener('resize', checkMobile);
-    }, []);
 
     // Handle wallet connection success
     useEffect(() => {
@@ -132,10 +122,6 @@ export default function WelcomeScreen({ onComplete, isVisible }: WelcomeScreenPr
         }
     };
 
-    if (isVisible && isMobile) {
-        return <MobileRestrictedView />;
-    }
-
     return (
         <AnimatePresence>
             {isVisible && (
@@ -152,11 +138,11 @@ export default function WelcomeScreen({ onComplete, isVisible }: WelcomeScreenPr
                     exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
                 >
                     {/* Hero Card */}
-                    <div className="flex flex-col items-center gap-8">
+                    <div className="flex flex-col items-center gap-6 sm:gap-8 px-4 sm:px-0">
                         <WelcomeCard>
                             {/* Logo */}
                             <motion.div
-                                className="flex justify-center mb-8"
+                                className="flex justify-center mb-4 sm:mb-8"
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
@@ -164,8 +150,7 @@ export default function WelcomeScreen({ onComplete, isVisible }: WelcomeScreenPr
                                 <img
                                     src="/Logo.png"
                                     alt="YDEX Logo"
-                                    className="h-auto"
-                                    style={{ width: '180px', height: 'auto' }}
+                                    className="h-auto w-[140px] sm:w-[180px]"
                                 />
                             </motion.div>
 
@@ -176,7 +161,7 @@ export default function WelcomeScreen({ onComplete, isVisible }: WelcomeScreenPr
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                             >
-                                <h1 className="text-xl font-mono uppercase tracking-wider text-white/80 mb-6">
+                                <h1 className="text-lg sm:text-xl font-mono uppercase tracking-wider text-white/80 mb-4 sm:mb-6">
                                     {HeroContent.greeting}
                                 </h1>
 

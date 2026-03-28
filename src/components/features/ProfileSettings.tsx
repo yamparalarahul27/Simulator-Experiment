@@ -302,11 +302,11 @@ export default function ProfileSettings() {
     };
 
     return (
-        <div className="flex flex-col items-center gap-8 max-w-2xl mx-auto py-8">
+        <div className="flex flex-col items-center gap-6 md:gap-8 max-w-2xl mx-auto py-4 md:py-8 w-full">
             {/* Header */}
             <div className="text-center">
-                <h1 className="text-4xl font-bold text-white mb-2">Profile &amp; Settings</h1>
-                <p className="text-white/60">Configure your profile details and preferences.</p>
+                <h1 className="text-2xl md:text-4xl font-bold text-white mb-2">Profile &amp; Settings</h1>
+                <p className="text-white/60 text-sm md:text-base">Configure your profile details and preferences.</p>
             </div>
 
             {/* Appearance Section */}
