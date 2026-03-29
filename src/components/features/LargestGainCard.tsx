@@ -28,7 +28,7 @@ export default function LargestGainCard({ trades }: LargestGainCardProps) {
       <div className="flex flex-col h-full justify-between relative z-10">
         <div>
           <div className="flex items-center">
-            <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">
+            <h3 className="text-[#585e6c] text-sm font-mono uppercase tracking-wider">
               Largest Gain
             </h3>
             <InfoTooltip infoKey="largestGain" />
@@ -37,25 +37,25 @@ export default function LargestGainCard({ trades }: LargestGainCardProps) {
 
         <div className="space-y-3">
           <div>
-            <span className="text-num-48 text-green-400 drop-shadow-[0_0_10px_rgba(34,197,94,0.25)]">
+            <span className="text-num-48 text-[#00e66b] drop-shadow-[0_0_10px_rgba(34,197,94,0.25)]">
               {pnlFormatted}
             </span>
           </div>
 
           {bestTrade ? (
             <div className="space-y-1">
-              <div className="flex items-center gap-2 text-white/60 text-sm font-mono">
-                <span className="text-white/80">{bestTrade.symbol}</span>
-                <span className="px-1.5 py-0.5 bg-white/10 text-white/60 text-xs font-mono rounded-sm">
+              <div className="flex items-center gap-2 text-[#adb9d2] text-sm font-mono">
+                <span className="text-[#ced5e4]">{bestTrade.symbol}</span>
+                <span className="px-1.5 py-0.5 bg-[#171a20] text-[#adb9d2] text-xs font-mono rounded-sm">
                   {bestTrade.side.toUpperCase()}
                 </span>
               </div>
-              <div className="text-white/40 text-xs font-mono">
+              <div className="text-[#585e6c] text-xs font-mono">
                 Closed: {formatTimestamp(bestTrade.closedAt.getTime())}
               </div>
             </div>
           ) : (
-            <div className="text-white/40 text-xs font-mono">
+            <div className="text-[#585e6c] text-xs font-mono">
               No winning trades in this period
             </div>
           )}

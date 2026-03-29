@@ -81,17 +81,17 @@ function getOrderContext(snap: SimConfig): { headline: string; detail: string } 
 function Row({ label, value, sub, className = '' }: { label: string; value: string; sub?: string; className?: string }) {
     return (
         <div className="flex items-center justify-between py-1">
-            <span className="text-[10px] font-mono text-white/40">{label}</span>
+            <span className="text-[10px] font-mono text-[#585e6c]">{label}</span>
             <div className="text-right">
                 <span className={`text-[11px] font-mono font-semibold ${className}`}>{value}</span>
-                {sub && <span className="block text-[9px] font-mono text-white/25">{sub}</span>}
+                {sub && <span className="block text-[9px] font-mono text-[#585e6c]">{sub}</span>}
             </div>
         </div>
     );
 }
 
 function Divider() {
-    return <div className="border-t border-white/5 my-2" />;
+    return <div className="border-t border-[#1a1e26] my-2" />;
 }
 
 function ScenarioBlock({
@@ -106,8 +106,8 @@ function ScenarioBlock({
     formatPrice: (n: number, d?: number) => string;
 }) {
     const isProfit = type === 'tp';
-    const color = isProfit ? 'text-green-400' : 'text-red-400';
-    const bgColor = isProfit ? 'bg-green-500/8 border-green-500/15' : 'bg-red-500/8 border-red-500/15';
+    const color = isProfit ? 'text-[#00e66b]' : 'text-[#ff285a]';
+    const bgColor = isProfit ? 'bg-[#00e66b]/8 border-[#00e66b]/15' : 'bg-[#ff285a]/8 border-[#ff285a]/15';
     const label = isProfit ? 'Take Profit' : 'Stop Loss';
     const sign = pnl.total >= 0 ? '+' : '';
 
@@ -117,7 +117,7 @@ function ScenarioBlock({
                 <span className={`text-[9px] font-mono font-bold uppercase tracking-widest ${color}`}>
                     {isProfit ? '↑' : '↓'} {label}
                 </span>
-                <span className={`text-[9px] font-mono text-white/30`}>
+                <span className={`text-[9px] font-mono text-[#585e6c]`}>
                     {isProfit ? 'Auto sell at profit' : 'Auto sell to limit loss'}
                 </span>
             </div>
@@ -179,32 +179,32 @@ const TradeSummaryPanel = React.memo(function TradeSummaryPanel({ simSnapshot, f
     const hasTpSl = tp || sl;
 
     return (
-        <div className="mt-3 bg-black/40 border border-white/8 p-3 space-y-3">
+        <div className="mt-3 bg-[#0b0e14]/40 border border-white/8 p-3 space-y-3">
             {/* Header */}
-            <p className="text-[10px] font-mono text-white/40 uppercase tracking-wider">Trade Summary</p>
+            <p className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider">Trade Summary</p>
 
             {/* Order Snapshot */}
             <div className="flex items-center gap-2 flex-wrap">
                 <span className={`px-2 py-0.5 text-[9px] font-mono font-bold border ${simSnapshot.side === 'buy'
-                    ? 'bg-green-500/10 text-green-400 border-green-500/20'
-                    : 'bg-red-500/10 text-red-400 border-red-500/20'
+                    ? 'bg-[#00e66b]/10 text-[#00e66b] border-[#00e66b]/20'
+                    : 'bg-[#ff285a]/10 text-[#ff285a] border-[#ff285a]/20'
                     }`}>
                     {simSnapshot.side.toUpperCase()}
                 </span>
-                <span className="px-2 py-0.5 text-[9px] font-mono bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                <span className="px-2 py-0.5 text-[9px] font-mono bg-[#00b3b3]/10 text-[#00ffff] border border-[#00b3b3]/20">
                     {simSnapshot.orderType.replace('_', ' ').toUpperCase()}
                 </span>
-                <span className="text-[10px] font-mono text-white/50">
+                <span className="text-[10px] font-mono text-[#adb9d2]">
                     {simSnapshot.amount.toFixed(4)} {token}
                 </span>
-                <span className="text-[10px] font-mono text-white/30">@</span>
+                <span className="text-[10px] font-mono text-[#585e6c]">@</span>
                 <span className="text-[10px] font-mono text-white font-bold">
                     {formatPrice(effectiveEntry)}
                 </span>
             </div>
 
             {/* Order Context */}
-            <div className="text-[10px] font-mono text-white/50 leading-relaxed border-l-2 border-white/10 pl-2">
+            <div className="text-[10px] font-mono text-[#adb9d2] leading-relaxed border-l-2 border-[#1a1e26] pl-2">
                 {context.headline}
             </div>
 
@@ -226,17 +226,17 @@ const TradeSummaryPanel = React.memo(function TradeSummaryPanel({ simSnapshot, f
                         <>
                             <Divider />
                             <div className="flex items-center justify-between">
-                                <span className="text-[10px] font-mono text-white/40">Risk / Reward</span>
+                                <span className="text-[10px] font-mono text-[#585e6c]">Risk / Reward</span>
                                 <div className="flex items-center gap-2">
                                     <span className="text-[11px] font-mono font-bold text-white">
                                         1 : {rrRatio}
                                     </span>
-                                    <span className={`text-[9px] font-mono ${parseFloat(rrRatio) >= 1.5 ? 'text-green-400' : parseFloat(rrRatio) >= 1 ? 'text-yellow-400' : 'text-red-400'}`}>
+                                    <span className={`text-[9px] font-mono ${parseFloat(rrRatio) >= 1.5 ? 'text-[#00e66b]' : parseFloat(rrRatio) >= 1 ? 'text-yellow-400' : 'text-[#ff285a]'}`}>
                                         {parseFloat(rrRatio) >= 2 ? '✓ Favourable' : parseFloat(rrRatio) >= 1 ? '~ Neutral' : '✗ Unfavourable'}
                                     </span>
                                 </div>
                             </div>
-                            <p className="text-[9px] font-mono text-white/50">
+                            <p className="text-[9px] font-mono text-[#adb9d2]">
                                 For every $1 risked, potential gain is ${rrRatio}
                             </p>
                         </>
@@ -246,7 +246,7 @@ const TradeSummaryPanel = React.memo(function TradeSummaryPanel({ simSnapshot, f
 
             {/* No TP/SL message for limit orders */}
             {simSnapshot.orderType === 'limit' && !hasTpSl && (
-                <p className="text-[9px] font-mono text-white/25 italic">
+                <p className="text-[9px] font-mono text-[#585e6c] italic">
                     Enable TP and/or SL on the order form to see profit/loss projections.
                 </p>
             )}
@@ -255,9 +255,9 @@ const TradeSummaryPanel = React.memo(function TradeSummaryPanel({ simSnapshot, f
             <Divider />
             <button
                 onClick={() => setEduOpen(v => !v)}
-                className="w-full flex items-center gap-2 text-[10px] font-mono text-white/30 hover:text-white/50 transition-colors"
+                className="w-full flex items-center gap-2 text-[10px] font-mono text-[#585e6c] hover:text-[#adb9d2] transition-colors"
             >
-                <Info size={11} className="shrink-0 text-white/25" />
+                <Info size={11} className="shrink-0 text-[#585e6c]" />
                 <span>How does TP / SL work?</span>
                 <span className="ml-auto">{eduOpen ? <ChevronUp size={11} /> : <ChevronDown size={11} />}</span>
             </button>
@@ -265,18 +265,18 @@ const TradeSummaryPanel = React.memo(function TradeSummaryPanel({ simSnapshot, f
             {eduOpen && (
                 <div className="space-y-2 pt-1">
                     <div className="flex gap-2">
-                        <TrendingUp size={12} className="text-green-400 shrink-0 mt-0.5" />
+                        <TrendingUp size={12} className="text-[#00e66b] shrink-0 mt-0.5" />
                         <div>
-                            <p className="text-[10px] font-mono text-green-400 font-bold">Take Profit = Auto Sell at Profit</p>
+                            <p className="text-[10px] font-mono text-[#00e66b] font-bold">Take Profit = Auto Sell at Profit</p>
                             <p className="text-[9px] font-mono text-white/35 leading-relaxed mt-0.5">
                                 When price reaches your target, the position is automatically sold to lock in the gain. The trade is then closed.
                             </p>
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <TrendingDown size={12} className="text-red-400 shrink-0 mt-0.5" />
+                        <TrendingDown size={12} className="text-[#ff285a] shrink-0 mt-0.5" />
                         <div>
-                            <p className="text-[10px] font-mono text-red-400 font-bold">Stop Loss = Auto Sell to Prevent Loss</p>
+                            <p className="text-[10px] font-mono text-[#ff285a] font-bold">Stop Loss = Auto Sell to Prevent Loss</p>
                             <p className="text-[9px] font-mono text-white/35 leading-relaxed mt-0.5">
                                 If price drops to your stop level, the asset is sold automatically to prevent further loss. The trade is closed.
                             </p>

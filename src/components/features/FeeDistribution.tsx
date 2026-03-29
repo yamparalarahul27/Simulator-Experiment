@@ -20,7 +20,7 @@ export default function FeeDistribution({ summary, className }: FeeDistributionP
                 {/* Header */}
                 <div className="mb-4">
                     <div className="flex items-center">
-                        <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">
+                        <h3 className="text-[#585e6c] text-sm font-mono uppercase tracking-wider">
                             Fee Distribution
                         </h3>
                         <InfoTooltip infoKey="feeDistribution" />
@@ -30,7 +30,7 @@ export default function FeeDistribution({ summary, className }: FeeDistributionP
                 {/* Cumulative Fees - Large Display */}
                 <div className="mb-6">
                     <div className="flex flex-col gap-1">
-                        <span className="text-white/50 text-xs font-mono uppercase tracking-wider">
+                        <span className="text-[#adb9d2] text-xs font-mono uppercase tracking-wider">
                             Total Fees Paid
                         </span>
                         <span className="text-num-48 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
@@ -44,10 +44,10 @@ export default function FeeDistribution({ summary, className }: FeeDistributionP
                     {feeComposition.map((item, index) => (
                         <div
                             key={item.type}
-                            className="flex items-center justify-between py-2 border-t border-white/5"
+                            className="flex items-center justify-between py-2 border-t border-[#1a1e26]"
                         >
                             {/* Fee Type */}
-                            <span className="text-white/60 text-sm font-mono">
+                            <span className="text-[#adb9d2] text-sm font-mono">
                                 {item.type}
                             </span>
 
@@ -56,7 +56,7 @@ export default function FeeDistribution({ summary, className }: FeeDistributionP
                                 <span className="text-white font-mono text-sm tabular-nums">
                                     {formatUsd(item.amount)}
                                 </span>
-                                <span className="px-2 py-0.5 bg-white/10 text-white/60 text-xs font-mono rounded-sm tabular-nums min-w-[60px] text-center">
+                                <span className="px-2 py-0.5 bg-[#171a20] text-[#adb9d2] text-xs font-mono rounded-sm tabular-nums min-w-[60px] text-center">
                                     {formatPercent(item.percent)}
                                 </span>
                             </div>

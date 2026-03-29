@@ -104,7 +104,7 @@ export default function AssistantModal() {
             {/* Floating AI Button */}
             <button
                 onClick={() => setIsOpen(true)}
-                className={`fixed bottom-24 left-6 z-50 flex items-center justify-center w-14 h-14 rounded-full border border-purple-600/60 shadow-lg shadow-purple-500/20 text-white transition-all duration-300 hover:scale-110 active:scale-95 ${isOpen ? "hidden" : ""}`}
+                className={`fixed bottom-24 left-6 z-50 flex items-center justify-center w-14 h-14 rounded-full border border-[#00b3b3]/60 shadow-lg shadow-[#00b3b3]/20 text-white transition-all duration-300 hover:scale-110 active:scale-95 ${isOpen ? "hidden" : ""}`}
             >
                 <Telescope className="w-6 h-6" />
             </button>
@@ -113,7 +113,7 @@ export default function AssistantModal() {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        className="fixed inset-0 bg-black/60 z-[60] md:hidden"
+                        className="fixed inset-0 bg-[#0b0e14]/60 z-[60] md:hidden"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -129,7 +129,7 @@ export default function AssistantModal() {
                         className="fixed z-[70]
                             inset-x-0 bottom-0 max-h-[85vh] max-w-[100vw] overflow-x-hidden rounded-t-2xl
                             md:inset-x-auto md:bottom-auto md:top-0 md:right-0 md:max-h-none md:max-w-none md:h-full md:w-[420px] md:rounded-none
-                            bg-[#0B0E14]/95 backdrop-blur-xl border-t border-white/10 md:border-t-0 md:border-l
+                            bg-[#0B0E14]/95 backdrop-blur-xl border-t border-[#1a1e26] md:border-t-0 md:border-l
                             flex flex-col shadow-2xl shadow-black/50"
                         initial={isDesktop ? { x: "100%", y: 0 } : { y: "100%", x: 0 }}
                         animate={{ x: 0, y: 0 }}
@@ -138,23 +138,23 @@ export default function AssistantModal() {
                     >
                         {/* Drag handle — mobile only */}
                         <div className="flex justify-center pt-2 pb-1 md:hidden">
-                            <div className="w-10 h-1 rounded-full bg-white/20" />
+                            <div className="w-10 h-1 rounded-full bg-[#1a1e26]" />
                         </div>
 
                         {/* Header */}
-                        <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 shrink-0">
+                        <div className="flex items-center justify-between px-4 py-3 border-b border-[#1a1e26] shrink-0">
                             <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center">
-                                    <Telescope className="w-4 h-4 text-purple-400" />
+                                <div className="w-8 h-8 rounded-full bg-[#00b3b3]/20 border border-[#00b3b3]/30 flex items-center justify-center">
+                                    <Telescope className="w-4 h-4 text-[#00ffff]" />
                                 </div>
                                 <div>
                                     <h2 className="text-sm font-semibold text-white">YDEX AI Assistant</h2>
-                                    <p className="text-[10px] text-white/40 font-mono">Powered by Gemini 2.5 Flash</p>
+                                    <p className="text-[10px] text-[#585e6c] font-mono">Powered by Gemini 2.5 Flash</p>
                                 </div>
                             </div>
                             <button
                                 onClick={() => setIsOpen(false)}
-                                className="p-2 bg-white/5 hover:bg-white/10 text-white/40 hover:text-white transition-colors"
+                                className="p-2 bg-[#11141a] hover:bg-[#171a20] text-[#585e6c] hover:text-white transition-colors"
                             >
                                 <X className="w-4 h-4" />
                             </button>
@@ -173,8 +173,8 @@ export default function AssistantModal() {
                                         <div
                                             className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center mt-1 ${
                                                 message.role === "user"
-                                                    ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
-                                                    : "bg-purple-500/20 text-purple-400 border border-purple-500/30"
+                                                    ? "bg-[#69a2f1]/20 text-[#69a2f1] border border-[#69a2f1]/30"
+                                                    : "bg-[#00b3b3]/20 text-[#00ffff] border border-[#00b3b3]/30"
                                             }`}
                                         >
                                             {message.role === "user" ? (
@@ -187,8 +187,8 @@ export default function AssistantModal() {
                                         <div
                                             className={`px-3.5 py-2.5 text-sm leading-relaxed ${
                                                 message.role === "user"
-                                                    ? "bg-blue-600 text-white"
-                                                    : "bg-white/5 border border-white/10 text-white/80 whitespace-pre-wrap"
+                                                    ? "bg-[#69a2f1] text-white"
+                                                    : "bg-[#11141a] border border-[#1a1e26] text-[#ced5e4] whitespace-pre-wrap"
                                             }`}
                                         >
                                             {message.content}
@@ -200,13 +200,13 @@ export default function AssistantModal() {
                             {isLoading && (
                                 <div className="flex justify-start">
                                     <div className="flex gap-2.5">
-                                        <div className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center mt-1 bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                                        <div className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center mt-1 bg-[#00b3b3]/20 text-[#00ffff] border border-[#00b3b3]/30">
                                             <Telescope className="w-3.5 h-3.5" />
                                         </div>
-                                        <div className="px-4 py-3 border border-white/10 bg-white/5 flex items-center gap-1.5">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce" style={{ animationDelay: "0ms" }} />
+                                        <div className="px-4 py-3 border border-[#1a1e26] bg-[#11141a] flex items-center gap-1.5">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-[#00e6e6] animate-bounce" style={{ animationDelay: "0ms" }} />
                                             <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "150ms" }} />
-                                            <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce" style={{ animationDelay: "300ms" }} />
+                                            <span className="w-1.5 h-1.5 rounded-full bg-[#00e6e6] animate-bounce" style={{ animationDelay: "300ms" }} />
                                         </div>
                                     </div>
                                 </div>
@@ -215,7 +215,7 @@ export default function AssistantModal() {
                         </div>
 
                         {/* Input */}
-                        <div className="shrink-0 px-3 py-3 border-t border-white/10 overflow-hidden">
+                        <div className="shrink-0 px-3 py-3 border-t border-[#1a1e26] overflow-hidden">
                             <form onSubmit={handleSubmit} className="flex items-center gap-2">
                                 <input
                                     ref={inputRef}
@@ -224,17 +224,17 @@ export default function AssistantModal() {
                                     onChange={(e) => setInput(e.target.value)}
                                     placeholder="Ask about trades or markets..."
                                     disabled={isLoading}
-                                    className="min-w-0 flex-1 bg-white/5 border border-white/10 py-2.5 px-3 text-base text-white placeholder:text-white/30 focus:outline-none focus:border-purple-500/50 disabled:opacity-50 transition-all"
+                                    className="min-w-0 flex-1 bg-[#11141a] border border-[#1a1e26] py-2.5 px-3 text-base text-white placeholder:text-[#585e6c] focus:outline-none focus:border-[#00b3b3]/50 disabled:opacity-50 transition-all"
                                 />
                                 <button
                                     type="submit"
                                     disabled={!input.trim() || isLoading}
-                                    className="shrink-0 p-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:scale-105 active:scale-95 disabled:opacity-30 transition-all duration-200"
+                                    className="shrink-0 p-3 bg-gradient-to-r from-[#00b3b3] to-[#00ffff] text-white hover:scale-105 active:scale-95 disabled:opacity-30 transition-all duration-200"
                                 >
                                     <Send className="w-4 h-4" />
                                 </button>
                             </form>
-                            <p className="text-center text-[10px] text-white/25 mt-2 font-mono">
+                            <p className="text-center text-[10px] text-[#585e6c] mt-2 font-mono">
                                 AI can make mistakes. Verify critical information.
                             </p>
                         </div>

@@ -12,23 +12,44 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Deriverse Brand Colors */
-  --ds-primary: #2E2F5F;
-  --ds-secondary: #605CA8;
-  --ds-accent: #8C83E9;
-  --ds-gradient-mid: #705BE3;
+  /* Blueshift Dark Palette */
+  --bs-bg: #0b0e14;
+  --bs-card: #11141a;
+  --bs-card-fg: #171a20;
+  --bs-border: #1a1e26;
+  --bs-border-active: rgba(173, 185, 210, 0.2);
+  --bs-bg-primary: rgba(0, 153, 153, 0.08);
+
+  --bs-text-primary: #eff1f6;
+  --bs-text-secondary: #ced5e4;
+  --bs-text-tertiary: #adb9d2;
+  --bs-text-mute: #585e6c;
+
+  --bs-brand: #00ffff;
+  --bs-brand-secondary: #00e6e6;
+  --bs-brand-tertiary: #00b3b3;
+  --bs-brand-anchor: #ddeae0;
+  --bs-brand-rust: #ffad66;
+  --bs-brand-ts: #69a2f1;
+
+  --bs-success: #00e66b;
+  --bs-error: #ff285a;
+
+  /* Legacy Deriverse tokens mapped to Blueshift */
+  --ds-primary: #00b3b3;
+  --ds-secondary: #00e6e6;
+  --ds-accent: #00ffff;
+  --ds-gradient-mid: #00e6e6;
 
   /* UI Colors */
-  --ds-bg-dark: #0D0D21;
-  --ds-bg-light: #BABACE;
-  --ds-border: #7C8EAA;
+  --ds-bg-dark: #0b0e14;
+  --ds-bg-light: #ced5e4;
+  --ds-border: #1a1e26;
 
   /* Text Colors */
-  --ds-text-primary: #EDEDED;
-  /* Off-white for dark background (WCAG compliant) */
-  --ds-text-dark: #040515;
-  /* Use ONLY on light backgrounds */
-  --ds-text-muted: #7C8EAA;
+  --ds-text-primary: #eff1f6;
+  --ds-text-dark: #0b0e14;
+  --ds-text-muted: #585e6c;
 
   /* Default Theme Mappings */
 
@@ -101,7 +122,23 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* Expose Deriverse tokens to Tailwind */
+  /* Expose Blueshift tokens to Tailwind */
+  --color-bs-bg: var(--bs-bg);
+  --color-bs-card: var(--bs-card);
+  --color-bs-card-fg: var(--bs-card-fg);
+  --color-bs-border: var(--bs-border);
+  --color-bs-border-active: var(--bs-border-active);
+  --color-bs-text-primary: var(--bs-text-primary);
+  --color-bs-text-secondary: var(--bs-text-secondary);
+  --color-bs-text-tertiary: var(--bs-text-tertiary);
+  --color-bs-text-mute: var(--bs-text-mute);
+  --color-bs-brand: var(--bs-brand);
+  --color-bs-brand-secondary: var(--bs-brand-secondary);
+  --color-bs-brand-tertiary: var(--bs-brand-tertiary);
+  --color-bs-success: var(--bs-success);
+  --color-bs-error: var(--bs-error);
+
+  /* Legacy Deriverse tokens */
   --color-primary: var(--ds-primary);
   --color-secondary: var(--ds-secondary);
   --color-accent: var(--ds-accent);
@@ -197,7 +234,7 @@
 }
 
 body {
-  background-color: var(--ds-bg-dark, #0D0D21);
+  background-color: var(--bs-bg, #0b0e14);
   font-family: var(--font-geist-mono), monospace;
 }
 

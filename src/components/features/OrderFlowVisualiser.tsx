@@ -545,13 +545,13 @@ export function getSliderRange(simSnapshot: SimConfig | null, currentPrice: numb
 }
 
 export function computeKnobColor(snap: SimConfig | null, simPrice: number, maxExtremum: number, sessionMin: number, sessionMax: number, postFillMin: number, postFillMax: number): string {
-    if (!snap) return 'bg-white/20 border-white/30';
+    if (!snap) return 'bg-[#1a1e26] border-white/30';
     const { activeIds } = computeActiveNode(snap, simPrice, maxExtremum, sessionMin, sessionMax, postFillMin, postFillMax);
 
     if (activeIds.includes('tp_filled')) return 'bg-emerald-400 border-emerald-300';
-    if (activeIds.includes('sl_filled')) return 'bg-red-500 border-red-400';
-    if (activeIds.includes('filled') || activeIds.includes('limit_filled') || activeIds.includes('stop_filled')) return 'bg-green-500 border-green-400';
-    if (activeIds.some(id => id === 'cancel')) return 'bg-gray-600 border-gray-500';
+    if (activeIds.includes('sl_filled')) return 'bg-[#ff285a] border-red-400';
+    if (activeIds.includes('filled') || activeIds.includes('limit_filled') || activeIds.includes('stop_filled')) return 'bg-[#00e66b] border-green-400';
+    if (activeIds.some(id => id === 'cancel')) return 'bg-[#585e6c] border-gray-500';
     return 'bg-blue-500 border-blue-400';
 }
 
@@ -958,30 +958,30 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
         <div className="flex flex-col h-full">
             {/* Header */}
             <div className="flex items-center gap-2 mb-3 flex-wrap">
-                <p className="text-[10px] font-mono text-white/40 uppercase tracking-wider">Order Flow</p>
-                <span className="px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-widest bg-purple-500/15 text-purple-400 border border-purple-500/20">
+                <p className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider">Order Flow</p>
+                <span className="px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-widest bg-[#00b3b3]/15 text-[#00ffff] border border-[#00b3b3]/20">
                     {ORDER_TYPE_LABELS[orderType]}
                 </span>
                 {side === 'buy'
-                    ? <span className="px-2 py-0.5 text-[9px] font-mono font-bold bg-green-500/10 text-green-400 border border-green-500/20">BUY</span>
-                    : <span className="px-2 py-0.5 text-[9px] font-mono font-bold bg-red-500/10 text-red-400 border border-red-500/20">SELL</span>
+                    ? <span className="px-2 py-0.5 text-[9px] font-mono font-bold bg-[#00e66b]/10 text-[#00e66b] border border-[#00e66b]/20">BUY</span>
+                    : <span className="px-2 py-0.5 text-[9px] font-mono font-bold bg-[#ff285a]/10 text-[#ff285a] border border-[#ff285a]/20">SELL</span>
                 }
-                {tpEnabled && <span className="px-1.5 py-0.5 text-[9px] font-mono bg-green-500/8 text-green-400/70 border border-green-500/15">TP</span>}
-                {slEnabled && <span className="px-1.5 py-0.5 text-[9px] font-mono bg-red-500/8 text-red-400/70 border border-red-500/15">SL</span>}
+                {tpEnabled && <span className="px-1.5 py-0.5 text-[9px] font-mono bg-[#00e66b]/8 text-[#00e66b]/70 border border-[#00e66b]/15">TP</span>}
+                {slEnabled && <span className="px-1.5 py-0.5 text-[9px] font-mono bg-[#ff285a]/8 text-[#ff285a]/70 border border-[#ff285a]/15">SL</span>}
                 {simSnapshot && (
-                    <span className="px-2 py-0.5 text-[9px] font-mono bg-purple-500/10 text-purple-400/70 border border-purple-500/15">
+                    <span className="px-2 py-0.5 text-[9px] font-mono bg-[#00b3b3]/10 text-[#00ffff]/70 border border-[#00b3b3]/15">
                         SIM RUNNING
                     </span>
                 )}
                 <div className="ml-auto flex items-center gap-1">
                     {zoom === 1 && (
-                        <span className="text-[9px] font-mono text-white/50 italic mr-1">zoom in to pan</span>
+                        <span className="text-[9px] font-mono text-[#adb9d2] italic mr-1">zoom in to pan</span>
                     )}
                     <button onClick={() => setZoom(z => Math.max(0.5, parseFloat((z - 0.25).toFixed(2))))}
-                        className="w-6 h-6 flex items-center justify-center text-xs font-mono text-white/40 hover:text-white/70 bg-white/5 border border-white/10 hover:border-white/20 transition-colors">−</button>
-                    <span className="text-[10px] font-mono text-white/30 w-10 text-center">{Math.round(zoom * 100)}%</span>
+                        className="w-6 h-6 flex items-center justify-center text-xs font-mono text-[#585e6c] hover:text-[#ced5e4] bg-[#11141a] border border-[#1a1e26] hover:border-white/20 transition-colors">−</button>
+                    <span className="text-[10px] font-mono text-[#585e6c] w-10 text-center">{Math.round(zoom * 100)}%</span>
                     <button onClick={() => setZoom(z => Math.min(2.0, parseFloat((z + 0.25).toFixed(2))))}
-                        className="w-6 h-6 flex items-center justify-center text-xs font-mono text-white/40 hover:text-white/70 bg-white/5 border border-white/10 hover:border-white/20 transition-colors">+</button>
+                        className="w-6 h-6 flex items-center justify-center text-xs font-mono text-[#585e6c] hover:text-[#ced5e4] bg-[#11141a] border border-[#1a1e26] hover:border-white/20 transition-colors">+</button>
                 </div>
             </div>
 
@@ -1032,15 +1032,15 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
 
             {/* Flow Done Banner */}
             {isFlowDone && (
-                <div className="flex items-center justify-center gap-2 py-2 mt-1 border border-green-500/15 bg-green-500/5">
-                    <span className="text-[10px] font-mono text-green-400/70">Order flow complete</span>
-                    <span className="text-[10px] font-mono text-white/30">—</span>
-                    <span className="text-[10px] font-mono text-white/40">Re-run Simulation to replay</span>
+                <div className="flex items-center justify-center gap-2 py-2 mt-1 border border-[#00e66b]/15 bg-[#00e66b]/5">
+                    <span className="text-[10px] font-mono text-[#00e66b]/70">Order flow complete</span>
+                    <span className="text-[10px] font-mono text-[#585e6c]">—</span>
+                    <span className="text-[10px] font-mono text-[#585e6c]">Re-run Simulation to replay</span>
                 </div>
             )}
 
             {/* Legend */}
-            <div className="flex items-center gap-3 mt-3 pt-2 border-t border-white/5 flex-wrap">
+            <div className="flex items-center gap-3 mt-3 pt-2 border-t border-[#1a1e26] flex-wrap">
                 {([
                     { color: 'rgba(139,92,246,0.55)', label: 'Start' },
                     { color: 'rgba(255,255,255,0.18)', label: 'State' },
@@ -1051,17 +1051,17 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
                 ] as { color: string; label: string }[]).map(({ color, label }) => (
                     <div key={label} className="flex items-center gap-1">
                         <div className="w-2.5 h-2.5 border flex-shrink-0" style={{ borderColor: color, background: color }} />
-                        <span className="text-[8px] font-mono text-white/30">{label}</span>
+                        <span className="text-[8px] font-mono text-[#585e6c]">{label}</span>
                     </div>
                 ))}
                 <div className="flex items-center gap-3 ml-2">
                     <div className="flex items-center gap-1">
                         <div className="w-3 h-3 rounded-sm border-2 bg-blue-500/30 border-blue-400/60 flex-shrink-0" />
-                        <span className="text-[8px] font-mono text-white/30">Active</span>
+                        <span className="text-[8px] font-mono text-[#585e6c]">Active</span>
                     </div>
                     <div className="flex items-center gap-1">
                         <div className="w-2.5 h-2.5 border flex-shrink-0 opacity-40" style={{ borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.05)' }} />
-                        <span className="text-[8px] font-mono text-white/30">Done</span>
+                        <span className="text-[8px] font-mono text-[#585e6c]">Done</span>
                     </div>
                 </div>
             </div>

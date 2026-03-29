@@ -58,18 +58,18 @@ export default function DrawdownCard({ trades, minHeight = 'min-h-[200px]' }: Dr
       <div className="flex flex-col h-full justify-between relative z-10">
         <div>
           <div className="flex items-center">
-            <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">Drawdown</h3>
+            <h3 className="text-[#585e6c] text-sm font-mono uppercase tracking-wider">Drawdown</h3>
             <InfoTooltip infoKey="drawdown" />
           </div>
         </div>
 
         <div className="space-y-3">
           <div>
-            <span className="text-num-48 text-red-400 drop-shadow-[0_0_10px_rgba(248,113,113,0.25)]">
+            <span className="text-num-48 text-[#ff285a] drop-shadow-[0_0_10px_rgba(248,113,113,0.25)]">
               {formatted}
             </span>
           </div>
-          <div className="text-white/40 text-xs font-mono">Max peak-to-trough loss</div>
+          <div className="text-[#585e6c] text-xs font-mono">Max peak-to-trough loss</div>
         </div>
       </div>
     </CardWithCornerShine>
