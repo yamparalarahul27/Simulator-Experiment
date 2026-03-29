@@ -184,17 +184,30 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
         handleSliderInteraction(e.clientY);
     }, [handleSliderInteraction]);
 
+    const handleTouchStart = useCallback((e: React.TouchEvent) => {
+        setIsDragging(true);
+        handleSliderInteraction(e.touches[0].clientY);
+    }, [handleSliderInteraction]);
+
     useEffect(() => {
         if (!isDragging) return;
 
         const handleMouseMove = (e: MouseEvent) => handleSliderInteraction(e.clientY);
-        const handleMouseUp = () => setIsDragging(false);
+        const handleTouchMove = (e: TouchEvent) => {
+            e.preventDefault();
+            handleSliderInteraction(e.touches[0].clientY);
+        };
+        const handleEnd = () => setIsDragging(false);
 
         window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('mouseup', handleMouseUp);
+        window.addEventListener('mouseup', handleEnd);
+        window.addEventListener('touchmove', handleTouchMove, { passive: false });
+        window.addEventListener('touchend', handleEnd);
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseup', handleMouseUp);
+            window.removeEventListener('mouseup', handleEnd);
+            window.removeEventListener('touchmove', handleTouchMove);
+            window.removeEventListener('touchend', handleEnd);
         };
     }, [isDragging, handleSliderInteraction]);
 
@@ -210,18 +223,18 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
     return (
         <div className="space-y-4">
             {/* Title */}
-            <div className="flex items-center gap-3 mb-5">
+            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3 mb-3 md:mb-5">
                 <h2 className="text-heading-16 text-white">Liquidation Simulator</h2>
-                <span className="px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-widest bg-purple-500/15 text-purple-400 border border-purple-500/20">
+                <span className="px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-widest bg-purple-500/15 text-purple-400 border border-purple-500/20 self-start">
                     Market Order Simulation
                 </span>
             </div>
 
             {/* 3-Column Layout: Inputs | Results | Price Slider */}
-            <div className="grid grid-cols-12 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
 
                 {/* ═══ LEFT: Inputs ═══ */}
-                <div className="col-span-4 bg-black/60 backdrop-blur-xl border border-white/10 p-4 space-y-4">
+                <div className="md:col-span-4 bg-black/60 backdrop-blur-xl border border-white/10 p-4 space-y-4">
                     <span className="text-label-12 text-white/50 uppercase tracking-wider">Simulator Inputs</span>
 
                     {/* Token */}
@@ -350,7 +363,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                 </div>
 
                 {/* ═══ MIDDLE: Results ═══ */}
-                <div className={`col-span-5 bg-black/60 backdrop-blur-xl border border-white/10 p-4 ${!simResult ? 'flex items-center justify-center' : ''}`}>
+                <div className={`md:col-span-5 bg-black/60 backdrop-blur-xl border border-white/10 p-4 ${!simResult ? 'flex items-center justify-center' : ''}`}>
                     {!simResult ? (
                         <div className="text-center">
                             <div className="text-white/15 text-xs font-mono mb-2">No simulation running</div>
@@ -443,7 +456,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                 </div>
 
                 {/* ═══ RIGHT: Vertical Price Slider ═══ */}
-                <div className="col-span-3 bg-black/60 backdrop-blur-xl border border-white/10 p-4">
+                <div className="md:col-span-3 bg-black/60 backdrop-blur-xl border border-white/10 p-4">
                     {!simResult ? (
                         <div className="h-full flex items-center justify-center">
                             <div className="text-white/10 text-[10px] font-mono text-center">
@@ -466,7 +479,8 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                             <div
                                 ref={sliderRef}
                                 onMouseDown={handleMouseDown}
-                                className="relative flex-1 min-h-[280px] cursor-pointer select-none mx-auto"
+                                onTouchStart={handleTouchStart}
+                                className="relative flex-1 min-h-[200px] md:min-h-[280px] cursor-pointer select-none mx-auto touch-none"
                                 style={{ width: '100%' }}
                             >
                                 {/* Track background */}
