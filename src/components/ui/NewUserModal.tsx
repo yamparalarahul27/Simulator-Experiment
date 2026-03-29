@@ -6,6 +6,7 @@ import WelcomeCard from './WelcomeCard';
 import WelcomeButton from './WelcomeButton';
 import WelcomeFooter from './WelcomeFooter';
 import WelcomeHeader from './WelcomeHeader';
+import GeneratedBackground from './GeneratedBackground';
 
 interface NewUserModalProps {
     isVisible: boolean;
@@ -34,16 +35,11 @@ export default function NewUserModal({ isVisible, onChoice, walletAddress }: New
             {isVisible && (
                 <motion.div
                     className="welcome-screen fixed inset-0 z-50 flex items-center justify-center"
-                    style={{
-                        backgroundImage: 'url(/assets/background_wallpaper_dot.png)',
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat'
-                    }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
                 >
+                    <GeneratedBackground dotOverlay />
                     {/* Header */}
                     <WelcomeHeader />
 
