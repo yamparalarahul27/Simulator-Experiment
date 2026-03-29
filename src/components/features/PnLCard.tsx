@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import NumberFlow from '@number-flow/react';
 import { ChevronDown, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { PnLChart } from './PnLChart';
 import CardWithCornerShine from '../ui/CardWithCornerShine';
@@ -140,7 +141,7 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                             <div className="text-center space-y-2">
                                 <span className="text-sm text-[#585e6c] uppercase tracking-[0.2em]">Total PnL ({activeFilter})</span>
                                 <div className={`text-num-56 sm:text-num-72 tracking-normal ${pnlData.isPositive ? 'text-[#00e66b]' : 'text-[#ff285a]'} drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]`}>
-                                    {pnlData.pnlFormatted}
+                                    <NumberFlow value={Math.abs(pnlData.pnl)} prefix={pnlData.isPositive ? '+$' : '-$'} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 600, easing: 'ease-out' }} />
                                 </div>
                                 {activeFilter !== 'All' && (
                                     <div className="text-center">
@@ -155,7 +156,7 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                             <div className="text-center space-y-2">
                                 <span className="text-sm text-[#585e6c] uppercase tracking-[0.2em]">Max Drawdown</span>
                                 <div className="text-num-56 sm:text-num-72 text-[#ff285a] drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-                                    -${Math.abs(drawdownStats.maxDrawdown).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    <NumberFlow value={Math.abs(drawdownStats.maxDrawdown)} prefix="-$" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 600, easing: 'ease-out' }} />
                                 </div>
                                 <div className="text-[#585e6c] text-xs font-mono">
                                     ({drawdownStats.maxDrawdownPercentage.toFixed(1)}% peak-to-trough)
@@ -188,19 +189,19 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                                 <div className="grid grid-cols-3 gap-4 text-center">
                                     <div>
                                         <div className="text-[#ff285a] text-num-32 font-mono">
-                                            {drawdownStats.maxDrawdownPercentage.toFixed(1)}%
+                                            <NumberFlow value={drawdownStats.maxDrawdownPercentage} suffix="%" format={{ minimumFractionDigits: 1, maximumFractionDigits: 1 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
                                         </div>
                                         <div className="text-[#585e6c] text-xs font-mono uppercase">Max DD</div>
                                     </div>
                                     <div>
                                         <div className="text-[#ced5e4] text-num-32 font-mono">
-                                            {drawdownStats.avgRecoveryDays.toFixed(1)} days
+                                            <NumberFlow value={drawdownStats.avgRecoveryDays} suffix=" days" format={{ minimumFractionDigits: 1, maximumFractionDigits: 1 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
                                         </div>
                                         <div className="text-[#585e6c] text-xs font-mono uppercase">Avg Recovery</div>
                                     </div>
                                     <div>
                                         <div className="text-[#00ffff] text-num-32 font-mono">
-                                            {drawdownStats.pnlToDrawdownRatio.toFixed(1)}x
+                                            <NumberFlow value={drawdownStats.pnlToDrawdownRatio} suffix="x" format={{ minimumFractionDigits: 1, maximumFractionDigits: 1 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
                                         </div>
                                         <div className="text-[#585e6c] text-xs font-mono uppercase">PnL/DD Ratio</div>
                                     </div>
