@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from '@/i18n/navigation';
 import WelcomeScreen from './WelcomeScreen';
+import GeneratedBackground from './GeneratedBackground';
 
 type LoadingPhase = 'welcome' | 'logo' | 'complete';
 
@@ -83,11 +84,11 @@ export default function LoadingScreen() {
         <AnimatePresence>
             {isVisible && (
                 <motion.div
-                    className="loading-screen fixed inset-0 z-50 flex items-center justify-center bg-cover bg-center bg-no-repeat"
-                    style={{ backgroundImage: "url('/assets/background.png')" }}
+                    className="loading-screen fixed inset-0 z-50 flex items-center justify-center"
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
                 >
+                    <GeneratedBackground />
                     {/* Welcome / Hero Landing */}
                     <WelcomeScreen
                         isVisible={currentPhase === 'welcome'}

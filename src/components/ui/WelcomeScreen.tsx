@@ -7,6 +7,7 @@ import WelcomeCard from './WelcomeCard';
 import WelcomeButton from './WelcomeButton';
 import WelcomeFooter from './WelcomeFooter';
 import NewUserModal from './NewUserModal';
+import GeneratedBackground from './GeneratedBackground';
 import { useWalletConnection } from '../../lib/hooks/useWalletConnection';
 import { SupabaseWalletService } from '../../services/SupabaseWalletService';
 
@@ -127,16 +128,11 @@ export default function WelcomeScreen({ onComplete, isVisible }: WelcomeScreenPr
             {isVisible && (
                 <motion.div
                     className="welcome-screen fixed inset-0 z-50 flex items-center justify-center"
-                    style={{
-                        backgroundImage: 'url(/assets/background_wallpaper_dot.png)',
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat'
-                    }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
                 >
+                    <GeneratedBackground dotOverlay />
                     {/* Hero Card */}
                     <div className="flex flex-col items-center gap-6 sm:gap-8 px-4 sm:px-0">
                         <WelcomeCard>

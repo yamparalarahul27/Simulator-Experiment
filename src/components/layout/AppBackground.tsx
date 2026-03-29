@@ -2,8 +2,7 @@
 
 import React, { useCallback, useState } from 'react';
 import { useAppearance } from '@/lib/context/AppearanceContext';
-
-const DEFAULT_BG = '/assets/background.png';
+import GeneratedBackground from '@/components/ui/GeneratedBackground';
 
 export default function AppBackground() {
     const { preferences } = useAppearance();
@@ -12,39 +11,13 @@ export default function AppBackground() {
 
     const handleImgError = useCallback(() => setImgError(true), []);
 
-    // Determine which image URL to use
-    const showImage = bgType !== 'color';
-    const imageUrl =
-        bgType === 'custom' && bgImagePath && !imgError
-            ? bgImagePath
-            : DEFAULT_BG;
+    // Determine if we should show a custom image
+    const hasCustomImage = bgType === 'custom' && bgImagePath && !imgError;
 
     return (
         <div>
             {/* Base Layer */}
-            {showImage ? (
-                <div
-                    className="fixed inset-0 -z-20"
-                    style={{
-                        backgroundImage: `url('${imageUrl}')`,
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'center center',
-                        backgroundSize: 'cover',
-                        transition: 'background-image 0.5s ease-in-out',
-                    }}
-                >
-                    {/* Hidden img for error detection on custom images */}
-                    {bgType === 'custom' && bgImagePath && (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                            src={bgImagePath}
-                            alt=""
-                            onError={handleImgError}
-                            className="hidden"
-                        />
-                    )}
-                </div>
-            ) : (
+            {bgType === 'color' ? (
                 <div
                     className="fixed inset-0 -z-20"
                     style={{
@@ -52,6 +25,28 @@ export default function AppBackground() {
                         transition: 'background-color 0.5s ease-in-out',
                     }}
                 />
+            ) : hasCustomImage ? (
+                <div
+                    className="fixed inset-0 -z-20"
+                    style={{
+                        backgroundImage: `url('${bgImagePath}')`,
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center center',
+                        backgroundSize: 'cover',
+                        transition: 'background-image 0.5s ease-in-out',
+                    }}
+                >
+                    {/* Hidden img for error detection on custom images */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src={bgImagePath}
+                        alt=""
+                        onError={handleImgError}
+                        className="hidden"
+                    />
+                </div>
+            ) : (
+                <GeneratedBackground className="fixed inset-0 -z-20" />
             )}
 
             {/* Overlay Layer — darkness + blur */}
