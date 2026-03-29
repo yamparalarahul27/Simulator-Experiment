@@ -12,7 +12,7 @@ function FieldLabel({ className, ...props }: React.LabelHTMLAttributes<HTMLLabel
   return (
     <label
       className={cn(
-        "text-white/60 text-xs font-mono uppercase tracking-wider",
+        "text-[#adb9d2] text-xs font-mono uppercase tracking-wider",
         className
       )}
       {...props}

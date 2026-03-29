@@ -29,7 +29,7 @@ export default function UnsavedChangesModal({
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onCancel}
-                        className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm"
+                        className="fixed inset-0 z-[100] bg-[#0b0e14]/60 backdrop-blur-sm"
                     />
 
                     {/* Modal */}
@@ -42,7 +42,7 @@ export default function UnsavedChangesModal({
                             className="relative w-full max-w-md"
                         >
                             {/* Glassmorphism Container */}
-                            <div className="relative overflow-hidden rounded-lg border border-white/10 bg-[#0D0D21]/95 backdrop-blur-xl shadow-2xl">
+                            <div className="relative overflow-hidden rounded-lg border border-[#1a1e26] bg-[#0b0e14]/95 backdrop-blur-xl shadow-2xl">
                                 {/* Corner Accents */}
                                 <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-blue-400/40"></div>
                                 <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-blue-400/40"></div>
@@ -53,9 +53,9 @@ export default function UnsavedChangesModal({
                                 <div className="relative z-10 p-6">
                                     {/* Icon */}
                                     <div className="mb-4 flex justify-center">
-                                        <div className="rounded-full bg-blue-500/10 p-3">
+                                        <div className="rounded-full bg-[#69a2f1]/10 p-3">
                                             <svg
-                                                className="h-6 w-6 text-blue-400"
+                                                className="h-6 w-6 text-[#69a2f1]"
                                                 fill="none"
                                                 viewBox="0 0 24 24"
                                                 stroke="currentColor"
@@ -76,7 +76,7 @@ export default function UnsavedChangesModal({
                                     </h3>
 
                                     {/* Message */}
-                                    <p className="mb-6 text-center text-sm text-white/60">
+                                    <p className="mb-6 text-center text-sm text-[#adb9d2]">
                                         Save the annotation or it will be lost
                                     </p>
 
@@ -84,13 +84,13 @@ export default function UnsavedChangesModal({
                                     <div className="flex gap-3">
                                         <button
                                             onClick={onDiscard}
-                                            className="flex-1 rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-white/80 transition-colors hover:bg-white/10"
+                                            className="flex-1 rounded-lg border border-[#1a1e26] bg-[#11141a] px-4 py-2.5 text-sm font-medium text-[#ced5e4] transition-colors hover:bg-[#171a20]"
                                         >
                                             Discard
                                         </button>
                                         <button
                                             onClick={onCancel}
-                                            className="flex-1 rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-white/80 transition-colors hover:bg-white/10"
+                                            className="flex-1 rounded-lg border border-[#1a1e26] bg-[#11141a] px-4 py-2.5 text-sm font-medium text-[#ced5e4] transition-colors hover:bg-[#171a20]"
                                         >
                                             Cancel
                                         </button>
@@ -104,7 +104,7 @@ export default function UnsavedChangesModal({
                                 </div>
 
                                 {/* Subtle gradient overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-blue-500/5 to-transparent pointer-events-none"></div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#00b3b3]/5 to-transparent pointer-events-none"></div>
                             </div>
                         </motion.div>
                     </div>

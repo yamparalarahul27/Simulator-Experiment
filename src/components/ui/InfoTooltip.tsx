@@ -29,7 +29,7 @@ export default function InfoTooltip({ infoKey, className = '' }: InfoTooltipProp
                 <TooltipTrigger asChild>
                     <button
                         type="button"
-                        className={`inline-flex items-center justify-center w-5 h-5 ml-2 text-white/40 hover:text-white/70 transition-colors duration-200 cursor-help ${className}`}
+                        className={`inline-flex items-center justify-center w-5 h-5 ml-2 text-[#585e6c] hover:text-[#ced5e4] transition-colors duration-200 cursor-help ${className}`}
                         aria-label="More information"
                     >
                         <Info size={20} />

@@ -9,7 +9,7 @@ const Accordion = AccordionPrimitive.Root
 
 const AccordionItem = ({ className, ...props }: AccordionPrimitive.AccordionItemProps) => (
   <AccordionPrimitive.Item
-    className={cn("border-b border-white/10", className)}
+    className={cn("border-b border-[#1a1e26]", className)}
     {...props}
   />
 )
@@ -44,7 +44,7 @@ const AccordionContent = ({
 }: AccordionPrimitive.AccordionContentProps) => (
   <AccordionPrimitive.Content
     className={cn(
-      "overflow-hidden text-sm text-zinc-400 transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
+      "overflow-hidden text-sm text-[#adb9d2] transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
       className
     )}
     {...props}

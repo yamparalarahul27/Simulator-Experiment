@@ -58,7 +58,7 @@ export default function AverageTradeDurationCard({ trades, minHeight = 'min-h-[3
       <div className="flex flex-col h-full justify-between relative z-10">
         <div>
           <div className="flex items-center">
-            <h3 className="text-white/40 text-sm font-mono uppercase tracking-wider">Average Trade Duration</h3>
+            <h3 className="text-[#585e6c] text-sm font-mono uppercase tracking-wider">Average Trade Duration</h3>
             <InfoTooltip infoKey="avgTradeDuration" />
           </div>
         </div>
@@ -69,7 +69,7 @@ export default function AverageTradeDurationCard({ trades, minHeight = 'min-h-[3
               {durationSegments.map(({ key, caption, digits }) => (
                 <div key={key}>
                   <div
-                    className="relative mt-3 flex items-center overflow-hidden rounded-none bg-black/20 text-[32px] font-semibold text-white"
+                    className="relative mt-3 flex items-center overflow-hidden rounded-none bg-[#0b0e14]/20 text-[32px] font-semibold text-white"
                     style={{ fontFamily: '"GeistPixelGridLocal", "Space Mono", monospace' }}
                   >
                     {digits.map((digit, idx) => {
@@ -90,7 +90,7 @@ export default function AverageTradeDurationCard({ trades, minHeight = 'min-h-[3
                       aria-hidden="true"
                     />
                   </div>
-                  <div className="mt-2 text-[10px] uppercase tracking-[0.4em] text-white/40 text-center">
+                  <div className="mt-2 text-[10px] uppercase tracking-[0.4em] text-[#585e6c] text-center">
                     {caption}
                   </div>
                 </div>
