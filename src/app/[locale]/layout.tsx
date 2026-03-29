@@ -5,6 +5,7 @@ import Providers from '../providers';
 import AppBackground from '@/components/layout/AppBackground';
 import LoadingScreen from '@/components/ui/LoadingScreen';
 import AssistantModal from '@/components/ui/AssistantModal';
+import { ThemeProvider } from '@/components/ui/ThemeProvider';
 import { Toaster } from 'sonner';
 import { LayoutShell } from '@/components/layout/LayoutShell';
 
@@ -26,10 +27,12 @@ export default async function LocaleLayout({
     return (
         <NextIntlClientProvider locale={locale} messages={messages}>
             <Providers>
-                <AppBackground />
-                <LayoutShell>{children}</LayoutShell>
-                <LoadingScreen />
-                <AssistantModal />
+                <ThemeProvider>
+                    <AppBackground />
+                    <LayoutShell>{children}</LayoutShell>
+                    <LoadingScreen />
+                    <AssistantModal />
+                </ThemeProvider>
             </Providers>
             <Toaster
                 position="top-right"

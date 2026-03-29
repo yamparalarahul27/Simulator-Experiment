@@ -58,12 +58,12 @@ const phases = [
 
 export default function RoadmapScreen() {
     return (
-        <section className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-8 p-4 md:p-8 text-[#ced5e4]">
+        <section className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-8 p-4 md:p-8 text-[var(--bs-text-secondary)]">
             <div className="flex w-full flex-col gap-4 md:gap-6 md:flex-row md:items-center md:justify-between">
                 <header className="text-left max-w-6xl md:flex-1">
-                    <h1 className="mt-2 md:mt-3 text-2xl md:text-4xl font-semibold text-white">Development Roadmap</h1>
-                    <p className="mt-1 md:mt-2 text-xs md:text-sm uppercase tracking-[0.4em] text-[#585e6c]">From simulation to real trading</p>
-                    <p className="mt-3 md:mt-4 text-sm md:text-base leading-relaxed text-[#ced5e4]">
+                    <h1 className="mt-2 md:mt-3 text-2xl md:text-4xl font-semibold text-[var(--bs-text-primary)]">Development Roadmap</h1>
+                    <p className="mt-1 md:mt-2 text-xs md:text-sm uppercase tracking-[0.4em] text-[var(--bs-text-mute)]">From simulation to real trading</p>
+                    <p className="mt-3 md:mt-4 text-sm md:text-base leading-relaxed text-[var(--bs-text-secondary)]">
                         YDEX is built in phases — each one expands capabilities while keeping education at the core.
                     </p>
                 </header>
@@ -78,26 +78,26 @@ export default function RoadmapScreen() {
                             phase.status === 'done'
                                 ? 'border-cyan-500/20 bg-cyan-500/5'
                                 : phase.status === 'next'
-                                  ? 'border-[#00b3b3]/20 bg-[#00b3b3]/5'
-                                  : 'border-[#1a1e26] bg-white/5'
+                                  ? 'border-[var(--bs-brand-tertiary)]/20 bg-[var(--bs-brand-tertiary)]/5'
+                                  : 'border-[var(--bs-border)] bg-[var(--bs-card-fg)]'
                         }`}
                     >
                         <div className="flex items-center gap-3">
-                            <p className="text-sm uppercase tracking-[0.3em] text-[#585e6c]">{phase.title}</p>
+                            <p className="text-sm uppercase tracking-[0.3em] text-[var(--bs-text-mute)]">{phase.title}</p>
                             <span
                                 className={`rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${
                                     phase.status === 'done'
                                         ? 'bg-cyan-500/15 text-cyan-400'
                                         : phase.status === 'next'
-                                          ? 'bg-[#00b3b3]/15 text-[#00ffff]'
-                                          : 'bg-[#171a20] text-[#585e6c]'
+                                          ? 'bg-[var(--bs-brand-tertiary)]/15 text-[var(--bs-brand)]'
+                                          : 'bg-[var(--bs-card-fg)] text-[var(--bs-text-mute)]'
                                 }`}
                             >
                                 {phase.status === 'done' ? 'Complete' : phase.status === 'next' ? 'Up Next' : 'Planned'}
                             </span>
                         </div>
-                        <p className="mt-1 text-sm text-[#adb9d2]">{phase.subtitle}</p>
-                        <ul className="mt-3 md:mt-4 space-y-2 text-sm md:text-base text-white/75">
+                        <p className="mt-1 text-sm text-[var(--bs-text-tertiary)]">{phase.subtitle}</p>
+                        <ul className="mt-3 md:mt-4 space-y-2 text-sm md:text-base text-[var(--bs-text-primary)]/75">
                             {phase.items.map((item) => (
                                 <li key={item} className="flex items-start gap-3">
                                     <span
@@ -105,8 +105,8 @@ export default function RoadmapScreen() {
                                             phase.status === 'done'
                                                 ? 'bg-cyan-400'
                                                 : phase.status === 'next'
-                                                  ? 'bg-[#00e6e6]'
-                                                  : 'bg-white/30'
+                                                  ? 'bg-[var(--bs-brand-secondary)]'
+                                                  : 'bg-[var(--bs-text-mute)]'
                                         }`}
                                     />
                                     <span>{item}</span>

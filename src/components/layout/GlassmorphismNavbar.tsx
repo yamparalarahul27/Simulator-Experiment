@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useRef, ReactNode } from 'react';
 import { Link } from '@/i18n/navigation';
+import { Sun, Moon } from 'lucide-react';
 import { LivePulseIndicator } from '../ui/LivePulseIndicator';
 import { HamburgerButton } from './HamburgerButton';
+import { useTheme } from '../ui/ThemeProvider';
 
 /**
  * GlassmorphismNavbar Component
@@ -99,7 +101,7 @@ export interface GlassmorphismNavbarProps {
  * - Desktop: Horizontal nav with hover dropdown
  * - Mobile: Full-screen overlay with categorized sections
  * - Network selector with visual indicators
- * - Glassmorphism: bg-[#0b0e14]/80 + backdrop-blur-xl
+ * - Glassmorphism: bg-[var(--bs-bg)]/80 + backdrop-blur-xl
  * - Auto-close mobile menu on route change
  * - Prevents body scroll when mobile menu open
  * 
@@ -134,6 +136,7 @@ export const GlassmorphismNavbar = ({
     onExchangeManagerClick,
     className = '',
 }: GlassmorphismNavbarProps) => {
+    const { theme, toggleTheme } = useTheme();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isNetworkDropdownOpen, setIsNetworkDropdownOpen] = useState(false);
@@ -202,10 +205,10 @@ export const GlassmorphismNavbar = ({
     // Helper for status text color
     const getStatusColor = (variant: string) => {
         switch (variant) {
-            case 'mainnet': return 'text-[#69a2f1]';
+            case 'mainnet': return 'text-[var(--bs-info)]';
             case 'mock': return 'text-yellow-500';
             case 'devnet':
-            default: return 'text-[#00e66b]';
+            default: return 'text-[var(--bs-success)]';
         }
     };
 
@@ -215,7 +218,7 @@ export const GlassmorphismNavbar = ({
             <nav className={`fixed left-0 right-0 z-50 top-2.5 ${className}`}>
                 <div className="px-3 sm:px-6 py-2 sm:py-3">
                     {/* Glassmorphism container */}
-                    <div className="bg-[#0b0e14]/80 max-w-7xl mx-auto backdrop-blur-xl border border-[#1a1e26] rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 shadow-2xl shadow-black/20">
+                    <div className="bg-[var(--bs-bg)]/80 max-w-7xl mx-auto backdrop-blur-xl border border-[var(--bs-border)] rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 shadow-2xl shadow-black/20">
                         <div className="flex items-center justify-between">
                             {/* Logo */}
                             <Link
@@ -245,8 +248,8 @@ export const GlassmorphismNavbar = ({
                                             }
                                         }}
                                         className={`px-3 xl:px-4 py-1.5 xl:py-2 rounded-lg text-sm xl:text-base font-medium transition-all duration-300 border-b-2 ${isActive(item.href)
-                                            ? 'text-white border-[#00b3b3]'
-                                            : 'text-[#adb9d2] border-transparent hover:text-white hover:bg-[#11141a]'
+                                            ? 'text-[var(--bs-text-primary)] border-[var(--bs-brand-tertiary)]'
+                                            : 'text-[var(--bs-text-tertiary)] border-transparent hover:text-[var(--bs-text-primary)] hover:bg-[var(--bs-card)]'
                                             }`}
                                     >
                                         {item.title}
@@ -263,7 +266,7 @@ export const GlassmorphismNavbar = ({
                                     >
                                         <button
                                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                            className="px-3 xl:px-4 py-1.5 xl:py-2 rounded-lg text-sm xl:text-base font-medium text-[#adb9d2] hover:text-white hover:bg-[#11141a] transition-all duration-300 flex items-center gap-1 border-b-2 border-transparent"
+                                            className="px-3 xl:px-4 py-1.5 xl:py-2 rounded-lg text-sm xl:text-base font-medium text-[var(--bs-text-tertiary)] hover:text-[var(--bs-text-primary)] hover:bg-[var(--bs-card)] transition-all duration-300 flex items-center gap-1 border-b-2 border-transparent"
                                         >
                                             {dropdownTitle}
                                             <svg
@@ -280,7 +283,7 @@ export const GlassmorphismNavbar = ({
                                         {/* Dropdown panel */}
                                         {isDropdownOpen && (
                                             <div className="absolute top-full right-0 pt-2 min-w-[200px]">
-                                                <div className="bg-[#0b0e14]/95 backdrop-blur-xl border border-[#1a1e26] rounded-lg shadow-2xl overflow-hidden">
+                                                <div className="bg-[var(--bs-bg)]/95 backdrop-blur-xl border border-[var(--bs-border)] rounded-lg shadow-2xl overflow-hidden">
                                                     {dropdownItems.map((item) => (
                                                         <Link
                                                             key={item.href}
@@ -293,8 +296,8 @@ export const GlassmorphismNavbar = ({
                                                                 setIsDropdownOpen(false);
                                                             }}
                                                             className={`block px-4 py-2.5 text-sm transition-colors ${isActive(item.href)
-                                                                ? 'text-white bg-white/10'
-                                                                : 'text-[#adb9d2] hover:text-white hover:bg-[#11141a]'
+                                                                ? 'text-[var(--bs-text-primary)] bg-[var(--bs-card-fg)]'
+                                                                : 'text-[var(--bs-text-tertiary)] hover:text-[var(--bs-text-primary)] hover:bg-[var(--bs-card)]'
                                                                 }`}
                                                         >
                                                             {item.title}
@@ -318,8 +321,8 @@ export const GlassmorphismNavbar = ({
                                             }
                                         }}
                                         className={`px-3 xl:px-4 py-1.5 xl:py-2 rounded-lg text-sm xl:text-base font-medium transition-all duration-300 border-b-2 ${isActive(item.href)
-                                            ? 'text-white border-[#00b3b3]'
-                                            : 'text-[#adb9d2] border-transparent hover:text-white hover:bg-[#11141a]'
+                                            ? 'text-[var(--bs-text-primary)] border-[var(--bs-brand-tertiary)]'
+                                            : 'text-[var(--bs-text-tertiary)] border-transparent hover:text-[var(--bs-text-primary)] hover:bg-[var(--bs-card)]'
                                             }`}
                                     >
                                         {item.title}
@@ -334,7 +337,7 @@ export const GlassmorphismNavbar = ({
                                     <div className="hidden sm:block relative" ref={networkDropdownRef}>
                                         <button
                                             onClick={() => setIsNetworkDropdownOpen(!isNetworkDropdownOpen)}
-                                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#11141a] border border-[#1a1e26] hover:bg-[#171a20] transition-all duration-300 cursor-pointer"
+                                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--bs-card)] border border-[var(--bs-border)] hover:bg-[var(--bs-card-fg)] transition-all duration-300 cursor-pointer"
                                         >
                                             <LivePulseIndicator
                                                 variant={networkStatus.variant}
@@ -345,7 +348,7 @@ export const GlassmorphismNavbar = ({
                                                 {networkStatus.name}
                                             </span>
                                             <svg
-                                                className={`w-3 h-3 text-[#585e6c] transition-transform duration-300 ${isNetworkDropdownOpen ? 'rotate-180' : ''}`}
+                                                className={`w-3 h-3 text-[var(--bs-text-mute)] transition-transform duration-300 ${isNetworkDropdownOpen ? 'rotate-180' : ''}`}
                                                 fill="none"
                                                 stroke="currentColor"
                                                 viewBox="0 0 24 24"
@@ -356,12 +359,12 @@ export const GlassmorphismNavbar = ({
 
                                         {isNetworkDropdownOpen && (
                                             <div className="absolute top-full right-0 pt-2 min-w-[200px]">
-                                                <div className="bg-[#0b0e14]/95 backdrop-blur-xl border border-[#1a1e26] rounded-lg shadow-2xl overflow-hidden">
+                                                <div className="bg-[var(--bs-bg)]/95 backdrop-blur-xl border border-[var(--bs-border)] rounded-lg shadow-2xl overflow-hidden">
                                                     <button
                                                         onClick={() => handleNetworkChange('mock')}
                                                         className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${networkStatus.variant === 'mock'
-                                                            ? 'text-white bg-white/10'
-                                                            : 'text-[#adb9d2] hover:text-white hover:bg-[#11141a]'
+                                                            ? 'text-[var(--bs-text-primary)] bg-[var(--bs-card-fg)]'
+                                                            : 'text-[var(--bs-text-tertiary)] hover:text-[var(--bs-text-primary)] hover:bg-[var(--bs-card)]'
                                                             }`}
                                                     >
                                                         <LivePulseIndicator variant="mock" size="sm" />
@@ -370,15 +373,15 @@ export const GlassmorphismNavbar = ({
                                                     <button
                                                         onClick={() => handleNetworkChange('devnet')}
                                                         className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${networkStatus.variant === 'devnet'
-                                                            ? 'text-white bg-white/10'
-                                                            : 'text-[#adb9d2] hover:text-white hover:bg-[#11141a]'
+                                                            ? 'text-[var(--bs-text-primary)] bg-[var(--bs-card-fg)]'
+                                                            : 'text-[var(--bs-text-tertiary)] hover:text-[var(--bs-text-primary)] hover:bg-[var(--bs-card)]'
                                                             }`}
                                                     >
                                                         <LivePulseIndicator variant="devnet" size="sm" />
                                                         <span>On Devnet</span>
                                                     </button>
                                                     <div
-                                                        className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-[#585e6c] cursor-not-allowed`}
+                                                        className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-[var(--bs-text-mute)] cursor-not-allowed`}
                                                     >
                                                         <LivePulseIndicator variant="mainnet" size="sm" />
                                                         <span>On Mainnet (Coming Soon)</span>
@@ -388,6 +391,15 @@ export const GlassmorphismNavbar = ({
                                         )}
                                     </div>
                                 )}
+
+                                {/* Theme Toggle */}
+                                <button
+                                    onClick={toggleTheme}
+                                    className="flex items-center justify-center w-8 h-8 rounded-full cursor-pointer opacity-80 hover:opacity-100 transition-opacity"
+                                    aria-label="Toggle theme"
+                                >
+                                    {theme === 'dark' ? <Sun size={18} className="text-[var(--bs-text-mute)]" /> : <Moon size={18} className="text-[var(--bs-text-mute)]" />}
+                                </button>
 
                                 <div
                                     className="hidden sm:block relative"
@@ -405,14 +417,14 @@ export const GlassmorphismNavbar = ({
 
                                     {isProfileDropdownOpen && (
                                         <div className="absolute top-full right-0 pt-2 min-w-[200px]">
-                                            <div className="bg-[#0b0e14]/95 backdrop-blur-xl border border-[#1a1e26] rounded-lg shadow-2xl overflow-hidden flex flex-col">
+                                            <div className="bg-[var(--bs-bg)]/95 backdrop-blur-xl border border-[var(--bs-border)] rounded-lg shadow-2xl overflow-hidden flex flex-col">
                                                 <Link
                                                     href="/profile-settings"
                                                     onClick={() => {
                                                         setIsProfileDropdownOpen(false);
                                                         onProfileSettingsClick?.();
                                                     }}
-                                                    className={`block w-full text-left px-4 py-2.5 text-sm transition-colors ${activePath === '/profile-settings' ? 'text-white bg-white/10' : 'text-[#adb9d2] hover:text-white hover:bg-[#11141a]'}`}
+                                                    className={`block w-full text-left px-4 py-2.5 text-sm transition-colors ${activePath === '/profile-settings' ? 'text-[var(--bs-text-primary)] bg-[var(--bs-card-fg)]' : 'text-[var(--bs-text-tertiary)] hover:text-[var(--bs-text-primary)] hover:bg-[var(--bs-card)]'}`}
                                                 >
                                                     Profile &amp; Settings
                                                 </Link>
@@ -422,7 +434,7 @@ export const GlassmorphismNavbar = ({
                                                         setIsProfileDropdownOpen(false);
                                                         onExchangeManagerClick?.();
                                                     }}
-                                                    className={`block w-full text-left px-4 py-2.5 text-sm transition-colors ${activePath === '/exchange-manager' ? 'text-white bg-white/10' : 'text-[#adb9d2] hover:text-white hover:bg-[#11141a]'}`}
+                                                    className={`block w-full text-left px-4 py-2.5 text-sm transition-colors ${activePath === '/exchange-manager' ? 'text-[var(--bs-text-primary)] bg-[var(--bs-card-fg)]' : 'text-[var(--bs-text-tertiary)] hover:text-[var(--bs-text-primary)] hover:bg-[var(--bs-card)]'}`}
                                                 >
                                                     Exchange Manager
                                                 </Link>
@@ -456,13 +468,13 @@ export const GlassmorphismNavbar = ({
                     />
 
                     {/* Menu panel */}
-                    <div className="absolute top-24 bottom-4 left-3 right-3 bg-[#0b0e14]/95 backdrop-blur-xl border border-[#1a1e26] rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-top duration-300">
+                    <div className="absolute top-24 bottom-4 left-3 right-3 bg-[var(--bs-bg)]/95 backdrop-blur-xl border border-[var(--bs-border)] rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-top duration-300">
                         {/* Scrollable content */}
                         <div className="flex-1 overflow-y-auto p-6 space-y-6">
                             {/* Main navigation */}
                             {mainItems.length > 0 && (
                                 <div>
-                                    <p className="text-xs text-[#585e6c] uppercase tracking-wider mb-3">Main</p>
+                                    <p className="text-xs text-[var(--bs-text-mute)] uppercase tracking-wider mb-3">Main</p>
                                     <div className="space-y-1">
                                         {mainItems.map((item) => (
                                             <Link
@@ -476,11 +488,11 @@ export const GlassmorphismNavbar = ({
                                                     setIsMobileMenuOpen(false);
                                                 }}
                                                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive(item.href)
-                                                    ? 'text-white bg-white/10'
-                                                    : 'text-[#adb9d2] hover:text-white hover:bg-[#11141a]'
+                                                    ? 'text-[var(--bs-text-primary)] bg-[var(--bs-card-fg)]'
+                                                    : 'text-[var(--bs-text-tertiary)] hover:text-[var(--bs-text-primary)] hover:bg-[var(--bs-card)]'
                                                     }`}
                                             >
-                                                <span className={`w-1.5 h-1.5 rounded-full ${isActive(item.href) ? 'bg-white' : 'bg-[#1a1e26]'}`} />
+                                                <span className={`w-1.5 h-1.5 rounded-full ${isActive(item.href) ? 'bg-white' : 'bg-[var(--bs-border)]'}`} />
                                                 {item.title}
                                             </Link>
                                         ))}
@@ -491,7 +503,7 @@ export const GlassmorphismNavbar = ({
                             {/* Dropdown items */}
                             {dropdownItems.length > 0 && (
                                 <div>
-                                    <p className="text-xs text-[#585e6c] uppercase tracking-wider mb-3">{dropdownTitle}</p>
+                                    <p className="text-xs text-[var(--bs-text-mute)] uppercase tracking-wider mb-3">{dropdownTitle}</p>
                                     <div className="space-y-1">
                                         {dropdownItems.map((item) => (
                                             <Link
@@ -505,11 +517,11 @@ export const GlassmorphismNavbar = ({
                                                     setIsMobileMenuOpen(false);
                                                 }}
                                                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive(item.href)
-                                                    ? 'text-white bg-white/10'
-                                                    : 'text-[#adb9d2] hover:text-white hover:bg-[#11141a]'
+                                                    ? 'text-[var(--bs-text-primary)] bg-[var(--bs-card-fg)]'
+                                                    : 'text-[var(--bs-text-tertiary)] hover:text-[var(--bs-text-primary)] hover:bg-[var(--bs-card)]'
                                                     }`}
                                             >
-                                                <span className={`w-1.5 h-1.5 rounded-full ${isActive(item.href) ? 'bg-white' : 'bg-[#1a1e26]'}`} />
+                                                <span className={`w-1.5 h-1.5 rounded-full ${isActive(item.href) ? 'bg-white' : 'bg-[var(--bs-border)]'}`} />
                                                 {item.title}
                                             </Link>
                                         ))}
@@ -520,7 +532,7 @@ export const GlassmorphismNavbar = ({
                             {/* Info items */}
                             {infoItems.length > 0 && (
                                 <div>
-                                    <p className="text-xs text-[#585e6c] uppercase tracking-wider mb-3">Information</p>
+                                    <p className="text-xs text-[var(--bs-text-mute)] uppercase tracking-wider mb-3">Information</p>
                                     <div className="space-y-1">
                                         {infoItems.map((item) => (
                                             <Link
@@ -534,11 +546,11 @@ export const GlassmorphismNavbar = ({
                                                     setIsMobileMenuOpen(false);
                                                 }}
                                                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive(item.href)
-                                                    ? 'text-white bg-white/10'
-                                                    : 'text-[#adb9d2] hover:text-white hover:bg-[#11141a]'
+                                                    ? 'text-[var(--bs-text-primary)] bg-[var(--bs-card-fg)]'
+                                                    : 'text-[var(--bs-text-tertiary)] hover:text-[var(--bs-text-primary)] hover:bg-[var(--bs-card)]'
                                                     }`}
                                             >
-                                                <span className={`w-1.5 h-1.5 rounded-full ${isActive(item.href) ? 'bg-white' : 'bg-[#1a1e26]'}`} />
+                                                <span className={`w-1.5 h-1.5 rounded-full ${isActive(item.href) ? 'bg-white' : 'bg-[var(--bs-border)]'}`} />
                                                 {item.title}
                                             </Link>
                                         ))}
@@ -548,17 +560,24 @@ export const GlassmorphismNavbar = ({
 
                             {/* Mobile specific extra items */}
                             <div>
-                                <p className="text-xs text-[#585e6c] uppercase tracking-wider mb-3">Settings</p>
+                                <p className="text-xs text-[var(--bs-text-mute)] uppercase tracking-wider mb-3">Settings</p>
                                 <div className="space-y-1">
+                                    <button
+                                        onClick={toggleTheme}
+                                        className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-[var(--bs-text-tertiary)] hover:text-[var(--bs-text-primary)] hover:bg-[var(--bs-card)] w-full"
+                                    >
+                                        {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+                                        {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+                                    </button>
                                     <Link
                                         href="/profile-settings"
                                         onClick={() => {
                                             onProfileSettingsClick?.();
                                             setIsMobileMenuOpen(false);
                                         }}
-                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${activePath === '/profile-settings' ? 'text-white bg-white/10' : 'text-[#adb9d2] hover:text-white hover:bg-[#11141a]'}`}
+                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${activePath === '/profile-settings' ? 'text-[var(--bs-text-primary)] bg-[var(--bs-card-fg)]' : 'text-[var(--bs-text-tertiary)] hover:text-[var(--bs-text-primary)] hover:bg-[var(--bs-card)]'}`}
                                     >
-                                        <span className={`w-1.5 h-1.5 rounded-full ${activePath === '/profile-settings' ? 'bg-white' : 'bg-[#1a1e26]'}`} />
+                                        <span className={`w-1.5 h-1.5 rounded-full ${activePath === '/profile-settings' ? 'bg-white' : 'bg-[var(--bs-border)]'}`} />
                                         Profile &amp; Settings
                                     </Link>
                                     <Link
@@ -567,9 +586,9 @@ export const GlassmorphismNavbar = ({
                                             onExchangeManagerClick?.();
                                             setIsMobileMenuOpen(false);
                                         }}
-                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${activePath === '/exchange-manager' ? 'text-white bg-white/10' : 'text-[#adb9d2] hover:text-white hover:bg-[#11141a]'}`}
+                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${activePath === '/exchange-manager' ? 'text-[var(--bs-text-primary)] bg-[var(--bs-card-fg)]' : 'text-[var(--bs-text-tertiary)] hover:text-[var(--bs-text-primary)] hover:bg-[var(--bs-card)]'}`}
                                     >
-                                        <span className={`w-1.5 h-1.5 rounded-full ${activePath === '/exchange-manager' ? 'bg-white' : 'bg-[#1a1e26]'}`} />
+                                        <span className={`w-1.5 h-1.5 rounded-full ${activePath === '/exchange-manager' ? 'bg-white' : 'bg-[var(--bs-border)]'}`} />
                                         Exchange Manager
                                     </Link>
                                 </div>

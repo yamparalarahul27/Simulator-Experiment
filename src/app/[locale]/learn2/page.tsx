@@ -31,15 +31,15 @@ const palette = {
 
 function ColorSwatch({ name, token, value }: { name: string; token: string; value: string }) {
     return (
-        <div className="flex items-center gap-4 p-3 border border-[#1a1e26] bg-[#11141a] hover:bg-[#171a20] transition-colors">
+        <div className="flex items-center gap-4 p-3 border border-[var(--bs-border)] bg-[var(--bs-card)] hover:bg-[#171a20] transition-colors">
             <div
-                className="w-12 h-12 shrink-0 border border-white/10"
+                className="w-12 h-12 shrink-0 border border-[var(--bs-border)]"
                 style={{ backgroundColor: value }}
             />
             <div className="min-w-0 flex-1">
-                <p className="text-[#eff1f6] text-sm font-semibold">{name}</p>
-                <p className="text-[#adb9d2] text-xs font-mono">{token}</p>
-                <p className="text-[#585e6c] text-xs font-mono">{value}</p>
+                <p className="text-[var(--bs-text-primary)] text-sm font-semibold">{name}</p>
+                <p className="text-[var(--bs-text-tertiary)] text-xs font-mono">{token}</p>
+                <p className="text-[var(--bs-text-mute)] text-xs font-mono">{value}</p>
             </div>
         </div>
     );
@@ -48,7 +48,7 @@ function ColorSwatch({ name, token, value }: { name: string; token: string; valu
 function Section({ title, colors }: { title: string; colors: typeof palette.backgrounds }) {
     return (
         <div>
-            <h2 className="text-lg font-semibold text-[#00ffff] mb-3 font-mono">{title}</h2>
+            <h2 className="text-lg font-semibold text-[var(--bs-brand)] mb-3 font-mono">{title}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                 {colors.map((c) => (
                     <ColorSwatch key={c.token} {...c} />
@@ -60,15 +60,15 @@ function Section({ title, colors }: { title: string; colors: typeof palette.back
 
 export default function Learn2Page() {
     return (
-        <div className="min-h-screen bg-[#0b0e14] text-[#eff1f6]">
+        <div className="min-h-screen bg-[var(--bs-bg)] text-[var(--bs-text-primary)]">
             <div className="max-w-5xl mx-auto px-4 py-8 md:py-12 space-y-10">
                 <div>
-                    <h1 className="text-2xl md:text-3xl font-bold text-[#eff1f6] font-mono">
+                    <h1 className="text-2xl md:text-3xl font-bold text-[var(--bs-text-primary)] font-mono">
                         Blueshift Dark Palette
                     </h1>
-                    <p className="text-[#adb9d2] text-sm mt-2">
+                    <p className="text-[var(--bs-text-tertiary)] text-sm mt-2">
                         Extracted from{" "}
-                        <span className="text-[#00ffff]">learn.blueshift.gg</span>
+                        <span className="text-[var(--bs-brand)]">learn.blueshift.gg</span>
                         {" "}— dark theme color tokens
                     </p>
                 </div>
@@ -80,27 +80,27 @@ export default function Learn2Page() {
 
                 {/* Full preview strip */}
                 <div>
-                    <h2 className="text-lg font-semibold text-[#00ffff] mb-3 font-mono">Preview</h2>
-                    <div className="border border-[#1a1e26] bg-[#11141a] p-4 md:p-6 space-y-4">
+                    <h2 className="text-lg font-semibold text-[var(--bs-brand)] mb-3 font-mono">Preview</h2>
+                    <div className="border border-[var(--bs-border)] bg-[var(--bs-card)] p-4 md:p-6 space-y-4">
                         <div className="flex flex-wrap gap-2">
                             {[...palette.backgrounds, ...palette.text, ...palette.brand, ...palette.status].map((c) => (
                                 <div
                                     key={c.token}
-                                    className="w-10 h-10 md:w-14 md:h-14 border border-white/5"
+                                    className="w-10 h-10 md:w-14 md:h-14 border border-[var(--bs-border)]"
                                     style={{ backgroundColor: c.value }}
                                     title={`${c.name}: ${c.value}`}
                                 />
                             ))}
                         </div>
 
-                        <div className="space-y-2 pt-4 border-t border-[#1a1e26]">
+                        <div className="space-y-2 pt-4 border-t border-[var(--bs-border)]">
                             <p className="text-sm" style={{ color: "#eff1f6" }}>Primary text — #eff1f6</p>
                             <p className="text-sm" style={{ color: "#ced5e4" }}>Secondary text — #ced5e4</p>
                             <p className="text-sm" style={{ color: "#adb9d2" }}>Tertiary text — #adb9d2</p>
                             <p className="text-sm" style={{ color: "#585e6c" }}>Mute text — #585e6c</p>
                         </div>
 
-                        <div className="flex flex-wrap gap-3 pt-4 border-t border-[#1a1e26]">
+                        <div className="flex flex-wrap gap-3 pt-4 border-t border-[var(--bs-border)]">
                             <button className="px-4 py-2 text-sm font-mono" style={{ backgroundColor: "#00ffff", color: "#0b0e14" }}>
                                 Brand Primary
                             </button>

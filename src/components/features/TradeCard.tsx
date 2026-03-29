@@ -54,8 +54,8 @@ export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardPr
                         />
 
                         <div>
-                            <h3 className="text-white font-bold text-lg">{trade.symbol}</h3>
-                            <p className="text-[#adb9d2] text-sm font-mono">
+                            <h3 className="text-[var(--bs-text-primary)] font-bold text-lg">{trade.symbol}</h3>
+                            <p className="text-[var(--bs-text-tertiary)] text-sm font-mono">
                                 {trade.side.toUpperCase()} • {trade.orderType}
                             </p>
                         </div>
@@ -63,8 +63,8 @@ export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardPr
                     <button
                         onClick={onAnnotate}
                         className={`relative z-20 p-2 rounded-lg transition-colors group/btn ${annotation
-                            ? 'bg-[#00b3b3]/20 text-[#00ffff] hover:bg-[#00b3b3]/30'
-                            : 'bg-[#11141a] text-[#585e6c] hover:bg-[#171a20] hover:text-[#adb9d2]'
+                            ? 'bg-[var(--bs-brand-tertiary)]/20 text-[var(--bs-brand)] hover:bg-[var(--bs-brand-tertiary)]/30'
+                            : 'bg-[var(--bs-card)] text-[var(--bs-text-mute)] hover:bg-[var(--bs-card-fg)] hover:text-[var(--bs-text-tertiary)]'
                             }`}
                         title={annotation ? "Edit note" : "Annotate your trade, it helps in growth"}
                     >
@@ -75,11 +75,11 @@ export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardPr
                 {/* PnL */}
                 <div className="mb-4">
                     <div className="flex items-baseline gap-2">
-                        <span className={`text-num-40 ${trade.pnl >= 0 ? 'text-[#00e66b]' : 'text-[#ff285a]'
+                        <span className={`text-num-40 ${trade.pnl >= 0 ? 'text-[var(--bs-success)]' : 'text-[var(--bs-error)]'
                             } drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]`}>
                             {trade.pnl >= 0 ? '+' : ''}{formatUsd(trade.pnl)}
                         </span>
-                        <span className={`text-sm font-medium ${trade.isWin ? 'text-[#00e66b]' : 'text-[#ff285a]'
+                        <span className={`text-sm font-medium ${trade.isWin ? 'text-[var(--bs-success)]' : 'text-[var(--bs-error)]'
                             }`}>
                             {trade.isWin ? 'WIN' : 'LOSS'}
                         </span>
@@ -88,38 +88,38 @@ export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardPr
 
                 {/* Date */}
                 <div className="mb-3">
-                    <p className="text-[#585e6c] text-xs font-mono" suppressHydrationWarning>
+                    <p className="text-[var(--bs-text-mute)] text-xs font-mono" suppressHydrationWarning>
                         {format(trade.closedAt, 'MMM d, yyyy • HH:mm')}
                     </p>
                 </div>
 
                 {/* Annotation Preview */}
                 {annotation && (
-                    <div className="mt-auto pt-3 border-t border-[#1a1e26]">
+                    <div className="mt-auto pt-3 border-t border-[var(--bs-border)]">
                         {/* Tags on card */}
                         {annotation.tags && annotation.tags.length > 0 && (
                             <div className="flex flex-wrap gap-1 mb-2">
                                 {annotation.tags.slice(0, 2).map(tag => (
-                                    <span key={tag} className="text-[9px] px-1.5 py-0.5 bg-[#00b3b3]/20 text-[#00ffff] border border-[#00b3b3]/20 font-mono">
+                                    <span key={tag} className="text-[9px] px-1.5 py-0.5 bg-[var(--bs-brand-tertiary)]/20 text-[var(--bs-brand)] border border-[var(--bs-brand-tertiary)]/20 font-mono">
                                         #{tag}
                                     </span>
                                 ))}
                                 {annotation.tags.length > 2 && (
-                                    <span className="text-[9px] text-[#585e6c]">+{annotation.tags.length - 2}</span>
+                                    <span className="text-[9px] text-[var(--bs-text-mute)]">+{annotation.tags.length - 2}</span>
                                 )}
                             </div>
                         )}
 
                         {truncatedNote && (
-                            <p className="text-xs text-[#adb9d2] line-clamp-2 italic font-serif">
+                            <p className="text-xs text-[var(--bs-text-tertiary)] line-clamp-2 italic font-serif">
                                 "{truncatedNote}"
                             </p>
                         )}
 
                         {annotation.lessonsLearned && !truncatedNote && (
-                            <div className="bg-[#00b3b3]/5 p-2 border border-[#00b3b3]/10">
-                                <p className="text-[10px] text-[#00ffff] font-bold mb-1 uppercase">Lesson</p>
-                                <p className="text-xs text-[#ced5e4] line-clamp-1 italic">
+                            <div className="bg-[var(--bs-brand-tertiary)]/5 p-2 border border-[var(--bs-brand-tertiary)]/10">
+                                <p className="text-[10px] text-[var(--bs-brand)] font-bold mb-1 uppercase">Lesson</p>
+                                <p className="text-xs text-[var(--bs-text-secondary)] line-clamp-1 italic">
                                     {annotation.lessonsLearned}
                                 </p>
                             </div>

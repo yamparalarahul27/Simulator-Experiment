@@ -33,11 +33,11 @@ interface SimulationResult {
 type LiqStatus = 'safe' | 'ok' | 'warning' | 'negative' | 'liquidated';
 
 const STATUS_CONFIG: Record<LiqStatus, { color: string; bg: string; border: string; label: string; sublabel: string }> = {
-    safe: { color: 'text-[#00e66b]', bg: 'bg-[#00e66b]', border: 'border-[#00e66b]/30', label: 'Safe', sublabel: 'Position Open' },
-    ok: { color: 'text-[#69a2f1]', bg: 'bg-blue-500', border: 'border-[#69a2f1]/30', label: 'OK', sublabel: 'Position Open' },
+    safe: { color: 'text-[var(--bs-success)]', bg: 'bg-[var(--bs-brand-success)]', border: 'border-[var(--bs-success)]/30', label: 'Safe', sublabel: 'Position Open' },
+    ok: { color: 'text-[var(--bs-info)]', bg: 'bg-blue-500', border: 'border-[var(--bs-info)]/30', label: 'OK', sublabel: 'Position Open' },
     warning: { color: 'text-yellow-400', bg: 'bg-yellow-500', border: 'border-yellow-500/30', label: 'Warning', sublabel: 'Near Liquidation' },
-    negative: { color: 'text-[#ff285a]', bg: 'bg-[#ff285a]', border: 'border-[#ff285a]/30', label: 'Negative', sublabel: 'About to Liquidate' },
-    liquidated: { color: 'text-[#adb9d2]', bg: 'bg-white/30', border: 'border-white/20', label: 'Liquidated', sublabel: 'Liquidated' },
+    negative: { color: 'text-[var(--bs-error)]', bg: 'bg-[var(--bs-error)]', border: 'border-[var(--bs-error)]/30', label: 'Negative', sublabel: 'About to Liquidate' },
+    liquidated: { color: 'text-[var(--bs-text-tertiary)]', bg: 'bg-[var(--bs-text-mute)]', border: 'border-[var(--bs-border)]', label: 'Liquidated', sublabel: 'Liquidated' },
 };
 
 // ─── Helpers ──────────────────────────────────
@@ -224,8 +224,8 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
         <div className="space-y-4">
             {/* Title */}
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3 mb-3 md:mb-5">
-                <h2 className="text-heading-16 text-white">Liquidation Simulator</h2>
-                <span className="px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-widest bg-[#00b3b3]/15 text-[#00ffff] border border-[#00b3b3]/20 self-start">
+                <h2 className="text-heading-16 text-[var(--bs-text-primary)]">Liquidation Simulator</h2>
+                <span className="px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-widest bg-[var(--bs-brand-tertiary)]/15 text-[var(--bs-brand)] border border-[var(--bs-brand-tertiary)]/20 self-start">
                     Market Order Simulation
                 </span>
             </div>
@@ -234,41 +234,41 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
 
                 {/* ═══ LEFT: Inputs ═══ */}
-                <div className="md:col-span-4 bg-[#0b0e14]/60 backdrop-blur-xl border border-[#1a1e26] p-4 space-y-4">
-                    <span className="text-label-12 text-[#adb9d2] uppercase tracking-wider">Simulator Inputs</span>
+                <div className="md:col-span-4 bg-[var(--bs-bg)]/60 backdrop-blur-xl border border-[var(--bs-border)] p-4 space-y-4">
+                    <span className="text-label-12 text-[var(--bs-text-tertiary)] uppercase tracking-wider">Simulator Inputs</span>
 
                     {/* Token */}
                     <div>
-                        <label className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider block mb-1">Token</label>
-                        <div className="px-3 py-2 bg-[#11141a] border border-[#1a1e26] text-sm font-mono text-white">
+                        <label className="text-[10px] font-mono text-[var(--bs-text-mute)] uppercase tracking-wider block mb-1">Token</label>
+                        <div className="px-3 py-2 bg-[var(--bs-card)] border border-[var(--bs-border)] text-sm font-mono text-[var(--bs-text-primary)]">
                             XRP / USDC
                         </div>
                     </div>
 
                     {/* Entry Price */}
                     <div>
-                        <label className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider block mb-1">Entry Price</label>
-                        <div className="px-3 py-2 bg-[#11141a] border border-[#1a1e26] text-sm font-mono text-white flex items-center justify-between">
+                        <label className="text-[10px] font-mono text-[var(--bs-text-mute)] uppercase tracking-wider block mb-1">Entry Price</label>
+                        <div className="px-3 py-2 bg-[var(--bs-card)] border border-[var(--bs-border)] text-sm font-mono text-[var(--bs-text-primary)] flex items-center justify-between">
                             <span>{xrpPrice > 0 ? fmt(xrpPrice, 4) : 'Loading...'}</span>
-                            <span className="flex items-center gap-1 text-[9px] text-[#00e66b]">
+                            <span className="flex items-center gap-1 text-[9px] text-[var(--bs-success)]">
                                 <Lock size={10} />
                                 LIVE
                             </span>
                         </div>
                         <div className="flex items-center gap-1 mt-1">
-                            <Info size={10} className="text-[#585e6c]" />
-                            <span className="text-[9px] font-mono text-[#585e6c]">Market Order — Binance live feed</span>
+                            <Info size={10} className="text-[var(--bs-text-mute)]" />
+                            <span className="text-[9px] font-mono text-[var(--bs-text-mute)]">Market Order — Binance live feed</span>
                         </div>
                     </div>
 
                     {/* Quantity */}
                     <div>
-                        <label className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider block mb-1">Quantity (XRP)</label>
+                        <label className="text-[10px] font-mono text-[var(--bs-text-mute)] uppercase tracking-wider block mb-1">Quantity (XRP)</label>
                         <input
                             type="number"
                             value={quantity}
                             onChange={e => setQuantity(Math.max(1, parseFloat(e.target.value) || 0))}
-                            className="w-full px-3 py-2 bg-[#11141a] border border-[#1a1e26] text-sm font-mono text-white focus:border-[#00b3b3]/50 focus:outline-none transition-colors"
+                            className="w-full px-3 py-2 bg-[var(--bs-card)] border border-[var(--bs-border)] text-sm font-mono text-[var(--bs-text-primary)] focus:border-[var(--bs-brand-tertiary)]/50 focus:outline-none transition-colors"
                             min={1}
                             step={10}
                         />
@@ -277,8 +277,8 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                     {/* Leverage Slider */}
                     <div>
                         <div className="flex items-center justify-between mb-1">
-                            <label className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider">Leverage</label>
-                            <span className="text-xs font-mono font-bold text-[#00e6e6]">{leverage}x</span>
+                            <label className="text-[10px] font-mono text-[var(--bs-text-mute)] uppercase tracking-wider">Leverage</label>
+                            <span className="text-xs font-mono font-bold text-[var(--bs-brand-secondary)]">{leverage}x</span>
                         </div>
                         <input
                             type="range"
@@ -286,11 +286,11 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                             max={100}
                             value={leverage}
                             onChange={e => setLeverage(parseInt(e.target.value))}
-                            className="w-full h-1.5 appearance-none bg-[#171a20] rounded-lg cursor-pointer accent-[#00b3b3]
-                                [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-[#00e6e6] [&::-webkit-slider-thumb]:rounded-lg [&::-webkit-slider-thumb]:cursor-pointer
-                                [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:bg-[#00e6e6] [&::-moz-range-thumb]:rounded-lg [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer"
+                            className="w-full h-1.5 appearance-none bg-[var(--bs-card-fg)] rounded-lg cursor-pointer accent-[var(--bs-brand-tertiary)]
+                                [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-[var(--bs-brand-secondary)] [&::-webkit-slider-thumb]:rounded-lg [&::-webkit-slider-thumb]:cursor-pointer
+                                [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:bg-[var(--bs-brand-secondary)] [&::-moz-range-thumb]:rounded-lg [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer"
                         />
-                        <div className="flex justify-between text-[8px] font-mono text-[#585e6c] mt-0.5">
+                        <div className="flex justify-between text-[8px] font-mono text-[var(--bs-text-mute)] mt-0.5">
                             <span>1x</span>
                             <span>25x</span>
                             <span>50x</span>
@@ -301,12 +301,12 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
 
                     {/* Maintenance Margin Rate */}
                     <div>
-                        <label className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider block mb-1">Maint. Margin Rate (%)</label>
+                        <label className="text-[10px] font-mono text-[var(--bs-text-mute)] uppercase tracking-wider block mb-1">Maint. Margin Rate (%)</label>
                         <input
                             type="number"
                             value={mmr}
                             onChange={e => setMmr(Math.max(0.01, Math.min(10, parseFloat(e.target.value) || 0.5)))}
-                            className="w-full px-3 py-2 bg-[#11141a] border border-[#1a1e26] text-sm font-mono text-white focus:border-[#00b3b3]/50 focus:outline-none transition-colors"
+                            className="w-full px-3 py-2 bg-[var(--bs-card)] border border-[var(--bs-border)] text-sm font-mono text-[var(--bs-text-primary)] focus:border-[var(--bs-brand-tertiary)]/50 focus:outline-none transition-colors"
                             min={0.01}
                             max={10}
                             step={0.1}
@@ -314,23 +314,23 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                     </div>
 
                     {/* Margin Required */}
-                    <div className="p-3 bg-[#00b3b3]/10 border border-[#00b3b3]/20">
-                        <div className="text-[10px] font-mono text-[#00e6e6]/60 uppercase tracking-wider mb-1">Margin Required</div>
-                        <div className="text-sm font-mono text-[#00e6e6] font-bold">
+                    <div className="p-3 bg-[var(--bs-brand-tertiary)]/10 border border-[var(--bs-brand-tertiary)]/20">
+                        <div className="text-[10px] font-mono text-[var(--bs-brand-secondary)]/60 uppercase tracking-wider mb-1">Margin Required</div>
+                        <div className="text-sm font-mono text-[var(--bs-brand-secondary)] font-bold">
                             💰 {fmt(marginRequired)} {isINR ? 'INR' : 'USDC'}
                         </div>
-                        <div className="text-[9px] font-mono text-[#585e6c] mt-0.5">Qty × Price ÷ Leverage</div>
+                        <div className="text-[9px] font-mono text-[var(--bs-text-mute)] mt-0.5">Qty × Price ÷ Leverage</div>
                     </div>
 
                     {/* Position Side */}
                     <div>
-                        <label className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider block mb-1">Position Side</label>
-                        <div className="grid grid-cols-2 gap-0 border border-[#1a1e26]">
+                        <label className="text-[10px] font-mono text-[var(--bs-text-mute)] uppercase tracking-wider block mb-1">Position Side</label>
+                        <div className="grid grid-cols-2 gap-0 border border-[var(--bs-border)]">
                             <button
                                 onClick={() => setSide('long')}
                                 className={`py-2 text-xs font-mono font-bold transition-all ${side === 'long'
-                                    ? 'bg-[#00e66b]/20 text-[#00e66b] border-r border-[#00e66b]/30'
-                                    : 'bg-[#11141a] text-[#585e6c] hover:bg-[#171a20] border-r border-[#1a1e26]'
+                                    ? 'bg-[var(--bs-brand-success)]/20 text-[var(--bs-success)] border-r border-[var(--bs-success)]/30'
+                                    : 'bg-[var(--bs-card)] text-[var(--bs-text-mute)] hover:bg-[var(--bs-card-fg)] border-r border-[var(--bs-border)]'
                                     }`}
                             >
                                 Long
@@ -338,8 +338,8 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                             <button
                                 onClick={() => setSide('short')}
                                 className={`py-2 text-xs font-mono font-bold transition-all ${side === 'short'
-                                    ? 'bg-[#ff285a]/20 text-[#ff285a]'
-                                    : 'bg-[#11141a] text-[#585e6c] hover:bg-[#171a20]'
+                                    ? 'bg-[var(--bs-error)]/20 text-[var(--bs-error)]'
+                                    : 'bg-[var(--bs-card)] text-[var(--bs-text-mute)] hover:bg-[var(--bs-card-fg)]'
                                     }`}
                             >
                                 Short
@@ -352,8 +352,8 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                         onClick={runSimulation}
                         disabled={!xrpPrice || xrpPrice <= 0}
                         className="w-full flex items-center justify-center gap-2 py-3 text-sm font-mono font-bold
-                            bg-gradient-to-r from-[#00b3b3] to-[#00ffff] text-white
-                            hover:from-[#00e6e6] hover:to-[#00ffff]
+                            bg-gradient-to-r from-[var(--bs-brand-tertiary)] to-[var(--bs-brand)] text-[var(--bs-text-primary)]
+                            hover:from-[var(--bs-brand-secondary)] hover:to-[var(--bs-brand)]
                             disabled:opacity-30 disabled:cursor-not-allowed
                             transition-all active:scale-[0.98]"
                     >
@@ -363,70 +363,70 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                 </div>
 
                 {/* ═══ MIDDLE: Results ═══ */}
-                <div className={`md:col-span-5 bg-[#0b0e14]/60 backdrop-blur-xl border border-[#1a1e26] p-4 ${!simResult ? 'flex items-center justify-center' : ''}`}>
+                <div className={`md:col-span-5 bg-[var(--bs-bg)]/60 backdrop-blur-xl border border-[var(--bs-border)] p-4 ${!simResult ? 'flex items-center justify-center' : ''}`}>
                     {!simResult ? (
                         <div className="text-center">
-                            <div className="text-white/15 text-xs font-mono mb-2">No simulation running</div>
-                            <div className="text-white/10 text-[10px] font-mono">Configure inputs and press "Run Simulation"</div>
+                            <div className="text-[var(--bs-text-primary)]/15 text-xs font-mono mb-2">No simulation running</div>
+                            <div className="text-[var(--bs-text-primary)]/10 text-[10px] font-mono">Configure inputs and press "Run Simulation"</div>
                         </div>
                     ) : results && (
                         <div className="space-y-4">
-                            <span className="text-label-12 text-[#adb9d2] uppercase tracking-wider">Simulation Results</span>
+                            <span className="text-label-12 text-[var(--bs-text-tertiary)] uppercase tracking-wider">Simulation Results</span>
 
                             {/* XRP Change */}
-                            <div className="p-3 bg-[#11141a] border border-[#1a1e26]">
-                                <div className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider mb-1">XRP Price Change</div>
+                            <div className="p-3 bg-[var(--bs-card)] border border-[var(--bs-border)]">
+                                <div className="text-[10px] font-mono text-[var(--bs-text-mute)] uppercase tracking-wider mb-1">XRP Price Change</div>
                                 <div className="flex items-baseline gap-2">
-                                    <span className="text-sm font-mono text-[#adb9d2]">{fmt(simResult.entryPrice, 4)}</span>
-                                    <span className="text-[#585e6c]">→</span>
-                                    <span className="text-sm font-mono text-white font-bold">{fmt(simPrice, 4)}</span>
+                                    <span className="text-sm font-mono text-[var(--bs-text-tertiary)]">{fmt(simResult.entryPrice, 4)}</span>
+                                    <span className="text-[var(--bs-text-mute)]">→</span>
+                                    <span className="text-sm font-mono text-[var(--bs-text-primary)] font-bold">{fmt(simPrice, 4)}</span>
                                 </div>
-                                <div className={`text-xs font-mono font-bold mt-1 ${results.xrpChange >= 0 ? 'text-[#00e66b]' : 'text-[#ff285a]'}`}>
+                                <div className={`text-xs font-mono font-bold mt-1 ${results.xrpChange >= 0 ? 'text-[var(--bs-success)]' : 'text-[var(--bs-error)]'}`}>
                                     {results.xrpChange >= 0 ? '+' : ''}{fmt(results.xrpChange, 4)} ({fmtPct(results.xrpChangePct)})
                                 </div>
                             </div>
 
                             {/* Position Value */}
-                            <div className="p-3 bg-[#11141a] border border-[#1a1e26]">
-                                <div className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider mb-1">Position Value</div>
-                                <div className="text-lg font-mono text-white font-bold">{fmt(results.positionValue)}</div>
-                                <div className="text-[10px] font-mono text-[#585e6c] mt-0.5">
+                            <div className="p-3 bg-[var(--bs-card)] border border-[var(--bs-border)]">
+                                <div className="text-[10px] font-mono text-[var(--bs-text-mute)] uppercase tracking-wider mb-1">Position Value</div>
+                                <div className="text-lg font-mono text-[var(--bs-text-primary)] font-bold">{fmt(results.positionValue)}</div>
+                                <div className="text-[10px] font-mono text-[var(--bs-text-mute)] mt-0.5">
                                     was {fmt(results.entryValue)} at entry
                                 </div>
                             </div>
 
                             {/* Margin Change */}
-                            <div className="p-3 bg-[#11141a] border border-[#1a1e26]">
-                                <div className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider mb-1">Margin Change</div>
+                            <div className="p-3 bg-[var(--bs-card)] border border-[var(--bs-border)]">
+                                <div className="text-[10px] font-mono text-[var(--bs-text-mute)] uppercase tracking-wider mb-1">Margin Change</div>
                                 <div className="flex items-baseline gap-2">
-                                    <span className="text-sm font-mono text-[#adb9d2]">{fmt(simResult.initialMargin)}</span>
-                                    <span className="text-[#585e6c]">→</span>
-                                    <span className={`text-sm font-mono font-bold ${results.effectiveMargin >= simResult.initialMargin ? 'text-[#00e66b]' : 'text-[#ff285a]'}`}>
+                                    <span className="text-sm font-mono text-[var(--bs-text-tertiary)]">{fmt(simResult.initialMargin)}</span>
+                                    <span className="text-[var(--bs-text-mute)]">→</span>
+                                    <span className={`text-sm font-mono font-bold ${results.effectiveMargin >= simResult.initialMargin ? 'text-[var(--bs-success)]' : 'text-[var(--bs-error)]'}`}>
                                         {fmt(results.effectiveMargin)}
                                     </span>
                                 </div>
-                                <div className={`text-xs font-mono font-bold mt-1 ${results.pnl >= 0 ? 'text-[#00e66b]' : 'text-[#ff285a]'}`}>
+                                <div className={`text-xs font-mono font-bold mt-1 ${results.pnl >= 0 ? 'text-[var(--bs-success)]' : 'text-[var(--bs-error)]'}`}>
                                     {results.pnl >= 0 ? '+' : ''}{fmt(results.pnl)} ({fmtPct(results.marginChangePct)})
                                 </div>
                             </div>
 
                             {/* Unrealized PnL */}
-                            <div className={`p-3 border ${results.pnl >= 0 ? 'border-[#00e66b]/20 bg-[#00e66b]/5' : 'border-[#ff285a]/20 bg-[#ff285a]/5'}`}>
-                                <div className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider mb-1">Unrealized PnL</div>
-                                <div className={`text-lg font-mono font-bold ${results.pnl >= 0 ? 'text-[#00e66b]' : 'text-[#ff285a]'}`}>
+                            <div className={`p-3 border ${results.pnl >= 0 ? 'border-[var(--bs-success)]/20 bg-[var(--bs-brand-success)]/5' : 'border-[var(--bs-error)]/20 bg-[var(--bs-error)]/5'}`}>
+                                <div className="text-[10px] font-mono text-[var(--bs-text-mute)] uppercase tracking-wider mb-1">Unrealized PnL</div>
+                                <div className={`text-lg font-mono font-bold ${results.pnl >= 0 ? 'text-[var(--bs-success)]' : 'text-[var(--bs-error)]'}`}>
                                     {results.pnl >= 0 ? '+' : ''}{fmt(results.pnl)}
                                 </div>
-                                <div className={`text-xs font-mono mt-0.5 ${results.roe >= 0 ? 'text-[#00e66b]/60' : 'text-[#ff285a]/60'}`}>
+                                <div className={`text-xs font-mono mt-0.5 ${results.roe >= 0 ? 'text-[var(--bs-success)]/60' : 'text-[var(--bs-error)]/60'}`}>
                                     Return on Margin: {fmtPct(results.roe)}
                                 </div>
                             </div>
 
                             {/* Liquidation Status Bar */}
-                            <div className={`p-3 border ${STATUS_CONFIG[results.status].border} bg-[#0b0e14]/40`}>
-                                <div className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider mb-2">Liquidation Status</div>
+                            <div className={`p-3 border ${STATUS_CONFIG[results.status].border} bg-[var(--bs-bg)]/40`}>
+                                <div className="text-[10px] font-mono text-[var(--bs-text-mute)] uppercase tracking-wider mb-2">Liquidation Status</div>
 
                                 {/* Bar */}
-                                <div className="relative h-3 bg-[#11141a] overflow-hidden mb-2">
+                                <div className="relative h-3 bg-[var(--bs-card)] overflow-hidden mb-2">
                                     <div
                                         className={`absolute top-0 left-0 h-full transition-all duration-300 ${STATUS_CONFIG[results.status].bg}`}
                                         style={{ width: `${Math.max(2, 100 - results.consumed)}%`, opacity: results.status === 'liquidated' ? 0.3 : 0.6 }}
@@ -446,7 +446,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                                             {STATUS_CONFIG[results.status].label}
                                         </span>
                                     </div>
-                                    <span className="text-[10px] font-mono text-[#585e6c]">
+                                    <span className="text-[10px] font-mono text-[var(--bs-text-mute)]">
                                         {STATUS_CONFIG[results.status].sublabel}
                                     </span>
                                 </div>
@@ -456,21 +456,21 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                 </div>
 
                 {/* ═══ RIGHT: Vertical Price Slider ═══ */}
-                <div className="md:col-span-3 bg-[#0b0e14]/60 backdrop-blur-xl border border-[#1a1e26] p-4">
+                <div className="md:col-span-3 bg-[var(--bs-bg)]/60 backdrop-blur-xl border border-[var(--bs-border)] p-4">
                     {!simResult ? (
                         <div className="h-full flex items-center justify-center">
-                            <div className="text-white/10 text-[10px] font-mono text-center">
+                            <div className="text-[var(--bs-text-primary)]/10 text-[10px] font-mono text-center">
                                 Price slider<br />appears after<br />simulation
                             </div>
                         </div>
                     ) : (
                         <div className="h-full flex flex-col">
-                            <span className="text-label-12 text-[#adb9d2] uppercase tracking-wider mb-3">Market Price</span>
+                            <span className="text-label-12 text-[var(--bs-text-tertiary)] uppercase tracking-wider mb-3">Market Price</span>
 
                             {/* Current sim price display */}
                             <div className="text-center mb-3">
-                                <div className="text-lg font-mono text-white font-bold">{fmt(simPrice, 4)}</div>
-                                <div className={`text-[10px] font-mono ${simPrice >= simResult.entryPrice ? 'text-[#00e66b]' : 'text-[#ff285a]'}`}>
+                                <div className="text-lg font-mono text-[var(--bs-text-primary)] font-bold">{fmt(simPrice, 4)}</div>
+                                <div className={`text-[10px] font-mono ${simPrice >= simResult.entryPrice ? 'text-[var(--bs-success)]' : 'text-[var(--bs-error)]'}`}>
                                     {simPrice >= simResult.entryPrice ? '▲' : '▼'} {fmtPct(((simPrice - simResult.entryPrice) / simResult.entryPrice) * 100)}
                                 </div>
                             </div>
@@ -484,15 +484,15 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                                 style={{ width: '100%' }}
                             >
                                 {/* Track background */}
-                                <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-1 bg-[#171a20]" />
+                                <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-1 bg-[var(--bs-card-fg)]" />
 
                                 {/* Entry price line */}
                                 <div
                                     className="absolute left-0 right-0 flex items-center gap-2"
                                     style={{ top: `${priceToPercent(simResult.entryPrice)}%` }}
                                 >
-                                    <div className="flex-1 h-px bg-white/30 border-dashed" />
-                                    <span className="text-[9px] font-mono text-[#adb9d2] whitespace-nowrap">
+                                    <div className="flex-1 h-px bg-[var(--bs-text-mute)] border-dashed" />
+                                    <span className="text-[9px] font-mono text-[var(--bs-text-tertiary)] whitespace-nowrap">
                                         {fmt(simResult.entryPrice, 4)} Entry
                                     </span>
                                 </div>
@@ -502,8 +502,8 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                                     className="absolute left-0 right-0 flex items-center gap-2"
                                     style={{ top: `${priceToPercent(simResult.liquidationPrice)}%` }}
                                 >
-                                    <div className="flex-1 h-px bg-[#ff285a]/60" />
-                                    <span className="text-[9px] font-mono text-[#ff285a] whitespace-nowrap">
+                                    <div className="flex-1 h-px bg-[var(--bs-error)]/60" />
+                                    <span className="text-[9px] font-mono text-[var(--bs-error)] whitespace-nowrap">
                                         {fmt(simResult.liquidationPrice, 4)} Liq 🔴
                                     </span>
                                 </div>
@@ -513,25 +513,25 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                                     className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex items-center gap-2"
                                     style={{ top: `${priceToPercent(simPrice)}%` }}
                                 >
-                                    <div className={`w-5 h-5 border-2 ring-2 ring-black/50 ${results?.status === 'liquidated' ? 'bg-white/30 border-white/40' :
-                                        results?.status === 'negative' ? 'bg-[#ff285a] border-red-400' :
+                                    <div className={`w-5 h-5 border-2 ring-2 ring-black/50 ${results?.status === 'liquidated' ? 'bg-[var(--bs-text-mute)] border-[var(--bs-border)]' :
+                                        results?.status === 'negative' ? 'bg-[var(--bs-error)] border-red-400' :
                                             results?.status === 'warning' ? 'bg-yellow-500 border-yellow-400' :
                                                 results?.status === 'ok' ? 'bg-blue-500 border-blue-400' :
-                                                    'bg-[#00e66b] border-green-400'
+                                                    'bg-[var(--bs-brand-success)] border-green-400'
                                         } cursor-grab active:cursor-grabbing shadow-lg`} />
                                 </div>
 
                                 {/* Top/Bottom range labels */}
                                 <div className="absolute -top-5 left-0 right-0 text-center">
-                                    <span className="text-[8px] font-mono text-[#585e6c]">{fmt(sliderRange.max, 4)}</span>
+                                    <span className="text-[8px] font-mono text-[var(--bs-text-mute)]">{fmt(sliderRange.max, 4)}</span>
                                 </div>
                                 <div className="absolute -bottom-5 left-0 right-0 text-center">
-                                    <span className="text-[8px] font-mono text-[#585e6c]">{fmt(sliderRange.min, 4)}</span>
+                                    <span className="text-[8px] font-mono text-[var(--bs-text-mute)]">{fmt(sliderRange.min, 4)}</span>
                                 </div>
                             </div>
 
                             <div className="text-center mt-2">
-                                <span className="text-[9px] font-mono text-[#585e6c]">Drag to simulate price</span>
+                                <span className="text-[9px] font-mono text-[var(--bs-text-mute)]">Drag to simulate price</span>
                             </div>
                         </div>
                     )}
@@ -539,43 +539,43 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
             </div>
 
             {/* ═══ Accordion: Educational Info ═══ */}
-            <div className="bg-[#0b0e14]/40 backdrop-blur-xl border border-[#1a1e26]">
+            <div className="bg-[var(--bs-bg)]/40 backdrop-blur-xl border border-[var(--bs-border)]">
                 <button
                     onClick={() => setAccordionOpen(prev => !prev)}
-                    className="w-full flex items-center justify-between px-4 py-3 hover:bg-[#11141a] transition-colors"
+                    className="w-full flex items-center justify-between px-4 py-3 hover:bg-[var(--bs-card)] transition-colors"
                 >
                     <div className="flex items-center gap-2">
-                        <Info size={14} className="text-[#00ffff]" />
-                        <span className="text-xs font-mono text-[#adb9d2]">What is Liquidation?</span>
+                        <Info size={14} className="text-[var(--bs-brand)]" />
+                        <span className="text-xs font-mono text-[var(--bs-text-tertiary)]">What is Liquidation?</span>
                     </div>
                     {accordionOpen ? (
-                        <ChevronUp size={14} className="text-[#585e6c]" />
+                        <ChevronUp size={14} className="text-[var(--bs-text-mute)]" />
                     ) : (
-                        <ChevronDown size={14} className="text-[#585e6c]" />
+                        <ChevronDown size={14} className="text-[var(--bs-text-mute)]" />
                     )}
                 </button>
 
                 {accordionOpen && (
-                    <div className="px-4 pb-4 border-t border-[#1a1e26]">
-                        <div className="pt-3 space-y-3 text-xs font-mono text-[#585e6c] leading-relaxed">
+                    <div className="px-4 pb-4 border-t border-[var(--bs-border)]">
+                        <div className="pt-3 space-y-3 text-xs font-mono text-[var(--bs-text-mute)] leading-relaxed">
                             <p>
-                                In perpetual futures trading, <span className="text-[#ced5e4]">liquidation</span> occurs when your
+                                In perpetual futures trading, <span className="text-[var(--bs-text-secondary)]">liquidation</span> occurs when your
                                 position's unrealized loss consumes your initial margin (collateral). The exchange automatically
                                 closes your position to prevent further losses.
                             </p>
                             <div className="space-y-1.5">
-                                <p className="text-[#adb9d2] font-bold">Key Takeaways:</p>
-                                <ul className="space-y-1 text-white/35">
+                                <p className="text-[var(--bs-text-tertiary)] font-bold">Key Takeaways:</p>
+                                <ul className="space-y-1 text-[var(--bs-text-primary)]/35">
                                     <li className="flex items-start gap-2">
-                                        <span className="text-[#00ffff] mt-0.5">•</span>
+                                        <span className="text-[var(--bs-brand)] mt-0.5">•</span>
                                         <span>Higher leverage moves the liquidation price closer to your entry — more risk.</span>
                                     </li>
                                     <li className="flex items-start gap-2">
-                                        <span className="text-[#00e66b] mt-0.5">•</span>
+                                        <span className="text-[var(--bs-success)] mt-0.5">•</span>
                                         <span>Long positions are liquidated when price drops below the liquidation price.</span>
                                     </li>
                                     <li className="flex items-start gap-2">
-                                        <span className="text-[#ff285a] mt-0.5">•</span>
+                                        <span className="text-[var(--bs-error)] mt-0.5">•</span>
                                         <span>Short positions are liquidated when price rises above the liquidation price.</span>
                                     </li>
                                     <li className="flex items-start gap-2">
@@ -584,8 +584,8 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                                     </li>
                                 </ul>
                             </div>
-                            <div className="p-2 bg-[#11141a] border border-[#1a1e26] text-[10px] text-[#585e6c]">
-                                <span className="text-[#585e6c]">Formula:</span><br />
+                            <div className="p-2 bg-[var(--bs-card)] border border-[var(--bs-border)] text-[10px] text-[var(--bs-text-mute)]">
+                                <span className="text-[var(--bs-text-mute)]">Formula:</span><br />
                                 Long Liq Price = Entry × (1 − 1/Leverage + MMR)<br />
                                 Short Liq Price = Entry × (1 + 1/Leverage − MMR)
                             </div>

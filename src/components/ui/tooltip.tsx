@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
  * CUSTOMIZED SHADCN TOOLTIP
  * 
  * This component has been customized to match the Deriverse design system:
- * - Glassmorphism background (bg-[#11141a] backdrop-blur-xl)
+ * - Glassmorphism background (bg-[var(--bs-card)] backdrop-blur-xl)
  * - Sharp corners (rounded-lg)
  * - White text with opacity
  * - Custom arrow styling
@@ -54,13 +54,13 @@ function TooltipContent({
         data-slot="tooltip-content"
         sideOffset={sideOffset}
         className={cn(
-          "bg-[#11141a] backdrop-blur-xl border border-[#1a1e26] text-[#ced5e4] animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-lg px-3 py-1.5 text-xs font-sans text-balance",
+          "bg-[var(--bs-card)] backdrop-blur-xl border border-[var(--bs-border)] text-[var(--bs-text-secondary)] animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-lg px-3 py-1.5 text-xs font-sans text-balance",
           className
         )}
         {...props}
       >
         {children}
-        <TooltipPrimitive.Arrow className="fill-white/5 z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[1px] border-l border-t border-[#1a1e26]" />
+        <TooltipPrimitive.Arrow className="fill-white/5 z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[1px] border-l border-t border-[var(--bs-border)]" />
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
   )

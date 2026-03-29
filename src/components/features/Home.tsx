@@ -12,19 +12,19 @@ import { MOCK_TRADES, calculateFeeBreakdown } from '../../lib/mockData';
 
 // Dynamic Imports for Heavy Components
 const PnLCard = dynamic(() => import('./PnLCard'), {
-  loading: () => <div className="animate-pulse bg-[#11141a] h-[400px] w-full" />
+  loading: () => <div className="animate-pulse bg-[var(--bs-card)] h-[400px] w-full" />
 });
 const DrawdownCard = dynamic(() => import('./DrawdownCard'), {
-  loading: () => <div className="animate-pulse bg-[#11141a] h-[400px] w-full" />
+  loading: () => <div className="animate-pulse bg-[var(--bs-card)] h-[400px] w-full" />
 });
 const OrderTypeRatioCard = dynamic(() => import('./OrderTypeRatioCard'), {
-  loading: () => <div className="animate-pulse bg-[#11141a] h-[300px] w-full" />
+  loading: () => <div className="animate-pulse bg-[var(--bs-card)] h-[300px] w-full" />
 });
 const AverageTradeDurationCard = dynamic(() => import('./AverageTradeDurationCard'), {
-  loading: () => <div className="animate-pulse bg-[#11141a] h-[200px] w-full" />
+  loading: () => <div className="animate-pulse bg-[var(--bs-card)] h-[200px] w-full" />
 });
 const TimeBasedPerformanceCard = dynamic(() => import('./TimeBasedPerformanceCard'), {
-  loading: () => <div className="animate-pulse bg-[#11141a] h-[600px] w-full" />
+  loading: () => <div className="animate-pulse bg-[var(--bs-card)] h-[600px] w-full" />
 });
 import { SupabaseTradeService } from '../../services/SupabaseTradeService';
 import { SupabaseWalletService } from '../../services/SupabaseWalletService';
@@ -227,9 +227,9 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
   // Loading state
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-white">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00b3b3] mb-4"></div>
-        <p className="text-[#adb9d2]">Loading your trading analytics...</p>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-[var(--bs-text-primary)]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--bs-brand-tertiary)] mb-4"></div>
+        <p className="text-[var(--bs-text-tertiary)]">Loading your trading analytics...</p>
       </div>
     );
   }
@@ -246,8 +246,8 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
           />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-white mb-2">Add or Connect Wallet to view your trades Analytics</h2>
-          <p className="text-[#adb9d2] max-w-md mx-auto">
+          <h2 className="text-2xl font-bold text-[var(--bs-text-primary)] mb-2">Add or Connect Wallet to view your trades Analytics</h2>
+          <p className="text-[var(--bs-text-tertiary)] max-w-md mx-auto">
             {analyzingWallet
               ? "We couldn't find any saved trades for your wallet in our database."
               : "It seems you haven't selected a wallet to analyze yet."}
@@ -255,7 +255,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
         </div>
         <button
           onClick={onNavigateToLookup}
-          className="px-6 py-3 bg-[#00b3b3]/50 hover:bg-[#00b3b3]/40 text-white font-medium rounded-lg transition-colors"
+          className="px-6 py-3 bg-[var(--bs-brand-tertiary)]/50 hover:bg-[var(--bs-brand-tertiary)]/40 text-[var(--bs-text-primary)] font-medium rounded-lg transition-colors"
         >
           Add Wallet
         </button>
@@ -268,9 +268,9 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
       <div className="flex flex-col gap-6">
         <div className="flex items-center justify-between gap-6 flex-wrap">
           <div>
-            <h1 className="text-3xl font-bold text-white">Home Analytics</h1>
+            <h1 className="text-3xl font-bold text-[var(--bs-text-primary)]">Home Analytics</h1>
             {timelineText && (
-              <p className="text-[#adb9d2] text-sm font-mono mt-1">{timelineText}</p>
+              <p className="text-[var(--bs-text-tertiary)] text-sm font-mono mt-1">{timelineText}</p>
             )}
           </div>
 
@@ -303,7 +303,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
 
       <div className="grid grid-cols-1 gap-8">
         <div className="flex items-center justify-center">
-          <h2 className="text-[#adb9d2] text-sm font-mono uppercase tracking-wider">Portfolio Overview</h2>
+          <h2 className="text-[var(--bs-text-tertiary)] text-sm font-mono uppercase tracking-wider">Portfolio Overview</h2>
         </div>
         <div className="w-full space-y-6">
           <PnLCard activeFilter={activeFilter} trades={filteredTrades} />
@@ -311,22 +311,22 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
         </div>
 
         <div className="flex items-center justify-center">
-          <h2 className="text-[#adb9d2] text-sm font-mono uppercase tracking-wider">Performance &amp; Time In Market</h2>
+          <h2 className="text-[var(--bs-text-tertiary)] text-sm font-mono uppercase tracking-wider">Performance &amp; Time In Market</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <CardWithCornerShine padding="lg" minHeight="min-h-[200px]">
             <div className="flex flex-col h-full justify-between relative z-10">
               <div>
                 <div className="flex items-center">
-                  <h3 className="text-[#585e6c] text-sm font-mono uppercase tracking-wider">Win Rate</h3>
+                  <h3 className="text-[var(--bs-text-mute)] text-sm font-mono uppercase tracking-wider">Win Rate</h3>
                   <InfoTooltip infoKey="winRate" />
                 </div>
               </div>
               <div className="flex flex-col items-start gap-2">
-                <span className="mt-2 text-num-48 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
+                <span className="mt-2 text-num-48 text-[var(--bs-text-primary)] drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
                   {winStats.winRate}%
                 </span>
-                <span className="px-1.5 py-0.5 bg-[#171a20] text-[#adb9d2] text-xs font-mono rounded-sm">
+                <span className="px-1.5 py-0.5 bg-[var(--bs-card-fg)] text-[var(--bs-text-tertiary)] text-xs font-mono rounded-sm">
                   {winStats.wins}W / {winStats.losses}L
                 </span>
               </div>
@@ -345,7 +345,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
         />
 
         <div className="flex items-center justify-center">
-          <h2 className="text-[#adb9d2] text-sm font-mono uppercase tracking-wider">Trading Behavior &amp; Risk</h2>
+          <h2 className="text-[var(--bs-text-tertiary)] text-sm font-mono uppercase tracking-wider">Trading Behavior &amp; Risk</h2>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
@@ -355,24 +355,24 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
             <div className="flex flex-col h-full justify-between relative z-10">
               <div>
                 <div className="flex items-center">
-                  <h3 className="text-[#585e6c] text-sm font-mono uppercase tracking-wider">Long/Short Ratio</h3>
+                  <h3 className="text-[var(--bs-text-mute)] text-sm font-mono uppercase tracking-wider">Long/Short Ratio</h3>
                   <InfoTooltip infoKey="longShortRatio" />
                 </div>
               </div>
               <div className="mt-4" />
               <div className="space-y-2">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-num-48 text-[#00e66b] drop-shadow-[0_0_5px_rgba(34,197,94,0.3)]">
+                  <span className="text-num-48 text-[var(--bs-success)] drop-shadow-[0_0_5px_rgba(34,197,94,0.3)]">
                     {longShortRatio.longPercent}%
                   </span>
 
-                  <span className="text-[#adb9d2] text-sm font-mono">Long</span>
+                  <span className="text-[var(--bs-text-tertiary)] text-sm font-mono">Long</span>
                 </div>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-num-48 text-[#ff285a] drop-shadow-[0_0_5px_rgba(248,113,113,0.3)]">
+                  <span className="text-num-48 text-[var(--bs-error)] drop-shadow-[0_0_5px_rgba(248,113,113,0.3)]">
                     {longShortRatio.shortPercent}%
                   </span>
-                  <span className="text-[#adb9d2] text-sm font-mono">Short</span>
+                  <span className="text-[var(--bs-text-tertiary)] text-sm font-mono">Short</span>
                 </div>
               </div>
             </div>
@@ -380,7 +380,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
         </div>
 
         <div className="flex items-center justify-center">
-          <h2 className="text-[#adb9d2] text-sm font-mono uppercase tracking-wider">Finances</h2>
+          <h2 className="text-[var(--bs-text-tertiary)] text-sm font-mono uppercase tracking-wider">Finances</h2>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="space-y-4">
@@ -388,13 +388,13 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
               <div className="flex flex-col h-full justify-between relative z-10">
                 <div>
                   <div className="flex items-center">
-                    <h3 className="text-[#585e6c] text-sm font-mono uppercase tracking-wider">Trading Volume</h3>
+                    <h3 className="text-[var(--bs-text-mute)] text-sm font-mono uppercase tracking-wider">Trading Volume</h3>
                     <InfoTooltip infoKey="tradingVolume" />
                   </div>
                 </div>
                 <div className="mt-4" />
                 <div>
-                  <span className="text-num-48 text-white/95 drop-shadow-[0_0_5px_rgba(255,255,255,0.1)]">
+                  <span className="text-num-48 text-[var(--bs-text-primary)]/95 drop-shadow-[0_0_5px_rgba(255,255,255,0.1)]">
                     {formatCompactNumber(tradingVolume)}
                   </span>
                 </div>
@@ -405,13 +405,13 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
               <div className="flex flex-col h-full justify-between relative z-10">
                 <div>
                   <div className="flex items-center">
-                    <h3 className="text-[#585e6c] text-sm font-mono uppercase tracking-wider">AVG WIN</h3>
+                    <h3 className="text-[var(--bs-text-mute)] text-sm font-mono uppercase tracking-wider">AVG WIN</h3>
                     <InfoTooltip infoKey="avgWin" />
                   </div>
                 </div>
                 <div className="mt-4" />
                 <div>
-                  <span className="text-num-48 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)] text-[#00e66b]">
+                  <span className="text-num-48 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)] text-[var(--bs-success)]">
                     +${Math.abs(avgWin).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
@@ -422,14 +422,14 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
               <div className="flex flex-col h-full justify-between relative z-10">
                 <div>
                   <div className="flex items-center">
-                    <h3 className="text-[#585e6c] text-sm font-mono uppercase tracking-wider">AVG LOSS</h3>
+                    <h3 className="text-[var(--bs-text-mute)] text-sm font-mono uppercase tracking-wider">AVG LOSS</h3>
                     <InfoTooltip infoKey="avgLoss" />
                   </div>
                 </div>
                 <div className="mt-4" />
                 <div
                 >
-                  <span className="text-num-48 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)] text-[#ff285a]">
+                  <span className="text-num-48 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)] text-[var(--bs-error)]">
                     {avgLoss === 0
                       ? '$0.00'
                       : `-$${Math.abs(avgLoss).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}

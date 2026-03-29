@@ -78,15 +78,15 @@ const SpotTradeChart = React.memo(function SpotTradeChart({ currentPrice, pair, 
         <div className="h-full flex flex-col">
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
-                <span className="text-label-12 text-[#adb9d2] uppercase tracking-wider">Price Chart</span>
+                <span className="text-label-12 text-[var(--bs-text-tertiary)] uppercase tracking-wider">Price Chart</span>
                 <div className="flex gap-1">
                     {timeframes.map(tf => (
                         <button
                             key={tf}
                             onClick={() => setTimeframe(tf)}
                             className={`px-2 py-0.5 text-[10px] font-mono font-bold transition-all ${timeframe === tf
-                                ? 'bg-[#00b3b3]/20 text-[#00e6e6] border border-[#00b3b3]/30'
-                                : 'text-[#585e6c] hover:text-[#adb9d2] border border-transparent'
+                                ? 'bg-[var(--bs-brand-tertiary)]/20 text-[var(--bs-brand-secondary)] border border-[var(--bs-brand-tertiary)]/30'
+                                : 'text-[var(--bs-text-mute)] hover:text-[var(--bs-text-tertiary)] border border-transparent'
                                 }`}
                         >
                             {tf}
@@ -150,7 +150,7 @@ const SpotTradeChart = React.memo(function SpotTradeChart({ currentPrice, pair, 
                         </AreaChart>
                     </ResponsiveContainer>
                 ) : (
-                    <div className="flex items-center justify-center h-full text-[#585e6c] text-xs font-mono">
+                    <div className="flex items-center justify-center h-full text-[var(--bs-text-mute)] text-xs font-mono">
                         Waiting for price data...
                     </div>
                 )}

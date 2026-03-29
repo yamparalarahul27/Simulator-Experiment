@@ -114,7 +114,7 @@ export default function AnnotationModal({
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={handleClose}
-                            className="fixed inset-0 z-[60] bg-[#0b0e14]/60 backdrop-blur-sm"
+                            className="fixed inset-0 z-[60] bg-[var(--bs-bg)]/60 backdrop-blur-sm"
                         />
 
                         {/* Modal */}
@@ -127,50 +127,50 @@ export default function AnnotationModal({
                                 className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden"
                             >
                                 {/* Glassmorphism Container */}
-                                <div className="relative overflow-hidden rounded-lg border border-[#1a1e26] bg-[#0b0e14]/95 backdrop-blur-xl shadow-2xl">
+                                <div className="relative overflow-hidden rounded-lg border border-[var(--bs-border)] bg-[var(--bs-bg)]/95 backdrop-blur-xl shadow-2xl">
                                     {/* Corner Accents */}
-                                    <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#00b3b3]/40"></div>
-                                    <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#00b3b3]/40"></div>
-                                    <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#00b3b3]/40"></div>
-                                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#00b3b3]/40"></div>
+                                    <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[var(--bs-brand-tertiary)]/40"></div>
+                                    <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[var(--bs-brand-tertiary)]/40"></div>
+                                    <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[var(--bs-brand-tertiary)]/40"></div>
+                                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[var(--bs-brand-tertiary)]/40"></div>
 
                                     {/* Header */}
-                                    <div className="relative z-10 flex items-center justify-between border-b border-[#1a1e26] p-6">
-                                        <h2 className="text-xl font-bold text-white">Trade Note</h2>
+                                    <div className="relative z-10 flex items-center justify-between border-b border-[var(--bs-border)] p-6">
+                                        <h2 className="text-xl font-bold text-[var(--bs-text-primary)]">Trade Note</h2>
                                         <button
                                             onClick={handleClose}
-                                            className="rounded-lg p-2 text-[#adb9d2] transition-colors hover:bg-[#171a20] hover:text-white"
+                                            className="rounded-lg p-2 text-[var(--bs-text-tertiary)] transition-colors hover:bg-[var(--bs-card-fg)] hover:text-[var(--bs-text-primary)]"
                                         >
                                             <X className="h-5 w-5" />
                                         </button>
                                     </div>
 
                                     {/* Trade Summary */}
-                                    <div className="relative z-10 border-b border-[#1a1e26] bg-[#11141a] p-6">
+                                    <div className="relative z-10 border-b border-[var(--bs-border)] bg-[var(--bs-card)] p-6">
                                         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                                             <div>
-                                                <p className="text-xs text-[#585e6c] uppercase tracking-wider mb-1">Symbol</p>
-                                                <p className="text-white font-semibold">{trade.symbol}</p>
+                                                <p className="text-xs text-[var(--bs-text-mute)] uppercase tracking-wider mb-1">Symbol</p>
+                                                <p className="text-[var(--bs-text-primary)] font-semibold">{trade.symbol}</p>
                                             </div>
                                             <div>
-                                                <p className="text-xs text-[#585e6c] uppercase tracking-wider mb-1">Side</p>
+                                                <p className="text-xs text-[var(--bs-text-mute)] uppercase tracking-wider mb-1">Side</p>
                                                 <p className={`font-semibold ${trade.side === 'long' || trade.side === 'buy'
-                                                    ? 'text-[#00e66b]'
-                                                    : 'text-[#ff285a]'
+                                                    ? 'text-[var(--bs-success)]'
+                                                    : 'text-[var(--bs-error)]'
                                                     }`}>
                                                     {trade.side.toUpperCase()}
                                                 </p>
                                             </div>
                                             <div>
-                                                <p className="text-xs text-[#585e6c] uppercase tracking-wider mb-1">PnL</p>
-                                                <p className={`font-semibold ${trade.pnl >= 0 ? 'text-[#00e66b]' : 'text-[#ff285a]'
+                                                <p className="text-xs text-[var(--bs-text-mute)] uppercase tracking-wider mb-1">PnL</p>
+                                                <p className={`font-semibold ${trade.pnl >= 0 ? 'text-[var(--bs-success)]' : 'text-[var(--bs-error)]'
                                                     }`}>
                                                     {trade.pnl >= 0 ? '+' : ''}{formatUsd(trade.pnl)}
                                                 </p>
                                             </div>
                                             <div>
-                                                <p className="text-xs text-[#585e6c] uppercase tracking-wider mb-1">Date</p>
-                                                <p className="text-[#ced5e4] text-sm">
+                                                <p className="text-xs text-[var(--bs-text-mute)] uppercase tracking-wider mb-1">Date</p>
+                                                <p className="text-[var(--bs-text-secondary)] text-sm">
                                                     {format(trade.closedAt, 'MMM d, HH:mm')}
                                                 </p>
                                             </div>
@@ -179,16 +179,16 @@ export default function AnnotationModal({
                                         {/* Additional Details */}
                                         <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 text-sm">
                                             <div>
-                                                <span className="text-[#585e6c]">Qty:</span>{' '}
-                                                <span className="text-[#ced5e4]">{trade.quantity.toFixed(4)}</span>
+                                                <span className="text-[var(--bs-text-mute)]">Qty:</span>{' '}
+                                                <span className="text-[var(--bs-text-secondary)]">{trade.quantity.toFixed(4)}</span>
                                             </div>
                                             <div>
-                                                <span className="text-[#585e6c]">Price:</span>{' '}
-                                                <span className="text-[#ced5e4]">{formatUsd(trade.price)}</span>
+                                                <span className="text-[var(--bs-text-mute)]">Price:</span>{' '}
+                                                <span className="text-[var(--bs-text-secondary)]">{formatUsd(trade.price)}</span>
                                             </div>
                                             <div>
-                                                <span className="text-[#585e6c]">Fee:</span>{' '}
-                                                <span className="text-[#ced5e4]">{formatUsd(trade.fee)}</span>
+                                                <span className="text-[var(--bs-text-mute)]">Fee:</span>{' '}
+                                                <span className="text-[var(--bs-text-secondary)]">{formatUsd(trade.fee)}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -198,8 +198,8 @@ export default function AnnotationModal({
 
                                         {/* Tags Section */}
                                         <div className="space-y-2">
-                                            <label className="flex items-center gap-2 text-sm font-medium text-[#ced5e4]">
-                                                <Tag className="h-4 w-4 text-[#00ffff]" />
+                                            <label className="flex items-center gap-2 text-sm font-medium text-[var(--bs-text-secondary)]">
+                                                <Tag className="h-4 w-4 text-[var(--bs-brand)]" />
                                                 Tags
                                             </label>
                                             <div className="flex flex-wrap gap-2">
@@ -209,8 +209,8 @@ export default function AnnotationModal({
                                                         key={tag}
                                                         onClick={() => toggleTag(tag)}
                                                         className={`px-3 py-1 text-xs font-medium transition-all border ${tags.includes(tag)
-                                                            ? 'bg-[#00b3b3]/20 border-[#00b3b3] text-[#00e6e6]'
-                                                            : 'bg-[#11141a] border-[#1a1e26] text-[#585e6c] hover:border-white/30 hover:text-[#ced5e4]'
+                                                            ? 'bg-[var(--bs-brand-tertiary)]/20 border-[var(--bs-brand-tertiary)] text-[var(--bs-brand-secondary)]'
+                                                            : 'bg-[var(--bs-card)] border-[var(--bs-border)] text-[var(--bs-text-mute)] hover:border-[var(--bs-border)] hover:text-[var(--bs-text-secondary)]'
                                                             }`}
                                                     >
                                                         {tag}
@@ -222,7 +222,7 @@ export default function AnnotationModal({
                                                     <button
                                                         key={tag}
                                                         onClick={() => toggleTag(tag)}
-                                                        className="px-3 py-1 text-xs font-medium bg-[#69a2f1]/20 border border-blue-400 text-blue-300 transition-all"
+                                                        className="px-3 py-1 text-xs font-medium bg-[var(--bs-info)]/20 border border-blue-400 text-blue-300 transition-all"
                                                     >
                                                         {tag}
                                                     </button>
@@ -237,13 +237,13 @@ export default function AnnotationModal({
                                                         onKeyDown={handleAddCustomTag}
                                                         onBlur={() => setIsAddingTag(false)}
                                                         placeholder="Press Enter..."
-                                                        className="bg-[#171a20] border border-[#00b3b3]/50 px-3 py-1 text-xs text-white focus:outline-none w-32"
+                                                        className="bg-[var(--bs-card-fg)] border border-[var(--bs-brand-tertiary)]/50 px-3 py-1 text-xs text-[var(--bs-text-primary)] focus:outline-none w-32"
                                                         autoFocus
                                                     />
                                                 ) : (
                                                     <button
                                                         onClick={() => setIsAddingTag(true)}
-                                                        className="px-3 py-1 text-xs font-medium bg-[#11141a] border border-dashed border-white/20 text-[#585e6c] hover:border-white/40 hover:text-[#adb9d2] flex items-center gap-1"
+                                                        className="px-3 py-1 text-xs font-medium bg-[var(--bs-card)] border border-dashed border-[var(--bs-border)] text-[var(--bs-text-mute)] hover:border-[var(--bs-border)] hover:text-[var(--bs-text-tertiary)] flex items-center gap-1"
                                                     >
                                                         <Plus className="h-3 w-3" />
                                                         Add Tag
@@ -254,7 +254,7 @@ export default function AnnotationModal({
 
                                         {/* Notes Area */}
                                         <div className="space-y-2">
-                                            <label className="block text-sm font-medium text-[#ced5e4]">
+                                            <label className="block text-sm font-medium text-[var(--bs-text-secondary)]">
                                                 Trade Notes
                                             </label>
                                             <textarea
@@ -265,18 +265,18 @@ export default function AnnotationModal({
                                                     }
                                                 }}
                                                 placeholder="Add your thoughts, entry reasons, or emotional state..."
-                                                className="w-full h-28 rounded-lg border border-[#1a1e26] bg-[#11141a] px-4 py-3 text-white placeholder:text-[#585e6c] focus:border-[#00b3b3]/40 focus:outline-none focus:ring-1 focus:ring-[#00b3b3]/20 resize-none text-sm"
+                                                className="w-full h-28 rounded-lg border border-[var(--bs-border)] bg-[var(--bs-card)] px-4 py-3 text-[var(--bs-text-primary)] placeholder:text-[var(--bs-text-mute)] focus:border-[var(--bs-brand-tertiary)]/40 focus:outline-none focus:ring-1 focus:ring-[var(--bs-brand-tertiary)]/20 resize-none text-sm"
                                             />
                                             <div className="flex justify-end text-[10px] font-mono">
-                                                <span className={`transition-colors ${remainingNoteChars < 50 ? 'text-yellow-400' : 'text-[#585e6c]'}`}>
+                                                <span className={`transition-colors ${remainingNoteChars < 50 ? 'text-yellow-400' : 'text-[var(--bs-text-mute)]'}`}>
                                                     {remainingNoteChars} / {MAX_NOTE_CHARS}
                                                 </span>
                                             </div>
                                         </div>
 
                                         {/* Key Lesson Area */}
-                                        <div className="bg-[#00b3b3]/5 border border-[#00b3b3]/10 p-3 space-y-2">
-                                            <label className="block text-xs font-bold uppercase tracking-wider text-[#00ffff]">
+                                        <div className="bg-[var(--bs-brand-tertiary)]/5 border border-[var(--bs-brand-tertiary)]/10 p-3 space-y-2">
+                                            <label className="block text-xs font-bold uppercase tracking-wider text-[var(--bs-brand)]">
                                                 Key Lesson (280 Max)
                                             </label>
                                             <textarea
@@ -287,36 +287,36 @@ export default function AnnotationModal({
                                                     }
                                                 }}
                                                 placeholder="What is the one thing you learned from this?"
-                                                className="w-full h-16 rounded-lg border border-[#00b3b3]/20 bg-[#0b0e14]/40 px-4 py-2 text-sm text-white placeholder:text-[#00ffff]/20 focus:border-[#00b3b3]/40 focus:outline-none transition-all resize-none italic"
+                                                className="w-full h-16 rounded-lg border border-[var(--bs-brand-tertiary)]/20 bg-[var(--bs-bg)]/40 px-4 py-2 text-sm text-[var(--bs-text-primary)] placeholder:text-[var(--bs-brand)]/20 focus:border-[var(--bs-brand-tertiary)]/40 focus:outline-none transition-all resize-none italic"
                                             />
                                             <div className="flex items-center justify-between text-[10px]">
-                                                <span className="text-[#00ffff]/40 italic">
+                                                <span className="text-[var(--bs-brand)]/40 italic">
                                                     Distill your core insight
                                                 </span>
-                                                <span className={`font-mono ${remainingLessonChars < 20 ? 'text-[#ff285a]' : 'text-[#00ffff]/40'}`}>
+                                                <span className={`font-mono ${remainingLessonChars < 20 ? 'text-[var(--bs-error)]' : 'text-[var(--bs-brand)]/40'}`}>
                                                     {remainingLessonChars}
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="relative z-10 flex justify-end gap-3 border-t border-[#1a1e26] p-6 bg-[#0b0e14]">
+                                    <div className="relative z-10 flex justify-end gap-3 border-t border-[var(--bs-border)] p-6 bg-[var(--bs-bg)]">
                                         <button
                                             onClick={handleClose}
-                                            className="rounded-lg border border-[#1a1e26] bg-[#11141a] px-6 py-2.5 text-sm font-medium text-[#ced5e4] transition-colors hover:bg-[#171a20]"
+                                            className="rounded-lg border border-[var(--bs-border)] bg-[var(--bs-card)] px-6 py-2.5 text-sm font-medium text-[var(--bs-text-secondary)] transition-colors hover:bg-[var(--bs-card-fg)]"
                                         >
                                             Cancel
                                         </button>
                                         <button
                                             onClick={handleSave}
-                                            className="rounded-lg bg-[#00b3b3] px-6 py-2.5 text-sm font-medium text-white transition-all hover:bg-[#00b3b3] shadow-[0_0_20px_rgba(0,179,179,0.3)]"
+                                            className="rounded-lg bg-[var(--bs-brand-tertiary)] px-6 py-2.5 text-sm font-medium text-[var(--bs-text-primary)] transition-all hover:bg-[var(--bs-brand-tertiary)] shadow-[0_0_20px_rgba(0,179,179,0.3)]"
                                         >
                                             Save Annotation
                                         </button>
                                     </div>
 
                                     {/* Subtle gradient overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-[#00b3b3]/5 to-transparent pointer-events-none"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--bs-brand-tertiary)]/5 to-transparent pointer-events-none"></div>
                                 </div>
                             </motion.div>
                         </div>

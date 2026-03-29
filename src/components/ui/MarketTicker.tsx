@@ -158,14 +158,14 @@ export const MarketTicker: React.FC = () => {
     const isLoading = isConnecting && orderedTickers.length === 0;
 
     return (
-        <div className="w-full bg-[#0b0e14] border-b border-[#1a1e26] overflow-hidden h-10 flex items-center justify-center fixed top-0 left-0 right-0 z-[60]">
+        <div className="w-full bg-[var(--bs-bg)] border-b border-[var(--bs-border)] overflow-hidden h-10 flex items-center justify-center fixed top-0 left-0 right-0 z-[60]">
             {/* Edge Fade Gradients */}
-            <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none"></div>
-            <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none"></div>
+            <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[var(--bs-bg)] to-transparent z-10 pointer-events-none"></div>
+            <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[var(--bs-bg)] to-transparent z-10 pointer-events-none"></div>
 
             {isLoading ? (
                 <div className="flex items-center justify-center w-full z-20">
-                    <span className="text-[10px] font-mono font-bold text-[#585e6c] uppercase tracking-widest animate-pulse">
+                    <span className="text-[10px] font-mono font-bold text-[var(--bs-text-mute)] uppercase tracking-widest animate-pulse">
                         {dataSource === 'rest'
                             ? 'Fetching prices from CoinGecko...'
                             : 'Connecting to Binance Live Stream...'}
@@ -176,16 +176,16 @@ export const MarketTicker: React.FC = () => {
                     {items.map((item, i) => (
                         <div
                             key={`${item.targetSymbol}-${i}`}
-                            className="flex items-center gap-6 px-12 border-r border-[#1a1e26] last:border-none"
+                            className="flex items-center gap-6 px-12 border-r border-[var(--bs-border)] last:border-none"
                         >
-                            <span className="text-[10px] font-mono font-bold text-[#585e6c] uppercase tracking-widest">
+                            <span className="text-[10px] font-mono font-bold text-[var(--bs-text-mute)] uppercase tracking-widest">
                                 {item.symbol}
                             </span>
                             <div className="flex items-center gap-2">
-                                <span className="text-[11px] font-pixel text-white tracking-widest w-[80px]">
+                                <span className="text-[11px] font-pixel text-[var(--bs-text-primary)] tracking-widest w-[80px]">
                                     ${item.price}
                                 </span>
-                                <div className={`flex items-center gap-1 text-[9px] font-mono font-bold w-[45px] ${item.change >= 0 ? 'text-[#00e66b]' : 'text-[#ff285a]'}`}>
+                                <div className={`flex items-center gap-1 text-[9px] font-mono font-bold w-[45px] ${item.change >= 0 ? 'text-[var(--bs-success)]' : 'text-[var(--bs-error)]'}`}>
                                     {item.change >= 0 ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
                                     {Math.abs(item.change)}%
                                 </div>

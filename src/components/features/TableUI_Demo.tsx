@@ -67,8 +67,8 @@ export default function TableUI_Demo({ activeFilter = 'All', trades }: TableUIDe
             header: 'Side',
             render: (value) => (
                 <span className={`px-2 py-1 rounded-sm text-xs font-mono ${value === 'BUY' || value === 'LONG'
-                    ? 'bg-[#00e66b]/20 text-[#00e66b]'
-                    : 'bg-[#ff285a]/20 text-[#ff285a]'
+                    ? 'bg-[var(--bs-brand-success)]/20 text-[var(--bs-success)]'
+                    : 'bg-[var(--bs-error)]/20 text-[var(--bs-error)]'
                     }`}>
                     {value}
                 </span>
@@ -94,7 +94,7 @@ export default function TableUI_Demo({ activeFilter = 'All', trades }: TableUIDe
             key: 'pnlFormatted',
             header: 'PnL',
             render: (value, row) => (
-                <span className={`font-mono font-bold ${row.pnl >= 0 ? 'text-[#00e66b]' : 'text-[#ff285a]'
+                <span className={`font-mono font-bold ${row.pnl >= 0 ? 'text-[var(--bs-success)]' : 'text-[var(--bs-error)]'
                     }`}>
                     {value}
                 </span>
@@ -108,7 +108,7 @@ export default function TableUI_Demo({ activeFilter = 'All', trades }: TableUIDe
             key: 'leverage',
             header: 'Leverage',
             render: (value) => (
-                <span className="px-2 py-1 bg-[#00b3b3]/20 text-[#00ffff] rounded-sm text-xs font-mono">
+                <span className="px-2 py-1 bg-[var(--bs-brand-tertiary)]/20 text-[var(--bs-brand)] rounded-sm text-xs font-mono">
                     {value}
                 </span>
             ),
@@ -118,8 +118,8 @@ export default function TableUI_Demo({ activeFilter = 'All', trades }: TableUIDe
             header: 'Status',
             render: (value) => (
                 <span className={`px-2 py-1 rounded-sm text-xs font-bold ${value === 'Win'
-                    ? 'bg-[#00e66b]/20 text-[#00e66b]'
-                    : 'bg-[#ff285a]/20 text-[#ff285a]'
+                    ? 'bg-[var(--bs-brand-success)]/20 text-[var(--bs-success)]'
+                    : 'bg-[var(--bs-error)]/20 text-[var(--bs-error)]'
                     }`}>
                     {value}
                 </span>
@@ -131,10 +131,10 @@ export default function TableUI_Demo({ activeFilter = 'All', trades }: TableUIDe
         <div className="pt-8 space-y-6">
             <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                    <h2 className="text-2xl font-bold text-white">Your Trade Data</h2>
+                    <h2 className="text-2xl font-bold text-[var(--bs-text-primary)]">Your Trade Data</h2>
                     <InfoTooltip infoKey="transactionTable" />
                 </div>
-                <p className="text-[#adb9d2]">Showing recent {tableData.length} trades from {activeFilter} Filter</p>
+                <p className="text-[var(--bs-text-tertiary)]">Showing recent {tableData.length} trades from {activeFilter} Filter</p>
             </div>
 
             <TableUI data={tableData} columns={columns} maxHeight="70vh" />

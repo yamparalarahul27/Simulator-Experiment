@@ -6,17 +6,17 @@ import { WifiOff, AlertTriangle, Terminal as TerminalIcon } from 'lucide-react';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen  flex items-center justify-center p-6 font-mono selection:bg-[#ff285a]/30 selection:text-[#ff285a]">
+    <div className="min-h-screen  flex items-center justify-center p-6 font-mono selection:bg-[var(--bs-error)]/30 selection:text-[var(--bs-error)]">
       <div className="max-w-xl w-full">
         {/* Terminal Header */}
-        <div className="border border-[#1a1e26] bg-[#11141a] p-4 flex items-center justify-between mb-8 overflow-hidden relative">
+        <div className="border border-[var(--bs-border)] bg-[var(--bs-card)] p-4 flex items-center justify-between mb-8 overflow-hidden relative">
           <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-[#ff285a] animate-pulse"></div>
-            <span className="text-[12px] text-[#585e6c] uppercase tracking-widest leading-none font-bold">
+            <div className="w-2 h-2 rounded-full bg-[var(--bs-error)] animate-pulse"></div>
+            <span className="text-[12px] text-[var(--bs-text-mute)] uppercase tracking-widest leading-none font-bold">
               Status: Critical Malfunction
             </span>
           </div>
-          <div className="text-[12px] text-[#585e6c] uppercase tracking-widest leading-none font-bold">Ref: ER_VOID_404</div>
+          <div className="text-[12px] text-[var(--bs-text-mute)] uppercase tracking-widest leading-none font-bold">Ref: ER_VOID_404</div>
 
           {/* Subtle Glitch Lines */}
           <div className="absolute inset-0 pointer-events-none opacity-10">
@@ -28,12 +28,12 @@ export default function NotFound() {
         {/* Error Content */}
         <div className="space-y-8">
           <div className="flex items-start gap-6">
-            <div className="p-4 bg-[#ff285a]/10 border border-[#ff285a]/20 text-[#ff285a] mt-1">
+            <div className="p-4 bg-[var(--bs-error)]/10 border border-[var(--bs-error)]/20 text-[var(--bs-error)] mt-1">
               <WifiOff size={32} />
             </div>
             <div className="space-y-4">
-              <h1 className="text-4xl font-bold text-white uppercase tracking-tighter leading-none">SIGNAL LOST</h1>
-              <p className="text-[#585e6c] text-sm leading-relaxed uppercase tracking-tighter">
+              <h1 className="text-4xl font-bold text-[var(--bs-text-primary)] uppercase tracking-tighter leading-none">SIGNAL LOST</h1>
+              <p className="text-[var(--bs-text-mute)] text-sm leading-relaxed uppercase tracking-tighter">
                 The requested coordinate does not exist within the current simulation grid. Packet loss at 100%.
                 Data retrieval failed.
               </p>
@@ -42,13 +42,13 @@ export default function NotFound() {
 
           {/* Diagnostic Stats */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 bg-[#11141a] border border-[#1a1e26]">
-              <span className="text-[12px] text-[#585e6c] uppercase block mb-1 font-bold">Error Code</span>
-              <span className="text-sm font-bold text-white">404_PAGE_NOT_FOUND</span>
+            <div className="p-4 bg-[var(--bs-card)] border border-[var(--bs-border)]">
+              <span className="text-[12px] text-[var(--bs-text-mute)] uppercase block mb-1 font-bold">Error Code</span>
+              <span className="text-sm font-bold text-[var(--bs-text-primary)]">404_PAGE_NOT_FOUND</span>
             </div>
-            <div className="p-4 bg-[#11141a] border border-[#1a1e26]">
-              <span className="text-[12px] text-[#585e6c] uppercase block mb-1 font-bold">Subsystem</span>
-              <span className="text-sm font-bold text-white">ROUTING_MANAGER_V2</span>
+            <div className="p-4 bg-[var(--bs-card)] border border-[var(--bs-border)]">
+              <span className="text-[12px] text-[var(--bs-text-mute)] uppercase block mb-1 font-bold">Subsystem</span>
+              <span className="text-sm font-bold text-[var(--bs-text-primary)]">ROUTING_MANAGER_V2</span>
             </div>
           </div>
 
@@ -56,7 +56,7 @@ export default function NotFound() {
           <div className="pt-4">
             <Link
               href="/"
-              className="group relative flex items-center justify-between p-4 bg-white text-black font-bold uppercase tracking-widest hover:bg-[#ff285a] transition-colors"
+              className="group relative flex items-center justify-between p-4 bg-white text-black font-bold uppercase tracking-widest hover:bg-[var(--bs-error)] transition-colors"
             >
               <div className="flex items-center gap-3">
                 <TerminalIcon size={18} />
@@ -66,12 +66,12 @@ export default function NotFound() {
 
               {/* Scanline Effect */}
               <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-10">
-                <div className="w-full h-1 bg-[#0b0e14] absolute top-0 animate-scanline"></div>
+                <div className="w-full h-1 bg-[var(--bs-bg)] absolute top-0 animate-scanline"></div>
               </div>
             </Link>
           </div>
 
-          <p className="text-center text-[12px] text-[#585e6c] uppercase tracking-[0.3em] pt-8 font-bold">
+          <p className="text-center text-[12px] text-[var(--bs-text-mute)] uppercase tracking-[0.3em] pt-8 font-bold">
             © 2024 YDEX // SYSTEM V2.4.0
           </p>
         </div>

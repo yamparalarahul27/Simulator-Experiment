@@ -12,7 +12,49 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Blueshift Dark Palette */
+  /* Light Theme (default for CSS, but app defaults to dark via class) */
+  --bs-bg: #f5f6f8;
+  --bs-card: #ffffff;
+  --bs-card-fg: #f0f1f3;
+  --bs-border: #e2e4e9;
+  --bs-border-active: rgba(0, 153, 153, 0.2);
+  --bs-bg-primary: rgba(0, 153, 153, 0.06);
+
+  --bs-text-primary: #0b0e14;
+  --bs-text-secondary: #2d3748;
+  --bs-text-tertiary: #4a5568;
+  --bs-text-mute: #9ca3af;
+
+  --bs-brand: #00999a;
+  --bs-brand-secondary: #00b3b3;
+  --bs-brand-tertiary: #00999a;
+  --bs-brand-anchor: #1a6b4a;
+  --bs-brand-rust: #d97706;
+  --bs-brand-ts: #3b82f6;
+
+  --bs-success: #16a34a;
+  --bs-error: #dc2626;
+  --bs-info: #3b82f6;
+
+  /* Legacy Deriverse tokens mapped to Blueshift */
+  --ds-primary: #00999a;
+  --ds-secondary: #00b3b3;
+  --ds-accent: #00999a;
+  --ds-gradient-mid: #00b3b3;
+
+  /* UI Colors */
+  --ds-bg-dark: #f5f6f8;
+  --ds-bg-light: #ffffff;
+  --ds-border: #e2e4e9;
+
+  /* Text Colors */
+  --ds-text-primary: #0b0e14;
+  --ds-text-dark: #0b0e14;
+  --ds-text-muted: #9ca3af;
+}
+
+/* Dark Theme */
+.dark {
   --bs-bg: #0b0e14;
   --bs-card: #11141a;
   --bs-card-fg: #171a20;
@@ -34,19 +76,15 @@
 
   --bs-success: #00e66b;
   --bs-error: #ff285a;
+  --bs-info: #69a2f1;
 
-  /* Legacy Deriverse tokens mapped to Blueshift */
   --ds-primary: #00b3b3;
   --ds-secondary: #00e6e6;
   --ds-accent: #00ffff;
   --ds-gradient-mid: #00e6e6;
-
-  /* UI Colors */
   --ds-bg-dark: #0b0e14;
   --ds-bg-light: #ced5e4;
   --ds-border: #1a1e26;
-
-  /* Text Colors */
   --ds-text-primary: #eff1f6;
   --ds-text-dark: #0b0e14;
   --ds-text-muted: #585e6c;
@@ -234,7 +272,9 @@
 }
 
 body {
-  background-color: var(--bs-bg, #0b0e14);
+  background-color: var(--bs-bg);
+  color: var(--bs-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
   font-family: var(--font-geist-mono), monospace;
 }
 

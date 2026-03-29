@@ -72,8 +72,8 @@ export default function TimeBasedPerformanceCard({
     if (!active || !payload?.length) return null;
     const value = payload[0]?.value ?? 0;
     return (
-      <div className="bg-[#0b0e14]/90 border border-[#1a1e26] p-3 rounded-lg shadow-xl backdrop-blur-md">
-        <p className="text-[#adb9d2] text-xs mb-1 font-mono">{viewMode === 'session' ? 'Session' : 'Hour'}: {label}</p>
+      <div className="bg-[var(--bs-bg)]/90 border border-[var(--bs-border)] p-3 rounded-lg shadow-xl backdrop-blur-md">
+        <p className="text-[var(--bs-text-tertiary)] text-xs mb-1 font-mono">{viewMode === 'session' ? 'Session' : 'Hour'}: {label}</p>
         <p className="text-sm font-mono font-bold" style={{ color: value >= 0 ? '#4ade80' : '#f87171' }}>
           PnL: {formatPnL(value)}
         </p>
@@ -86,17 +86,17 @@ export default function TimeBasedPerformanceCard({
       <div className="flex flex-col h-full justify-between relative z-10">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center">
-            <h3 className="text-[#585e6c] text-sm font-mono uppercase tracking-wider">Time-based Performance</h3>
+            <h3 className="text-[var(--bs-text-mute)] text-sm font-mono uppercase tracking-wider">Time-based Performance</h3>
             <InfoTooltip infoKey="timeBasedPerformance" />
           </div>
 
-          <div className="flex items-center border border-[#1a1e26] bg-[#0b0e14]/20">
+          <div className="flex items-center border border-[var(--bs-border)] bg-[var(--bs-bg)]/20">
             <button
               type="button"
               onClick={() => setViewMode('session')}
               className={`px-3 py-1.5 text-xs font-mono uppercase tracking-wider transition-all ${viewMode === 'session'
-                ? 'bg-[#00b3b3]/20 text-white/90'
-                : 'text-[#adb9d2] hover:text-[#ced5e4]'}
+                ? 'bg-[var(--bs-brand-tertiary)]/20 text-[var(--bs-text-primary)]/90'
+                : 'text-[var(--bs-text-tertiary)] hover:text-[var(--bs-text-secondary)]'}
               `}
             >
               Session
@@ -104,9 +104,9 @@ export default function TimeBasedPerformanceCard({
             <button
               type="button"
               onClick={() => setViewMode('hourly')}
-              className={`px-3 py-1.5 text-xs font-mono uppercase tracking-wider transition-all border-l border-[#1a1e26] ${viewMode === 'hourly'
-                ? 'bg-[#00b3b3]/20 text-white/90'
-                : 'text-[#adb9d2] hover:text-[#ced5e4]'}
+              className={`px-3 py-1.5 text-xs font-mono uppercase tracking-wider transition-all border-l border-[var(--bs-border)] ${viewMode === 'hourly'
+                ? 'bg-[var(--bs-brand-tertiary)]/20 text-[var(--bs-text-primary)]/90'
+                : 'text-[var(--bs-text-tertiary)] hover:text-[var(--bs-text-secondary)]'}
               `}
             >
               Hourly
@@ -117,7 +117,7 @@ export default function TimeBasedPerformanceCard({
         <div className="mt-6 flex-1">
           {!hasTrades ? (
             <div className="h-full flex items-center justify-center">
-              <span className="text-[#585e6c] text-sm font-mono">No trades in selected period</span>
+              <span className="text-[var(--bs-text-mute)] text-sm font-mono">No trades in selected period</span>
             </div>
           ) : (
             <div className={`w-full min-w-0 ${chartHeightClass}`}>
@@ -150,8 +150,8 @@ export default function TimeBasedPerformanceCard({
           )}
         </div>
 
-        <div className="pt-4 border-t border-[#1a1e26]">
-          <span className="text-[#585e6c] text-xs font-mono">PnL by {viewMode === 'session' ? 'session' : 'hour'}</span>
+        <div className="pt-4 border-t border-[var(--bs-border)]">
+          <span className="text-[var(--bs-text-mute)] text-xs font-mono">PnL by {viewMode === 'session' ? 'session' : 'hour'}</span>
         </div>
       </div>
     </CardWithCornerShine>
