@@ -260,7 +260,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                     <div className="relative">
                         <button
                             onClick={() => setIsFilterOpen(!isFilterOpen)}
-                            className={`flex items-center gap-2 rounded-none border px-4 py-2 text-sm font-medium transition-all ${selectedTags.length > 0
+                            className={`flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-all ${selectedTags.length > 0
                                 ? 'bg-[#00b3b3]/20 border-[#00b3b3] text-[#00e6e6]'
                                 : 'border-[#1a1e26] bg-[#11141a] text-[#ced5e4] hover:bg-[#171a20]'
                                 }`}
@@ -310,7 +310,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                     {/* Download Button */}
                     <button
                         onClick={handleDownload}
-                        className="flex items-center justify-center h-10 w-10 rounded-none border border-[#1a1e26] bg-[#11141a] text-[#ced5e4] transition-colors hover:bg-[#171a20]"
+                        className="flex items-center justify-center h-10 w-10 rounded-lg border border-[#1a1e26] bg-[#11141a] text-[#ced5e4] transition-colors hover:bg-[#171a20]"
                         title="Export Journal"
                     >
                         <BookDown className="h-5 w-5" />
@@ -402,7 +402,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                             <button
                                 onClick={() => goToPage(currentPage - 1)}
                                 disabled={currentPage === 1}
-                                className="rounded-none border border-[#1a1e26] bg-[#11141a] p-2 text-[#ced5e4] transition-colors hover:bg-[#171a20] disabled:opacity-40 disabled:cursor-not-allowed"
+                                className="rounded-lg border border-[#1a1e26] bg-[#11141a] p-2 text-[#ced5e4] transition-colors hover:bg-[#171a20] disabled:opacity-40 disabled:cursor-not-allowed"
                             >
                                 <ChevronLeft className="h-5 w-5" />
                             </button>
@@ -419,7 +419,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                                             <button
                                                 key={page}
                                                 onClick={() => goToPage(page)}
-                                                className={`min-w-[40px] rounded-none px-3 py-2 text-sm font-medium transition-colors ${page === currentPage
+                                                className={`min-w-[40px] rounded-lg px-3 py-2 text-sm font-medium transition-colors ${page === currentPage
                                                     ? 'bg-[#00b3b3] text-white'
                                                     : 'border border-[#1a1e26] bg-[#11141a] text-[#ced5e4] hover:bg-[#171a20]'
                                                     }`}
@@ -444,7 +444,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                             <button
                                 onClick={() => goToPage(currentPage + 1)}
                                 disabled={currentPage === totalPages}
-                                className="rounded-none border border-[#1a1e26] bg-[#11141a] p-2 text-[#ced5e4] transition-colors hover:bg-[#171a20] disabled:opacity-40 disabled:cursor-not-allowed"
+                                className="rounded-lg border border-[#1a1e26] bg-[#11141a] p-2 text-[#ced5e4] transition-colors hover:bg-[#171a20] disabled:opacity-40 disabled:cursor-not-allowed"
                             >
                                 <ChevronRight className="h-5 w-5" />
                             </button>

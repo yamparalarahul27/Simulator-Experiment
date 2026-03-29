@@ -65,7 +65,7 @@ export default function AddressInput({ onSubmit, loading = false }: AddressInput
               value={address}
               onChange={handleInputChange}
               placeholder="Paste Solana wallet address (44 characters, base58 format)"
-              className="w-full px-4 py-3 bg-[#0b0e14]/60 border border-[#1a1e26] rounded-none text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-[#0b0e14]/60 border border-[#1a1e26] rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
               disabled={loading}
             />
           </div>
@@ -73,7 +73,7 @@ export default function AddressInput({ onSubmit, loading = false }: AddressInput
           <button
             onClick={handleSubmit}
             disabled={!isValid || loading}
-            className="sm:w-auto w-full px-6 py-3 bg-[#69a2f1] text-white rounded-none font-medium hover:bg-[#69a2f1]/80"
+            className="sm:w-auto w-full px-6 py-3 bg-[#69a2f1] text-white rounded-lg font-medium hover:bg-[#69a2f1]/80"
           >
             {loading ? 'Loading...' : 'Run'}
           </button>

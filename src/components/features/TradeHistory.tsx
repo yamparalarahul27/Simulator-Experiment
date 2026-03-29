@@ -261,7 +261,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                 <button
                   onClick={handleWalletConnect}
                   disabled={connecting || connected}
-                  className="px-6 py-3 bg-[#171a20] border border-white/20 rounded-none font-semibold text-white hover:bg-[#171a20] transition disabled:opacity-50"
+                  className="px-6 py-3 bg-[#171a20] border border-white/20 rounded-lg font-semibold text-white hover:bg-[#171a20] transition disabled:opacity-50"
                 >
                   {connecting
                     ? 'Connecting…'
@@ -272,7 +272,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                 {connected && (
                   <button
                     onClick={handleWalletDisconnect}
-                    className="px-6 py-3 border border-white/20 rounded-none font-semibold text-white hover:bg-[#171a20] transition"
+                    className="px-6 py-3 border border-white/20 rounded-lg font-semibold text-white hover:bg-[#171a20] transition"
                   >
                     Disconnect
                   </button>
@@ -286,7 +286,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
               <button
                 onClick={() => walletAddress && handleAddressSubmit(walletAddress, hasCachedData)}
                 disabled={!walletAddress || loading}
-                className={`px-6 py-3 text-white rounded-none font-semibold transition disabled:opacity-50 
+                className={`px-6 py-3 text-white rounded-lg font-semibold transition disabled:opacity-50 
                   ${hasCachedData ? 'bg-[#171a20] hover:bg-[#1a1e26] border border-[#1a1e26]' : 'bg-[#69a2f1] hover:bg-[#69a2f1]/80'}`}
               >
                 {loading ? 'Running…' : walletAddress ? (hasCachedData ? 'Force Refresh' : 'Run Lookup') : 'Connect to Run'}
@@ -344,7 +344,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
             {activeTab === 'deriverse' && (
               <div className="space-y-4">
                 {loadingDeriverse ? (
-                  <div className="rounded-none border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-12 text-center">
+                  <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-12 text-center">
                     <div className="flex items-center justify-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                       <span className="ml-3 text-[#adb9d2]">Parsing Deriverse trades...</span>
@@ -366,14 +366,14 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
             {activeTab === 'all' && (
               <div>
                 {loadingHelius ? (
-                  <div className="rounded-none border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-12 text-center">
+                  <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-12 text-center">
                     <div className="flex items-center justify-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                       <span className="ml-3 text-[#adb9d2]">Fetching transactions...</span>
                     </div>
                   </div>
                 ) : transactions.length === 0 ? (
-                  <div className="rounded-none border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-12 text-center max-w-2xl mx-auto">
+                  <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-12 text-center max-w-2xl mx-auto">
                     <p className="text-[#adb9d2] mb-2">Transaction history is not cached.</p>
                     <p className="text-[#585e6c] text-sm mb-6 italic">
                       "Sorry for the inconvenience, we are working on limited resources, that's why this force refresh is enabled, to save Helius usage."
@@ -383,7 +383,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                     </p>
                   </div>
                 ) : (
-                  <div className="rounded-none border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl overflow-hidden">
+                  <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl overflow-hidden">
                     <div className="px-6 py-4 border-b border-[#1a1e26] bg-gradient-to-r from-white/5 to-transparent">
                       <h3 className="text-lg font-semibold text-white">All Transactions (via Helius RPC)</h3>
                       <p className="text-sm text-[#adb9d2] mt-1">Showing last {transactions.length} transactions for this address</p>
@@ -412,7 +412,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                                 {HeliusService.formatTime(tx.time)}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
-                                <span className={`px-3 py-1.5 rounded-none text-xs font-semibold backdrop-blur-sm
+                                <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur-sm
                                                 ${tx.type.includes('Transfer') ? 'bg-[#69a2f1]/20 text-blue-300 border border-[#69a2f1]/30' :
                                     tx.type.includes('Swap') ? 'bg-[#00b3b3]/20 text-[#00e6e6] border border-[#00b3b3]/30' :
                                       tx.type.includes('Deriverse') ? 'bg-[#00e66b]/20 text-green-300 border border-[#00e66b]/30' :
@@ -421,7 +421,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                                 </span>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                <span className={`px-3 py-1.5 rounded-none text-xs font-semibold backdrop-blur-sm
+                                <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur-sm
                                                ${tx.status === 'Confirmed'
                                     ? 'bg-[#00e66b]/20 text-green-300 border border-[#00e66b]/30'
                                     : 'bg-[#ff285a]/20 text-red-300 border border-[#ff285a]/30'}`}>
@@ -460,7 +460,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
             collapsible
             value={howItWorksOpen ? 'how-it-works' : undefined}
             onValueChange={value => setHowItWorksOpen(value === 'how-it-works')}
-            className="border border-[#1a1e26] rounded-none bg-[#0b0e14]/80"
+            className="border border-[#1a1e26] rounded-lg bg-[#0b0e14]/80"
           >
             <AccordionItem value="how-it-works" className="px-4">
               <AccordionTrigger className="text-xl font-semibold">

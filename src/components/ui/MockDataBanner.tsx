@@ -23,7 +23,7 @@ export const MockDataBanner = ({
     message = "You are viewing sample data. To see your real trading analytics, fetch your trades from the blockchain."
 }: MockDataBannerProps) => {
     return (
-        <div className="mb- p-2 bg-[#11141a] rounded-none px-4 py-2 backdrop-blur-sm">
+        <div className="mb- p-2 bg-[#11141a] rounded-lg px-4 py-2 backdrop-blur-sm">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                 <div>
                     <h3 className="text-sm font-semibold text-yellow-500 mb-1">
@@ -38,7 +38,7 @@ export const MockDataBanner = ({
                 {onFetchTrades && (
                     <button
                         onClick={onFetchTrades}
-                        className="px-4 py-2 bg-[#0b0e14]/50 rounded-none border border-white/20 text-sm font-semibold text-white md:self-center md:ml-auto"
+                        className="px-4 py-2 bg-[#0b0e14]/50 rounded-lg border border-white/20 text-sm font-semibold text-white md:self-center md:ml-auto"
                     >
                         Go to Wallet's
                     </button>

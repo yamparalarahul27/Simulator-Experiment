@@ -72,7 +72,7 @@ export default function TimeBasedPerformanceCard({
     if (!active || !payload?.length) return null;
     const value = payload[0]?.value ?? 0;
     return (
-      <div className="bg-[#0b0e14]/90 border border-[#1a1e26] p-3 rounded-none shadow-xl backdrop-blur-md">
+      <div className="bg-[#0b0e14]/90 border border-[#1a1e26] p-3 rounded-lg shadow-xl backdrop-blur-md">
         <p className="text-[#adb9d2] text-xs mb-1 font-mono">{viewMode === 'session' ? 'Session' : 'Hour'}: {label}</p>
         <p className="text-sm font-mono font-bold" style={{ color: value >= 0 ? '#4ade80' : '#f87171' }}>
           PnL: {formatPnL(value)}
