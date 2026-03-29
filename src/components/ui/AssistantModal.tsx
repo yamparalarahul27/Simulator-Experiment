@@ -215,8 +215,8 @@ export default function AssistantModal() {
                         </div>
 
                         {/* Input */}
-                        <div className="shrink-0 px-4 py-3 border-t border-white/10">
-                            <form onSubmit={handleSubmit} className="relative flex items-center">
+                        <div className="shrink-0 px-3 py-3 border-t border-white/10 overflow-hidden">
+                            <form onSubmit={handleSubmit} className="flex items-center gap-2">
                                 <input
                                     ref={inputRef}
                                     type="text"
@@ -224,14 +224,14 @@ export default function AssistantModal() {
                                     onChange={(e) => setInput(e.target.value)}
                                     placeholder="Ask about trades or markets..."
                                     disabled={isLoading}
-                                    className="w-full bg-white/5 border border-white/10 py-3 pl-4 pr-12 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-purple-500/50 disabled:opacity-50 transition-all"
+                                    className="min-w-0 flex-1 bg-white/5 border border-white/10 py-3 px-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-purple-500/50 disabled:opacity-50 transition-all"
                                 />
                                 <button
                                     type="submit"
                                     disabled={!input.trim() || isLoading}
-                                    className="absolute right-1.5 p-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:scale-105 active:scale-95 disabled:opacity-0 disabled:scale-90 transition-all duration-200"
+                                    className="shrink-0 p-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:scale-105 active:scale-95 disabled:opacity-30 transition-all duration-200"
                                 >
-                                    <Send className="w-3.5 h-3.5" />
+                                    <Send className="w-4 h-4" />
                                 </button>
                             </form>
                             <p className="text-center text-[10px] text-white/25 mt-2 font-mono">
