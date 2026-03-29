@@ -29,7 +29,7 @@ export default function LargestLossCard({ trades }: LargestLossCardProps) {
       <div className="flex flex-col h-full justify-between relative z-10">
         <div>
           <div className="flex items-center">
-            <h3 className="text-[#585e6c] text-sm font-mono uppercase tracking-wider">
+            <h3 className="text-[var(--bs-text-mute)] text-sm font-mono uppercase tracking-wider">
               Largest Loss
             </h3>
             <InfoTooltip infoKey="largestLoss" />
@@ -38,25 +38,25 @@ export default function LargestLossCard({ trades }: LargestLossCardProps) {
 
         <div className="space-y-3">
           <div>
-            <span className="text-num-48 text-[#ff285a] drop-shadow-[0_0_10px_rgba(248,113,113,0.25)]">
+            <span className="text-num-48 text-[var(--bs-error)] drop-shadow-[0_0_10px_rgba(248,113,113,0.25)]">
               <NumberFlow value={Math.abs(pnl)} prefix="-$" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
             </span>
           </div>
 
           {worstTrade ? (
             <div className="space-y-1">
-              <div className="flex items-center gap-2 text-[#adb9d2] text-sm font-mono">
-                <span className="text-[#ced5e4]">{worstTrade.symbol}</span>
-                <span className="px-1.5 py-0.5 bg-[#171a20] text-[#adb9d2] text-xs font-mono rounded-sm">
+              <div className="flex items-center gap-2 text-[var(--bs-text-tertiary)] text-sm font-mono">
+                <span className="text-[var(--bs-text-secondary)]">{worstTrade.symbol}</span>
+                <span className="px-1.5 py-0.5 bg-[var(--bs-card-fg)] text-[var(--bs-text-tertiary)] text-xs font-mono rounded-sm">
                   {worstTrade.side.toUpperCase()}
                 </span>
               </div>
-              <div className="text-[#585e6c] text-xs font-mono">
+              <div className="text-[var(--bs-text-mute)] text-xs font-mono">
                 Closed: {formatTimestamp(worstTrade.closedAt.getTime())}
               </div>
             </div>
           ) : (
-            <div className="text-[#585e6c] text-xs font-mono">
+            <div className="text-[var(--bs-text-mute)] text-xs font-mono">
               No losing trades in this period
             </div>
           )}

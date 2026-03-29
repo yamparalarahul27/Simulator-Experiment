@@ -38,7 +38,7 @@ export const WelcomeFooter = ({ className = '' }: WelcomeFooterProps) => {
             >
                 <WelcomeCard className="footer-card !min-h-[auto] !py-4 w-full">
                     <div className="powered-by flex items-center justify-center space-x-4 w-full mb-2">
-                        <span className="text-[#585e6c] text-sm font-mono uppercase tracking-wider">Powered by</span>
+                        <span className="text-[var(--bs-text-mute)] text-sm font-mono uppercase tracking-wider">Powered by</span>
                         <img
                             src="/assets/solana_network_logo.png"
                             alt="Solana Network Logo"
@@ -51,7 +51,7 @@ export const WelcomeFooter = ({ className = '' }: WelcomeFooterProps) => {
 
             {/* Attribution - Outside Card */}
             <motion.div
-                className="attribution text-xs opacity-60 text-[#ced5e4] mt-2"
+                className="attribution text-xs opacity-60 text-[var(--bs-text-secondary)] mt-2"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 1, ease: "easeOut" }}

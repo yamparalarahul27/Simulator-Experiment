@@ -207,16 +207,16 @@ export default function DeriverseWalletAsk({
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                     >
-                        <h1 className="text-xl font-mono uppercase tracking-wider text-[#ced5e4] mb-6">
+                        <h1 className="text-xl font-mono uppercase tracking-wider text-[var(--bs-text-secondary)] mb-6">
                             {WalletAskContent.title}
                         </h1>
 
                         <div className="space-y-4">
-                            <p className="text-sm leading-relaxed text-[#adb9d2] max-w-md mx-auto">
+                            <p className="text-sm leading-relaxed text-[var(--bs-text-tertiary)] max-w-md mx-auto">
                                 {WalletAskContent.description1}
                             </p>
 
-                            <p className="text-sm leading-relaxed text-[#adb9d2] max-w-md mx-auto">
+                            <p className="text-sm leading-relaxed text-[var(--bs-text-tertiary)] max-w-md mx-auto">
                                 {WalletAskContent.description2}
                             </p>
                         </div>
@@ -244,7 +244,7 @@ export default function DeriverseWalletAsk({
 
                         {/* Secondary: Optional wallet connect */}
                         <button
-                            className="text-[#adb9d2] text-sm font-mono hover:text-[#ced5e4] transition-colors cursor-pointer"
+                            className="text-[var(--bs-text-tertiary)] text-sm font-mono hover:text-[var(--bs-text-secondary)] transition-colors cursor-pointer"
                             onClick={handleWalletConnect}
                             disabled={isConnecting || isCheckingWallet}
                         >

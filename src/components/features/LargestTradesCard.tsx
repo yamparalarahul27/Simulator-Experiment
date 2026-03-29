@@ -45,7 +45,7 @@ const AssetIcon = ({ trade }: { trade: Trade }) => {
           console.log('Icon loaded successfully:', iconPath);
         }}
       />
-      <span className="w-[26px] h-[26px] mr-2 hidden items-center justify-center bg-[#0b0e14] text-white text-xs font-mono rounded-lg">
+      <span className="w-[26px] h-[26px] mr-2 hidden items-center justify-center bg-[var(--bs-bg)] text-[var(--bs-text-primary)] text-xs font-mono rounded-lg">
         {trade.symbol.slice(0, 3)}
       </span>
     </>
@@ -101,7 +101,7 @@ export default function LargestTradesCard({ trades }: LargestTradesCardProps) {
       <div className="flex flex-col h-full justify-between relative z-10">
         <div>
           <div className="flex items-center">
-            <h3 className="text-[#585e6c] text-sm font-mono uppercase tracking-wider">
+            <h3 className="text-[var(--bs-text-mute)] text-sm font-mono uppercase tracking-wider">
               Largest Trades
             </h3>
             <InfoTooltip infoKey="largestTrades" />
@@ -111,25 +111,25 @@ export default function LargestTradesCard({ trades }: LargestTradesCardProps) {
         <div className="grid grid-cols-2 gap-4 pt-4">
           {/* Best Trade */}
           <div className="text-center space-y-2">
-            <div className="text-[#00e66b] text-num-32 font-mono drop-shadow-[0_0_10px_rgba(34,197,94,0.25)]">
+            <div className="text-[var(--bs-success)] text-num-32 font-mono drop-shadow-[0_0_10px_rgba(34,197,94,0.25)]">
               <NumberFlow value={bestTrade ? Math.abs(bestTrade.pnl) : 0} prefix="+$" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
             </div>
 
             {bestTrade ? (
               <div className="space-y-0.5">
-                <div className="flex items-center justify-center gap-1 text-[#adb9d2] text-sm font-mono">
+                <div className="flex items-center justify-center gap-1 text-[var(--bs-text-tertiary)] text-sm font-mono">
                   <AssetIcon trade={bestTrade} />
-                  <span className="text-[#ced5e4]">{bestTrade.symbol}</span>
-                  <span className="px-1.5 py-0.5 bg-[#171a20] text-[#adb9d2] text-xs font-mono rounded-sm">
+                  <span className="text-[var(--bs-text-secondary)]">{bestTrade.symbol}</span>
+                  <span className="px-1.5 py-0.5 bg-[var(--bs-card-fg)] text-[var(--bs-text-tertiary)] text-xs font-mono rounded-sm">
                     {bestTrade.side.toUpperCase()}
                   </span>
                 </div>
-                <div className="text-[#585e6c] text-xs font-mono" suppressHydrationWarning>
+                <div className="text-[var(--bs-text-mute)] text-xs font-mono" suppressHydrationWarning>
                   Closed: {formatTimestamp(bestTrade.closedAt.getTime())}
                 </div>
               </div>
             ) : (
-              <div className="text-[#585e6c] text-xs font-mono">
+              <div className="text-[var(--bs-text-mute)] text-xs font-mono">
                 No winning trades in this period
               </div>
             )}
@@ -137,25 +137,25 @@ export default function LargestTradesCard({ trades }: LargestTradesCardProps) {
 
           {/* Worst Trade */}
           <div className="text-center space-y-2">
-            <div className="text-num-32 font-mono text-[#ff285a] drop-shadow-[0_0_10px_rgba(248,113,113,0.25)]">
+            <div className="text-num-32 font-mono text-[var(--bs-error)] drop-shadow-[0_0_10px_rgba(248,113,113,0.25)]">
               <NumberFlow value={worstTrade ? Math.abs(worstTrade.pnl) : 0} prefix="-$" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
             </div>
 
             {worstTrade ? (
               <div className="space-y-0.5">
-                <div className="flex items-center justify-center gap-1 text-[#adb9d2] text-sm font-mono">
+                <div className="flex items-center justify-center gap-1 text-[var(--bs-text-tertiary)] text-sm font-mono">
                   <AssetIcon trade={worstTrade} />
-                  <span className="text-[#ced5e4]">{worstTrade.symbol}</span>
-                  <span className="px-1.5 py-0.5 bg-[#171a20] text-[#adb9d2] text-xs font-mono rounded-sm">
+                  <span className="text-[var(--bs-text-secondary)]">{worstTrade.symbol}</span>
+                  <span className="px-1.5 py-0.5 bg-[var(--bs-card-fg)] text-[var(--bs-text-tertiary)] text-xs font-mono rounded-sm">
                     {worstTrade.side.toUpperCase()}
                   </span>
                 </div>
-                <div className="text-[#585e6c] text-xs font-mono" suppressHydrationWarning>
+                <div className="text-[var(--bs-text-mute)] text-xs font-mono" suppressHydrationWarning>
                   Closed: {formatTimestamp(worstTrade.closedAt.getTime())}
                 </div>
               </div>
             ) : (
-              <div className="text-[#585e6c] text-xs font-mono">
+              <div className="text-[var(--bs-text-mute)] text-xs font-mono">
                 No losing trades in this period
               </div>
             )}

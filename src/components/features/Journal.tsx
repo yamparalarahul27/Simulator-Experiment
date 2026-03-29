@@ -249,8 +249,8 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-white">Journal</h1>
-                    <p className="text-[#adb9d2] text-sm mt-1 font-mono tracking-tight">
+                    <h1 className="text-3xl font-bold text-[var(--bs-text-primary)]">Journal</h1>
+                    <p className="text-[var(--bs-text-tertiary)] text-sm mt-1 font-mono tracking-tight">
                         REFLECT ON YOUR TRADES AND TRACK YOUR GROWTH
                     </p>
                 </div>
@@ -261,8 +261,8 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                         <button
                             onClick={() => setIsFilterOpen(!isFilterOpen)}
                             className={`flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-all ${selectedTags.length > 0
-                                ? 'bg-[#00b3b3]/20 border-[#00b3b3] text-[#00e6e6]'
-                                : 'border-[#1a1e26] bg-[#11141a] text-[#ced5e4] hover:bg-[#171a20]'
+                                ? 'bg-[var(--bs-brand-tertiary)]/20 border-[var(--bs-brand-tertiary)] text-[var(--bs-brand-secondary)]'
+                                : 'border-[var(--bs-border)] bg-[var(--bs-card)] text-[var(--bs-text-secondary)] hover:bg-[var(--bs-card-fg)]'
                                 }`}
                         >
                             <Filter className="h-4 w-4" />
@@ -275,21 +275,21 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                                     className="fixed inset-0 z-40"
                                     onClick={() => setIsFilterOpen(false)}
                                 />
-                                <div className="absolute right-0 mt-2 w-56 bg-[#0b0e14] border border-[#1a1e26] shadow-2xl z-50 p-2 glass-morphism">
+                                <div className="absolute right-0 mt-2 w-56 bg-[var(--bs-bg)] border border-[var(--bs-border)] shadow-2xl z-50 p-2 glass-morphism">
                                     <div className="max-h-60 overflow-y-auto custom-scrollbar p-1">
                                         {availableTags.length === 0 ? (
-                                            <p className="text-[10px] text-[#585e6c] p-2 italic">Add annotations to see tags</p>
+                                            <p className="text-[10px] text-[var(--bs-text-mute)] p-2 italic">Add annotations to see tags</p>
                                         ) : (
                                             availableTags.map(tag => (
                                                 <button
                                                     key={tag}
                                                     onClick={() => toggleTagFilter(tag)}
-                                                    className="w-full flex items-center justify-between px-3 py-2 text-xs text-[#ced5e4] hover:bg-[#11141a] transition-colors group"
+                                                    className="w-full flex items-center justify-between px-3 py-2 text-xs text-[var(--bs-text-secondary)] hover:bg-[var(--bs-card)] transition-colors group"
                                                 >
-                                                    <span className={selectedTags.includes(tag) ? 'text-[#00ffff]' : ''}>
+                                                    <span className={selectedTags.includes(tag) ? 'text-[var(--bs-brand)]' : ''}>
                                                         #{tag}
                                                     </span>
-                                                    {selectedTags.includes(tag) && <Check className="h-3 w-3 text-[#00ffff]" />}
+                                                    {selectedTags.includes(tag) && <Check className="h-3 w-3 text-[var(--bs-brand)]" />}
                                                 </button>
                                             ))
                                         )}
@@ -297,7 +297,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                                     {selectedTags.length > 0 && (
                                         <button
                                             onClick={() => setSelectedTags([])}
-                                            className="w-full mt-2 pt-2 border-t border-[#1a1e26] text-[10px] text-[#585e6c] hover:text-white transition-colors text-center pb-1"
+                                            className="w-full mt-2 pt-2 border-t border-[var(--bs-border)] text-[10px] text-[var(--bs-text-mute)] hover:text-[var(--bs-text-primary)] transition-colors text-center pb-1"
                                         >
                                             Clear All
                                         </button>
@@ -310,7 +310,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                     {/* Download Button */}
                     <button
                         onClick={handleDownload}
-                        className="flex items-center justify-center h-10 w-10 rounded-lg border border-[#1a1e26] bg-[#11141a] text-[#ced5e4] transition-colors hover:bg-[#171a20]"
+                        className="flex items-center justify-center h-10 w-10 rounded-lg border border-[var(--bs-border)] bg-[var(--bs-card)] text-[var(--bs-text-secondary)] transition-colors hover:bg-[var(--bs-card-fg)]"
                         title="Export Journal"
                     >
                         <BookDown className="h-5 w-5" />
@@ -324,9 +324,9 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
 
             {/* Loading State */}
             {loading && (
-                <div className="flex flex-col items-center justify-center min-h-[300px] text-white">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#00b3b3] mb-4"></div>
-                    <p className="text-[#adb9d2]">Loading journal entries...</p>
+                <div className="flex flex-col items-center justify-center min-h-[300px] text-[var(--bs-text-primary)]">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--bs-brand-tertiary)] mb-4"></div>
+                    <p className="text-[var(--bs-text-tertiary)]">Loading journal entries...</p>
                 </div>
             )}
 
@@ -336,8 +336,8 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                     <div>
                         <img src="/assets/graphic_no_trade_data_onJournal.png" alt="No trade data" className="w-64" />
                     </div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Connect Wallet to view your Journal</h3>
-                    <p className="text-[#adb9d2] max-w-md mb-6">
+                    <h3 className="text-xl font-semibold text-[var(--bs-text-primary)] mb-2">Connect Wallet to view your Journal</h3>
+                    <p className="text-[var(--bs-text-tertiary)] max-w-md mb-6">
                         {network === 'devnet' && !analyzingWallet
                             ? "Go to Wallet Lookup to load your trades."
                             : "We couldn't find any saved trades for your wallet."}
@@ -347,8 +347,8 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
 
             {/* Filtered Empty State */}
             {!loading && trades.length > 0 && filteredTrades.length === 0 && (
-                <div className="flex flex-col items-center justify-center min-h-[300px] text-center border border-dashed border-[#1a1e26] bg-[#11141a] p-8">
-                    <p className="text-xl text-white font-medium mb-3">
+                <div className="flex flex-col items-center justify-center min-h-[300px] text-center border border-dashed border-[var(--bs-border)] bg-[var(--bs-card)] p-8">
+                    <p className="text-xl text-[var(--bs-text-primary)] font-medium mb-3">
                         {selectedTags.includes('FOMO')
                             ? "No trades found with tag '#FOMO' — that's actually a good thing!"
                             : selectedTags.includes('Revenge')
@@ -360,7 +360,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                     </p>
                     <button
                         onClick={() => setSelectedTags([])}
-                        className="text-[#00ffff] hover:text-[#00e6e6] text-sm font-mono underline underline-offset-4"
+                        className="text-[var(--bs-brand)] hover:text-[var(--bs-brand-secondary)] text-sm font-mono underline underline-offset-4"
                     >
                         Clear filters to see all trades
                     </button>
@@ -380,13 +380,13 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                             />
                         ))}
                         {loading && Array.from({ length: 6 }).map((_, i) => (
-                            <div key={`skeleton-${i}`} className="bg-[#11141a] border border-[#1a1e26] p-6 h-[200px]">
+                            <div key={`skeleton-${i}`} className="bg-[var(--bs-card)] border border-[var(--bs-border)] p-6 h-[200px]">
                                 <div className="animate-pulse flex flex-col h-full space-y-4">
                                     <div className="flex gap-3">
-                                        <div className="w-12 h-12 bg-[#11141a]"></div>
+                                        <div className="w-12 h-12 bg-[var(--bs-card)]"></div>
                                         <div className="space-y-2">
-                                            <div className="w-24 h-4 bg-[#11141a]"></div>
-                                            <div className="w-16 h-3 bg-[#11141a]"></div>
+                                            <div className="w-24 h-4 bg-[var(--bs-card)]"></div>
+                                            <div className="w-16 h-3 bg-[var(--bs-card)]"></div>
                                         </div>
                                     </div>
                                     <div className="flex-1"></div>
@@ -402,7 +402,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                             <button
                                 onClick={() => goToPage(currentPage - 1)}
                                 disabled={currentPage === 1}
-                                className="rounded-lg border border-[#1a1e26] bg-[#11141a] p-2 text-[#ced5e4] transition-colors hover:bg-[#171a20] disabled:opacity-40 disabled:cursor-not-allowed"
+                                className="rounded-lg border border-[var(--bs-border)] bg-[var(--bs-card)] p-2 text-[var(--bs-text-secondary)] transition-colors hover:bg-[var(--bs-card-fg)] disabled:opacity-40 disabled:cursor-not-allowed"
                             >
                                 <ChevronLeft className="h-5 w-5" />
                             </button>
@@ -420,8 +420,8 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                                                 key={page}
                                                 onClick={() => goToPage(page)}
                                                 className={`min-w-[40px] rounded-lg px-3 py-2 text-sm font-medium transition-colors ${page === currentPage
-                                                    ? 'bg-[#00b3b3] text-white'
-                                                    : 'border border-[#1a1e26] bg-[#11141a] text-[#ced5e4] hover:bg-[#171a20]'
+                                                    ? 'bg-[var(--bs-brand-tertiary)] text-[var(--bs-text-primary)]'
+                                                    : 'border border-[var(--bs-border)] bg-[var(--bs-card)] text-[var(--bs-text-secondary)] hover:bg-[var(--bs-card-fg)]'
                                                     }`}
                                             >
                                                 {page}
@@ -432,7 +432,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                                         page === currentPage + 2
                                     ) {
                                         return (
-                                            <span key={page} className="text-[#585e6c]">
+                                            <span key={page} className="text-[var(--bs-text-mute)]">
                                                 ...
                                             </span>
                                         );
@@ -444,7 +444,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                             <button
                                 onClick={() => goToPage(currentPage + 1)}
                                 disabled={currentPage === totalPages}
-                                className="rounded-lg border border-[#1a1e26] bg-[#11141a] p-2 text-[#ced5e4] transition-colors hover:bg-[#171a20] disabled:opacity-40 disabled:cursor-not-allowed"
+                                className="rounded-lg border border-[var(--bs-border)] bg-[var(--bs-card)] p-2 text-[var(--bs-text-secondary)] transition-colors hover:bg-[var(--bs-card-fg)] disabled:opacity-40 disabled:cursor-not-allowed"
                             >
                                 <ChevronRight className="h-5 w-5" />
                             </button>

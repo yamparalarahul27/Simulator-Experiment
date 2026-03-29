@@ -24,14 +24,14 @@ export default function JournalStreakCard({ trades, annotations }: JournalStreak
         <div>
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <h3 className="text-[#585e6c] text-sm font-mono uppercase tracking-wider">Journal Streak</h3>
+              <h3 className="text-[var(--bs-text-mute)] text-sm font-mono uppercase tracking-wider">Journal Streak</h3>
               <InfoTooltip infoKey="tradeStreak" />
             </div>
-            <span className="text-[#00ffff] text-[10px] font-mono border border-[#00b3b3]/20 px-2 py-0.5 bg-[#00b3b3]/5">
+            <span className="text-[var(--bs-brand)] text-[10px] font-mono border border-[var(--bs-brand-tertiary)]/20 px-2 py-0.5 bg-[var(--bs-brand-tertiary)]/5">
               <NumberFlow value={stats.activeDays} transformTiming={{ duration: 400, easing: 'ease-out' }} />/21 DAYS
             </span>
           </div>
-          <p className="text-[#adb9d2] text-xs mt-1">
+          <p className="text-[var(--bs-text-tertiary)] text-xs mt-1">
             Journal for 21 days and It will become a Habit.
           </p>
         </div>

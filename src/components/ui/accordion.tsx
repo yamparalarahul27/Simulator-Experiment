@@ -9,7 +9,7 @@ const Accordion = AccordionPrimitive.Root
 
 const AccordionItem = ({ className, ...props }: AccordionPrimitive.AccordionItemProps) => (
   <AccordionPrimitive.Item
-    className={cn("border-b border-[#1a1e26]", className)}
+    className={cn("border-b border-[var(--bs-border)]", className)}
     {...props}
   />
 )
@@ -23,7 +23,7 @@ const AccordionTrigger = ({
   <AccordionPrimitive.Header className="flex">
     <AccordionPrimitive.Trigger
       className={cn(
-        "flex flex-1 items-center justify-between py-4 text-left text-base font-semibold text-white transition-all",
+        "flex flex-1 items-center justify-between py-4 text-left text-base font-semibold text-[var(--bs-text-primary)] transition-all",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/70",
         "[&[data-state=open]>svg]:rotate-180",
         className
@@ -31,7 +31,7 @@ const AccordionTrigger = ({
       {...props}
     >
       {children}
-      <ChevronDown className="h-4 w-4 text-white transition-transform duration-200" />
+      <ChevronDown className="h-4 w-4 text-[var(--bs-text-primary)] transition-transform duration-200" />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 )
@@ -44,7 +44,7 @@ const AccordionContent = ({
 }: AccordionPrimitive.AccordionContentProps) => (
   <AccordionPrimitive.Content
     className={cn(
-      "overflow-hidden text-sm text-[#adb9d2] transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
+      "overflow-hidden text-sm text-[var(--bs-text-tertiary)] transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
       className
     )}
     {...props}

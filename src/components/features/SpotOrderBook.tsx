@@ -42,11 +42,11 @@ const SpotOrderBook = React.memo(function SpotOrderBook({ orderBook, formatPrice
         <div className="h-full flex flex-col">
             {/* Header */}
             <div className="flex items-center justify-between mb-2">
-                <span className="text-label-12 text-[#adb9d2] uppercase tracking-wider">Order Book</span>
+                <span className="text-label-12 text-[var(--bs-text-tertiary)] uppercase tracking-wider">Order Book</span>
             </div>
 
             {/* Column Headers */}
-            <div className="grid grid-cols-3 gap-1 text-[9px] font-mono text-[#585e6c] uppercase tracking-wider mb-1 px-1">
+            <div className="grid grid-cols-3 gap-1 text-[9px] font-mono text-[var(--bs-text-mute)] uppercase tracking-wider mb-1 px-1">
                 <span>Price</span>
                 <span className="text-right">Size</span>
                 <span className="text-right">Total</span>
@@ -59,26 +59,26 @@ const SpotOrderBook = React.memo(function SpotOrderBook({ orderBook, formatPrice
                         key={`ask-${i}`}
                         data-price={level.price}
                         onClick={handlePriceClick}
-                        className="relative grid grid-cols-3 gap-1 text-[10px] font-mono py-0.5 px-1 hover:bg-[#11141a] transition-colors cursor-pointer group"
+                        className="relative grid grid-cols-3 gap-1 text-[10px] font-mono py-0.5 px-1 hover:bg-[var(--bs-card)] transition-colors cursor-pointer group"
                     >
                         {/* Depth bar */}
                         <div
-                            className="absolute right-0 top-0 bottom-0 bg-[#ff285a]/8 transition-all"
+                            className="absolute right-0 top-0 bottom-0 bg-[var(--bs-error)]/8 transition-all"
                             style={{ width: `${(level.total / maxTotal) * 100}%` }}
                         />
-                        <span className="text-[#ff285a] relative z-10">{formatBookPrice(level.price)}</span>
-                        <span className="text-[#adb9d2] text-right relative z-10">{formatSize(level.size)}</span>
-                        <span className="text-[#585e6c] text-right relative z-10">{formatSize(level.total)}</span>
+                        <span className="text-[var(--bs-error)] relative z-10">{formatBookPrice(level.price)}</span>
+                        <span className="text-[var(--bs-text-tertiary)] text-right relative z-10">{formatSize(level.size)}</span>
+                        <span className="text-[var(--bs-text-mute)] text-right relative z-10">{formatSize(level.total)}</span>
                     </button>
                 ))}
             </div>
 
             {/* Spread */}
-            <div className="py-1.5 px-1 border-y border-[#1a1e26] my-0.5 flex items-center justify-between">
-                <span className="text-[10px] font-mono text-[#adb9d2]">
+            <div className="py-1.5 px-1 border-y border-[var(--bs-border)] my-0.5 flex items-center justify-between">
+                <span className="text-[10px] font-mono text-[var(--bs-text-tertiary)]">
                     {spread > 0 ? formatBookPrice(spread) : '—'}
                 </span>
-                <span className="text-[9px] font-mono text-[#585e6c]">
+                <span className="text-[9px] font-mono text-[var(--bs-text-mute)]">
                     {spreadPercent > 0 ? `${spreadPercent.toFixed(3)}%` : ''}
                 </span>
             </div>
@@ -90,16 +90,16 @@ const SpotOrderBook = React.memo(function SpotOrderBook({ orderBook, formatPrice
                         key={`bid-${i}`}
                         data-price={level.price}
                         onClick={handlePriceClick}
-                        className="relative grid grid-cols-3 gap-1 text-[10px] font-mono py-0.5 px-1 hover:bg-[#11141a] transition-colors cursor-pointer w-full group"
+                        className="relative grid grid-cols-3 gap-1 text-[10px] font-mono py-0.5 px-1 hover:bg-[var(--bs-card)] transition-colors cursor-pointer w-full group"
                     >
                         {/* Depth bar */}
                         <div
-                            className="absolute right-0 top-0 bottom-0 bg-[#00e66b]/8 transition-all"
+                            className="absolute right-0 top-0 bottom-0 bg-[var(--bs-brand-success)]/8 transition-all"
                             style={{ width: `${(level.total / maxTotal) * 100}%` }}
                         />
-                        <span className="text-[#00e66b] relative z-10">{formatBookPrice(level.price)}</span>
-                        <span className="text-[#adb9d2] text-right relative z-10">{formatSize(level.size)}</span>
-                        <span className="text-[#585e6c] text-right relative z-10">{formatSize(level.total)}</span>
+                        <span className="text-[var(--bs-success)] relative z-10">{formatBookPrice(level.price)}</span>
+                        <span className="text-[var(--bs-text-tertiary)] text-right relative z-10">{formatSize(level.size)}</span>
+                        <span className="text-[var(--bs-text-mute)] text-right relative z-10">{formatSize(level.total)}</span>
                     </button>
                 ))}
             </div>

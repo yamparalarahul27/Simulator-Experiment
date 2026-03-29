@@ -223,8 +223,8 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                 <button
                     onClick={() => onSideChange('buy')}
                     className={`py-2.5 text-sm font-mono font-bold transition-all ${side === 'buy'
-                        ? 'bg-[#00e66b]/20 text-[#00e66b] border border-[#00e66b]/30'
-                        : 'bg-[#11141a] text-[#585e6c] border border-[#1a1e26] hover:text-[#adb9d2]'
+                        ? 'bg-[var(--bs-brand-success)]/20 text-[var(--bs-success)] border border-[var(--bs-success)]/30'
+                        : 'bg-[var(--bs-card)] text-[var(--bs-text-mute)] border border-[var(--bs-border)] hover:text-[var(--bs-text-tertiary)]'
                         }`}
                 >
                     BUY
@@ -232,8 +232,8 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                 <button
                     onClick={() => onSideChange('sell')}
                     className={`py-2.5 text-sm font-mono font-bold transition-all ${side === 'sell'
-                        ? 'bg-[#ff285a]/20 text-[#ff285a] border border-[#ff285a]/30'
-                        : 'bg-[#11141a] text-[#585e6c] border border-[#1a1e26] hover:text-[#adb9d2]'
+                        ? 'bg-[var(--bs-error)]/20 text-[var(--bs-error)] border border-[var(--bs-error)]/30'
+                        : 'bg-[var(--bs-card)] text-[var(--bs-text-mute)] border border-[var(--bs-border)] hover:text-[var(--bs-text-tertiary)]'
                         }`}
                 >
                     SELL
@@ -247,8 +247,8 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                         key={ot.value}
                         onClick={() => handleOrderTypeChange(ot.value)}
                         className={`px-2 py-1 text-[10px] font-mono font-medium transition-all border ${orderType === ot.value
-                            ? 'bg-[#00b3b3]/20 text-[#00e6e6] border-[#00b3b3]/30'
-                            : 'text-[#585e6c] border-[#1a1e26] hover:text-[#adb9d2] hover:border-[#1a1e26]'
+                            ? 'bg-[var(--bs-brand-tertiary)]/20 text-[var(--bs-brand-secondary)] border-[var(--bs-brand-tertiary)]/30'
+                            : 'text-[var(--bs-text-mute)] border-[var(--bs-border)] hover:text-[var(--bs-text-tertiary)] hover:border-[var(--bs-border)]'
                             }`}
                     >
                         {ot.label}
@@ -268,24 +268,24 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
 
                 {/* Entry Price (read-only, shows live price) */}
                 <div>
-                    <label className="text-[10px] font-mono text-[#585e6c] block mb-1">Entry (Market) Price</label>
-                    <div className="w-full bg-[#11141a] border border-[#1a1e26] text-white text-xs font-mono px-3 py-2 flex items-center justify-between">
+                    <label className="text-[10px] font-mono text-[var(--bs-text-mute)] block mb-1">Entry (Market) Price</label>
+                    <div className="w-full bg-[var(--bs-card)] border border-[var(--bs-border)] text-[var(--bs-text-primary)] text-xs font-mono px-3 py-2 flex items-center justify-between">
                         <span>{currentPrice > 0 ? formatPrice(currentPrice) : '—'}</span>
-                        <span className="text-[9px] text-[#00e66b] font-mono">LIVE</span>
+                        <span className="text-[9px] text-[var(--bs-success)] font-mono">LIVE</span>
                     </div>
                 </div>
 
                 {/* Price (Limit, Iceberg, OCO) */}
                 {(orderType === 'limit' || orderType === 'iceberg' || orderType === 'oco') && (
                     <div>
-                        <label className="text-[10px] font-mono text-[#585e6c] block mb-1">Limit Price</label>
+                        <label className="text-[10px] font-mono text-[var(--bs-text-mute)] block mb-1">Limit Price</label>
                         <input
                             type="number"
                             step="any"
                             placeholder="0.00"
                             value={form.price}
                             onChange={(e) => handleField('price', e.target.value)}
-                            className="w-full bg-[#0b0e14]/50 border border-[#1a1e26] text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-[#00b3b3]/50 placeholder:text-white/15"
+                            className="w-full bg-[var(--bs-bg)]/50 border border-[var(--bs-border)] text-[var(--bs-text-primary)] text-xs font-mono px-3 py-2 focus:outline-none focus:border-[var(--bs-brand-tertiary)]/50 placeholder:text-[var(--bs-text-primary)]/15"
                         />
                     </div>
                 )}
@@ -293,17 +293,17 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                 {/* Stop Price (Stop Market, Stop Limit, OCO) */}
                 {(orderType === 'stop_market' || orderType === 'stop_limit' || orderType === 'oco') && (
                     <div>
-                        <label className="text-[10px] font-mono text-[#585e6c] block mb-1">Stop Price (Trigger)</label>
+                        <label className="text-[10px] font-mono text-[var(--bs-text-mute)] block mb-1">Stop Price (Trigger)</label>
                         <input
                             type="number"
                             step="any"
                             placeholder="Trigger price..."
                             value={form.stopPrice}
                             onChange={(e) => handleField('stopPrice', e.target.value)}
-                            className="w-full bg-[#0b0e14]/50 border border-[#1a1e26] text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-[#00b3b3]/50 placeholder:text-white/15"
+                            className="w-full bg-[var(--bs-bg)]/50 border border-[var(--bs-border)] text-[var(--bs-text-primary)] text-xs font-mono px-3 py-2 focus:outline-none focus:border-[var(--bs-brand-tertiary)]/50 placeholder:text-[var(--bs-text-primary)]/15"
                         />
                         {orderType !== 'oco' && (
-                            <p className="text-[9px] font-mono text-[#585e6c] mt-1">
+                            <p className="text-[9px] font-mono text-[var(--bs-text-mute)] mt-1">
                                 {side === 'buy'
                                     ? 'Buy Stop triggers on upward breakout — stop price must be above market.'
                                     : 'Sell Stop triggers on downward move — stop price must be below market.'}
@@ -315,7 +315,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                 {/* Limit Price leg of Stop Limit / OCO */}
                 {(orderType === 'stop_limit' || orderType === 'oco') && (
                     <div>
-                        <label className="text-[10px] font-mono text-[#585e6c] block mb-1">
+                        <label className="text-[10px] font-mono text-[var(--bs-text-mute)] block mb-1">
                             {orderType === 'oco' ? 'Stop-Limit Price' : 'Limit Price'}
                         </label>
                         <input
@@ -324,7 +324,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                             placeholder="Max execution price..."
                             value={form.limitPrice}
                             onChange={(e) => handleField('limitPrice', e.target.value)}
-                            className="w-full bg-[#0b0e14]/50 border border-[#1a1e26] text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-[#00b3b3]/50 placeholder:text-white/15"
+                            className="w-full bg-[var(--bs-bg)]/50 border border-[var(--bs-border)] text-[var(--bs-text-primary)] text-xs font-mono px-3 py-2 focus:outline-none focus:border-[var(--bs-brand-tertiary)]/50 placeholder:text-[var(--bs-text-primary)]/15"
                         />
                     </div>
                 )}
@@ -333,25 +333,25 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                 {orderType === 'trailing_stop' && (
                     <>
                         <div>
-                            <label className="text-[10px] font-mono text-[#585e6c] block mb-1">Activation Price</label>
+                            <label className="text-[10px] font-mono text-[var(--bs-text-mute)] block mb-1">Activation Price</label>
                             <input
                                 type="number"
                                 step="any"
                                 placeholder={side === 'buy' ? 'Must be > Market' : 'Must be < Market'}
                                 value={form.activationPrice}
                                 onChange={(e) => handleField('activationPrice', e.target.value)}
-                                className="w-full bg-[#0b0e14]/50 border border-[#1a1e26] text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-[#00b3b3]/50 placeholder:text-white/15"
+                                className="w-full bg-[var(--bs-bg)]/50 border border-[var(--bs-border)] text-[var(--bs-text-primary)] text-xs font-mono px-3 py-2 focus:outline-none focus:border-[var(--bs-brand-tertiary)]/50 placeholder:text-[var(--bs-text-primary)]/15"
                             />
                         </div>
                         <div>
-                            <label className="text-[10px] font-mono text-[#585e6c] block mb-1">Trailing Delta (%)</label>
+                            <label className="text-[10px] font-mono text-[var(--bs-text-mute)] block mb-1">Trailing Delta (%)</label>
                             <input
                                 type="number"
                                 step="0.1"
                                 placeholder="0.1 - 20.0"
                                 value={form.trailingPercent}
                                 onChange={(e) => handleField('trailingPercent', e.target.value)}
-                                className="w-full bg-[#0b0e14]/50 border border-[#1a1e26] text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-[#00b3b3]/50 placeholder:text-white/15"
+                                className="w-full bg-[var(--bs-bg)]/50 border border-[var(--bs-border)] text-[var(--bs-text-primary)] text-xs font-mono px-3 py-2 focus:outline-none focus:border-[var(--bs-brand-tertiary)]/50 placeholder:text-[var(--bs-text-primary)]/15"
                             />
                         </div>
                     </>
@@ -361,12 +361,12 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                 {orderType === 'limit' && (
                     <div className="flex items-center gap-4 mt-2">
                         <label className="flex items-center gap-2 cursor-pointer group">
-                            <input type="checkbox" checked={form.tpEnabled} onChange={e => handleField('tpEnabled', e.target.checked)} className="accent-[#00b3b3] cursor-pointer" />
-                            <span className="text-[10px] font-mono text-[#adb9d2] group-hover:text-[#ced5e4] transition-colors">TP</span>
+                            <input type="checkbox" checked={form.tpEnabled} onChange={e => handleField('tpEnabled', e.target.checked)} className="accent-[var(--bs-brand-tertiary)] cursor-pointer" />
+                            <span className="text-[10px] font-mono text-[var(--bs-text-tertiary)] group-hover:text-[var(--bs-text-secondary)] transition-colors">TP</span>
                         </label>
                         <label className="flex items-center gap-2 cursor-pointer group">
-                            <input type="checkbox" checked={form.slEnabled} onChange={e => handleField('slEnabled', e.target.checked)} className="accent-[#00b3b3] cursor-pointer" />
-                            <span className="text-[10px] font-mono text-[#adb9d2] group-hover:text-[#ced5e4] transition-colors">SL</span>
+                            <input type="checkbox" checked={form.slEnabled} onChange={e => handleField('slEnabled', e.target.checked)} className="accent-[var(--bs-brand-tertiary)] cursor-pointer" />
+                            <span className="text-[10px] font-mono text-[var(--bs-text-tertiary)] group-hover:text-[var(--bs-text-secondary)] transition-colors">SL</span>
                         </label>
                     </div>
                 )}
@@ -374,27 +374,27 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                 {/* TP/SL Specific Inputs */}
                 {form.tpEnabled && orderType === 'limit' && (
                     <div>
-                        <label className="text-[10px] font-mono text-[#585e6c] block mb-1 text-[#00e66b]/80">Take Profit Price</label>
+                        <label className="text-[10px] font-mono text-[var(--bs-text-mute)] block mb-1 text-[var(--bs-success)]/80">Take Profit Price</label>
                         <input
                             type="number"
                             step="any"
                             placeholder="Target profit price..."
                             value={form.tpPrice}
                             onChange={(e) => handleField('tpPrice', e.target.value)}
-                            className="w-full bg-[#0b0e14]/50 border border-[#00e66b]/20 text-white text-xs font-mono px-3 py-2 flex items-center justify-between focus:outline-none focus:border-[#00e66b]/50 placeholder:text-white/15"
+                            className="w-full bg-[var(--bs-bg)]/50 border border-[var(--bs-success)]/20 text-[var(--bs-text-primary)] text-xs font-mono px-3 py-2 flex items-center justify-between focus:outline-none focus:border-[var(--bs-success)]/50 placeholder:text-[var(--bs-text-primary)]/15"
                         />
                     </div>
                 )}
                 {form.slEnabled && orderType === 'limit' && (
                     <div>
-                        <label className="text-[10px] font-mono text-[#585e6c] block mb-1 text-[#ff285a]/80">Stop Loss Price</label>
+                        <label className="text-[10px] font-mono text-[var(--bs-text-mute)] block mb-1 text-[var(--bs-error)]/80">Stop Loss Price</label>
                         <input
                             type="number"
                             step="any"
                             placeholder="Stop loss trigger..."
                             value={form.slPrice}
                             onChange={(e) => handleField('slPrice', e.target.value)}
-                            className="w-full bg-[#0b0e14]/50 border border-[#ff285a]/20 text-white text-xs font-mono px-3 py-2 flex items-center justify-between focus:outline-none focus:border-[#ff285a]/50 placeholder:text-white/15"
+                            className="w-full bg-[var(--bs-bg)]/50 border border-[var(--bs-error)]/20 text-[var(--bs-text-primary)] text-xs font-mono px-3 py-2 flex items-center justify-between focus:outline-none focus:border-[var(--bs-error)]/50 placeholder:text-[var(--bs-text-primary)]/15"
                         />
                     </div>
                 )}
@@ -406,13 +406,13 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                     if (risk === 0) return null;
                     const rr = (gain / risk).toFixed(2);
                     const rrNum = parseFloat(rr);
-                    const color = rrNum >= 1.5 ? 'text-[#00e66b] border-[#00e66b]/20 bg-[#00e66b]/8'
+                    const color = rrNum >= 1.5 ? 'text-[var(--bs-success)] border-[var(--bs-success)]/20 bg-[var(--bs-brand-success)]/8'
                         : rrNum >= 1.0 ? 'text-yellow-400 border-yellow-500/20 bg-yellow-500/8'
-                            : 'text-[#ff285a] border-[#ff285a]/20 bg-[#ff285a]/8';
+                            : 'text-[var(--bs-error)] border-[var(--bs-error)]/20 bg-[var(--bs-error)]/8';
                     const label = rrNum >= 1.5 ? '✓ Favourable' : rrNum >= 1.0 ? '~ Neutral' : '✗ Poor — risk exceeds reward';
                     return (
                         <div className={`flex items-center justify-between px-2 py-1.5 border text-[10px] font-mono ${color}`}>
-                            <span className="text-[#585e6c]">Risk / Reward</span>
+                            <span className="text-[var(--bs-text-mute)]">Risk / Reward</span>
                             <span className="font-bold">1 : {rr} <span className="font-normal">{label}</span></span>
                         </div>
                     );
@@ -420,28 +420,28 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
 
                 {/* Amount */}
                 <div className="pt-2">
-                    <label className="text-[10px] font-mono text-[#585e6c] block mb-1">Amount ({token})</label>
+                    <label className="text-[10px] font-mono text-[var(--bs-text-mute)] block mb-1">Amount ({token})</label>
                     <input
                         type="number"
                         step="any"
                         placeholder="0.00"
                         value={form.amount}
                         onChange={(e) => handleField('amount', e.target.value)}
-                        className="w-full bg-[#0b0e14]/50 border border-[#1a1e26] text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-[#00b3b3]/50 placeholder:text-white/15"
+                        className="w-full bg-[var(--bs-bg)]/50 border border-[var(--bs-border)] text-[var(--bs-text-primary)] text-xs font-mono px-3 py-2 focus:outline-none focus:border-[var(--bs-brand-tertiary)]/50 placeholder:text-[var(--bs-text-primary)]/15"
                     />
                 </div>
 
                 {/* Visible Qty (Iceberg, Stop Limit) */}
                 {(orderType === 'iceberg' || orderType === 'stop_limit') && (
                     <div>
-                        <label className="text-[10px] font-mono text-[#585e6c] block mb-1">Visible Quantity (Iceberg Slice)</label>
+                        <label className="text-[10px] font-mono text-[var(--bs-text-mute)] block mb-1">Visible Quantity (Iceberg Slice)</label>
                         <input
                             type="number"
                             step="any"
                             placeholder="Publicly visible chunk..."
                             value={form.visibleQty}
                             onChange={(e) => handleField('visibleQty', e.target.value)}
-                            className="w-full bg-[#0b0e14]/50 border border-[#1a1e26] text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-[#00b3b3]/50 placeholder:text-white/15"
+                            className="w-full bg-[var(--bs-bg)]/50 border border-[var(--bs-border)] text-[var(--bs-text-primary)] text-xs font-mono px-3 py-2 focus:outline-none focus:border-[var(--bs-brand-tertiary)]/50 placeholder:text-[var(--bs-text-primary)]/15"
                         />
                     </div>
                 )}
@@ -450,21 +450,21 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                 {orderType === 'twap' && (
                     <div className="grid grid-cols-2 gap-2">
                         <div>
-                            <label className="text-[10px] font-mono text-[#585e6c] block mb-1">Duration (sec)</label>
+                            <label className="text-[10px] font-mono text-[var(--bs-text-mute)] block mb-1">Duration (sec)</label>
                             <input
                                 type="number"
                                 value={form.twapDuration}
                                 onChange={(e) => handleField('twapDuration', e.target.value)}
-                                className="w-full bg-[#0b0e14]/50 border border-[#1a1e26] text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-[#00b3b3]/50"
+                                className="w-full bg-[var(--bs-bg)]/50 border border-[var(--bs-border)] text-[var(--bs-text-primary)] text-xs font-mono px-3 py-2 focus:outline-none focus:border-[var(--bs-brand-tertiary)]/50"
                             />
                         </div>
                         <div>
-                            <label className="text-[10px] font-mono text-[#585e6c] block mb-1">Intervals</label>
+                            <label className="text-[10px] font-mono text-[var(--bs-text-mute)] block mb-1">Intervals</label>
                             <input
                                 type="number"
                                 value={form.twapIntervals}
                                 onChange={(e) => handleField('twapIntervals', e.target.value)}
-                                className="w-full bg-[#0b0e14]/50 border border-[#1a1e26] text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-[#00b3b3]/50"
+                                className="w-full bg-[var(--bs-bg)]/50 border border-[var(--bs-border)] text-[var(--bs-text-primary)] text-xs font-mono px-3 py-2 focus:outline-none focus:border-[var(--bs-brand-tertiary)]/50"
                             />
                         </div>
                     </div>
@@ -475,10 +475,10 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
             <button
                 onClick={handleRunSimulation}
                 disabled={amountNum <= 0 || currentPrice <= 0 || isInvalid}
-                className={`w-full py-3 text-sm font-mono font-bold transition-all mt-4 flex items-center justify-center gap-2 text-white
+                className={`w-full py-3 text-sm font-mono font-bold transition-all mt-4 flex items-center justify-center gap-2 text-[var(--bs-text-primary)]
                     ${isInvalid || amountNum <= 0 || currentPrice <= 0
-                        ? 'bg-[#171a20] text-[#585e6c] cursor-not-allowed border border-[#1a1e26]'
-                        : 'bg-gradient-to-r from-[#00b3b3] to-[#00ffff] hover:from-[#00e6e6] hover:to-[#00ffff] border border-transparent shadow-[0_0_15px_rgba(0,179,179,0.4)]'
+                        ? 'bg-[var(--bs-card-fg)] text-[var(--bs-text-mute)] cursor-not-allowed border border-[var(--bs-border)]'
+                        : 'bg-gradient-to-r from-[var(--bs-brand-tertiary)] to-[var(--bs-brand)] hover:from-[var(--bs-brand-secondary)] hover:to-[var(--bs-brand)] border border-transparent shadow-[0_0_15px_rgba(0,179,179,0.4)]'
                     }`}
             >
                 <Play size={13} fill="currentColor" />

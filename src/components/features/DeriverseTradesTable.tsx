@@ -29,9 +29,9 @@ interface DeriverseTradesTableProps {
 export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrades = false, currentWalletAddress }: DeriverseTradesTableProps) {
     if (trades.length === 0) {
         return (
-            <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl overflow-hidden p-12 text-center">
-                <p className="text-[#adb9d2]">No Deriverse trades found for this address</p>
-                <p className="text-[#585e6c] text-sm mt-2">
+            <div className="rounded-lg border border-[var(--bs-border)] bg-[var(--bs-bg)]/80 backdrop-blur-xl overflow-hidden p-12 text-center">
+                <p className="text-[var(--bs-text-tertiary)]">No Deriverse trades found for this address</p>
+                <p className="text-[var(--bs-text-mute)] text-sm mt-2">
                     This wallet may not have any trading activity on Deriverse Devnet
                 </p>
             </div>
@@ -48,23 +48,23 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
         <div className="space-y-4">
             {/* Statistics Summary */}
             <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
-                <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-4 md:col-span-1">
-                    <p className="text-xs text-[#adb9d2] uppercase tracking-wider mb-1">Total Trades</p>
-                    <p className="text-2xl font-semibold text-white font-mono"><NumberFlow value={trades.length} transformTiming={{ duration: 400, easing: 'ease-out' }} /></p>
+                <div className="rounded-lg border border-[var(--bs-border)] bg-[var(--bs-bg)]/80 backdrop-blur-xl p-4 md:col-span-1">
+                    <p className="text-xs text-[var(--bs-text-tertiary)] uppercase tracking-wider mb-1">Total Trades</p>
+                    <p className="text-2xl font-semibold text-[var(--bs-text-primary)] font-mono"><NumberFlow value={trades.length} transformTiming={{ duration: 400, easing: 'ease-out' }} /></p>
                 </div>
-                <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-4 md:col-span-2">
-                    <p className="text-xs text-[#adb9d2] uppercase tracking-wider mb-1">Total PnL</p>
-                    <p className={`text-2xl font-semibold font-mono ${totalPnL >= 0 ? 'text-[#00e66b]' : 'text-[#ff285a]'}`}>
+                <div className="rounded-lg border border-[var(--bs-border)] bg-[var(--bs-bg)]/80 backdrop-blur-xl p-4 md:col-span-2">
+                    <p className="text-xs text-[var(--bs-text-tertiary)] uppercase tracking-wider mb-1">Total PnL</p>
+                    <p className={`text-2xl font-semibold font-mono ${totalPnL >= 0 ? 'text-[var(--bs-success)]' : 'text-[var(--bs-error)]'}`}>
                         <NumberFlow value={totalPnL} prefix={totalPnL >= 0 ? '+' : ''} suffix=" USDC" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
                     </p>
                 </div>
-                <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-4 md:col-span-1">
-                    <p className="text-xs text-[#adb9d2] uppercase tracking-wider mb-1">Win Rate</p>
-                    <p className="text-2xl font-semibold text-white font-mono"><NumberFlow value={winRate} suffix="%" format={{ minimumFractionDigits: 1, maximumFractionDigits: 1 }} transformTiming={{ duration: 400, easing: 'ease-out' }} /></p>
+                <div className="rounded-lg border border-[var(--bs-border)] bg-[var(--bs-bg)]/80 backdrop-blur-xl p-4 md:col-span-1">
+                    <p className="text-xs text-[var(--bs-text-tertiary)] uppercase tracking-wider mb-1">Win Rate</p>
+                    <p className="text-2xl font-semibold text-[var(--bs-text-primary)] font-mono"><NumberFlow value={winRate} suffix="%" format={{ minimumFractionDigits: 1, maximumFractionDigits: 1 }} transformTiming={{ duration: 400, easing: 'ease-out' }} /></p>
                 </div>
-                <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-4 md:col-span-1">
-                    <p className="text-xs text-[#adb9d2] uppercase tracking-wider mb-1">Total Fees</p>
-                    <p className="text-2xl font-semibold text-white font-mono"><NumberFlow value={totalFees} suffix=" USDC" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 400, easing: 'ease-out' }} />
+                <div className="rounded-lg border border-[var(--bs-border)] bg-[var(--bs-bg)]/80 backdrop-blur-xl p-4 md:col-span-1">
+                    <p className="text-xs text-[var(--bs-text-tertiary)] uppercase tracking-wider mb-1">Total Fees</p>
+                    <p className="text-2xl font-semibold text-[var(--bs-text-primary)] font-mono"><NumberFlow value={totalFees} suffix=" USDC" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 400, easing: 'ease-out' }} />
                     </p>
                 </div>
                 <div className="rounded-lg bg-blue-600/10 backdrop-blur-xl flex flex-col justify-center md:col-span-1 p-4">
@@ -72,7 +72,7 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
                         <button
                             onClick={onSaveTrades}
                             disabled={savingTrades}
-                            className="px-4 py-2 bg-[#69a2f1] border border-[#1a1e26] text-white rounded-lg font-semibold hover:bg-[#69a2f1]/80 transition disabled:bg-blue-900/40 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
+                            className="px-4 py-2 bg-[var(--bs-info)] border border-[var(--bs-border)] text-[var(--bs-text-primary)] rounded-lg font-semibold hover:bg-[var(--bs-info)]/80 transition disabled:bg-blue-900/40 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
                         >
                             {savingTrades ? (
                                 <>
@@ -88,33 +88,33 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
                         </button>
                     ) : (
                         <div className="text-center">
-                            <p className="text-xs text-[#adb9d2] uppercase tracking-wider mb-1">Actions</p>
-                            <p className="text-sm text-[#585e6c]">No trades to save</p>
+                            <p className="text-xs text-[var(--bs-text-tertiary)] uppercase tracking-wider mb-1">Actions</p>
+                            <p className="text-sm text-[var(--bs-text-mute)]">No trades to save</p>
                         </div>
                     )}
                 </div>
             </div>
 
             {/* Trades Table */}
-            <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl overflow-hidden">
-                <div className="px-6 py-4 border-b border-[#1a1e26] bg-gradient-to-r from-white/5 to-transparent">
-                    <h3 className="text-lg font-semibold text-white">Deriverse Trades</h3>
-                    <p className="text-sm text-[#adb9d2] mt-1">Showing {trades.length} trades parsed from on-chain data</p>
+            <div className="rounded-lg border border-[var(--bs-border)] bg-[var(--bs-bg)]/80 backdrop-blur-xl overflow-hidden">
+                <div className="px-6 py-4 border-b border-[var(--bs-border)] bg-gradient-to-r from-white/5 to-transparent">
+                    <h3 className="text-lg font-semibold text-[var(--bs-text-primary)]">Deriverse Trades</h3>
+                    <p className="text-sm text-[var(--bs-text-tertiary)] mt-1">Showing {trades.length} trades parsed from on-chain data</p>
                 </div>
                 <div className="overflow-x-auto max-h-[60vh]">
                     <table className="w-full text-left">
-                        <thead className="sticky top-0 bg-[#0b0e14]/90 backdrop-blur-xl border-b border-[#1a1e26]">
+                        <thead className="sticky top-0 bg-[var(--bs-bg)]/90 backdrop-blur-xl border-b border-[var(--bs-border)]">
                             <tr>
-                                <th className="px-6 py-4 text-xs font-semibold text-[#ced5e4] uppercase tracking-wider">Time</th>
-                                <th className="px-6 py-4 text-xs font-semibold text-[#ced5e4] uppercase tracking-wider">Symbol</th>
-                                <th className="px-6 py-4 text-xs font-semibold text-[#ced5e4] uppercase tracking-wider">Type</th>
-                                <th className="px-6 py-4 text-xs font-semibold text-[#ced5e4] uppercase tracking-wider">Side</th>
-                                <th className="px-6 py-4 text-xs font-semibold text-[#ced5e4] uppercase tracking-wider text-right">Quantity</th>
-                                <th className="px-6 py-4 text-xs font-semibold text-[#ced5e4] uppercase tracking-wider text-right">Price</th>
-                                <th className="px-6 py-4 text-xs font-semibold text-[#ced5e4] uppercase tracking-wider text-right">Notional</th>
-                                <th className="px-6 py-4 text-xs font-semibold text-[#ced5e4] uppercase tracking-wider text-right">PnL</th>
-                                <th className="px-6 py-4 text-xs font-semibold text-[#ced5e4] uppercase tracking-wider text-right">Fee</th>
-                                <th className="px-6 py-4 text-xs font-semibold text-[#ced5e4] uppercase tracking-wider">Signature</th>
+                                <th className="px-6 py-4 text-xs font-semibold text-[var(--bs-text-secondary)] uppercase tracking-wider">Time</th>
+                                <th className="px-6 py-4 text-xs font-semibold text-[var(--bs-text-secondary)] uppercase tracking-wider">Symbol</th>
+                                <th className="px-6 py-4 text-xs font-semibold text-[var(--bs-text-secondary)] uppercase tracking-wider">Type</th>
+                                <th className="px-6 py-4 text-xs font-semibold text-[var(--bs-text-secondary)] uppercase tracking-wider">Side</th>
+                                <th className="px-6 py-4 text-xs font-semibold text-[var(--bs-text-secondary)] uppercase tracking-wider text-right">Quantity</th>
+                                <th className="px-6 py-4 text-xs font-semibold text-[var(--bs-text-secondary)] uppercase tracking-wider text-right">Price</th>
+                                <th className="px-6 py-4 text-xs font-semibold text-[var(--bs-text-secondary)] uppercase tracking-wider text-right">Notional</th>
+                                <th className="px-6 py-4 text-xs font-semibold text-[var(--bs-text-secondary)] uppercase tracking-wider text-right">PnL</th>
+                                <th className="px-6 py-4 text-xs font-semibold text-[var(--bs-text-secondary)] uppercase tracking-wider text-right">Fee</th>
+                                <th className="px-6 py-4 text-xs font-semibold text-[var(--bs-text-secondary)] uppercase tracking-wider">Signature</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-[#1a1e26]">
@@ -123,47 +123,47 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
                                 return (
                                     <tr
                                         key={trade.id}
-                                        className="hover:bg-[#11141a] transition-all duration-200 group"
+                                        className="hover:bg-[var(--bs-card)] transition-all duration-200 group"
                                         style={{
                                             animation: `fadeIn 0.3s ease-in-out ${index * 0.05}s both`
                                         }}
                                     >
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-[#ced5e4]">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-[var(--bs-text-secondary)]">
                                             {trade.closedAt.toLocaleString()}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white font-semibold">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-[var(--bs-text-primary)] font-semibold">
                                             {trade.symbol}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur-sm
                                       ${isPerp
-                                                    ? 'bg-[#00b3b3]/20 text-[#00e6e6] border border-[#00b3b3]/30'
-                                                    : 'bg-[#69a2f1]/20 text-blue-300 border border-[#69a2f1]/30'}`}>
+                                                    ? 'bg-[var(--bs-brand-tertiary)]/20 text-[var(--bs-brand-secondary)] border border-[var(--bs-brand-tertiary)]/30'
+                                                    : 'bg-[var(--bs-info)]/20 text-blue-300 border border-[var(--bs-info)]/30'}`}>
                                                 {isPerp ? 'Perpetual' : 'Spot'}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur-sm
                                       ${trade.side === 'buy' || trade.side === 'long'
-                                                    ? 'bg-[#00e66b]/20 text-green-300 border border-[#00e66b]/30'
-                                                    : 'bg-[#ff285a]/20 text-red-300 border border-[#ff285a]/30'}`}>
+                                                    ? 'bg-[var(--bs-brand-success)]/20 text-green-300 border border-[var(--bs-success)]/30'
+                                                    : 'bg-[var(--bs-error)]/20 text-red-300 border border-[var(--bs-error)]/30'}`}>
                                                 {trade.side.toUpperCase()}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-white font-mono">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-[var(--bs-text-primary)] font-mono">
                                             {trade.quantity.toFixed(4)}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-white font-mono">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-[var(--bs-text-primary)] font-mono">
                                             ${trade.price.toFixed(2)}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-white font-mono">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-[var(--bs-text-primary)] font-mono">
                                             ${trade.notional.toFixed(2)}
                                         </td>
                                         <td className={`px-6 py-4 whitespace-nowrap text-sm text-right font-mono font-semibold
-                                   ${trade.pnl > 0 ? 'text-[#00e66b]' : trade.pnl < 0 ? 'text-[#ff285a]' : 'text-[#adb9d2]'}`}>
+                                   ${trade.pnl > 0 ? 'text-[var(--bs-success)]' : trade.pnl < 0 ? 'text-[var(--bs-error)]' : 'text-[var(--bs-text-tertiary)]'}`}>
                                             {trade.pnl > 0 ? '+' : ''}{trade.pnl.toFixed(2)}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-[#ced5e4] font-mono">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-[var(--bs-text-secondary)] font-mono">
                                             {trade.fee.toFixed(4)}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm">
@@ -171,7 +171,7 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
                                                 href={`https://solscan.io/tx/${trade.txSignature}?cluster=devnet`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="text-[#69a2f1] hover:text-blue-300 transition-colors font-mono group-hover:underline"
+                                                className="text-[var(--bs-info)] hover:text-blue-300 transition-colors font-mono group-hover:underline"
                                             >
                                                 {trade.txSignature.slice(0, 8)}...{trade.txSignature.slice(-8)}
                                             </a>

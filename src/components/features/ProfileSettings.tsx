@@ -72,14 +72,14 @@ function AppearanceSection() {
     );
 
     return (
-        <div className="w-full border border-[#1a1e26] bg-white/[0.03]">
+        <div className="w-full border border-[var(--bs-border)] bg-white/[0.03]">
             {/* Section Header */}
-            <div className="px-5 py-3 border-b border-[#1a1e26]">
-                <h2 className="text-sm font-semibold text-white/90 uppercase tracking-wider">
+            <div className="px-5 py-3 border-b border-[var(--bs-border)]">
+                <h2 className="text-sm font-semibold text-[var(--bs-text-primary)]/90 uppercase tracking-wider">
                     Appearance
                 </h2>
                 {!connected && (
-                    <p className="text-xs text-[#585e6c] mt-1">
+                    <p className="text-xs text-[var(--bs-text-mute)] mt-1">
                         Connect your wallet to save appearance settings.
                     </p>
                 )}
@@ -88,7 +88,7 @@ function AppearanceSection() {
             <div className="p-5 space-y-6">
                 {/* Background Mode Selector */}
                 <div>
-                    <label className="text-xs text-[#adb9d2] uppercase tracking-wider mb-2 block">
+                    <label className="text-xs text-[var(--bs-text-tertiary)] uppercase tracking-wider mb-2 block">
                         Background Mode
                     </label>
                     <div className="flex gap-2">
@@ -106,8 +106,8 @@ function AppearanceSection() {
                                         flex items-center gap-2 px-4 py-2 text-sm font-medium
                                         border transition-all duration-200
                                         ${isActive
-                                            ? 'border-[#00b3b3]/60 bg-[#00b3b3]/15 text-white'
-                                            : 'border-[#1a1e26] bg-white/[0.03] text-[#adb9d2] hover:border-white/20 hover:text-[#ced5e4]'
+                                            ? 'border-[var(--bs-brand-tertiary)]/60 bg-[var(--bs-brand-tertiary)]/15 text-[var(--bs-text-primary)]'
+                                            : 'border-[var(--bs-border)] bg-white/[0.03] text-[var(--bs-text-tertiary)] hover:border-[var(--bs-border)] hover:text-[var(--bs-text-secondary)]'
                                         }
                                         ${isDisabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}
                                     `}
@@ -124,13 +124,13 @@ function AppearanceSection() {
                 {/* Custom Image Upload */}
                 {preferences.bgType === 'custom' && (
                     <div className="space-y-3">
-                        <label className="text-xs text-[#adb9d2] uppercase tracking-wider block">
+                        <label className="text-xs text-[var(--bs-text-tertiary)] uppercase tracking-wider block">
                             Custom Image
                         </label>
 
                         {preferences.bgImagePath && (
                             <div className="flex items-center gap-3">
-                                <div className="w-24 h-14 border border-[#1a1e26] overflow-hidden bg-black/30">
+                                <div className="w-24 h-14 border border-[var(--bs-border)] overflow-hidden bg-black/30">
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                         src={preferences.bgImagePath}
@@ -141,8 +141,8 @@ function AppearanceSection() {
                                 <button
                                     type="button"
                                     onClick={removeBackground}
-                                    className="px-3 py-1.5 text-xs border border-[#ff285a]/30 text-[#ff285a]
-                                               hover:bg-[#ff285a]/10 transition-colors"
+                                    className="px-3 py-1.5 text-xs border border-[var(--bs-error)]/30 text-[var(--bs-error)]
+                                               hover:bg-[var(--bs-error)]/10 transition-colors"
                                 >
                                     Remove
                                 </button>
@@ -155,9 +155,9 @@ function AppearanceSection() {
                                 onClick={() => fileInputRef.current?.click()}
                                 disabled={isUploading}
                                 className={`
-                                    px-4 py-2 text-sm border border-[#1a1e26] bg-white/[0.03]
-                                    hover:border-white/20 transition-colors
-                                    ${isUploading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer text-[#ced5e4] hover:text-white'}
+                                    px-4 py-2 text-sm border border-[var(--bs-border)] bg-white/[0.03]
+                                    hover:border-[var(--bs-border)] transition-colors
+                                    ${isUploading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer text-[var(--bs-text-secondary)] hover:text-[var(--bs-text-primary)]'}
                                 `}
                             >
                                 {isUploading ? 'Compressing & Uploading...' : 'Upload New Image'}
@@ -171,7 +171,7 @@ function AppearanceSection() {
                             />
                         </div>
 
-                        <p className="text-[11px] text-[#585e6c]">
+                        <p className="text-[11px] text-[var(--bs-text-mute)]">
                             Max: 2MB input (JPG/PNG/WebP). Compressed to WebP ≤300KB. Ideal: 2560px wide.
                         </p>
                     </div>
@@ -180,7 +180,7 @@ function AppearanceSection() {
                 {/* Solid Color Picker */}
                 {preferences.bgType === 'color' && (
                     <div className="space-y-2">
-                        <label className="text-xs text-[#adb9d2] uppercase tracking-wider block">
+                        <label className="text-xs text-[var(--bs-text-tertiary)] uppercase tracking-wider block">
                             Background Color
                         </label>
                         <div className="flex items-center gap-3">
@@ -188,7 +188,7 @@ function AppearanceSection() {
                                 type="color"
                                 value={preferences.bgColor}
                                 onChange={handleColorPickerChange}
-                                className="w-10 h-10 border border-[#1a1e26] bg-transparent cursor-pointer
+                                className="w-10 h-10 border border-[var(--bs-border)] bg-transparent cursor-pointer
                                            [&::-webkit-color-swatch-wrapper]:p-0
                                            [&::-webkit-color-swatch]:border-0"
                             />
@@ -198,9 +198,9 @@ function AppearanceSection() {
                                 onChange={handleColorChange}
                                 placeholder="#0b0e14"
                                 maxLength={7}
-                                className="w-28 px-3 py-2 text-sm bg-white/[0.03] border border-[#1a1e26]
-                                           text-[#ced5e4] font-mono placeholder:text-[#585e6c]
-                                           focus:outline-none focus:border-[#00b3b3]/40"
+                                className="w-28 px-3 py-2 text-sm bg-white/[0.03] border border-[var(--bs-border)]
+                                           text-[var(--bs-text-secondary)] font-mono placeholder:text-[var(--bs-text-mute)]
+                                           focus:outline-none focus:border-[var(--bs-brand-tertiary)]/40"
                             />
                         </div>
                     </div>
@@ -209,10 +209,10 @@ function AppearanceSection() {
                 {/* Overlay Opacity Slider */}
                 <div>
                     <div className="flex items-center justify-between mb-2">
-                        <label className="text-xs text-[#adb9d2] uppercase tracking-wider">
+                        <label className="text-xs text-[var(--bs-text-tertiary)] uppercase tracking-wider">
                             Image Overlay Darkness
                         </label>
-                        <span className="text-xs text-[#585e6c] font-mono">
+                        <span className="text-xs text-[var(--bs-text-mute)] font-mono">
                             {preferences.overlayOpacity}%
                         </span>
                     </div>
@@ -222,21 +222,21 @@ function AppearanceSection() {
                         max={100}
                         value={preferences.overlayOpacity}
                         onChange={(e) => updatePreference('overlayOpacity', Number(e.target.value))}
-                        className="w-full h-1 bg-[#171a20] appearance-none cursor-pointer
+                        className="w-full h-1 bg-[var(--bs-card-fg)] appearance-none cursor-pointer
                                    [&::-webkit-slider-thumb]:appearance-none
                                    [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5
-                                   [&::-webkit-slider-thumb]:bg-[#00e6e6] [&::-webkit-slider-thumb]:rounded-full
-                                   [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#00b3b3]"
+                                   [&::-webkit-slider-thumb]:bg-[var(--bs-brand-secondary)] [&::-webkit-slider-thumb]:rounded-full
+                                   [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[var(--bs-brand-tertiary)]"
                     />
                 </div>
 
                 {/* Blur Slider */}
                 <div>
                     <div className="flex items-center justify-between mb-2">
-                        <label className="text-xs text-[#adb9d2] uppercase tracking-wider">
+                        <label className="text-xs text-[var(--bs-text-tertiary)] uppercase tracking-wider">
                             Image Blur Intensity
                         </label>
-                        <span className="text-xs text-[#585e6c] font-mono">
+                        <span className="text-xs text-[var(--bs-text-mute)] font-mono">
                             {preferences.blurAmount}px
                         </span>
                     </div>
@@ -246,21 +246,21 @@ function AppearanceSection() {
                         max={20}
                         value={preferences.blurAmount}
                         onChange={(e) => updatePreference('blurAmount', Number(e.target.value))}
-                        className="w-full h-1 bg-[#171a20] appearance-none cursor-pointer
+                        className="w-full h-1 bg-[var(--bs-card-fg)] appearance-none cursor-pointer
                                    [&::-webkit-slider-thumb]:appearance-none
                                    [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5
-                                   [&::-webkit-slider-thumb]:bg-[#00e6e6] [&::-webkit-slider-thumb]:rounded-full
-                                   [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#00b3b3]"
+                                   [&::-webkit-slider-thumb]:bg-[var(--bs-brand-secondary)] [&::-webkit-slider-thumb]:rounded-full
+                                   [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[var(--bs-brand-tertiary)]"
                     />
                 </div>
 
                 {/* Reset Button */}
-                <div className="pt-2 border-t border-[#1a1e26]">
+                <div className="pt-2 border-t border-[var(--bs-border)]">
                     <button
                         type="button"
                         onClick={resetToDefault}
-                        className="px-4 py-2 text-xs text-[#585e6c] border border-[#1a1e26]
-                                   hover:text-[#adb9d2] hover:border-white/20 transition-colors"
+                        className="px-4 py-2 text-xs text-[var(--bs-text-mute)] border border-[var(--bs-border)]
+                                   hover:text-[var(--bs-text-tertiary)] hover:border-[var(--bs-border)] transition-colors"
                     >
                         ↺ Reset to Default
                     </button>
@@ -305,8 +305,8 @@ export default function ProfileSettings() {
         <div className="flex flex-col items-center gap-6 md:gap-8 max-w-2xl mx-auto py-4 md:py-8 w-full">
             {/* Header */}
             <div className="text-center">
-                <h1 className="text-2xl md:text-4xl font-bold text-white mb-2">Profile &amp; Settings</h1>
-                <p className="text-[#adb9d2] text-sm md:text-base">Configure your profile details and preferences.</p>
+                <h1 className="text-2xl md:text-4xl font-bold text-[var(--bs-text-primary)] mb-2">Profile &amp; Settings</h1>
+                <p className="text-[var(--bs-text-tertiary)] text-sm md:text-base">Configure your profile details and preferences.</p>
             </div>
 
             {/* Appearance Section */}
@@ -318,8 +318,8 @@ export default function ProfileSettings() {
                 onClick={handleLogout}
                 disabled={isLoggingOut}
                 className={`px-8 py-3 border-2 rounded-lg font-semibold text-base transition-all duration-300 ${isLoggingOut
-                    ? 'bg-[#171a20] border-white/20 text-[#585e6c] cursor-not-allowed'
-                    : 'bg-red-900/40 border-[#ff285a]/10 text-white hover:bg-red-900/60 hover:border-[#ff285a]/10'
+                    ? 'bg-[var(--bs-card-fg)] border-[var(--bs-border)] text-[var(--bs-text-mute)] cursor-not-allowed'
+                    : 'bg-red-900/40 border-[var(--bs-error)]/10 text-[var(--bs-text-primary)] hover:bg-red-900/60 hover:border-[var(--bs-error)]/10'
                     }`}
             >
                 {isLoggingOut ? 'Logging out...' : 'Log out'}
