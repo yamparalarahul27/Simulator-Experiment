@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import NumberFlow from '@number-flow/react';
 import Image from 'next/image';
 import CardWithCornerShine from '../ui/CardWithCornerShine';
 import InfoTooltip from '../ui/InfoTooltip';
@@ -27,7 +28,7 @@ export default function JournalStreakCard({ trades, annotations }: JournalStreak
               <InfoTooltip infoKey="tradeStreak" />
             </div>
             <span className="text-[#00ffff] text-[10px] font-mono border border-[#00b3b3]/20 px-2 py-0.5 bg-[#00b3b3]/5">
-              {stats.activeDays}/21 DAYS
+              <NumberFlow value={stats.activeDays} transformTiming={{ duration: 400, easing: 'ease-out' }} />/21 DAYS
             </span>
           </div>
           <p className="text-[#adb9d2] text-xs mt-1">

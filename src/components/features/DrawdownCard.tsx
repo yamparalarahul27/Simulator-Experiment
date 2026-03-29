@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
+import NumberFlow from '@number-flow/react';
 import CardWithCornerShine from '../ui/CardWithCornerShine';
 import InfoTooltip from '../ui/InfoTooltip';
 import type { Trade } from '../../lib/types';
@@ -66,7 +67,7 @@ export default function DrawdownCard({ trades, minHeight = 'min-h-[200px]' }: Dr
         <div className="space-y-3">
           <div>
             <span className="text-num-48 text-[#ff285a] drop-shadow-[0_0_10px_rgba(248,113,113,0.25)]">
-              {formatted}
+              <NumberFlow value={maxDrawdown} prefix="$" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
             </span>
           </div>
           <div className="text-[#585e6c] text-xs font-mono">Max peak-to-trough loss</div>

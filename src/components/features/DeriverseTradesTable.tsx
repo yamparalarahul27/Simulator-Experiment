@@ -1,3 +1,4 @@
+import NumberFlow from '@number-flow/react';
 import { Trade } from '../../lib/types';
 
 interface DeriverseTradesTableProps {
@@ -49,21 +50,21 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
             <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
                 <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-4 md:col-span-1">
                     <p className="text-xs text-[#adb9d2] uppercase tracking-wider mb-1">Total Trades</p>
-                    <p className="text-2xl font-semibold text-white font-mono">{trades.length}</p>
+                    <p className="text-2xl font-semibold text-white font-mono"><NumberFlow value={trades.length} transformTiming={{ duration: 400, easing: 'ease-out' }} /></p>
                 </div>
                 <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-4 md:col-span-2">
                     <p className="text-xs text-[#adb9d2] uppercase tracking-wider mb-1">Total PnL</p>
                     <p className={`text-2xl font-semibold font-mono ${totalPnL >= 0 ? 'text-[#00e66b]' : 'text-[#ff285a]'}`}>
-                        {totalPnL >= 0 ? '+' : ''}{totalPnL.toFixed(2)} USDC
+                        <NumberFlow value={totalPnL} prefix={totalPnL >= 0 ? '+' : ''} suffix=" USDC" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
                     </p>
                 </div>
                 <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-4 md:col-span-1">
                     <p className="text-xs text-[#adb9d2] uppercase tracking-wider mb-1">Win Rate</p>
-                    <p className="text-2xl font-semibold text-white font-mono">{winRate.toFixed(1)}%</p>
+                    <p className="text-2xl font-semibold text-white font-mono"><NumberFlow value={winRate} suffix="%" format={{ minimumFractionDigits: 1, maximumFractionDigits: 1 }} transformTiming={{ duration: 400, easing: 'ease-out' }} /></p>
                 </div>
                 <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-4 md:col-span-1">
                     <p className="text-xs text-[#adb9d2] uppercase tracking-wider mb-1">Total Fees</p>
-                    <p className="text-2xl font-semibold text-white font-mono">{totalFees.toFixed(2)} USDC
+                    <p className="text-2xl font-semibold text-white font-mono"><NumberFlow value={totalFees} suffix=" USDC" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 400, easing: 'ease-out' }} />
                     </p>
                 </div>
                 <div className="rounded-lg bg-blue-600/10 backdrop-blur-xl flex flex-col justify-center md:col-span-1 p-4">

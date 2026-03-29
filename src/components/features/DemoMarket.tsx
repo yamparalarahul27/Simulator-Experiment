@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
+import NumberFlow from '@number-flow/react';
 import SpotConcepts from './SpotConcepts';
 import FutureConcepts from './FutureConcepts';
 import ControlPanel from './ControlPanel';
@@ -94,7 +95,7 @@ function DemoMarketInner({ walletAddress, simulatorKind }: { walletAddress?: str
                         </button>
                     </div>
                     <span className="text-[10px] font-mono text-white">
-                        1 USD = ₹{usdInrRate.toFixed(2)}
+                        1 USD = ₹<NumberFlow value={usdInrRate} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 400, easing: 'ease-out' }} />
                     </span>
                 </div>
             </div>
