@@ -1,9 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import type { LearningModule, LessonConfig } from '@/lib/types';
 import LessonShell from './LessonShell';
 import OrderBookLesson from './OrderBookLesson';
+
+const InteractiveOrderBook = dynamic(() => import('./InteractiveOrderBook'), { ssr: false });
 
 // ============================================
 // Order Book educational content
@@ -273,6 +276,18 @@ function OverviewContent({
                     <p className="text-xs font-mono text-[#585e6c] mt-1">
                         200 more bids than asks within the 0–10% range — bullish liquidity imbalance
                     </p>
+                </div>
+            </div>
+
+            {/* Interactive Order Book */}
+            <div className="border border-[#1a1e26]">
+                <div className="px-4 py-3 border-b border-[#1a1e26] bg-[#0b0e14]/60">
+                    <p className="text-[10px] font-mono text-[#00ffff]/60 uppercase tracking-wider">
+                        Try it — Interactive Order Book
+                    </p>
+                </div>
+                <div className="p-4">
+                    <InteractiveOrderBook showDepthChart showAnnotations />
                 </div>
             </div>
 
