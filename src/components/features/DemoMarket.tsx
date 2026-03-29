@@ -13,17 +13,26 @@ import { Settings } from 'lucide-react';
  * DemoMarket — Page shell with Spot/Future tabs and Control Panel drawer.
  * LivePricesProvider wraps the tree so useSpotTrade (and any child) can
  * consume live prices from context without prop-drilling.
+ *
+ * @param simulatorKind - Controls which tabs are visible:
+ *   'spot'    → only Spot Concepts tab
+ *   'futures' → only Future Concepts tab
+ *   undefined → both tabs (standalone /simulator page)
  */
-export default function DemoMarket({ walletAddress }: { walletAddress?: string | null }) {
+export default function DemoMarket({ walletAddress, simulatorKind }: { walletAddress?: string | null; simulatorKind?: 'spot' | 'futures' }) {
     return (
         <LivePricesProvider>
-            <DemoMarketInner walletAddress={walletAddress} />
+            <DemoMarketInner walletAddress={walletAddress} simulatorKind={simulatorKind} />
         </LivePricesProvider>
     );
 }
 
-function DemoMarketInner({ walletAddress }: { walletAddress?: string | null }) {
-    const [activeTab, setActiveTab] = useState<'spot' | 'future'>('future');
+function DemoMarketInner({ walletAddress, simulatorKind }: { walletAddress?: string | null; simulatorKind?: 'spot' | 'futures' }) {
+    const showSpot = !simulatorKind || simulatorKind === 'spot';
+    const showFuture = !simulatorKind || simulatorKind === 'futures';
+    const showTabs = showSpot && showFuture;
+
+    const [activeTab, setActiveTab] = useState<'spot' | 'future'>(showSpot ? 'spot' : 'future');
     const [controlPanelOpen, setControlPanelOpen] = useState(false);
     const [currencyModalOpen, setCurrencyModalOpen] = useState(false);
 
@@ -90,27 +99,29 @@ function DemoMarketInner({ walletAddress }: { walletAddress?: string | null }) {
                 </div>
             </div>
 
-            {/* Spot / Future Tabs */}
-            <div className="flex border-b border-white/10 mb-4 md:mb-6">
-                <button
-                    onClick={() => setActiveTab('future')}
-                    className={`flex-1 md:flex-none px-4 md:px-6 py-3 text-sm font-mono font-medium transition-all border-b-2 ${activeTab === 'future'
-                        ? 'text-white border-purple-500'
-                        : 'text-white/40 border-transparent hover:text-white/70'
-                        }`}
-                >
-                    Future Concepts
-                </button>
-                <button
-                    onClick={() => setActiveTab('spot')}
-                    className={`flex-1 md:flex-none px-4 md:px-6 py-3 text-sm font-mono font-medium transition-all border-b-2 ${activeTab === 'spot'
-                        ? 'text-white border-purple-500'
-                        : 'text-white/40 border-transparent hover:text-white/70'
-                        }`}
-                >
-                    Spot Concepts
-                </button>
-            </div>
+            {/* Spot / Future Tabs — only shown when both are available */}
+            {showTabs && (
+                <div className="flex border-b border-white/10 mb-4 md:mb-6">
+                    <button
+                        onClick={() => setActiveTab('spot')}
+                        className={`flex-1 md:flex-none px-4 md:px-6 py-3 text-sm font-mono font-medium transition-all border-b-2 ${activeTab === 'spot'
+                            ? 'text-white border-purple-500'
+                            : 'text-white/40 border-transparent hover:text-white/70'
+                            }`}
+                    >
+                        Spot Concepts
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('future')}
+                        className={`flex-1 md:flex-none px-4 md:px-6 py-3 text-sm font-mono font-medium transition-all border-b-2 ${activeTab === 'future'
+                            ? 'text-white border-purple-500'
+                            : 'text-white/40 border-transparent hover:text-white/70'
+                            }`}
+                    >
+                        Future Concepts
+                    </button>
+                </div>
+            )}
 
             {/* Tab Content */}
             <div className="flex gap-0">

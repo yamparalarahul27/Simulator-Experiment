@@ -55,7 +55,7 @@ export default function OrderTypeLesson({ lesson, details, onBack }: OrderTypeLe
 
                 {/* Full Simulator */}
                 <div className="border border-white/10">
-                    <DemoMarket />
+                    <DemoMarket simulatorKind="spot" />
                 </div>
             </div>
         </LessonShell>
