@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
+import NumberFlow from '@number-flow/react';
 import CardWithCornerShine from '../ui/CardWithCornerShine';
 import InfoTooltip from '../ui/InfoTooltip';
 import { Trade } from '../../lib/types';
@@ -38,7 +39,7 @@ export default function LargestGainCard({ trades }: LargestGainCardProps) {
         <div className="space-y-3">
           <div>
             <span className="text-num-48 text-[#00e66b] drop-shadow-[0_0_10px_rgba(34,197,94,0.25)]">
-              {pnlFormatted}
+              <NumberFlow value={Math.abs(pnl)} prefix="+$" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
             </span>
           </div>
 

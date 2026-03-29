@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
+import NumberFlow from '@number-flow/react';
 import CardWithCornerShine from '../ui/CardWithCornerShine';
 import InfoTooltip from '../ui/InfoTooltip';
 import { Trade } from '../../lib/types';
@@ -111,7 +112,7 @@ export default function LargestTradesCard({ trades }: LargestTradesCardProps) {
           {/* Best Trade */}
           <div className="text-center space-y-2">
             <div className="text-[#00e66b] text-num-32 font-mono drop-shadow-[0_0_10px_rgba(34,197,94,0.25)]">
-              {bestPnlFormatted}
+              <NumberFlow value={bestTrade ? Math.abs(bestTrade.pnl) : 0} prefix="+$" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
             </div>
 
             {bestTrade ? (
@@ -137,7 +138,7 @@ export default function LargestTradesCard({ trades }: LargestTradesCardProps) {
           {/* Worst Trade */}
           <div className="text-center space-y-2">
             <div className="text-num-32 font-mono text-[#ff285a] drop-shadow-[0_0_10px_rgba(248,113,113,0.25)]">
-              {worstPnlFormatted}
+              <NumberFlow value={worstTrade ? Math.abs(worstTrade.pnl) : 0} prefix="-$" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
             </div>
 
             {worstTrade ? (

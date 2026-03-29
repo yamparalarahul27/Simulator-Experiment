@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
+import NumberFlow from '@number-flow/react';
 import CardWithCornerShine from '../ui/CardWithCornerShine';
 import InfoTooltip from '../ui/InfoTooltip';
 import type { Trade } from '../../lib/types';
@@ -49,13 +50,13 @@ export default function OrderTypeRatioCard({ trades }: OrderTypeRatioCardProps) 
         <div className="space-y-2">
           <div className="flex items-baseline gap-2">
             <span className="text-num-48 text-[#00e66b] drop-shadow-[0_0_5px_rgba(34,197,94,0.3)]">
-              {ratio.limitPercent}%
+              <NumberFlow value={ratio.limitPercent} suffix="%" transformTiming={{ duration: 500, easing: 'ease-out' }} />
             </span>
             <span className="text-[#adb9d2] text-sm font-mono">Limit</span>
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-num-48 text-[#ff285a] drop-shadow-[0_0_5px_rgba(248,113,113,0.3)]">
-              {ratio.marketPercent}%
+              <NumberFlow value={ratio.marketPercent} suffix="%" transformTiming={{ duration: 500, easing: 'ease-out' }} />
             </span>
             <span className="text-[#adb9d2] text-sm font-mono">Market</span>
           </div>

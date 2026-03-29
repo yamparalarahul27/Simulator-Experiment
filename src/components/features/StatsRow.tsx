@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
+import NumberFlow from '@number-flow/react';
 import CardWithCornerShine from '../ui/CardWithCornerShine';
 import { MOCK_TRADES } from '../../lib/mockData';
 import { calculateWinRate, calculateAvgWin, calculateAvgLoss, filterTradesByDate, FilterType } from '../../lib/tradeFilters';
@@ -36,7 +37,7 @@ export default function StatsRow({ activeFilter = 'All', trades }: StatsRowProps
                     </div>
                     <div className="flex flex-col items-start gap-2">
                         <span className="text-num-48 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
-                            {stats.winRate}%
+                            <NumberFlow value={parseFloat(stats.winRate)} suffix="%" format={{ minimumFractionDigits: 1, maximumFractionDigits: 1 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
                         </span>
                         <div className="flex items-center gap-2">
                             <span className="px-1.5 py-0.5 bg-[#171a20] text-[#adb9d2] text-xs font-mono rounded-sm">
@@ -58,7 +59,7 @@ export default function StatsRow({ activeFilter = 'All', trades }: StatsRowProps
                     </div>
                     <div>
                         <span className="text-num-48 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)] text-[#00e66b]">
-                            +${Math.abs(stats.avgWin).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            <NumberFlow value={Math.abs(stats.avgWin)} prefix="+$" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
                         </span>
                     </div>
                 </div>
@@ -75,9 +76,7 @@ export default function StatsRow({ activeFilter = 'All', trades }: StatsRowProps
                     </div>
                     <div>
                         <span className="text-num-48 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)] text-[#ff285a]">
-                            {stats.avgLoss === 0
-                                ? '$0.00'
-                                : `-$${Math.abs(stats.avgLoss).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                            <NumberFlow value={Math.abs(stats.avgLoss)} prefix={stats.avgLoss === 0 ? '$' : '-$'} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
                         </span>
                     </div>
                 </div>
