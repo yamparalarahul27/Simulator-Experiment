@@ -56,7 +56,7 @@ export default function TableUI_Demo({ activeFilter = 'All', trades }: TableUIDe
                     <img
                         src={row.pairImage}
                         alt={value}
-                        className="w-6 h-6 rounded-none"
+                        className="w-6 h-6 rounded-lg"
                     />
                     <span className="font-mono">{value}</span>
                 </div>

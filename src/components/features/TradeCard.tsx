@@ -50,7 +50,7 @@ export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardPr
                         <img
                             src={pairImage}
                             alt={trade.symbol}
-                            className="w-12 h-12 rounded-none"
+                            className="w-12 h-12 rounded-lg"
                         />
 
                         <div>
@@ -62,7 +62,7 @@ export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardPr
                     </div>
                     <button
                         onClick={onAnnotate}
-                        className={`relative z-20 p-2 rounded-none transition-colors group/btn ${annotation
+                        className={`relative z-20 p-2 rounded-lg transition-colors group/btn ${annotation
                             ? 'bg-[#00b3b3]/20 text-[#00ffff] hover:bg-[#00b3b3]/30'
                             : 'bg-[#11141a] text-[#585e6c] hover:bg-[#171a20] hover:text-[#adb9d2]'
                             }`}

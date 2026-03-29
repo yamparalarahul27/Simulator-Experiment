@@ -75,7 +75,7 @@ const FILTER_LABELS: Record<FilterType, string> = {
                             key={filter}
                             type="button"
                             onClick={() => onFilterChange(filter)}
-                            className={`px-4 py-2 rounded-none text-sm font-mono transition-all duration-200 border-b-2 ${activeFilter === filter
+                            className={`px-4 py-2 rounded-lg text-sm font-mono transition-all duration-200 border-b-2 ${activeFilter === filter
                                 ? 'bg-[#00b3b3]/20 border-[#00b3b3] text-white/100'
                                 : 'bg-[#11141a] border-x border-t border-[#1a1e26] border-b-transparent text-[#adb9d2] hover:bg-[#171a20] hover:border-white/20'
                                 }`}
@@ -93,7 +93,7 @@ const FILTER_LABELS: Record<FilterType, string> = {
                         <Button
                             variant="outline"
                             id="date-picker-range"
-                            className="w-full justify-between px-2.5 font-normal rounded-none"
+                            className="w-full justify-between px-2.5 font-normal rounded-lg"
                             suppressHydrationWarning
                         >
                             <span className="inline-flex items-center gap-2">
@@ -135,7 +135,7 @@ const FILTER_LABELS: Record<FilterType, string> = {
                     <PopoverTrigger asChild>
                         <Button
                             variant="outline"
-                            className="w-full justify-between px-2.5 font-normal rounded-none"
+                            className="w-full justify-between px-2.5 font-normal rounded-lg"
                         >
                             <span className="text-[#ced5e4]">
                                 {selectedCount === 0
@@ -165,7 +165,7 @@ const FILTER_LABELS: Record<FilterType, string> = {
                                 <div
                                     key={pair}
                                     onClick={() => togglePair(pair)}
-                                    className="w-full flex items-center justify-between gap-3 px-2 py-2 rounded-none border border-[#1a1e26] bg-[#11141a] hover:bg-[#171a20] transition-colors cursor-pointer"
+                                    className="w-full flex items-center justify-between gap-3 px-2 py-2 rounded-lg border border-[#1a1e26] bg-[#11141a] hover:bg-[#171a20] transition-colors cursor-pointer"
                                 >
                                     <div className="flex items-center gap-3">
                                         <Checkbox
@@ -185,7 +185,7 @@ const FILTER_LABELS: Record<FilterType, string> = {
             <div className="w-full sm:w-[140px]">
                 <Button
                     variant="default"
-                    className="w-full rounded-none"
+                    className="w-full rounded-lg"
                     onClick={onApply}
                 >
                     Apply

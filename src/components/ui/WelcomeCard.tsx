@@ -65,7 +65,7 @@ export const WelcomeCard = ({ children, className = '' }: WelcomeCardProps) => {
                 group relative
                 min-h-0 sm:min-h-[400px]
                 w-full max-w-[500px]
-                rounded-none
+                rounded-lg
                 bg-[#0b0e14]/40
                 border border-[#1a1e26]
                 hover:border-white/20

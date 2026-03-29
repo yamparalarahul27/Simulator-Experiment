@@ -82,7 +82,7 @@ export default function NewUserModal({ isVisible, onChoice, walletAddress }: New
                                     </p>
                                     
                                     {/* Wallet Address Display */}
-                                    <div className="mt-4 p-3 bg-[#11141a] border border-[#1a1e26] rounded-none">
+                                    <div className="mt-4 p-3 bg-[#11141a] border border-[#1a1e26] rounded-lg">
                                         <p className="text-xs text-[#adb9d2] uppercase tracking-wider mb-1">Your Wallet</p>
                                         <p className="text-sm font-mono text-[#ced5e4]">
                                             {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}

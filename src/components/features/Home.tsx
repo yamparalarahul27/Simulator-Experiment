@@ -255,7 +255,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
         </div>
         <button
           onClick={onNavigateToLookup}
-          className="px-6 py-3 bg-[#00b3b3]/50 hover:bg-[#00b3b3]/40 text-white font-medium rounded-none transition-colors"
+          className="px-6 py-3 bg-[#00b3b3]/50 hover:bg-[#00b3b3]/40 text-white font-medium rounded-lg transition-colors"
         >
           Add Wallet
         </button>

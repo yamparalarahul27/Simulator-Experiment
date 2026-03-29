@@ -28,7 +28,7 @@ interface DeriverseTradesTableProps {
 export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrades = false, currentWalletAddress }: DeriverseTradesTableProps) {
     if (trades.length === 0) {
         return (
-            <div className="rounded-none border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl overflow-hidden p-12 text-center">
+            <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl overflow-hidden p-12 text-center">
                 <p className="text-[#adb9d2]">No Deriverse trades found for this address</p>
                 <p className="text-[#585e6c] text-sm mt-2">
                     This wallet may not have any trading activity on Deriverse Devnet
@@ -47,31 +47,31 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
         <div className="space-y-4">
             {/* Statistics Summary */}
             <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
-                <div className="rounded-none border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-4 md:col-span-1">
+                <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-4 md:col-span-1">
                     <p className="text-xs text-[#adb9d2] uppercase tracking-wider mb-1">Total Trades</p>
                     <p className="text-2xl font-semibold text-white font-mono">{trades.length}</p>
                 </div>
-                <div className="rounded-none border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-4 md:col-span-2">
+                <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-4 md:col-span-2">
                     <p className="text-xs text-[#adb9d2] uppercase tracking-wider mb-1">Total PnL</p>
                     <p className={`text-2xl font-semibold font-mono ${totalPnL >= 0 ? 'text-[#00e66b]' : 'text-[#ff285a]'}`}>
                         {totalPnL >= 0 ? '+' : ''}{totalPnL.toFixed(2)} USDC
                     </p>
                 </div>
-                <div className="rounded-none border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-4 md:col-span-1">
+                <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-4 md:col-span-1">
                     <p className="text-xs text-[#adb9d2] uppercase tracking-wider mb-1">Win Rate</p>
                     <p className="text-2xl font-semibold text-white font-mono">{winRate.toFixed(1)}%</p>
                 </div>
-                <div className="rounded-none border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-4 md:col-span-1">
+                <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-4 md:col-span-1">
                     <p className="text-xs text-[#adb9d2] uppercase tracking-wider mb-1">Total Fees</p>
                     <p className="text-2xl font-semibold text-white font-mono">{totalFees.toFixed(2)} USDC
                     </p>
                 </div>
-                <div className="rounded-none bg-blue-600/10 backdrop-blur-xl flex flex-col justify-center md:col-span-1 p-4">
+                <div className="rounded-lg bg-blue-600/10 backdrop-blur-xl flex flex-col justify-center md:col-span-1 p-4">
                     {onSaveTrades && trades.length > 0 && currentWalletAddress ? (
                         <button
                             onClick={onSaveTrades}
                             disabled={savingTrades}
-                            className="px-4 py-2 bg-[#69a2f1] border border-[#1a1e26] text-white rounded-none font-semibold hover:bg-[#69a2f1]/80 transition disabled:bg-blue-900/40 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
+                            className="px-4 py-2 bg-[#69a2f1] border border-[#1a1e26] text-white rounded-lg font-semibold hover:bg-[#69a2f1]/80 transition disabled:bg-blue-900/40 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
                         >
                             {savingTrades ? (
                                 <>
@@ -95,7 +95,7 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
             </div>
 
             {/* Trades Table */}
-            <div className="rounded-none border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl overflow-hidden">
+            <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl overflow-hidden">
                 <div className="px-6 py-4 border-b border-[#1a1e26] bg-gradient-to-r from-white/5 to-transparent">
                     <h3 className="text-lg font-semibold text-white">Deriverse Trades</h3>
                     <p className="text-sm text-[#adb9d2] mt-1">Showing {trades.length} trades parsed from on-chain data</p>
@@ -134,7 +134,7 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
                                             {trade.symbol}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className={`px-3 py-1.5 rounded-none text-xs font-semibold backdrop-blur-sm
+                                            <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur-sm
                                       ${isPerp
                                                     ? 'bg-[#00b3b3]/20 text-[#00e6e6] border border-[#00b3b3]/30'
                                                     : 'bg-[#69a2f1]/20 text-blue-300 border border-[#69a2f1]/30'}`}>
@@ -142,7 +142,7 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className={`px-3 py-1.5 rounded-none text-xs font-semibold backdrop-blur-sm
+                                            <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur-sm
                                       ${trade.side === 'buy' || trade.side === 'long'
                                                     ? 'bg-[#00e66b]/20 text-green-300 border border-[#00e66b]/30'
                                                     : 'bg-[#ff285a]/20 text-red-300 border border-[#ff285a]/30'}`}>

@@ -286,9 +286,9 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                             max={100}
                             value={leverage}
                             onChange={e => setLeverage(parseInt(e.target.value))}
-                            className="w-full h-1.5 appearance-none bg-[#171a20] rounded-none cursor-pointer accent-[#00b3b3]
-                                [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-[#00e6e6] [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:cursor-pointer
-                                [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:bg-[#00e6e6] [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer"
+                            className="w-full h-1.5 appearance-none bg-[#171a20] rounded-lg cursor-pointer accent-[#00b3b3]
+                                [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-[#00e6e6] [&::-webkit-slider-thumb]:rounded-lg [&::-webkit-slider-thumb]:cursor-pointer
+                                [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:bg-[#00e6e6] [&::-moz-range-thumb]:rounded-lg [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer"
                         />
                         <div className="flex justify-between text-[8px] font-mono text-[#585e6c] mt-0.5">
                             <span>1x</span>

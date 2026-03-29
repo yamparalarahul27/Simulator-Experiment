@@ -74,7 +74,7 @@ export default function RoadmapScreen() {
                 {phases.map((phase) => (
                     <div
                         key={phase.title}
-                        className={`rounded-none border p-4 md:p-6 ${
+                        className={`rounded-lg border p-4 md:p-6 ${
                             phase.status === 'done'
                                 ? 'border-cyan-500/20 bg-cyan-500/5'
                                 : phase.status === 'next'

@@ -317,7 +317,7 @@ export default function ProfileSettings() {
                 type="button"
                 onClick={handleLogout}
                 disabled={isLoggingOut}
-                className={`px-8 py-3 border-2 rounded-none font-semibold text-base transition-all duration-300 ${isLoggingOut
+                className={`px-8 py-3 border-2 rounded-lg font-semibold text-base transition-all duration-300 ${isLoggingOut
                     ? 'bg-[#171a20] border-white/20 text-[#585e6c] cursor-not-allowed'
                     : 'bg-red-900/40 border-[#ff285a]/10 text-white hover:bg-red-900/60 hover:border-[#ff285a]/10'
                     }`}

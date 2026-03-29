@@ -35,7 +35,7 @@ export const WelcomeButton = ({
             className={`
                 brand_button_primary
                 px-8 py-4
-                rounded-none
+                rounded-lg
                 border-2
                 bg-[#0A2260]
                 border-[#2651C2]
