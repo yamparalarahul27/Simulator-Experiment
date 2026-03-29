@@ -127,8 +127,8 @@ export default function AssistantModal() {
                 {isOpen && (
                     <motion.div
                         className="fixed z-[70]
-                            inset-x-0 bottom-0 max-h-[85vh] rounded-t-2xl
-                            md:inset-x-auto md:bottom-auto md:top-0 md:right-0 md:max-h-none md:h-full md:w-[420px] md:rounded-none
+                            inset-x-0 bottom-0 max-h-[85vh] max-w-[100vw] overflow-x-hidden rounded-t-2xl
+                            md:inset-x-auto md:bottom-auto md:top-0 md:right-0 md:max-h-none md:max-w-none md:h-full md:w-[420px] md:rounded-none
                             bg-[#0B0E14]/95 backdrop-blur-xl border-t border-white/10 md:border-t-0 md:border-l
                             flex flex-col shadow-2xl shadow-black/50"
                         initial={isDesktop ? { x: "100%", y: 0 } : { y: "100%", x: 0 }}
