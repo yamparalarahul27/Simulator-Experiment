@@ -23,7 +23,7 @@ export default function DemoMarket({ walletAddress }: { walletAddress?: string |
 }
 
 function DemoMarketInner({ walletAddress }: { walletAddress?: string | null }) {
-    const [activeTab, setActiveTab] = useState<'spot' | 'future'>('future');
+    const [activeTab, setActiveTab] = useState<'spot' | 'future'>('spot');
     const [controlPanelOpen, setControlPanelOpen] = useState(false);
     const [currencyModalOpen, setCurrencyModalOpen] = useState(false);
 
@@ -93,15 +93,6 @@ function DemoMarketInner({ walletAddress }: { walletAddress?: string | null }) {
             {/* Spot / Future Tabs */}
             <div className="flex border-b border-white/10 mb-4 md:mb-6">
                 <button
-                    onClick={() => setActiveTab('future')}
-                    className={`flex-1 md:flex-none px-4 md:px-6 py-3 text-sm font-mono font-medium transition-all border-b-2 ${activeTab === 'future'
-                        ? 'text-white border-purple-500'
-                        : 'text-white/40 border-transparent hover:text-white/70'
-                        }`}
-                >
-                    Future Concepts
-                </button>
-                <button
                     onClick={() => setActiveTab('spot')}
                     className={`flex-1 md:flex-none px-4 md:px-6 py-3 text-sm font-mono font-medium transition-all border-b-2 ${activeTab === 'spot'
                         ? 'text-white border-purple-500'
@@ -109,6 +100,15 @@ function DemoMarketInner({ walletAddress }: { walletAddress?: string | null }) {
                         }`}
                 >
                     Spot Concepts
+                </button>
+                <button
+                    onClick={() => setActiveTab('future')}
+                    className={`flex-1 md:flex-none px-4 md:px-6 py-3 text-sm font-mono font-medium transition-all border-b-2 ${activeTab === 'future'
+                        ? 'text-white border-purple-500'
+                        : 'text-white/40 border-transparent hover:text-white/70'
+                        }`}
+                >
+                    Future Concepts
                 </button>
             </div>
 
