@@ -44,7 +44,7 @@ const AssetIcon = ({ trade }: { trade: Trade }) => {
           console.log('Icon loaded successfully:', iconPath);
         }}
       />
-      <span className="w-[26px] h-[26px] mr-2 hidden items-center justify-center bg-[#0b0e14] text-white text-xs font-mono rounded-none">
+      <span className="w-[26px] h-[26px] mr-2 hidden items-center justify-center bg-[#0b0e14] text-white text-xs font-mono rounded-lg">
         {trade.symbol.slice(0, 3)}
       </span>
     </>

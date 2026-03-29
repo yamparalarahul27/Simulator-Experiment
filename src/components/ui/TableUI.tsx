@@ -127,7 +127,7 @@ export const TableUI = <T extends Record<string, any>>({
 
     return (
         <div
-            className={`w-full overflow-hidden rounded-none border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl shadow-2xl flex flex-col ${className}`}
+            className={`w-full overflow-hidden rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl shadow-2xl flex flex-col ${className}`}
             style={{ maxHeight }}
         >
             <div className="overflow-auto flex-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/20">

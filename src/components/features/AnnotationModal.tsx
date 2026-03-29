@@ -127,7 +127,7 @@ export default function AnnotationModal({
                                 className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden"
                             >
                                 {/* Glassmorphism Container */}
-                                <div className="relative overflow-hidden rounded-none border border-[#1a1e26] bg-[#0b0e14]/95 backdrop-blur-xl shadow-2xl">
+                                <div className="relative overflow-hidden rounded-lg border border-[#1a1e26] bg-[#0b0e14]/95 backdrop-blur-xl shadow-2xl">
                                     {/* Corner Accents */}
                                     <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#00b3b3]/40"></div>
                                     <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#00b3b3]/40"></div>
@@ -139,7 +139,7 @@ export default function AnnotationModal({
                                         <h2 className="text-xl font-bold text-white">Trade Note</h2>
                                         <button
                                             onClick={handleClose}
-                                            className="rounded-none p-2 text-[#adb9d2] transition-colors hover:bg-[#171a20] hover:text-white"
+                                            className="rounded-lg p-2 text-[#adb9d2] transition-colors hover:bg-[#171a20] hover:text-white"
                                         >
                                             <X className="h-5 w-5" />
                                         </button>
@@ -265,7 +265,7 @@ export default function AnnotationModal({
                                                     }
                                                 }}
                                                 placeholder="Add your thoughts, entry reasons, or emotional state..."
-                                                className="w-full h-28 rounded-none border border-[#1a1e26] bg-[#11141a] px-4 py-3 text-white placeholder:text-[#585e6c] focus:border-[#00b3b3]/40 focus:outline-none focus:ring-1 focus:ring-[#00b3b3]/20 resize-none text-sm"
+                                                className="w-full h-28 rounded-lg border border-[#1a1e26] bg-[#11141a] px-4 py-3 text-white placeholder:text-[#585e6c] focus:border-[#00b3b3]/40 focus:outline-none focus:ring-1 focus:ring-[#00b3b3]/20 resize-none text-sm"
                                             />
                                             <div className="flex justify-end text-[10px] font-mono">
                                                 <span className={`transition-colors ${remainingNoteChars < 50 ? 'text-yellow-400' : 'text-[#585e6c]'}`}>
@@ -287,7 +287,7 @@ export default function AnnotationModal({
                                                     }
                                                 }}
                                                 placeholder="What is the one thing you learned from this?"
-                                                className="w-full h-16 rounded-none border border-[#00b3b3]/20 bg-[#0b0e14]/40 px-4 py-2 text-sm text-white placeholder:text-[#00ffff]/20 focus:border-[#00b3b3]/40 focus:outline-none transition-all resize-none italic"
+                                                className="w-full h-16 rounded-lg border border-[#00b3b3]/20 bg-[#0b0e14]/40 px-4 py-2 text-sm text-white placeholder:text-[#00ffff]/20 focus:border-[#00b3b3]/40 focus:outline-none transition-all resize-none italic"
                                             />
                                             <div className="flex items-center justify-between text-[10px]">
                                                 <span className="text-[#00ffff]/40 italic">
@@ -303,13 +303,13 @@ export default function AnnotationModal({
                                     <div className="relative z-10 flex justify-end gap-3 border-t border-[#1a1e26] p-6 bg-[#0b0e14]">
                                         <button
                                             onClick={handleClose}
-                                            className="rounded-none border border-[#1a1e26] bg-[#11141a] px-6 py-2.5 text-sm font-medium text-[#ced5e4] transition-colors hover:bg-[#171a20]"
+                                            className="rounded-lg border border-[#1a1e26] bg-[#11141a] px-6 py-2.5 text-sm font-medium text-[#ced5e4] transition-colors hover:bg-[#171a20]"
                                         >
                                             Cancel
                                         </button>
                                         <button
                                             onClick={handleSave}
-                                            className="rounded-none bg-[#00b3b3] px-6 py-2.5 text-sm font-medium text-white transition-all hover:bg-[#00b3b3] shadow-[0_0_20px_rgba(0,179,179,0.3)]"
+                                            className="rounded-lg bg-[#00b3b3] px-6 py-2.5 text-sm font-medium text-white transition-all hover:bg-[#00b3b3] shadow-[0_0_20px_rgba(0,179,179,0.3)]"
                                         >
                                             Save Annotation
                                         </button>

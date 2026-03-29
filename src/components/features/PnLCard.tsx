@@ -119,11 +119,11 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                             <span className="text-[#adb9d2] text-sm">Show Drawdown on Chart</span>
                             <button
                                 onClick={() => setShowDrawdown(!showDrawdown)}
-                                className={`relative inline-flex h-6 w-11 items-center rounded-none bg-black/10 border border-[#1a1e26] transition-colors duration-300 ${showDrawdown ? 'bg-[#00b3b3]' : 'bg-[#585e6c]'
+                                className={`relative inline-flex h-6 w-11 items-center rounded-lg bg-black/10 border border-[#1a1e26] transition-colors duration-300 ${showDrawdown ? 'bg-[#00b3b3]' : 'bg-[#585e6c]'
                                     }`}
                             >
                                 <span
-                                    className={`inline-block h-4 w-4 transform rounded-none bg-white transition-transform duration-300 ${showDrawdown ? 'translate-x-6' : 'translate-x-1'
+                                    className={`inline-block h-4 w-4 transform rounded-lg bg-white transition-transform duration-300 ${showDrawdown ? 'translate-x-6' : 'translate-x-1'
                                         }`}
                                 />
                             </button>
