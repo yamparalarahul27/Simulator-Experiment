@@ -64,7 +64,7 @@ function DemoMarketInner({ walletAddress, simulatorKind }: { walletAddress?: str
     const closeCurrencyModal = useCallback(() => setCurrencyModalOpen(false), []);
 
     return (
-        <div className="relative">
+        <div className="relative p-1">
             {/* Header */}
             <div className="flex flex-col gap-3 mb-4 md:mb-6 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center gap-2 md:gap-4 min-w-0">
