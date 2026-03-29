@@ -4,7 +4,7 @@ import { usePathname } from '@/i18n/navigation';
 import RouteBasedNavbar from './RouteBasedNavbar';
 import Footer from './Footer';
 
-const FULL_SCREEN_ROUTES = ['/simulator', '/assistant'];
+const FULL_SCREEN_ROUTES = ['/simulator'];
 
 export function LayoutShell({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
