@@ -10,9 +10,9 @@ import { useRouter } from '@/i18n/navigation';
 
 function DifficultyBadge({ level }: { level: LearningModule['difficulty'] }) {
     const config = {
-        beginner: { label: 'Beginner', color: 'text-green-400/80 bg-green-500/10 border-green-500/20' },
+        beginner: { label: 'Beginner', color: 'text-[#00e66b]/80 bg-[#00e66b]/10 border-[#00e66b]/20' },
         intermediate: { label: 'Intermediate', color: 'text-yellow-400/80 bg-yellow-500/10 border-yellow-500/20' },
-        advanced: { label: 'Advanced', color: 'text-red-400/80 bg-red-500/10 border-red-500/20' },
+        advanced: { label: 'Advanced', color: 'text-[#ff285a]/80 bg-[#ff285a]/10 border-[#ff285a]/20' },
     };
     const { label, color } = config[level];
 
@@ -35,10 +35,10 @@ function ModuleCard({ module, onClick }: { module: LearningModule; onClick?: () 
             onClick={isActive ? onClick : undefined}
             disabled={!isActive}
             className={`
-                w-full text-left bg-black border p-6 flex flex-col gap-3 transition-all duration-200
+                w-full text-left bg-[#0b0e14] border p-6 flex flex-col gap-3 transition-all duration-200
                 ${isActive
-                    ? 'border-white/10 hover:border-white/25 hover:bg-white/[0.02] cursor-pointer'
-                    : 'border-white/5 opacity-50 cursor-not-allowed'
+                    ? 'border-[#1a1e26] hover:border-white/25 hover:bg-white/[0.02] cursor-pointer'
+                    : 'border-[#1a1e26] opacity-50 cursor-not-allowed'
                 }
             `}
         >
@@ -48,20 +48,20 @@ function ModuleCard({ module, onClick }: { module: LearningModule; onClick?: () 
                     <h2 className="text-base font-mono font-semibold text-white">{module.title}</h2>
                 </div>
                 {module.comingSoon ? (
-                    <span className="text-[9px] font-mono uppercase tracking-wider text-purple-400/70 bg-purple-500/10 px-2 py-0.5 border border-purple-500/20">
+                    <span className="text-[9px] font-mono uppercase tracking-wider text-[#00ffff]/70 bg-[#00b3b3]/10 px-2 py-0.5 border border-[#00b3b3]/20">
                         Coming Soon
                     </span>
                 ) : (
                     <DifficultyBadge level={module.difficulty} />
                 )}
             </div>
-            <p className="text-xs font-mono text-white/40 leading-relaxed">{module.description}</p>
+            <p className="text-xs font-mono text-[#585e6c] leading-relaxed">{module.description}</p>
             {isActive && module.lessons.length > 0 && (
                 <div className="flex items-center justify-between mt-1">
-                    <span className="text-[10px] font-mono text-white/30">
+                    <span className="text-[10px] font-mono text-[#585e6c]">
                         {module.lessons.length} lessons
                     </span>
-                    <span className="text-xs font-mono text-purple-400/70">
+                    <span className="text-xs font-mono text-[#00ffff]/70">
                         Start &rarr;
                     </span>
                 </div>
@@ -76,7 +76,7 @@ function ModuleCard({ module, onClick }: { module: LearningModule; onClick?: () 
 
 function HeroSection({ onStartLearning }: { onStartLearning: () => void }) {
     return (
-        <div className="relative border border-white/10 bg-gradient-to-br from-purple-900/20 via-black to-black overflow-hidden">
+        <div className="relative border border-[#1a1e26] bg-gradient-to-br from-[#00b3b3]/20 via-black to-black overflow-hidden">
             {/* Subtle grid pattern */}
             <div
                 className="absolute inset-0 opacity-[0.03]"
@@ -90,18 +90,18 @@ function HeroSection({ onStartLearning }: { onStartLearning: () => void }) {
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                     <div className="space-y-3">
                         <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-mono uppercase tracking-widest text-purple-400/80 bg-purple-500/10 px-2.5 py-1 border border-purple-500/20">
+                            <span className="text-[10px] font-mono uppercase tracking-widest text-[#00ffff]/80 bg-[#00b3b3]/10 px-2.5 py-1 border border-[#00b3b3]/20">
                                 Featured Lab
                             </span>
                         </div>
                         <h2 className="text-xl sm:text-2xl md:text-3xl font-mono font-bold text-white">
                             Order Types Lab
                         </h2>
-                        <p className="text-sm font-mono text-white/50 max-w-lg leading-relaxed">
+                        <p className="text-sm font-mono text-[#adb9d2] max-w-lg leading-relaxed">
                             Learn all 8 order types with live simulation. Place orders, watch them execute
                             on an interactive state diagram, and understand exactly how each type works.
                         </p>
-                        <div className="flex items-center gap-3 text-xs font-mono text-white/30">
+                        <div className="flex items-center gap-3 text-xs font-mono text-[#585e6c]">
                             <span>9 lessons</span>
                             <span className="text-white/10">|</span>
                             <span>Interactive simulator</span>
@@ -111,7 +111,7 @@ function HeroSection({ onStartLearning }: { onStartLearning: () => void }) {
                     </div>
                     <button
                         onClick={onStartLearning}
-                        className="px-8 py-3 bg-purple-600/80 hover:bg-purple-600 border border-purple-500/30 text-white font-mono text-sm font-medium transition-all duration-200 whitespace-nowrap"
+                        className="px-8 py-3 bg-[#00b3b3]/80 hover:bg-[#00b3b3] border border-[#00b3b3]/30 text-white font-mono text-sm font-medium transition-all duration-200 whitespace-nowrap"
                     >
                         Start Learning &rarr;
                     </button>
@@ -137,7 +137,7 @@ export default function Web3Hub() {
             {/* Header */}
             <div>
                 <h1 className="text-2xl font-mono font-bold text-white tracking-wide">Learn</h1>
-                <p className="text-sm font-mono text-white/50 mt-1">
+                <p className="text-sm font-mono text-[#adb9d2] mt-1">
                     Solving Why of DEX — interactive lessons & simulators
                 </p>
             </div>
@@ -147,7 +147,7 @@ export default function Web3Hub() {
 
             {/* Module Grid */}
             <div>
-                <h3 className="text-xs font-mono uppercase tracking-widest text-white/30 mb-4">
+                <h3 className="text-xs font-mono uppercase tracking-widest text-[#585e6c] mb-4">
                     Learning Modules
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

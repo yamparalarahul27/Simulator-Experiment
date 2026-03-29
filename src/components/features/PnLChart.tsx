@@ -17,20 +17,20 @@ const CustomTooltip = ({ active, payload, label, showDrawdown }: any) => {
         const ratioInfo = showDrawdown && payload.find((p: any) => p.name === 'pnlToDrawdownRatio');
 
         return (
-            <div className="bg-black/90 border border-white/10 p-3 rounded shadow-xl backdrop-blur-md">
-                <p className="text-white/60 text-xs mb-1">Time: {label}</p>
+            <div className="bg-[#0b0e14]/90 border border-[#1a1e26] p-3 rounded shadow-xl backdrop-blur-md">
+                <p className="text-[#adb9d2] text-xs mb-1">Time: {label}</p>
                 {pnlInfo && (
                     <p style={{ color: pnlInfo.color }} className="text-sm font-mono font-bold mb-1">
                         PnL: {pnlInfo.value.toFixed(2)}
                     </p>
                 )}
                 {drawdownInfo && drawdownInfo.value > 0 && (
-                    <p className="text-red-400 text-sm font-mono mb-1">
+                    <p className="text-[#ff285a] text-sm font-mono mb-1">
                         Drawdown: -{drawdownInfo.value.toFixed(2)}%
                     </p>
                 )}
                 {ratioInfo && (
-                    <p className="text-purple-400 text-sm font-mono">
+                    <p className="text-[#00ffff] text-sm font-mono">
                         PnL/DD: {ratioInfo.value.toFixed(2)}x
                     </p>
                 )}

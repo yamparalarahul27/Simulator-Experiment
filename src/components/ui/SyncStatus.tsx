@@ -69,10 +69,10 @@ export default function SyncStatus({
   return (
     <div className="flex items-center">
       {context === 'home' && <InfoTooltip infoKey="lastIngestion" />}
-      <span className="text-white/60 text-sm font-mono ml-2 mr-2">
+      <span className="text-[#adb9d2] text-sm font-mono ml-2 mr-2">
         {context === 'tradeHistory' ? 'Data status:' : 'Last ingestion:'}
       </span>
-      <span className="text-sm font-mono text-white/70">
+      <span className="text-sm font-mono text-[#ced5e4]">
         {getDisplayText()}
       </span>
     </div>

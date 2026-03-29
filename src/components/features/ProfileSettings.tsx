@@ -72,14 +72,14 @@ function AppearanceSection() {
     );
 
     return (
-        <div className="w-full border border-white/10 bg-white/[0.03]">
+        <div className="w-full border border-[#1a1e26] bg-white/[0.03]">
             {/* Section Header */}
-            <div className="px-5 py-3 border-b border-white/10">
+            <div className="px-5 py-3 border-b border-[#1a1e26]">
                 <h2 className="text-sm font-semibold text-white/90 uppercase tracking-wider">
                     Appearance
                 </h2>
                 {!connected && (
-                    <p className="text-xs text-white/40 mt-1">
+                    <p className="text-xs text-[#585e6c] mt-1">
                         Connect your wallet to save appearance settings.
                     </p>
                 )}
@@ -88,7 +88,7 @@ function AppearanceSection() {
             <div className="p-5 space-y-6">
                 {/* Background Mode Selector */}
                 <div>
-                    <label className="text-xs text-white/50 uppercase tracking-wider mb-2 block">
+                    <label className="text-xs text-[#adb9d2] uppercase tracking-wider mb-2 block">
                         Background Mode
                     </label>
                     <div className="flex gap-2">
@@ -106,8 +106,8 @@ function AppearanceSection() {
                                         flex items-center gap-2 px-4 py-2 text-sm font-medium
                                         border transition-all duration-200
                                         ${isActive
-                                            ? 'border-purple-500/60 bg-purple-500/15 text-white'
-                                            : 'border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20 hover:text-white/80'
+                                            ? 'border-[#00b3b3]/60 bg-[#00b3b3]/15 text-white'
+                                            : 'border-[#1a1e26] bg-white/[0.03] text-[#adb9d2] hover:border-white/20 hover:text-[#ced5e4]'
                                         }
                                         ${isDisabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}
                                     `}
@@ -124,13 +124,13 @@ function AppearanceSection() {
                 {/* Custom Image Upload */}
                 {preferences.bgType === 'custom' && (
                     <div className="space-y-3">
-                        <label className="text-xs text-white/50 uppercase tracking-wider block">
+                        <label className="text-xs text-[#adb9d2] uppercase tracking-wider block">
                             Custom Image
                         </label>
 
                         {preferences.bgImagePath && (
                             <div className="flex items-center gap-3">
-                                <div className="w-24 h-14 border border-white/10 overflow-hidden bg-black/30">
+                                <div className="w-24 h-14 border border-[#1a1e26] overflow-hidden bg-black/30">
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                         src={preferences.bgImagePath}
@@ -141,8 +141,8 @@ function AppearanceSection() {
                                 <button
                                     type="button"
                                     onClick={removeBackground}
-                                    className="px-3 py-1.5 text-xs border border-red-500/30 text-red-400
-                                               hover:bg-red-500/10 transition-colors"
+                                    className="px-3 py-1.5 text-xs border border-[#ff285a]/30 text-[#ff285a]
+                                               hover:bg-[#ff285a]/10 transition-colors"
                                 >
                                     Remove
                                 </button>
@@ -155,9 +155,9 @@ function AppearanceSection() {
                                 onClick={() => fileInputRef.current?.click()}
                                 disabled={isUploading}
                                 className={`
-                                    px-4 py-2 text-sm border border-white/10 bg-white/[0.03]
+                                    px-4 py-2 text-sm border border-[#1a1e26] bg-white/[0.03]
                                     hover:border-white/20 transition-colors
-                                    ${isUploading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer text-white/70 hover:text-white'}
+                                    ${isUploading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer text-[#ced5e4] hover:text-white'}
                                 `}
                             >
                                 {isUploading ? 'Compressing & Uploading...' : 'Upload New Image'}
@@ -171,7 +171,7 @@ function AppearanceSection() {
                             />
                         </div>
 
-                        <p className="text-[11px] text-white/30">
+                        <p className="text-[11px] text-[#585e6c]">
                             Max: 2MB input (JPG/PNG/WebP). Compressed to WebP ≤300KB. Ideal: 2560px wide.
                         </p>
                     </div>
@@ -180,7 +180,7 @@ function AppearanceSection() {
                 {/* Solid Color Picker */}
                 {preferences.bgType === 'color' && (
                     <div className="space-y-2">
-                        <label className="text-xs text-white/50 uppercase tracking-wider block">
+                        <label className="text-xs text-[#adb9d2] uppercase tracking-wider block">
                             Background Color
                         </label>
                         <div className="flex items-center gap-3">
@@ -188,7 +188,7 @@ function AppearanceSection() {
                                 type="color"
                                 value={preferences.bgColor}
                                 onChange={handleColorPickerChange}
-                                className="w-10 h-10 border border-white/10 bg-transparent cursor-pointer
+                                className="w-10 h-10 border border-[#1a1e26] bg-transparent cursor-pointer
                                            [&::-webkit-color-swatch-wrapper]:p-0
                                            [&::-webkit-color-swatch]:border-0"
                             />
@@ -196,11 +196,11 @@ function AppearanceSection() {
                                 type="text"
                                 value={colorInput}
                                 onChange={handleColorChange}
-                                placeholder="#0D0D21"
+                                placeholder="#0b0e14"
                                 maxLength={7}
-                                className="w-28 px-3 py-2 text-sm bg-white/[0.03] border border-white/10
-                                           text-white/80 font-mono placeholder:text-white/20
-                                           focus:outline-none focus:border-purple-500/40"
+                                className="w-28 px-3 py-2 text-sm bg-white/[0.03] border border-[#1a1e26]
+                                           text-[#ced5e4] font-mono placeholder:text-[#585e6c]
+                                           focus:outline-none focus:border-[#00b3b3]/40"
                             />
                         </div>
                     </div>
@@ -209,10 +209,10 @@ function AppearanceSection() {
                 {/* Overlay Opacity Slider */}
                 <div>
                     <div className="flex items-center justify-between mb-2">
-                        <label className="text-xs text-white/50 uppercase tracking-wider">
+                        <label className="text-xs text-[#adb9d2] uppercase tracking-wider">
                             Image Overlay Darkness
                         </label>
-                        <span className="text-xs text-white/40 font-mono">
+                        <span className="text-xs text-[#585e6c] font-mono">
                             {preferences.overlayOpacity}%
                         </span>
                     </div>
@@ -222,21 +222,21 @@ function AppearanceSection() {
                         max={100}
                         value={preferences.overlayOpacity}
                         onChange={(e) => updatePreference('overlayOpacity', Number(e.target.value))}
-                        className="w-full h-1 bg-white/10 appearance-none cursor-pointer
+                        className="w-full h-1 bg-[#171a20] appearance-none cursor-pointer
                                    [&::-webkit-slider-thumb]:appearance-none
                                    [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5
-                                   [&::-webkit-slider-thumb]:bg-purple-400 [&::-webkit-slider-thumb]:rounded-full
-                                   [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-purple-300"
+                                   [&::-webkit-slider-thumb]:bg-[#00e6e6] [&::-webkit-slider-thumb]:rounded-full
+                                   [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#00b3b3]"
                     />
                 </div>
 
                 {/* Blur Slider */}
                 <div>
                     <div className="flex items-center justify-between mb-2">
-                        <label className="text-xs text-white/50 uppercase tracking-wider">
+                        <label className="text-xs text-[#adb9d2] uppercase tracking-wider">
                             Image Blur Intensity
                         </label>
-                        <span className="text-xs text-white/40 font-mono">
+                        <span className="text-xs text-[#585e6c] font-mono">
                             {preferences.blurAmount}px
                         </span>
                     </div>
@@ -246,21 +246,21 @@ function AppearanceSection() {
                         max={20}
                         value={preferences.blurAmount}
                         onChange={(e) => updatePreference('blurAmount', Number(e.target.value))}
-                        className="w-full h-1 bg-white/10 appearance-none cursor-pointer
+                        className="w-full h-1 bg-[#171a20] appearance-none cursor-pointer
                                    [&::-webkit-slider-thumb]:appearance-none
                                    [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5
-                                   [&::-webkit-slider-thumb]:bg-purple-400 [&::-webkit-slider-thumb]:rounded-full
-                                   [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-purple-300"
+                                   [&::-webkit-slider-thumb]:bg-[#00e6e6] [&::-webkit-slider-thumb]:rounded-full
+                                   [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#00b3b3]"
                     />
                 </div>
 
                 {/* Reset Button */}
-                <div className="pt-2 border-t border-white/5">
+                <div className="pt-2 border-t border-[#1a1e26]">
                     <button
                         type="button"
                         onClick={resetToDefault}
-                        className="px-4 py-2 text-xs text-white/40 border border-white/10
-                                   hover:text-white/60 hover:border-white/20 transition-colors"
+                        className="px-4 py-2 text-xs text-[#585e6c] border border-[#1a1e26]
+                                   hover:text-[#adb9d2] hover:border-white/20 transition-colors"
                     >
                         ↺ Reset to Default
                     </button>
@@ -306,7 +306,7 @@ export default function ProfileSettings() {
             {/* Header */}
             <div className="text-center">
                 <h1 className="text-2xl md:text-4xl font-bold text-white mb-2">Profile &amp; Settings</h1>
-                <p className="text-white/60 text-sm md:text-base">Configure your profile details and preferences.</p>
+                <p className="text-[#adb9d2] text-sm md:text-base">Configure your profile details and preferences.</p>
             </div>
 
             {/* Appearance Section */}
@@ -318,8 +318,8 @@ export default function ProfileSettings() {
                 onClick={handleLogout}
                 disabled={isLoggingOut}
                 className={`px-8 py-3 border-2 rounded-none font-semibold text-base transition-all duration-300 ${isLoggingOut
-                    ? 'bg-white/10 border-white/20 text-white/40 cursor-not-allowed'
-                    : 'bg-red-900/40 border-red-500/10 text-white hover:bg-red-900/60 hover:border-red-500/10'
+                    ? 'bg-[#171a20] border-white/20 text-[#585e6c] cursor-not-allowed'
+                    : 'bg-red-900/40 border-[#ff285a]/10 text-white hover:bg-red-900/60 hover:border-[#ff285a]/10'
                     }`}
             >
                 {isLoggingOut ? 'Logging out...' : 'Log out'}

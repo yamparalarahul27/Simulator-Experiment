@@ -110,16 +110,16 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                                     <h2 className="text-xl font-bold text-white tracking-wide">PnL Analysis</h2>
                                     <InfoTooltip infoKey="pnlCard" />
                                 </div>
-                                <p className="text-sm text-white/40 font-mono">NET PROFIT & LOSS</p>
+                                <p className="text-sm text-[#585e6c] font-mono">NET PROFIT & LOSS</p>
                             </div>
                         </div>
 
                         {/* Drawdown Toggle */}
                         <div className="flex items-center gap-3">
-                            <span className="text-white/60 text-sm">Show Drawdown on Chart</span>
+                            <span className="text-[#adb9d2] text-sm">Show Drawdown on Chart</span>
                             <button
                                 onClick={() => setShowDrawdown(!showDrawdown)}
-                                className={`relative inline-flex h-6 w-11 items-center rounded-none bg-black/10 border border-white/10 transition-colors duration-300 ${showDrawdown ? 'bg-purple-600' : 'bg-gray-600'
+                                className={`relative inline-flex h-6 w-11 items-center rounded-none bg-black/10 border border-[#1a1e26] transition-colors duration-300 ${showDrawdown ? 'bg-[#00b3b3]' : 'bg-[#585e6c]'
                                     }`}
                             >
                                 <span
@@ -134,17 +134,17 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                     <div className="flex-1 flex flex-col justify-center py-8 space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
                             {/* Divider Line */}
-                            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/10 hidden md:block" />
+                            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-[#171a20] hidden md:block" />
 
                             {/* Total PnL */}
                             <div className="text-center space-y-2">
-                                <span className="text-sm text-white/40 uppercase tracking-[0.2em]">Total PnL ({activeFilter})</span>
-                                <div className={`text-num-56 sm:text-num-72 tracking-normal ${pnlData.isPositive ? 'text-green-400' : 'text-red-400'} drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]`}>
+                                <span className="text-sm text-[#585e6c] uppercase tracking-[0.2em]">Total PnL ({activeFilter})</span>
+                                <div className={`text-num-56 sm:text-num-72 tracking-normal ${pnlData.isPositive ? 'text-[#00e66b]' : 'text-[#ff285a]'} drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]`}>
                                     {pnlData.pnlFormatted}
                                 </div>
                                 {activeFilter !== 'All' && (
                                     <div className="text-center">
-                                        <span className="text-white/40 text-sm font-mono">
+                                        <span className="text-[#585e6c] text-sm font-mono">
                                             {pnlData.isPositive ? '+' : ''}{pnlData.percent} {comparisonLabel}
                                         </span>
                                     </div>
@@ -153,11 +153,11 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
 
                             {/* Max Drawdown */}
                             <div className="text-center space-y-2">
-                                <span className="text-sm text-white/40 uppercase tracking-[0.2em]">Max Drawdown</span>
-                                <div className="text-num-56 sm:text-num-72 text-red-400 drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                                <span className="text-sm text-[#585e6c] uppercase tracking-[0.2em]">Max Drawdown</span>
+                                <div className="text-num-56 sm:text-num-72 text-[#ff285a] drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]">
                                     -${Math.abs(drawdownStats.maxDrawdown).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </div>
-                                <div className="text-white/40 text-xs font-mono">
+                                <div className="text-[#585e6c] text-xs font-mono">
                                     ({drawdownStats.maxDrawdownPercentage.toFixed(1)}% peak-to-trough)
                                 </div>
                             </div>
@@ -165,7 +165,7 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                     </div>
 
                     {/* Chart Accordion Section */}
-                    <div className="w-full border-t border-white/10 pt-4">
+                    <div className="w-full border-t border-[#1a1e26] pt-4">
                         <button
                             onClick={() => setIsChartVisible(!isChartVisible)}
                             className="w-full flex items-center justify-center gap-8 group cursor-pointer"
@@ -174,7 +174,7 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                                 Visualisation Chart
                             </span>
                             <div className={`
-                                p-1.5 rounded-full bg-black border border-white/10 
+                                p-1.5 rounded-full bg-[#0b0e14] border border-[#1a1e26] 
                                 group-hover:border-white/30 transition-all duration-300
                                 ${isChartVisible ? 'rotate-180' : ''}
                             `}>
@@ -184,25 +184,25 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
 
                         {/* Drawdown Stats Table - Above Chart */}
                         {isChartVisible && showDrawdown && (
-                            <div className="mt-4 p-4 bg-black/20 border border-white/10 rounded-sm animate-in fade-in slide-in-from-top-4 duration-300">
+                            <div className="mt-4 p-4 bg-[#0b0e14]/20 border border-[#1a1e26] rounded-sm animate-in fade-in slide-in-from-top-4 duration-300">
                                 <div className="grid grid-cols-3 gap-4 text-center">
                                     <div>
-                                        <div className="text-red-400 text-num-32 font-mono">
+                                        <div className="text-[#ff285a] text-num-32 font-mono">
                                             {drawdownStats.maxDrawdownPercentage.toFixed(1)}%
                                         </div>
-                                        <div className="text-white/40 text-xs font-mono uppercase">Max DD</div>
+                                        <div className="text-[#585e6c] text-xs font-mono uppercase">Max DD</div>
                                     </div>
                                     <div>
-                                        <div className="text-white/80 text-num-32 font-mono">
+                                        <div className="text-[#ced5e4] text-num-32 font-mono">
                                             {drawdownStats.avgRecoveryDays.toFixed(1)} days
                                         </div>
-                                        <div className="text-white/40 text-xs font-mono uppercase">Avg Recovery</div>
+                                        <div className="text-[#585e6c] text-xs font-mono uppercase">Avg Recovery</div>
                                     </div>
                                     <div>
-                                        <div className="text-purple-400 text-num-32 font-mono">
+                                        <div className="text-[#00ffff] text-num-32 font-mono">
                                             {drawdownStats.pnlToDrawdownRatio.toFixed(1)}x
                                         </div>
-                                        <div className="text-white/40 text-xs font-mono uppercase">PnL/DD Ratio</div>
+                                        <div className="text-[#585e6c] text-xs font-mono uppercase">PnL/DD Ratio</div>
                                     </div>
                                 </div>
                             </div>

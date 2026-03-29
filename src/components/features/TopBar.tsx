@@ -76,8 +76,8 @@ const FILTER_LABELS: Record<FilterType, string> = {
                             type="button"
                             onClick={() => onFilterChange(filter)}
                             className={`px-4 py-2 rounded-none text-sm font-mono transition-all duration-200 border-b-2 ${activeFilter === filter
-                                ? 'bg-purple-500/20 border-purple-500 text-white/100'
-                                : 'bg-white/5 border-x border-t border-white/10 border-b-transparent text-white/60 hover:bg-white/10 hover:border-white/20'
+                                ? 'bg-[#00b3b3]/20 border-[#00b3b3] text-white/100'
+                                : 'bg-[#11141a] border-x border-t border-[#1a1e26] border-b-transparent text-[#adb9d2] hover:bg-[#171a20] hover:border-white/20'
                                 }`}
                         >
                             {FILTER_LABELS[filter]}
@@ -110,7 +110,7 @@ const FILTER_LABELS: Record<FilterType, string> = {
                                     <span>Pick a date</span>
                                 )}
                             </span>
-                            <ChevronDown className="h-4 w-4 text-white/60" />
+                            <ChevronDown className="h-4 w-4 text-[#adb9d2]" />
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -137,19 +137,19 @@ const FILTER_LABELS: Record<FilterType, string> = {
                             variant="outline"
                             className="w-full justify-between px-2.5 font-normal rounded-none"
                         >
-                            <span className="text-white/80">
+                            <span className="text-[#ced5e4]">
                                 {selectedCount === 0
                                     ? 'All pairs'
                                     : allSelected
                                         ? `All pairs (${selectedCount})`
                                         : `${selectedCount} selected`}
                             </span>
-                            <ChevronDown className="h-4 w-4 text-white/60" />
+                            <ChevronDown className="h-4 w-4 text-[#adb9d2]" />
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-[320px] p-3" align="end">
                         <div className="flex items-center justify-between mb-3">
-                            <span className="text-white/60 text-xs font-mono uppercase tracking-wider">Select Pairs</span>
+                            <span className="text-[#adb9d2] text-xs font-mono uppercase tracking-wider">Select Pairs</span>
                             <div className="flex items-center gap-2">
                                 <Button variant="ghost" size="sm" className="h-8 px-2" onClick={selectAllPairs}>
                                     All
@@ -165,7 +165,7 @@ const FILTER_LABELS: Record<FilterType, string> = {
                                 <div
                                     key={pair}
                                     onClick={() => togglePair(pair)}
-                                    className="w-full flex items-center justify-between gap-3 px-2 py-2 rounded-none border border-white/10 bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
+                                    className="w-full flex items-center justify-between gap-3 px-2 py-2 rounded-none border border-[#1a1e26] bg-[#11141a] hover:bg-[#171a20] transition-colors cursor-pointer"
                                 >
                                     <div className="flex items-center gap-3">
                                         <Checkbox
@@ -173,7 +173,7 @@ const FILTER_LABELS: Record<FilterType, string> = {
                                             onCheckedChange={() => togglePair(pair)}
                                             onClick={(e) => e.stopPropagation()}
                                         />
-                                        <span className="text-white/80 text-sm font-mono">{pair}</span>
+                                        <span className="text-[#ced5e4] text-sm font-mono">{pair}</span>
                                     </div>
                                 </div>
                             ))}

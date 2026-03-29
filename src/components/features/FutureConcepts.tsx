@@ -32,17 +32,17 @@ export default function FutureConcepts({ currency, usdInrRate }: FutureConceptsP
     return (
         <div className="space-y-4">
             {/* Section Navigation */}
-            <div className="flex items-center gap-1 bg-black/40 backdrop-blur-xl border border-white/10 p-1">
+            <div className="flex items-center gap-1 bg-[#0b0e14]/40 backdrop-blur-xl border border-[#1a1e26] p-1">
                 {sections.map(({ id, label, enabled }) => (
                     <button
                         key={id}
                         onClick={() => enabled && setActiveSection(id)}
                         disabled={!enabled}
                         className={`px-4 py-2 text-xs font-mono font-medium transition-all ${activeSection === id
-                            ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                            ? 'bg-[#00b3b3]/20 text-[#00e6e6] border border-[#00b3b3]/30'
                             : enabled
-                                ? 'text-white/50 hover:text-white/80 hover:bg-white/5 border border-transparent'
-                                : 'text-white/20 cursor-not-allowed border border-transparent'
+                                ? 'text-[#adb9d2] hover:text-[#ced5e4] hover:bg-[#11141a] border border-transparent'
+                                : 'text-[#585e6c] cursor-not-allowed border border-transparent'
                             }`}
                     >
                         {label}

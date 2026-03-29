@@ -110,7 +110,7 @@ export const HamburgerButton = ({
     const colorClasses = {
         white: 'bg-white',
         black: 'bg-black',
-        gray: 'bg-gray-400',
+        gray: 'bg-[#adb9d2]',
         custom: customColorClass || 'bg-white',
     };
 
@@ -121,7 +121,7 @@ export const HamburgerButton = ({
         <button
             type="button"
             onClick={onClick}
-            className={`p-2 rounded-none hover:bg-white/10 transition-colors ${className}`}
+            className={`p-2 rounded-none hover:bg-[#171a20] transition-colors ${className}`}
             aria-label={ariaLabel}
             aria-expanded={isOpen}
             aria-controls={ariaControls}

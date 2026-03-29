@@ -7,7 +7,7 @@ export default function PerksPage() {
         <div className="space-y-8">
             <div>
                 <h1 className="text-2xl font-mono font-bold text-white tracking-wide">Perks</h1>
-                <p className="text-sm font-mono text-white/50 mt-1">
+                <p className="text-sm font-mono text-[#adb9d2] mt-1">
                     Rewards and benefits for your learning journey
                 </p>
             </div>
@@ -16,7 +16,7 @@ export default function PerksPage() {
                 <div className="flex flex-col items-center justify-center py-8 md:py-16 text-center px-4">
                     <span className="text-4xl mb-4">🎁</span>
                     <h2 className="text-lg font-mono font-semibold text-white mb-2">Coming Soon</h2>
-                    <p className="text-sm font-mono text-white/40 max-w-md">
+                    <p className="text-sm font-mono text-[#585e6c] max-w-md">
                         Earn perks and rewards as you progress through lessons and complete challenges.
                         NFTs, badges, and exclusive content await.
                     </p>
