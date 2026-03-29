@@ -224,7 +224,7 @@ export default function AssistantModal() {
                                     onChange={(e) => setInput(e.target.value)}
                                     placeholder="Ask about trades or markets..."
                                     disabled={isLoading}
-                                    className="min-w-0 flex-1 bg-white/5 border border-white/10 py-3 px-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-purple-500/50 disabled:opacity-50 transition-all"
+                                    className="min-w-0 flex-1 bg-white/5 border border-white/10 py-2.5 px-3 text-base text-white placeholder:text-white/30 focus:outline-none focus:border-purple-500/50 disabled:opacity-50 transition-all"
                                 />
                                 <button
                                     type="submit"
