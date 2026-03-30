@@ -75,7 +75,7 @@ function AppearanceSection() {
         <div className="w-full border border-bs-border bg-white/[0.03]">
             {/* Section Header */}
             <div className="px-5 py-3 border-b border-bs-border">
-                <h2 className="text-sm font-semibold text-white/90 uppercase tracking-wider">
+                <h2 className="text-sm font-semibold text-bs-text-primary/90 uppercase tracking-wider">
                     Appearance
                 </h2>
                 {!connected && (
@@ -106,8 +106,8 @@ function AppearanceSection() {
                                         flex items-center gap-2 px-4 py-2 text-sm font-medium
                                         border transition-all duration-200
                                         ${isActive
-                                            ? 'border-bs-brand-tertiary/60 bg-bs-brand-tertiary/15 text-white'
-                                            : 'border-bs-border bg-white/[0.03] text-bs-text-tertiary hover:border-white/20 hover:text-bs-text-secondary'
+                                            ? 'border-bs-brand-tertiary/60 bg-bs-brand-tertiary/15 text-bs-text-primary'
+                                            : 'border-bs-border bg-white/[0.03] text-bs-text-tertiary hover:border-bs-border hover:text-bs-text-secondary'
                                         }
                                         ${isDisabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}
                                     `}
@@ -130,7 +130,7 @@ function AppearanceSection() {
 
                         {preferences.bgImagePath && (
                             <div className="flex items-center gap-3">
-                                <div className="w-24 h-14 border border-bs-border overflow-hidden bg-black/30">
+                                <div className="w-24 h-14 border border-bs-border overflow-hidden bg-bs-bg/30">
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                         src={preferences.bgImagePath}
@@ -156,8 +156,8 @@ function AppearanceSection() {
                                 disabled={isUploading}
                                 className={`
                                     px-4 py-2 text-sm border border-bs-border bg-white/[0.03]
-                                    hover:border-white/20 transition-colors
-                                    ${isUploading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer text-bs-text-secondary hover:text-white'}
+                                    hover:border-bs-border transition-colors
+                                    ${isUploading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer text-bs-text-secondary hover:text-bs-text-primary'}
                                 `}
                             >
                                 {isUploading ? 'Compressing & Uploading...' : 'Upload New Image'}
@@ -260,7 +260,7 @@ function AppearanceSection() {
                         type="button"
                         onClick={resetToDefault}
                         className="px-4 py-2 text-xs text-bs-text-mute border border-bs-border
-                                   hover:text-bs-text-tertiary hover:border-white/20 transition-colors"
+                                   hover:text-bs-text-tertiary hover:border-bs-border transition-colors"
                     >
                         ↺ Reset to Default
                     </button>
@@ -305,7 +305,7 @@ export default function ProfileSettings() {
         <div className="flex flex-col items-center gap-6 md:gap-8 max-w-2xl mx-auto py-4 md:py-8 w-full">
             {/* Header */}
             <div className="text-center">
-                <h1 className="text-2xl md:text-4xl font-bold text-white mb-2">Profile &amp; Settings</h1>
+                <h1 className="text-2xl md:text-4xl font-bold text-bs-text-primary mb-2">Profile &amp; Settings</h1>
                 <p className="text-bs-text-tertiary text-sm md:text-base">Configure your profile details and preferences.</p>
             </div>
 
@@ -318,8 +318,8 @@ export default function ProfileSettings() {
                 onClick={handleLogout}
                 disabled={isLoggingOut}
                 className={`px-8 py-3 border-2 rounded-lg font-semibold text-base transition-all duration-300 ${isLoggingOut
-                    ? 'bg-bs-card-fg border-white/20 text-bs-text-mute cursor-not-allowed'
-                    : 'bg-red-900/40 border-[#ff285a]/10 text-white hover:bg-red-900/60 hover:border-[#ff285a]/10'
+                    ? 'bg-bs-card-fg border-bs-border text-bs-text-mute cursor-not-allowed'
+                    : 'bg-red-900/40 border-[#ff285a]/10 text-bs-text-primary hover:bg-red-900/60 hover:border-[#ff285a]/10'
                     }`}
             >
                 {isLoggingOut ? 'Logging out...' : 'Log out'}

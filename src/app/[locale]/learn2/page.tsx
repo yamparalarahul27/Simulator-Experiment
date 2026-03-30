@@ -33,7 +33,7 @@ function ColorSwatch({ name, token, value }: { name: string; token: string; valu
     return (
         <div className="flex items-center gap-4 p-3 border border-bs-border bg-bs-card hover:bg-bs-card-fg transition-colors">
             <div
-                className="w-12 h-12 shrink-0 border border-white/10"
+                className="w-12 h-12 shrink-0 border border-bs-border"
                 style={{ backgroundColor: value }}
             />
             <div className="min-w-0 flex-1">

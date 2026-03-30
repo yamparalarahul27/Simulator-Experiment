@@ -60,7 +60,9 @@ export default function AppBackground() {
                 <div
                     className="fixed inset-0 -z-10"
                     style={{
-                        backgroundColor: `rgba(13, 13, 33, ${overlayOpacity / 100})`,
+                        backgroundColor: isLight
+                            ? `rgba(245, 247, 250, ${overlayOpacity / 100})`
+                            : `rgba(13, 13, 33, ${overlayOpacity / 100})`,
                         backdropFilter: blurAmount > 0 ? `blur(${blurAmount}px)` : undefined,
                         WebkitBackdropFilter: blurAmount > 0 ? `blur(${blurAmount}px)` : undefined,
                         transition: 'background-color 0.3s ease, backdrop-filter 0.3s ease',

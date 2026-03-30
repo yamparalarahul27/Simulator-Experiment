@@ -227,7 +227,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
   // Loading state
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-white">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-bs-text-primary">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-bs-brand-tertiary mb-4"></div>
         <p className="text-bs-text-tertiary">Loading your trading analytics...</p>
       </div>
@@ -246,7 +246,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
           />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-white mb-2">Add or Connect Wallet to view your trades Analytics</h2>
+          <h2 className="text-2xl font-bold text-bs-text-primary mb-2">Add or Connect Wallet to view your trades Analytics</h2>
           <p className="text-bs-text-tertiary max-w-md mx-auto">
             {analyzingWallet
               ? "We couldn't find any saved trades for your wallet in our database."
@@ -255,7 +255,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
         </div>
         <button
           onClick={onNavigateToLookup}
-          className="px-6 py-3 bg-bs-brand-tertiary/50 hover:bg-bs-brand-tertiary/40 text-white font-medium rounded-lg transition-colors"
+          className="px-6 py-3 bg-bs-brand-tertiary/50 hover:bg-bs-brand-tertiary/40 text-bs-text-primary font-medium rounded-lg transition-colors"
         >
           Add Wallet
         </button>
@@ -268,7 +268,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
       <div className="flex flex-col gap-6">
         <div className="flex items-center justify-between gap-6 flex-wrap">
           <div>
-            <h1 className="text-3xl font-bold text-white">Home Analytics</h1>
+            <h1 className="text-3xl font-bold text-bs-text-primary">Home Analytics</h1>
             {timelineText && (
               <p className="text-bs-text-tertiary text-sm font-mono mt-1">{timelineText}</p>
             )}
@@ -323,7 +323,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
                 </div>
               </div>
               <div className="flex flex-col items-start gap-2">
-                <span className="mt-2 text-num-48 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
+                <span className="mt-2 text-num-48 text-bs-text-primary drop-shadow-[0_0_10px_rgba(0,180,170,0.2)]">
                   {winStats.winRate}%
                 </span>
                 <span className="px-1.5 py-0.5 bg-bs-card-fg text-bs-text-tertiary text-xs font-mono rounded-sm">
@@ -394,7 +394,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
                 </div>
                 <div className="mt-4" />
                 <div>
-                  <span className="text-num-48 text-white/95 drop-shadow-[0_0_5px_rgba(255,255,255,0.1)]">
+                  <span className="text-num-48 text-bs-text-primary/95 drop-shadow-[0_0_5px_rgba(0,180,170,0.1)]">
                     {formatCompactNumber(tradingVolume)}
                   </span>
                 </div>

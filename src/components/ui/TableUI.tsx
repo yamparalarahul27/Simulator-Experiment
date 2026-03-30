@@ -141,7 +141,7 @@ export const TableUI = <T extends Record<string, any>>({
                                     className="relative px-6 py-4 font-semibold text-bs-text-secondary border-b border-bs-border select-none group"
                                 >
                                     <div
-                                        className="flex items-center gap-2 cursor-pointer hover:text-white transition-colors overflow-hidden"
+                                        className="flex items-center gap-2 cursor-pointer hover:text-bs-text-primary transition-colors overflow-hidden"
                                         onClick={() => handleSort(col.key)}
                                     >
                                         <span className="truncate">{col.header}</span>

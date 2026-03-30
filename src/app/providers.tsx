@@ -6,6 +6,7 @@ import type { IUnifiedWalletConfig } from '@jup-ag/wallet-adapter/dist/types/con
 import { APP_BASE_URL, DEFAULT_WALLET_CLUSTER, SupportedCluster, WALLET_CLUSTER_CONFIG } from '@/lib/constants';
 import { AppearanceProvider } from '@/lib/context/AppearanceContext';
 import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
+import { useTheme } from 'next-themes';
 
 type UnifiedWalletProviderType = typeof import('@jup-ag/wallet-adapter')['UnifiedWalletProvider'];
 
@@ -25,6 +26,7 @@ function AppearanceWrapper({ children }: PropsWithChildren) {
 export default function Providers({ children }: PropsWithChildren) {
     const [WalletProvider, setWalletProvider] = useState<UnifiedWalletProviderType | null>(null);
     const [cluster, setCluster] = useState<SupportedCluster>(DEFAULT_WALLET_CLUSTER);
+    const { resolvedTheme } = useTheme();
 
     useEffect(() => {
         // Lazy-load Jupiter's UnifiedWalletProvider on the client to avoid SSR hydration issues.
@@ -42,7 +44,7 @@ export default function Providers({ children }: PropsWithChildren) {
     const walletConfig = useMemo(() => ({
         env: cluster as Cluster,
         autoConnect: false,
-        theme: 'dark',
+        theme: resolvedTheme === 'light' ? 'light' : 'dark',
         metadata: {
             name: 'YDEX',
             description: 'YDEX wallet connectivity',
@@ -50,7 +52,7 @@ export default function Providers({ children }: PropsWithChildren) {
             iconUrls: ['/Logo.png']
         }
         // RPC URLs are configured per cluster via WALLET_CLUSTER_CONFIG.
-    }) satisfies IUnifiedWalletConfig, [cluster]);
+    }) satisfies IUnifiedWalletConfig, [cluster, resolvedTheme]);
 
     if (!WalletProvider) {
         // Wallet not loaded yet — still provide AppearanceProvider with null wallet

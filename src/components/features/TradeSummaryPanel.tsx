@@ -198,7 +198,7 @@ const TradeSummaryPanel = React.memo(function TradeSummaryPanel({ simSnapshot, f
                     {simSnapshot.amount.toFixed(4)} {token}
                 </span>
                 <span className="text-[10px] font-mono text-bs-text-mute">@</span>
-                <span className="text-[10px] font-mono text-white font-bold">
+                <span className="text-[10px] font-mono text-bs-text-primary font-bold">
                     {formatPrice(effectiveEntry)}
                 </span>
             </div>
@@ -228,7 +228,7 @@ const TradeSummaryPanel = React.memo(function TradeSummaryPanel({ simSnapshot, f
                             <div className="flex items-center justify-between">
                                 <span className="text-[10px] font-mono text-bs-text-mute">Risk / Reward</span>
                                 <div className="flex items-center gap-2">
-                                    <span className="text-[11px] font-mono font-bold text-white">
+                                    <span className="text-[11px] font-mono font-bold text-bs-text-primary">
                                         1 : {rrRatio}
                                     </span>
                                     <span className={`text-[9px] font-mono ${parseFloat(rrRatio) >= 1.5 ? 'text-bs-success' : parseFloat(rrRatio) >= 1 ? 'text-yellow-400' : 'text-bs-error'}`}>
@@ -268,7 +268,7 @@ const TradeSummaryPanel = React.memo(function TradeSummaryPanel({ simSnapshot, f
                         <TrendingUp size={12} className="text-bs-success shrink-0 mt-0.5" />
                         <div>
                             <p className="text-[10px] font-mono text-bs-success font-bold">Take Profit = Auto Sell at Profit</p>
-                            <p className="text-[9px] font-mono text-white/35 leading-relaxed mt-0.5">
+                            <p className="text-[9px] font-mono text-bs-text-primary/35 leading-relaxed mt-0.5">
                                 When price reaches your target, the position is automatically sold to lock in the gain. The trade is then closed.
                             </p>
                         </div>
@@ -277,7 +277,7 @@ const TradeSummaryPanel = React.memo(function TradeSummaryPanel({ simSnapshot, f
                         <TrendingDown size={12} className="text-bs-error shrink-0 mt-0.5" />
                         <div>
                             <p className="text-[10px] font-mono text-bs-error font-bold">Stop Loss = Auto Sell to Prevent Loss</p>
-                            <p className="text-[9px] font-mono text-white/35 leading-relaxed mt-0.5">
+                            <p className="text-[9px] font-mono text-bs-text-primary/35 leading-relaxed mt-0.5">
                                 If price drops to your stop level, the asset is sold automatically to prevent further loss. The trade is closed.
                             </p>
                         </div>

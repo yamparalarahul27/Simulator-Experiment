@@ -653,11 +653,11 @@ function bezierMid(e: LayoutEdge): { x: number; y: number } {
 
 const NODE_STYLE: Record<NodeKind, { fill: string; activeFill: string; stroke: string; text: string; sub: string }> = {
     start: { fill: 'rgba(139,92,246,0.15)', activeFill: 'rgba(139,92,246,0.40)', stroke: 'rgba(139,92,246,0.80)', text: '#c4b5fd', sub: 'rgba(196,181,253,0.55)' },
-    state: { fill: 'rgba(255,255,255,0.04)', activeFill: 'rgba(255,255,255,0.14)', stroke: 'rgba(255,255,255,0.50)', text: '#e2e8f0', sub: 'rgba(226,232,240,0.55)' },
+    state: { fill: 'var(--bs-bg-primary)', activeFill: 'rgba(0,180,170,0.14)', stroke: 'var(--bs-brand-tertiary)', text: 'var(--bs-text-secondary)', sub: 'var(--bs-text-mute)' },
     terminal: { fill: 'rgba(34,197,94,0.12)', activeFill: 'rgba(34,197,94,0.38)', stroke: 'rgba(34,197,94,0.75)', text: '#86efac', sub: 'rgba(134,239,172,0.55)' },
     tp: { fill: 'rgba(34,197,94,0.10)', activeFill: 'rgba(34,197,94,0.34)', stroke: 'rgba(34,197,94,0.70)', text: '#4ade80', sub: 'rgba(74,222,128,0.55)' },
     sl: { fill: 'rgba(239,68,68,0.10)', activeFill: 'rgba(239,68,68,0.32)', stroke: 'rgba(239,68,68,0.70)', text: '#f87171', sub: 'rgba(248,113,113,0.55)' },
-    cancel: { fill: 'rgba(255,255,255,0.02)', activeFill: 'rgba(255,255,255,0.08)', stroke: 'rgba(255,255,255,0.18)', text: '#6b7280', sub: 'rgba(107,114,128,0.45)' },
+    cancel: { fill: 'rgba(107,114,128,0.05)', activeFill: 'rgba(107,114,128,0.12)', stroke: 'rgba(107,114,128,0.35)', text: 'var(--bs-text-mute)', sub: 'rgba(107,114,128,0.45)' },
 };
 
 function resolveNodeStyle(kind: NodeKind, side: 'buy' | 'sell') {
@@ -668,7 +668,7 @@ function resolveNodeStyle(kind: NodeKind, side: 'buy' | 'sell') {
 }
 
 const EDGE_STROKE: Record<EdgeColor, string> = {
-    neutral: 'rgba(255,255,255,0.22)',
+    neutral: 'var(--bs-text-mute)',
     tp: 'rgba(74,222,128,0.65)',
     sl: 'rgba(248,113,113,0.65)',
 };
@@ -745,9 +745,9 @@ function EdgeLine({ edge }: { edge: LayoutEdge }) {
                 return (
                     <g>
                         <rect x={mid.x - labelW / 2 - 3} y={mid.y - 9} width={labelW + 6} height={14}
-                            fill="rgba(0,0,0,0.6)" rx={2} />
+                            fill="var(--bs-card)" rx={2} />
                         <text x={mid.x} y={mid.y} textAnchor="middle"
-                            fill="rgba(255,255,255,0.45)" fontSize={10} fontFamily="monospace">
+                            fill="var(--bs-text-secondary)" fontSize={10} fontFamily="monospace">
                             {edge.label}
                         </text>
                     </g>
@@ -978,10 +978,10 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
                         <span className="text-[9px] font-mono text-bs-text-tertiary italic mr-1">zoom in to pan</span>
                     )}
                     <button onClick={() => setZoom(z => Math.max(0.5, parseFloat((z - 0.25).toFixed(2))))}
-                        className="w-6 h-6 flex items-center justify-center text-xs font-mono text-bs-text-mute hover:text-bs-text-secondary bg-bs-card border border-bs-border hover:border-white/20 transition-colors">−</button>
+                        className="w-6 h-6 flex items-center justify-center text-xs font-mono text-bs-text-mute hover:text-bs-text-secondary bg-bs-card border border-bs-border hover:border-bs-border transition-colors">−</button>
                     <span className="text-[10px] font-mono text-bs-text-mute w-10 text-center">{Math.round(zoom * 100)}%</span>
                     <button onClick={() => setZoom(z => Math.min(2.0, parseFloat((z + 0.25).toFixed(2))))}
-                        className="w-6 h-6 flex items-center justify-center text-xs font-mono text-bs-text-mute hover:text-bs-text-secondary bg-bs-card border border-bs-border hover:border-white/20 transition-colors">+</button>
+                        className="w-6 h-6 flex items-center justify-center text-xs font-mono text-bs-text-mute hover:text-bs-text-secondary bg-bs-card border border-bs-border hover:border-bs-border transition-colors">+</button>
                 </div>
             </div>
 
@@ -1005,7 +1005,7 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
                         style={{ display: 'block' }}>
                         <defs>
                             <marker id="arr-neutral" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
-                                <path d="M0,0 L0,6 L7,3 z" fill="rgba(255,255,255,0.35)" />
+                                <path d="M0,0 L0,6 L7,3 z" fill="var(--bs-text-mute)" />
                             </marker>
                             <marker id="arr-tp" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
                                 <path d="M0,0 L0,6 L7,3 z" fill="rgba(74,222,128,0.75)" />
@@ -1014,7 +1014,7 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
                                 <path d="M0,0 L0,6 L7,3 z" fill="rgba(248,113,113,0.75)" />
                             </marker>
                             <marker id="arr-dashed" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
-                                <path d="M0,0 L0,6 L7,3 z" fill="rgba(255,255,255,0.18)" />
+                                <path d="M0,0 L0,6 L7,3 z" fill="var(--bs-text-mute)" />
                             </marker>
                         </defs>
                         {layout.edges.map((e, i) => <EdgeLine key={i} edge={e} />)}
@@ -1043,11 +1043,11 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
             <div className="flex items-center gap-3 mt-3 pt-2 border-t border-bs-border flex-wrap">
                 {([
                     { color: 'rgba(139,92,246,0.55)', label: 'Start' },
-                    { color: 'rgba(255,255,255,0.18)', label: 'State' },
+                    { color: 'var(--bs-text-mute)', label: 'State' },
                     { color: 'rgba(34,197,94,0.45)', label: 'Filled' },
                     { color: 'rgba(74,222,128,0.5)', label: 'TP' },
                     { color: 'rgba(248,113,113,0.5)', label: 'SL' },
-                    { color: 'rgba(255,255,255,0.08)', label: 'Cancelled' },
+                    { color: 'var(--bs-border)', label: 'Cancelled' },
                 ] as { color: string; label: string }[]).map(({ color, label }) => (
                     <div key={label} className="flex items-center gap-1">
                         <div className="w-2.5 h-2.5 border flex-shrink-0" style={{ borderColor: color, background: color }} />
@@ -1060,7 +1060,7 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
                         <span className="text-[8px] font-mono text-bs-text-mute">Active</span>
                     </div>
                     <div className="flex items-center gap-1">
-                        <div className="w-2.5 h-2.5 border flex-shrink-0 opacity-40" style={{ borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.05)' }} />
+                        <div className="w-2.5 h-2.5 border flex-shrink-0 opacity-40" style={{ borderColor: 'var(--bs-border)', background: 'var(--bs-bg-primary)' }} />
                         <span className="text-[8px] font-mono text-bs-text-mute">Done</span>
                     </div>
                 </div>

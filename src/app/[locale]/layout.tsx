@@ -39,12 +39,12 @@ export default async function LocaleLayout({
                 offset={24}
                 toastOptions={{
                     style: {
-                        background: 'rgba(0, 0, 0, 0.8)',
+                        background: 'var(--bs-card)',
                         backdropFilter: 'blur(12px)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        border: '1px solid var(--bs-border)',
                         borderRadius: '0px',
-                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
-                        color: 'white',
+                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+                        color: 'var(--bs-text-primary)',
                         fontFamily: 'var(--font-geist-mono)',
                         fontSize: '14px',
                         padding: '16px 20px',

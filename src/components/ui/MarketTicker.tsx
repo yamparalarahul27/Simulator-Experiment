@@ -182,7 +182,7 @@ export const MarketTicker: React.FC = () => {
                                 {item.symbol}
                             </span>
                             <div className="flex items-center gap-2">
-                                <span className="text-[11px] font-pixel text-white tracking-widest w-[80px]">
+                                <span className="text-[11px] font-pixel text-bs-text-primary tracking-widest w-[80px]">
                                     ${item.price}
                                 </span>
                                 <div className={`flex items-center gap-1 text-[9px] font-mono font-bold w-[45px] ${item.change >= 0 ? 'text-bs-success' : 'text-bs-error'}`}>

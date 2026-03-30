@@ -269,7 +269,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                 {/* Entry Price (read-only, shows live price) */}
                 <div>
                     <label className="text-[10px] font-mono text-bs-text-mute block mb-1">Entry (Market) Price</label>
-                    <div className="w-full bg-bs-card border border-bs-border text-white text-xs font-mono px-3 py-2 flex items-center justify-between">
+                    <div className="w-full bg-bs-card border border-bs-border text-bs-text-primary text-xs font-mono px-3 py-2 flex items-center justify-between">
                         <span>{currentPrice > 0 ? formatPrice(currentPrice) : '—'}</span>
                         <span className="text-[9px] text-bs-success font-mono">LIVE</span>
                     </div>
@@ -285,7 +285,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                             placeholder="0.00"
                             value={form.price}
                             onChange={(e) => handleField('price', e.target.value)}
-                            className="w-full bg-bs-bg/50 border border-bs-border text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-white/15"
+                            className="w-full bg-bs-bg/50 border border-bs-border text-bs-text-primary text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-bs-text-primary/15"
                         />
                     </div>
                 )}
@@ -300,7 +300,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                             placeholder="Trigger price..."
                             value={form.stopPrice}
                             onChange={(e) => handleField('stopPrice', e.target.value)}
-                            className="w-full bg-bs-bg/50 border border-bs-border text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-white/15"
+                            className="w-full bg-bs-bg/50 border border-bs-border text-bs-text-primary text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-bs-text-primary/15"
                         />
                         {orderType !== 'oco' && (
                             <p className="text-[9px] font-mono text-bs-text-mute mt-1">
@@ -324,7 +324,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                             placeholder="Max execution price..."
                             value={form.limitPrice}
                             onChange={(e) => handleField('limitPrice', e.target.value)}
-                            className="w-full bg-bs-bg/50 border border-bs-border text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-white/15"
+                            className="w-full bg-bs-bg/50 border border-bs-border text-bs-text-primary text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-bs-text-primary/15"
                         />
                     </div>
                 )}
@@ -340,7 +340,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                                 placeholder={side === 'buy' ? 'Must be > Market' : 'Must be < Market'}
                                 value={form.activationPrice}
                                 onChange={(e) => handleField('activationPrice', e.target.value)}
-                                className="w-full bg-bs-bg/50 border border-bs-border text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-white/15"
+                                className="w-full bg-bs-bg/50 border border-bs-border text-bs-text-primary text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-bs-text-primary/15"
                             />
                         </div>
                         <div>
@@ -351,7 +351,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                                 placeholder="0.1 - 20.0"
                                 value={form.trailingPercent}
                                 onChange={(e) => handleField('trailingPercent', e.target.value)}
-                                className="w-full bg-bs-bg/50 border border-bs-border text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-white/15"
+                                className="w-full bg-bs-bg/50 border border-bs-border text-bs-text-primary text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-bs-text-primary/15"
                             />
                         </div>
                     </>
@@ -381,7 +381,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                             placeholder="Target profit price..."
                             value={form.tpPrice}
                             onChange={(e) => handleField('tpPrice', e.target.value)}
-                            className="w-full bg-bs-bg/50 border border-[#00e66b]/20 text-white text-xs font-mono px-3 py-2 flex items-center justify-between focus:outline-none focus:border-[#00e66b]/50 placeholder:text-white/15"
+                            className="w-full bg-bs-bg/50 border border-[#00e66b]/20 text-bs-text-primary text-xs font-mono px-3 py-2 flex items-center justify-between focus:outline-none focus:border-[#00e66b]/50 placeholder:text-bs-text-primary/15"
                         />
                     </div>
                 )}
@@ -394,7 +394,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                             placeholder="Stop loss trigger..."
                             value={form.slPrice}
                             onChange={(e) => handleField('slPrice', e.target.value)}
-                            className="w-full bg-bs-bg/50 border border-[#ff285a]/20 text-white text-xs font-mono px-3 py-2 flex items-center justify-between focus:outline-none focus:border-[#ff285a]/50 placeholder:text-white/15"
+                            className="w-full bg-bs-bg/50 border border-[#ff285a]/20 text-bs-text-primary text-xs font-mono px-3 py-2 flex items-center justify-between focus:outline-none focus:border-[#ff285a]/50 placeholder:text-bs-text-primary/15"
                         />
                     </div>
                 )}
@@ -427,7 +427,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                         placeholder="0.00"
                         value={form.amount}
                         onChange={(e) => handleField('amount', e.target.value)}
-                        className="w-full bg-bs-bg/50 border border-bs-border text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-white/15"
+                        className="w-full bg-bs-bg/50 border border-bs-border text-bs-text-primary text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-bs-text-primary/15"
                     />
                 </div>
 
@@ -441,7 +441,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                             placeholder="Publicly visible chunk..."
                             value={form.visibleQty}
                             onChange={(e) => handleField('visibleQty', e.target.value)}
-                            className="w-full bg-bs-bg/50 border border-bs-border text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-white/15"
+                            className="w-full bg-bs-bg/50 border border-bs-border text-bs-text-primary text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-bs-text-primary/15"
                         />
                     </div>
                 )}
@@ -455,7 +455,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                                 type="number"
                                 value={form.twapDuration}
                                 onChange={(e) => handleField('twapDuration', e.target.value)}
-                                className="w-full bg-bs-bg/50 border border-bs-border text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50"
+                                className="w-full bg-bs-bg/50 border border-bs-border text-bs-text-primary text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50"
                             />
                         </div>
                         <div>
@@ -464,7 +464,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                                 type="number"
                                 value={form.twapIntervals}
                                 onChange={(e) => handleField('twapIntervals', e.target.value)}
-                                className="w-full bg-bs-bg/50 border border-bs-border text-white text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50"
+                                className="w-full bg-bs-bg/50 border border-bs-border text-bs-text-primary text-xs font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50"
                             />
                         </div>
                     </div>
@@ -475,7 +475,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
             <button
                 onClick={handleRunSimulation}
                 disabled={amountNum <= 0 || currentPrice <= 0 || isInvalid}
-                className={`w-full py-3 text-sm font-mono font-bold transition-all mt-4 flex items-center justify-center gap-2 text-white
+                className={`w-full py-3 text-sm font-mono font-bold transition-all mt-4 flex items-center justify-center gap-2 text-bs-text-primary
                     ${isInvalid || amountNum <= 0 || currentPrice <= 0
                         ? 'bg-bs-card-fg text-bs-text-mute cursor-not-allowed border border-bs-border'
                         : 'bg-gradient-to-r from-[#00b3b3] to-[#00ffff] hover:from-[#00e6e6] hover:to-[#00ffff] border border-transparent shadow-[0_0_15px_rgba(0,179,179,0.4)]'

@@ -23,7 +23,7 @@ const AccordionTrigger = ({
   <AccordionPrimitive.Header className="flex">
     <AccordionPrimitive.Trigger
       className={cn(
-        "flex flex-1 items-center justify-between py-4 text-left text-base font-semibold text-white transition-all",
+        "flex flex-1 items-center justify-between py-4 text-left text-base font-semibold text-bs-text-primary transition-all",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/70",
         "[&[data-state=open]>svg]:rotate-180",
         className
@@ -31,7 +31,7 @@ const AccordionTrigger = ({
       {...props}
     >
       {children}
-      <ChevronDown className="h-4 w-4 text-white transition-transform duration-200" />
+      <ChevronDown className="h-4 w-4 text-bs-text-primary transition-transform duration-200" />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 )

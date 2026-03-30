@@ -56,7 +56,7 @@ export default function HelpScreen() {
         <section className="mx-auto flex max-w-4xl flex-col gap-6 md:gap-8 rounded-lg text-bs-text-secondary backdrop-blur">
             <header className="space-y-3">
                 <p className="text-xs md:text-sm uppercase tracking-[0.4em] text-bs-text-mute">Need a hand?</p>
-                <h1 className="text-2xl md:text-4xl font-semibold text-white">Help Center</h1>
+                <h1 className="text-2xl md:text-4xl font-semibold text-bs-text-primary">Help Center</h1>
                 <p className="text-base md:text-lg leading-relaxed text-bs-text-secondary">
                     Quick answers to the most common questions.
                 </p>
@@ -70,7 +70,7 @@ export default function HelpScreen() {
             >
                 {FAQ_ITEMS.map((item) => (
                     <AccordionItem key={item.value} value={item.value} className="px-4">
-                        <AccordionTrigger className="text-white text-base md:text-lg">
+                        <AccordionTrigger className="text-bs-text-primary text-base md:text-lg">
                             {item.title}
                         </AccordionTrigger>
                         <AccordionContent className="text-bs-text-secondary text-sm">
@@ -80,18 +80,18 @@ export default function HelpScreen() {
                 ))}
             </Accordion>
 
-            <footer className="space-y-4 rounded-lg bg-gradient-to-r from-[#00ffff]/15 via-[#00e6e6]/15 to-[#00b3b3]/15 p-4 md:p-6 text-sm leading-relaxed text-white/85">
+            <footer className="space-y-4 rounded-lg bg-gradient-to-r from-[#00ffff]/15 via-[#00e6e6]/15 to-[#00b3b3]/15 p-4 md:p-6 text-sm leading-relaxed text-bs-text-primary/85">
 
                 <div className="text-center space-y-3 rounded-lg border border-bs-border bg-bs-bg/20 p-4 text-bs-text-secondary">
                     <p>
                         If you have any other question or need help, connect with me on Telegram
                     </p>
-                    <div className="flex flex-col sm:flex-row justify-center flex-wrap items-center gap-2 sm:gap-3 text-white">
+                    <div className="flex flex-col sm:flex-row justify-center flex-wrap items-center gap-2 sm:gap-3 text-bs-text-primary">
                         <a
                             href={TELEGRAM_URL}
                             target="_blank"
                             rel="noreferrer"
-                            className="rounded-lg border border-white/15 px-4 py-2 text-sm font-medium text-white/90 transition-colors hover:border-white/40"
+                            className="rounded-lg border border-bs-border px-4 py-2 text-sm font-medium text-bs-text-primary/90 transition-colors hover:border-white/40"
                         >
                             {TELEGRAM_URL.replace('https://', '')}
                         </a>
@@ -99,7 +99,7 @@ export default function HelpScreen() {
                             type="button"
                             onClick={handleCopy}
                             aria-label="Copy Telegram handle"
-                            className="flex items-center gap-2 rounded-lg border border-white/15 px-4 py-2 text-sm font-medium text-bs-text-secondary transition-colors hover:border-white/40"
+                            className="flex items-center gap-2 rounded-lg border border-bs-border px-4 py-2 text-sm font-medium text-bs-text-secondary transition-colors hover:border-white/40"
                         >
                             {copied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4" />}
                             {copied ? 'Copied' : 'Copy handle'}
@@ -107,7 +107,7 @@ export default function HelpScreen() {
                         <button
                             type="button"
                             onClick={() => setIsQrOpen(true)}
-                            className="flex items-center gap-2 rounded-lg border border-white/15 px-4 py-2 text-sm font-medium text-bs-text-secondary transition-colors hover:border-white/40"
+                            className="flex items-center gap-2 rounded-lg border border-bs-border px-4 py-2 text-sm font-medium text-bs-text-secondary transition-colors hover:border-white/40"
                         >
                             <QrCode className="h-4 w-4" />
                             View QR
@@ -118,16 +118,16 @@ export default function HelpScreen() {
 
             {isQrOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-                    <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setIsQrOpen(false)} />
+                    <div className="absolute inset-0 bg-bs-bg/70 backdrop-blur-sm" onClick={() => setIsQrOpen(false)} />
                     <div className="relative z-10 w-full max-w-sm rounded-lg bg-[#05050c]/95 p-6 text-center shadow-2xl">
                         <button
                             aria-label="Close QR modal"
-                            className="absolute right-4 top-4 rounded-lg border border-bs-border p-1 text-bs-text-tertiary transition-colors hover:text-white"
+                            className="absolute right-4 top-4 rounded-lg border border-bs-border p-1 text-bs-text-tertiary transition-colors hover:text-bs-text-primary"
                             onClick={() => setIsQrOpen(false)}
                         >
                             <X className="h-4 w-4" />
                         </button>
-                        <h4 className="text-lg font-semibold text-white">Scan to say hi!</h4>
+                        <h4 className="text-lg font-semibold text-bs-text-primary">Scan to say hi!</h4>
                         <p className="mt-2 text-sm text-bs-text-secondary">Waiting to talk to you soon.</p>
                         <div className="mt-6 overflow-hidden rounded-lg">
                             <Image

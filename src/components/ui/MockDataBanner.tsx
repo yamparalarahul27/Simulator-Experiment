@@ -38,7 +38,7 @@ export const MockDataBanner = ({
                 {onFetchTrades && (
                     <button
                         onClick={onFetchTrades}
-                        className="px-4 py-2 bg-bs-bg/50 rounded-lg border border-white/20 text-sm font-semibold text-white md:self-center md:ml-auto"
+                        className="px-4 py-2 bg-bs-bg/50 rounded-lg border border-bs-border text-sm font-semibold text-bs-text-primary md:self-center md:ml-auto"
                     >
                         Go to Wallet's
                     </button>

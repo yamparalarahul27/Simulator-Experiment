@@ -136,10 +136,10 @@ export default function AnnotationModal({
 
                                     {/* Header */}
                                     <div className="relative z-10 flex items-center justify-between border-b border-bs-border p-6">
-                                        <h2 className="text-xl font-bold text-white">Trade Note</h2>
+                                        <h2 className="text-xl font-bold text-bs-text-primary">Trade Note</h2>
                                         <button
                                             onClick={handleClose}
-                                            className="rounded-lg p-2 text-bs-text-tertiary transition-colors hover:bg-bs-card-fg hover:text-white"
+                                            className="rounded-lg p-2 text-bs-text-tertiary transition-colors hover:bg-bs-card-fg hover:text-bs-text-primary"
                                         >
                                             <X className="h-5 w-5" />
                                         </button>
@@ -150,7 +150,7 @@ export default function AnnotationModal({
                                         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                                             <div>
                                                 <p className="text-xs text-bs-text-mute uppercase tracking-wider mb-1">Symbol</p>
-                                                <p className="text-white font-semibold">{trade.symbol}</p>
+                                                <p className="text-bs-text-primary font-semibold">{trade.symbol}</p>
                                             </div>
                                             <div>
                                                 <p className="text-xs text-bs-text-mute uppercase tracking-wider mb-1">Side</p>
@@ -237,13 +237,13 @@ export default function AnnotationModal({
                                                         onKeyDown={handleAddCustomTag}
                                                         onBlur={() => setIsAddingTag(false)}
                                                         placeholder="Press Enter..."
-                                                        className="bg-bs-card-fg border border-bs-brand-tertiary/50 px-3 py-1 text-xs text-white focus:outline-none w-32"
+                                                        className="bg-bs-card-fg border border-bs-brand-tertiary/50 px-3 py-1 text-xs text-bs-text-primary focus:outline-none w-32"
                                                         autoFocus
                                                     />
                                                 ) : (
                                                     <button
                                                         onClick={() => setIsAddingTag(true)}
-                                                        className="px-3 py-1 text-xs font-medium bg-bs-card border border-dashed border-white/20 text-bs-text-mute hover:border-white/40 hover:text-bs-text-tertiary flex items-center gap-1"
+                                                        className="px-3 py-1 text-xs font-medium bg-bs-card border border-dashed border-bs-border text-bs-text-mute hover:border-white/40 hover:text-bs-text-tertiary flex items-center gap-1"
                                                     >
                                                         <Plus className="h-3 w-3" />
                                                         Add Tag
@@ -265,7 +265,7 @@ export default function AnnotationModal({
                                                     }
                                                 }}
                                                 placeholder="Add your thoughts, entry reasons, or emotional state..."
-                                                className="w-full h-28 rounded-lg border border-bs-border bg-bs-card px-4 py-3 text-white placeholder:text-bs-text-mute focus:border-bs-brand-tertiary/40 focus:outline-none focus:ring-1 focus:ring-[#00b3b3]/20 resize-none text-sm"
+                                                className="w-full h-28 rounded-lg border border-bs-border bg-bs-card px-4 py-3 text-bs-text-primary placeholder:text-bs-text-mute focus:border-bs-brand-tertiary/40 focus:outline-none focus:ring-1 focus:ring-[#00b3b3]/20 resize-none text-sm"
                                             />
                                             <div className="flex justify-end text-[10px] font-mono">
                                                 <span className={`transition-colors ${remainingNoteChars < 50 ? 'text-yellow-400' : 'text-bs-text-mute'}`}>
@@ -287,7 +287,7 @@ export default function AnnotationModal({
                                                     }
                                                 }}
                                                 placeholder="What is the one thing you learned from this?"
-                                                className="w-full h-16 rounded-lg border border-bs-brand-tertiary/20 bg-bs-bg/40 px-4 py-2 text-sm text-white placeholder:text-bs-brand/20 focus:border-bs-brand-tertiary/40 focus:outline-none transition-all resize-none italic"
+                                                className="w-full h-16 rounded-lg border border-bs-brand-tertiary/20 bg-bs-bg/40 px-4 py-2 text-sm text-bs-text-primary placeholder:text-bs-brand/20 focus:border-bs-brand-tertiary/40 focus:outline-none transition-all resize-none italic"
                                             />
                                             <div className="flex items-center justify-between text-[10px]">
                                                 <span className="text-bs-brand/40 italic">
@@ -309,7 +309,7 @@ export default function AnnotationModal({
                                         </button>
                                         <button
                                             onClick={handleSave}
-                                            className="rounded-lg bg-bs-brand-tertiary px-6 py-2.5 text-sm font-medium text-white transition-all hover:bg-bs-brand-tertiary shadow-[0_0_20px_rgba(0,179,179,0.3)]"
+                                            className="rounded-lg bg-bs-brand-tertiary px-6 py-2.5 text-sm font-medium text-bs-text-primary transition-all hover:bg-bs-brand-tertiary shadow-[0_0_20px_rgba(0,179,179,0.3)]"
                                         >
                                             Save Annotation
                                         </button>

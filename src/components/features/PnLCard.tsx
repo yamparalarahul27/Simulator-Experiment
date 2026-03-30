@@ -108,7 +108,7 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                             />
                             <div>
                                 <div className="flex items-center">
-                                    <h2 className="text-xl font-bold text-white tracking-wide">PnL Analysis</h2>
+                                    <h2 className="text-xl font-bold text-bs-text-primary tracking-wide">PnL Analysis</h2>
                                     <InfoTooltip infoKey="pnlCard" />
                                 </div>
                                 <p className="text-sm text-bs-text-mute font-mono">NET PROFIT & LOSS</p>
@@ -120,7 +120,7 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                             <span className="text-bs-text-tertiary text-sm">Show Drawdown on Chart</span>
                             <button
                                 onClick={() => setShowDrawdown(!showDrawdown)}
-                                className={`relative inline-flex h-6 w-11 items-center rounded-lg bg-black/10 border border-bs-border transition-colors duration-300 ${showDrawdown ? 'bg-bs-brand-tertiary' : 'bg-bs-text-mute'
+                                className={`relative inline-flex h-6 w-11 items-center rounded-lg bg-bs-bg/10 border border-bs-border transition-colors duration-300 ${showDrawdown ? 'bg-bs-brand-tertiary' : 'bg-bs-text-mute'
                                     }`}
                             >
                                 <span
@@ -171,7 +171,7 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                             onClick={() => setIsChartVisible(!isChartVisible)}
                             className="w-full flex items-center justify-center gap-8 group cursor-pointer"
                         >
-                            <span className="text-white font-mono text-sm tracking-widest uppercase">
+                            <span className="text-bs-text-primary font-mono text-sm tracking-widest uppercase">
                                 Visualisation Chart
                             </span>
                             <div className={`
@@ -179,7 +179,7 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                                 group-hover:border-white/30 transition-all duration-300
                                 ${isChartVisible ? 'rotate-180' : ''}
                             `}>
-                                <ChevronDown className="w-4 h-4 text-white" />
+                                <ChevronDown className="w-4 h-4 text-bs-text-primary" />
                             </div>
                         </button>
 

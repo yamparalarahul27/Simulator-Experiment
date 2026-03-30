@@ -61,7 +61,7 @@ export default function RoadmapScreen() {
         <section className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-8 p-4 md:p-8 text-bs-text-secondary">
             <div className="flex w-full flex-col gap-4 md:gap-6 md:flex-row md:items-center md:justify-between">
                 <header className="text-left max-w-6xl md:flex-1">
-                    <h1 className="mt-2 md:mt-3 text-2xl md:text-4xl font-semibold text-white">Development Roadmap</h1>
+                    <h1 className="mt-2 md:mt-3 text-2xl md:text-4xl font-semibold text-bs-text-primary">Development Roadmap</h1>
                     <p className="mt-1 md:mt-2 text-xs md:text-sm uppercase tracking-[0.4em] text-bs-text-mute">From simulation to real trading</p>
                     <p className="mt-3 md:mt-4 text-sm md:text-base leading-relaxed text-bs-text-secondary">
                         YDEX is built in phases — each one expands capabilities while keeping education at the core.
@@ -79,7 +79,7 @@ export default function RoadmapScreen() {
                                 ? 'border-cyan-500/20 bg-cyan-500/5'
                                 : phase.status === 'next'
                                   ? 'border-bs-brand-tertiary/20 bg-bs-brand-tertiary/5'
-                                  : 'border-bs-border bg-white/5'
+                                  : 'border-bs-border bg-bs-text-primary/5'
                         }`}
                     >
                         <div className="flex items-center gap-3">
@@ -97,7 +97,7 @@ export default function RoadmapScreen() {
                             </span>
                         </div>
                         <p className="mt-1 text-sm text-bs-text-tertiary">{phase.subtitle}</p>
-                        <ul className="mt-3 md:mt-4 space-y-2 text-sm md:text-base text-white/75">
+                        <ul className="mt-3 md:mt-4 space-y-2 text-sm md:text-base text-bs-text-primary/75">
                             {phase.items.map((item) => (
                                 <li key={item} className="flex items-start gap-3">
                                     <span

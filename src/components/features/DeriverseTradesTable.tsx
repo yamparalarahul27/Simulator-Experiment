@@ -50,7 +50,7 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
             <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
                 <div className="rounded-lg border border-bs-border bg-bs-bg/80 backdrop-blur-xl p-4 md:col-span-1">
                     <p className="text-xs text-bs-text-tertiary uppercase tracking-wider mb-1">Total Trades</p>
-                    <p className="text-2xl font-semibold text-white font-mono"><NumberFlow value={trades.length} transformTiming={{ duration: 400, easing: 'ease-out' }} /></p>
+                    <p className="text-2xl font-semibold text-bs-text-primary font-mono"><NumberFlow value={trades.length} transformTiming={{ duration: 400, easing: 'ease-out' }} /></p>
                 </div>
                 <div className="rounded-lg border border-bs-border bg-bs-bg/80 backdrop-blur-xl p-4 md:col-span-2">
                     <p className="text-xs text-bs-text-tertiary uppercase tracking-wider mb-1">Total PnL</p>
@@ -60,11 +60,11 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
                 </div>
                 <div className="rounded-lg border border-bs-border bg-bs-bg/80 backdrop-blur-xl p-4 md:col-span-1">
                     <p className="text-xs text-bs-text-tertiary uppercase tracking-wider mb-1">Win Rate</p>
-                    <p className="text-2xl font-semibold text-white font-mono"><NumberFlow value={winRate} suffix="%" format={{ minimumFractionDigits: 1, maximumFractionDigits: 1 }} transformTiming={{ duration: 400, easing: 'ease-out' }} /></p>
+                    <p className="text-2xl font-semibold text-bs-text-primary font-mono"><NumberFlow value={winRate} suffix="%" format={{ minimumFractionDigits: 1, maximumFractionDigits: 1 }} transformTiming={{ duration: 400, easing: 'ease-out' }} /></p>
                 </div>
                 <div className="rounded-lg border border-bs-border bg-bs-bg/80 backdrop-blur-xl p-4 md:col-span-1">
                     <p className="text-xs text-bs-text-tertiary uppercase tracking-wider mb-1">Total Fees</p>
-                    <p className="text-2xl font-semibold text-white font-mono"><NumberFlow value={totalFees} suffix=" USDC" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 400, easing: 'ease-out' }} />
+                    <p className="text-2xl font-semibold text-bs-text-primary font-mono"><NumberFlow value={totalFees} suffix=" USDC" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 400, easing: 'ease-out' }} />
                     </p>
                 </div>
                 <div className="rounded-lg bg-blue-600/10 backdrop-blur-xl flex flex-col justify-center md:col-span-1 p-4">
@@ -72,7 +72,7 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
                         <button
                             onClick={onSaveTrades}
                             disabled={savingTrades}
-                            className="px-4 py-2 bg-[#69a2f1] border border-bs-border text-white rounded-lg font-semibold hover:bg-[#69a2f1]/80 transition disabled:bg-blue-900/40 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
+                            className="px-4 py-2 bg-[#69a2f1] border border-bs-border text-bs-text-primary rounded-lg font-semibold hover:bg-[#69a2f1]/80 transition disabled:bg-blue-900/40 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
                         >
                             {savingTrades ? (
                                 <>
@@ -98,7 +98,7 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
             {/* Trades Table */}
             <div className="rounded-lg border border-bs-border bg-bs-bg/80 backdrop-blur-xl overflow-hidden">
                 <div className="px-6 py-4 border-b border-bs-border bg-gradient-to-r from-white/5 to-transparent">
-                    <h3 className="text-lg font-semibold text-white">Deriverse Trades</h3>
+                    <h3 className="text-lg font-semibold text-bs-text-primary">Deriverse Trades</h3>
                     <p className="text-sm text-bs-text-tertiary mt-1">Showing {trades.length} trades parsed from on-chain data</p>
                 </div>
                 <div className="overflow-x-auto max-h-[60vh]">
@@ -131,7 +131,7 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-bs-text-secondary">
                                             {trade.closedAt.toLocaleString()}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white font-semibold">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-bs-text-primary font-semibold">
                                             {trade.symbol}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
@@ -150,13 +150,13 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
                                                 {trade.side.toUpperCase()}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-white font-mono">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-bs-text-primary font-mono">
                                             {trade.quantity.toFixed(4)}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-white font-mono">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-bs-text-primary font-mono">
                                             ${trade.price.toFixed(2)}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-white font-mono">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-bs-text-primary font-mono">
                                             ${trade.notional.toFixed(2)}
                                         </td>
                                         <td className={`px-6 py-4 whitespace-nowrap text-sm text-right font-mono font-semibold

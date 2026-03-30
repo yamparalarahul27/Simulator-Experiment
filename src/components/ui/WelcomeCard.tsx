@@ -33,26 +33,26 @@ const CornerAccents = () => {
         <>
             {/* Top-Left Corner */}
             <div className="absolute top-4 left-4 w-4 h-4">
-                <div className="absolute top-0 left-0 w-2 h-px bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
-                <div className="absolute top-0 left-0 w-px h-2 bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
+                <div className="absolute top-0 left-0 w-2 h-px bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
+                <div className="absolute top-0 left-0 w-px h-2 bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
             </div>
 
             {/* Top-Right Corner */}
             <div className="absolute top-4 right-4 w-4 h-4">
-                <div className="absolute top-0 right-0 w-2 h-px bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
-                <div className="absolute top-0 right-0 w-px h-2 bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
+                <div className="absolute top-0 right-0 w-2 h-px bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
+                <div className="absolute top-0 right-0 w-px h-2 bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
             </div>
 
             {/* Bottom-Left Corner */}
             <div className="absolute bottom-4 left-4 w-4 h-4">
-                <div className="absolute bottom-0 left-0 w-2 h-px bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
-                <div className="absolute bottom-0 left-0 w-px h-2 bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
+                <div className="absolute bottom-0 left-0 w-2 h-px bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
+                <div className="absolute bottom-0 left-0 w-px h-2 bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
             </div>
 
             {/* Bottom-Right Corner */}
             <div className="absolute bottom-4 right-4 w-4 h-4">
-                <div className="absolute bottom-0 right-0 w-2 h-px bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
-                <div className="absolute bottom-0 right-0 w-px h-2 bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
+                <div className="absolute bottom-0 right-0 w-2 h-px bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
+                <div className="absolute bottom-0 right-0 w-px h-2 bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
             </div>
         </>
     );
@@ -68,7 +68,7 @@ export const WelcomeCard = ({ children, className = '' }: WelcomeCardProps) => {
                 rounded-lg
                 bg-bs-bg/40
                 border border-bs-border
-                hover:border-white/20
+                hover:border-bs-border
                 hover:shadow-lg hover:shadow-white/5
                 transition-all duration-300
                 p-5 sm:p-8

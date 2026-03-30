@@ -37,7 +37,7 @@ const STATUS_CONFIG: Record<LiqStatus, { color: string; bg: string; border: stri
     ok: { color: 'text-bs-brand-ts', bg: 'bg-blue-500', border: 'border-[#69a2f1]/30', label: 'OK', sublabel: 'Position Open' },
     warning: { color: 'text-yellow-400', bg: 'bg-yellow-500', border: 'border-yellow-500/30', label: 'Warning', sublabel: 'Near Liquidation' },
     negative: { color: 'text-bs-error', bg: 'bg-bs-error', border: 'border-[#ff285a]/30', label: 'Negative', sublabel: 'About to Liquidate' },
-    liquidated: { color: 'text-bs-text-tertiary', bg: 'bg-white/30', border: 'border-white/20', label: 'Liquidated', sublabel: 'Liquidated' },
+    liquidated: { color: 'text-bs-text-tertiary', bg: 'bg-white/30', border: 'border-bs-border', label: 'Liquidated', sublabel: 'Liquidated' },
 };
 
 // ─── Helpers ──────────────────────────────────
@@ -224,7 +224,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
         <div className="space-y-4">
             {/* Title */}
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3 mb-3 md:mb-5">
-                <h2 className="text-heading-16 text-white">Liquidation Simulator</h2>
+                <h2 className="text-heading-16 text-bs-text-primary">Liquidation Simulator</h2>
                 <span className="px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-widest bg-bs-brand-tertiary/15 text-bs-brand border border-bs-brand-tertiary/20 self-start">
                     Market Order Simulation
                 </span>
@@ -240,7 +240,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                     {/* Token */}
                     <div>
                         <label className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider block mb-1">Token</label>
-                        <div className="px-3 py-2 bg-bs-card border border-bs-border text-sm font-mono text-white">
+                        <div className="px-3 py-2 bg-bs-card border border-bs-border text-sm font-mono text-bs-text-primary">
                             XRP / USDC
                         </div>
                     </div>
@@ -248,7 +248,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                     {/* Entry Price */}
                     <div>
                         <label className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider block mb-1">Entry Price</label>
-                        <div className="px-3 py-2 bg-bs-card border border-bs-border text-sm font-mono text-white flex items-center justify-between">
+                        <div className="px-3 py-2 bg-bs-card border border-bs-border text-sm font-mono text-bs-text-primary flex items-center justify-between">
                             <span>{xrpPrice > 0 ? fmt(xrpPrice, 4) : 'Loading...'}</span>
                             <span className="flex items-center gap-1 text-[9px] text-bs-success">
                                 <Lock size={10} />
@@ -268,7 +268,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                             type="number"
                             value={quantity}
                             onChange={e => setQuantity(Math.max(1, parseFloat(e.target.value) || 0))}
-                            className="w-full px-3 py-2 bg-bs-card border border-bs-border text-sm font-mono text-white focus:border-bs-brand-tertiary/50 focus:outline-none transition-colors"
+                            className="w-full px-3 py-2 bg-bs-card border border-bs-border text-sm font-mono text-bs-text-primary focus:border-bs-brand-tertiary/50 focus:outline-none transition-colors"
                             min={1}
                             step={10}
                         />
@@ -306,7 +306,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                             type="number"
                             value={mmr}
                             onChange={e => setMmr(Math.max(0.01, Math.min(10, parseFloat(e.target.value) || 0.5)))}
-                            className="w-full px-3 py-2 bg-bs-card border border-bs-border text-sm font-mono text-white focus:border-bs-brand-tertiary/50 focus:outline-none transition-colors"
+                            className="w-full px-3 py-2 bg-bs-card border border-bs-border text-sm font-mono text-bs-text-primary focus:border-bs-brand-tertiary/50 focus:outline-none transition-colors"
                             min={0.01}
                             max={10}
                             step={0.1}
@@ -352,7 +352,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                         onClick={runSimulation}
                         disabled={!xrpPrice || xrpPrice <= 0}
                         className="w-full flex items-center justify-center gap-2 py-3 text-sm font-mono font-bold
-                            bg-gradient-to-r from-[#00b3b3] to-[#00ffff] text-white
+                            bg-gradient-to-r from-[#00b3b3] to-[#00ffff] text-bs-text-primary
                             hover:from-[#00e6e6] hover:to-[#00ffff]
                             disabled:opacity-30 disabled:cursor-not-allowed
                             transition-all active:scale-[0.98]"
@@ -366,8 +366,8 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                 <div className={`md:col-span-5 bg-bs-bg/60 backdrop-blur-xl border border-bs-border p-4 ${!simResult ? 'flex items-center justify-center' : ''}`}>
                     {!simResult ? (
                         <div className="text-center">
-                            <div className="text-white/15 text-xs font-mono mb-2">No simulation running</div>
-                            <div className="text-white/10 text-[10px] font-mono">Configure inputs and press "Run Simulation"</div>
+                            <div className="text-bs-text-primary/15 text-xs font-mono mb-2">No simulation running</div>
+                            <div className="text-bs-text-primary/10 text-[10px] font-mono">Configure inputs and press "Run Simulation"</div>
                         </div>
                     ) : results && (
                         <div className="space-y-4">
@@ -379,7 +379,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                                 <div className="flex items-baseline gap-2">
                                     <span className="text-sm font-mono text-bs-text-tertiary">{fmt(simResult.entryPrice, 4)}</span>
                                     <span className="text-bs-text-mute">→</span>
-                                    <span className="text-sm font-mono text-white font-bold">{fmt(simPrice, 4)}</span>
+                                    <span className="text-sm font-mono text-bs-text-primary font-bold">{fmt(simPrice, 4)}</span>
                                 </div>
                                 <div className={`text-xs font-mono font-bold mt-1 ${results.xrpChange >= 0 ? 'text-bs-success' : 'text-bs-error'}`}>
                                     {results.xrpChange >= 0 ? '+' : ''}{fmt(results.xrpChange, 4)} ({fmtPct(results.xrpChangePct)})
@@ -389,7 +389,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                             {/* Position Value */}
                             <div className="p-3 bg-bs-card border border-bs-border">
                                 <div className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider mb-1">Position Value</div>
-                                <div className="text-lg font-mono text-white font-bold">{fmt(results.positionValue)}</div>
+                                <div className="text-lg font-mono text-bs-text-primary font-bold">{fmt(results.positionValue)}</div>
                                 <div className="text-[10px] font-mono text-bs-text-mute mt-0.5">
                                     was {fmt(results.entryValue)} at entry
                                 </div>
@@ -459,7 +459,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                 <div className="md:col-span-3 bg-bs-bg/60 backdrop-blur-xl border border-bs-border p-4">
                     {!simResult ? (
                         <div className="h-full flex items-center justify-center">
-                            <div className="text-white/10 text-[10px] font-mono text-center">
+                            <div className="text-bs-text-primary/10 text-[10px] font-mono text-center">
                                 Price slider<br />appears after<br />simulation
                             </div>
                         </div>
@@ -469,7 +469,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
 
                             {/* Current sim price display */}
                             <div className="text-center mb-3">
-                                <div className="text-lg font-mono text-white font-bold">{fmt(simPrice, 4)}</div>
+                                <div className="text-lg font-mono text-bs-text-primary font-bold">{fmt(simPrice, 4)}</div>
                                 <div className={`text-[10px] font-mono ${simPrice >= simResult.entryPrice ? 'text-bs-success' : 'text-bs-error'}`}>
                                     {simPrice >= simResult.entryPrice ? '▲' : '▼'} {fmtPct(((simPrice - simResult.entryPrice) / simResult.entryPrice) * 100)}
                                 </div>
@@ -565,7 +565,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                             </p>
                             <div className="space-y-1.5">
                                 <p className="text-bs-text-tertiary font-bold">Key Takeaways:</p>
-                                <ul className="space-y-1 text-white/35">
+                                <ul className="space-y-1 text-bs-text-primary/35">
                                     <li className="flex items-start gap-2">
                                         <span className="text-bs-brand mt-0.5">•</span>
                                         <span>Higher leverage moves the liquidation price closer to your entry — more risk.</span>

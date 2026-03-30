@@ -69,7 +69,7 @@ const SpotTradeHistory = React.memo(function SpotTradeHistory({
                         key={t.key}
                         onClick={() => setTab(t.key)}
                         className={`px-4 py-2.5 text-xs font-mono font-medium transition-all border-b-2 ${tab === t.key
-                                ? 'text-white border-bs-brand-tertiary'
+                                ? 'text-bs-text-primary border-bs-brand-tertiary'
                                 : 'text-bs-text-mute border-transparent hover:text-bs-text-tertiary'
                             }`}
                     >
@@ -251,7 +251,7 @@ const SpotTradeHistory = React.memo(function SpotTradeHistory({
 
                                         return (
                                             <tr key={bal.token} className="border-b border-bs-border hover:bg-white/[0.02] transition-colors">
-                                                <td className="text-xs font-mono font-bold text-white px-3 py-2.5">{bal.token}</td>
+                                                <td className="text-xs font-mono font-bold text-bs-text-primary px-3 py-2.5">{bal.token}</td>
                                                 <td className="text-[10px] font-mono text-bs-text-tertiary px-3 py-2.5 text-right">
                                                     {bal.available > 1_000_000
                                                         ? bal.available.toLocaleString('en-US', { maximumFractionDigits: 0 })

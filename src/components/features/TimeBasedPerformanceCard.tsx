@@ -95,7 +95,7 @@ export default function TimeBasedPerformanceCard({
               type="button"
               onClick={() => setViewMode('session')}
               className={`px-3 py-1.5 text-xs font-mono uppercase tracking-wider transition-all ${viewMode === 'session'
-                ? 'bg-bs-brand-tertiary/20 text-white/90'
+                ? 'bg-bs-brand-tertiary/20 text-bs-text-primary/90'
                 : 'text-bs-text-tertiary hover:text-bs-text-secondary'}
               `}
             >
@@ -105,7 +105,7 @@ export default function TimeBasedPerformanceCard({
               type="button"
               onClick={() => setViewMode('hourly')}
               className={`px-3 py-1.5 text-xs font-mono uppercase tracking-wider transition-all border-l border-bs-border ${viewMode === 'hourly'
-                ? 'bg-bs-brand-tertiary/20 text-white/90'
+                ? 'bg-bs-brand-tertiary/20 text-bs-text-primary/90'
                 : 'text-bs-text-tertiary hover:text-bs-text-secondary'}
               `}
             >
@@ -123,22 +123,22 @@ export default function TimeBasedPerformanceCard({
             <div className={`w-full min-w-0 ${chartHeightClass}`}>
               <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                 <BarChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.08)" />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--bs-border)" />
                   <XAxis
                     dataKey="label"
-                    tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }}
+                    tick={{ fill: 'var(--bs-text-mute)', fontSize: 10 }}
                     tickLine={false}
                     axisLine={false}
                     interval={viewMode === 'hourly' ? 2 : 0}
                   />
                   <YAxis
-                    tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }}
+                    tick={{ fill: 'var(--bs-text-mute)', fontSize: 10 }}
                     tickLine={false}
                     axisLine={false}
                     tickFormatter={(v) => Number(v).toFixed(0)}
                     width={40}
                   />
-                  <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
+                  <Tooltip content={<CustomTooltip />} cursor={{ fill: 'var(--bs-bg-primary)' }} />
                   <Bar dataKey="pnl" radius={[0, 0, 0, 0]} isAnimationActive={false}>
                     {chartData.map((entry, idx) => (
                       <Cell key={`cell-${idx}`} fill={entry.pnl >= 0 ? 'rgba(74, 222, 128, 0.8)' : 'rgba(248, 113, 113, 0.8)'} />

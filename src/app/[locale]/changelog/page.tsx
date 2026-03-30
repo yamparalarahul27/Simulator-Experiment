@@ -281,7 +281,7 @@ function TabButton({
             className={`flex-1 px-4 py-3 text-left transition-all border ${
                 active
                     ? 'bg-bs-brand-tertiary/10 border-bs-brand-tertiary/30 text-bs-brand-secondary'
-                    : 'bg-transparent border-bs-border text-bs-text-mute hover:text-bs-text-tertiary hover:border-white/10'
+                    : 'bg-transparent border-bs-border text-bs-text-mute hover:text-bs-text-tertiary hover:border-bs-border'
             }`}
         >
             <div className="flex items-center gap-2">

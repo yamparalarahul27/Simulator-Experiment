@@ -36,7 +36,7 @@ export default function StatsRow({ activeFilter = 'All', trades }: StatsRowProps
                         </div>
                     </div>
                     <div className="flex flex-col items-start gap-2">
-                        <span className="text-num-48 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
+                        <span className="text-num-48 text-bs-text-primary drop-shadow-[0_0_10px_rgba(0,180,170,0.2)]">
                             <NumberFlow value={parseFloat(stats.winRate)} suffix="%" format={{ minimumFractionDigits: 1, maximumFractionDigits: 1 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
                         </span>
                         <div className="flex items-center gap-2">

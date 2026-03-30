@@ -117,7 +117,7 @@ export const PnLChart: React.FC<PnLChartProps> = ({ data, height = 400, showDraw
                         </linearGradient>
                     </defs>
 
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.1)" />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--bs-border)" />
 
                     <XAxis
                         dataKey="time"
@@ -125,15 +125,15 @@ export const PnLChart: React.FC<PnLChartProps> = ({ data, height = 400, showDraw
                     />
 
                     <YAxis
-                        tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }}
+                        tick={{ fill: 'var(--bs-text-mute)', fontSize: 10 }}
                         tickLine={false}
                         axisLine={false}
                         tickFormatter={(value) => value.toFixed(0)}
                     />
 
-                    <Tooltip content={<CustomTooltip showDrawdown={showDrawdown} />} cursor={{ stroke: 'rgba(255,255,255,0.2)', strokeWidth: 1 }} />
+                    <Tooltip content={<CustomTooltip showDrawdown={showDrawdown} />} cursor={{ stroke: 'var(--bs-border)', strokeWidth: 1 }} />
 
-                    <ReferenceLine y={0} stroke="rgba(255,255,255,0.2)" strokeDasharray="3 3" />
+                    <ReferenceLine y={0} stroke="var(--bs-border)" strokeDasharray="3 3" />
 
                     <Area
                         type="monotone"

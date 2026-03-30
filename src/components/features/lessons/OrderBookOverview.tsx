@@ -150,7 +150,7 @@ function LessonCard({
     return (
         <button
             onClick={onClick}
-            className="w-full text-left bg-bs-bg border border-bs-border hover:border-white/20 hover:bg-white/[0.02] transition-all duration-200 p-5 group"
+            className="w-full text-left bg-bs-bg border border-bs-border hover:border-bs-border hover:bg-white/[0.02] transition-all duration-200 p-5 group"
         >
             <div className="flex items-start gap-4">
                 <div className="flex items-center justify-center w-10 h-10 bg-bs-card border border-bs-border text-lg shrink-0">
@@ -159,7 +159,7 @@ function LessonCard({
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                         <span className="text-[10px] font-mono text-bs-text-mute">{String(index).padStart(2, '0')}</span>
-                        <h3 className="text-sm font-mono font-semibold text-white">{lesson.title}</h3>
+                        <h3 className="text-sm font-mono font-semibold text-bs-text-primary">{lesson.title}</h3>
                     </div>
                     <p className="text-xs font-mono text-bs-text-mute mt-1">{lesson.description}</p>
                 </div>
@@ -186,7 +186,7 @@ function OverviewContent({
         <div className="space-y-8">
             {/* Intro section */}
             <div className="border border-bs-border bg-white/[0.02] p-6 md:p-8">
-                <h2 className="text-lg font-mono font-semibold text-white mb-4">What is an Order Book?</h2>
+                <h2 className="text-lg font-mono font-semibold text-bs-text-primary mb-4">What is an Order Book?</h2>
                 <div className="space-y-3 text-sm font-mono text-bs-text-tertiary leading-relaxed">
                     <p>
                         An order book is a real-time list of all open buy and sell limit orders for a specific
@@ -200,9 +200,9 @@ function OverviewContent({
                         Key elements you see in an order book:
                     </p>
                     <ul className="list-none space-y-1 pl-2">
-                        <li><span className="text-white">Price</span> — the level someone is willing to buy or sell at</li>
-                        <li><span className="text-white">Amount / Size</span> — how much they want to trade at that price</li>
-                        <li><span className="text-white">Total (cumulative)</span> — running sum of how much volume is available up to that price</li>
+                        <li><span className="text-bs-text-primary">Price</span> — the level someone is willing to buy or sell at</li>
+                        <li><span className="text-bs-text-primary">Amount / Size</span> — how much they want to trade at that price</li>
+                        <li><span className="text-bs-text-primary">Total (cumulative)</span> — running sum of how much volume is available up to that price</li>
                     </ul>
                     <p>
                         The order book is the purest form of supply and demand. By combining Depth, Heatmap,
@@ -216,19 +216,19 @@ function OverviewContent({
                 <h3 className="text-sm font-mono font-semibold text-bs-text-secondary uppercase tracking-wider mb-4">Quick Reference</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div className="flex items-center gap-2 text-xs font-mono text-bs-text-mute">
-                        <span>⚔️ Limit vs Market</span> <span className="text-white/10">—</span> <span>Passive vs aggressive</span>
+                        <span>⚔️ Limit vs Market</span> <span className="text-bs-text-primary/10">—</span> <span>Passive vs aggressive</span>
                     </div>
                     <div className="flex items-center gap-2 text-xs font-mono text-bs-text-mute">
-                        <span>🗺️ Heatmap</span> <span className="text-white/10">—</span> <span>Order book on chart over time</span>
+                        <span>🗺️ Heatmap</span> <span className="text-bs-text-primary/10">—</span> <span>Order book on chart over time</span>
                     </div>
                     <div className="flex items-center gap-2 text-xs font-mono text-bs-text-mute">
-                        <span>📉 Depth</span> <span className="text-white/10">—</span> <span>Liquidity at each level</span>
+                        <span>📉 Depth</span> <span className="text-bs-text-primary/10">—</span> <span>Liquidity at each level</span>
                     </div>
                     <div className="flex items-center gap-2 text-xs font-mono text-bs-text-mute">
-                        <span>🎨 Overlay</span> <span className="text-white/10">—</span> <span>Bid/ask bands on candles</span>
+                        <span>🎨 Overlay</span> <span className="text-bs-text-primary/10">—</span> <span>Bid/ask bands on candles</span>
                     </div>
                     <div className="flex items-center gap-2 text-xs font-mono text-bs-text-mute">
-                        <span>💡 Pro Tips</span> <span className="text-white/10">—</span> <span>Spot vs Perps, spoofing</span>
+                        <span>💡 Pro Tips</span> <span className="text-bs-text-primary/10">—</span> <span>Spot vs Perps, spoofing</span>
                     </div>
                 </div>
             </div>
@@ -270,7 +270,7 @@ function OverviewContent({
                     </div>
                 </div>
                 <div className="mt-4 pt-4 border-t border-bs-border">
-                    <p className="text-sm font-mono text-white">
+                    <p className="text-sm font-mono text-bs-text-primary">
                         Depth Delta = 550 − 350 = <span className="text-bs-success">+200</span>
                     </p>
                     <p className="text-xs font-mono text-bs-text-mute mt-1">

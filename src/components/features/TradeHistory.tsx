@@ -217,7 +217,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
   };
 
   return (
-    <div className="min-h-screen text-white py-8">
+    <div className="min-h-screen text-bs-text-primary py-8">
       <AnalyticsConfirmModal
         isOpen={showAnalyticsModal}
         onConfirm={handleAnalyticsConfirm}
@@ -233,7 +233,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
               key={mode}
               onClick={() => setInputMode(mode)}
               className={`px-4 py-2 font-semibold uppercase tracking-wide text-sm transition-all ${inputMode === mode
-                ? 'text-white border-b-2 border-blue-400'
+                ? 'text-bs-text-primary border-b-2 border-blue-400'
                 : 'text-bs-text-mute hover:text-bs-text-secondary'
                 }`}
             >
@@ -244,7 +244,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
 
         {/* Input Section */}
         <CardWithCornerShine padding="xs">
-          <h2 className="text-xl font-semibold text-white mb-4 text-center">
+          <h2 className="text-xl font-semibold text-bs-text-primary mb-4 text-center">
             Wallet Transaction Search on Devnet
           </h2>
           {inputMode === 'manual' ? (
@@ -261,7 +261,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                 <button
                   onClick={handleWalletConnect}
                   disabled={connecting || connected}
-                  className="px-6 py-3 bg-bs-card-fg border border-white/20 rounded-lg font-semibold text-white hover:bg-bs-card-fg transition disabled:opacity-50"
+                  className="px-6 py-3 bg-bs-card-fg border border-bs-border rounded-lg font-semibold text-bs-text-primary hover:bg-bs-card-fg transition disabled:opacity-50"
                 >
                   {connecting
                     ? 'Connecting…'
@@ -272,7 +272,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                 {connected && (
                   <button
                     onClick={handleWalletDisconnect}
-                    className="px-6 py-3 border border-white/20 rounded-lg font-semibold text-white hover:bg-bs-card-fg transition"
+                    className="px-6 py-3 border border-bs-border rounded-lg font-semibold text-bs-text-primary hover:bg-bs-card-fg transition"
                   >
                     Disconnect
                   </button>
@@ -286,7 +286,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
               <button
                 onClick={() => walletAddress && handleAddressSubmit(walletAddress, hasCachedData)}
                 disabled={!walletAddress || loading}
-                className={`px-6 py-3 text-white rounded-lg font-semibold transition disabled:opacity-50 
+                className={`px-6 py-3 text-bs-text-primary rounded-lg font-semibold transition disabled:opacity-50 
                   ${hasCachedData ? 'bg-bs-card-fg hover:bg-bs-border border border-bs-border' : 'bg-[#69a2f1] hover:bg-[#69a2f1]/80'}`}
               >
                 {loading ? 'Running…' : walletAddress ? (hasCachedData ? 'Force Refresh' : 'Run Lookup') : 'Connect to Run'}
@@ -303,7 +303,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
               <button
                 onClick={() => setActiveTab('deriverse')}
                 className={`px-6 py-3 font-semibold text-sm uppercase tracking-wide transition-all ${activeTab === 'deriverse'
-                  ? 'text-white border-b-2 border-blue-400'
+                  ? 'text-bs-text-primary border-b-2 border-blue-400'
                   : 'text-bs-text-tertiary hover:text-bs-text-primary'
                   }`}
               >
@@ -317,7 +317,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
               <button
                 onClick={() => setActiveTab('all')}
                 className={`px-6 py-3 font-semibold text-sm uppercase tracking-wide transition-all ${activeTab === 'all'
-                  ? 'text-white border-b-2 border-blue-400'
+                  ? 'text-bs-text-primary border-b-2 border-blue-400'
                   : 'text-bs-text-tertiary hover:text-bs-text-primary'
                   }`}
               >
@@ -379,13 +379,13 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                       "Sorry for the inconvenience, we are working on limited resources, that's why this force refresh is enabled, to save Helius usage."
                     </p>
                     <p className="text-bs-text-tertiary text-sm">
-                      Click <span className="text-white font-semibold">"Force Refresh"</span> above to fetch full transaction history from Helius.
+                      Click <span className="text-bs-text-primary font-semibold">"Force Refresh"</span> above to fetch full transaction history from Helius.
                     </p>
                   </div>
                 ) : (
                   <div className="rounded-lg border border-bs-border bg-bs-bg/80 backdrop-blur-xl overflow-hidden">
                     <div className="px-6 py-4 border-b border-bs-border bg-gradient-to-r from-white/5 to-transparent">
-                      <h3 className="text-lg font-semibold text-white">All Transactions (via Helius RPC)</h3>
+                      <h3 className="text-lg font-semibold text-bs-text-primary">All Transactions (via Helius RPC)</h3>
                       <p className="text-sm text-bs-text-tertiary mt-1">Showing last {transactions.length} transactions for this address</p>
                     </div>
                     <div className="overflow-x-auto max-h-[70vh]">
@@ -428,7 +428,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                                   {tx.status}
                                 </span>
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-white font-mono font-semibold">
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-bs-text-primary font-mono font-semibold">
                                 {tx.fee.toLocaleString()}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm">
@@ -472,7 +472,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                     <>
                       <p>🎯 <strong>Deriverse Trades</strong>: Parsed on-chain trading activity (spot & perpetual fills, PnL, fees)</p>
                       <p>📊 <strong>All Transactions</strong>: Complete transaction history via Helius RPC</p>
-                      <p className="mt-4 font-semibold text-white">Steps:</p>
+                      <p className="mt-4 font-semibold text-bs-text-primary">Steps:</p>
                       <ol className="list-decimal list-inside space-y-1 text-bs-text-secondary">
                         <li>Paste any Solana wallet address or connect your wallet</li>
                         <li>Click "Run" to fetch Deriverse trades & full history</li>
@@ -482,7 +482,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                     </>
                   ) : (
                     <>
-                      <p className="mt-4 font-semibold text-white">Steps:</p>
+                      <p className="mt-4 font-semibold text-bs-text-primary">Steps:</p>
                       <ol className="list-decimal list-inside space-y-1 text-bs-text-secondary">
                         <li>Click "Connect Wallet" to link your Solana wallet</li>
                         <li>Choose your preferred wallet provider (Phantom, Solflare, etc.)</li>

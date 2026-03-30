@@ -62,7 +62,7 @@ export interface CardWithCornerShineProps {
  * - Base state: white at 20% opacity
  * - Hover state: full white with soft glow shadow
  * - Transition: smooth 300ms duration
- * - Glow: shadow-[0_0_8px_rgba(255,255,255,0.6)]
+ * - Glow: shadow-[0_0_8px_rgba(0,180,170,0.4)]
  * 
  * POSITIONING:
  * - Inset 16px (4 in Tailwind units) from card edges
@@ -73,26 +73,26 @@ const CornerAccents = () => {
         <>
             {/* Top-Left Corner: Horizontal line extending right, vertical line extending down */}
             <div className="absolute top-4 left-4 w-4 h-4">
-                <div className="absolute top-0 left-0 w-2 h-px bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
-                <div className="absolute top-0 left-0 w-px h-2 bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
+                <div className="absolute top-0 left-0 w-2 h-px bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
+                <div className="absolute top-0 left-0 w-px h-2 bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
             </div>
 
             {/* Top-Right Corner */}
             <div className="absolute top-4 right-4 w-4 h-4">
-                <div className="absolute top-0 right-0 w-2 h-px bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
-                <div className="absolute top-0 right-0 w-px h-2 bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
+                <div className="absolute top-0 right-0 w-2 h-px bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
+                <div className="absolute top-0 right-0 w-px h-2 bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
             </div>
 
             {/* Bottom-Left Corner */}
             <div className="absolute bottom-4 left-4 w-4 h-4">
-                <div className="absolute bottom-0 left-0 w-2 h-px bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
-                <div className="absolute bottom-0 left-0 w-px h-2 bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
+                <div className="absolute bottom-0 left-0 w-2 h-px bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
+                <div className="absolute bottom-0 left-0 w-px h-2 bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
             </div>
 
             {/* Bottom-Right Corner */}
             <div className="absolute bottom-4 right-4 w-4 h-4">
-                <div className="absolute bottom-0 right-0 w-2 h-px bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
-                <div className="absolute bottom-0 right-0 w-px h-2 bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
+                <div className="absolute bottom-0 right-0 w-2 h-px bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
+                <div className="absolute bottom-0 right-0 w-px h-2 bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
             </div>
         </>
     );
@@ -130,7 +130,7 @@ export const CardWithCornerShine = ({
     } as const;
 
     // Construct dynamic background opacity class
-    const bgOpacityClass = `bg-black/${bgOpacity}`;
+    const bgOpacityClass = `bg-bs-bg/${bgOpacity}`;
 
     // Build complete class string
     const containerClasses = [
@@ -138,9 +138,9 @@ export const CardWithCornerShine = ({
         minHeight,
         'rounded-[0px]',
         bgOpacityClass,
-        'bg-black/10',
+        'bg-bs-bg/10',
         'border border-bs-border',
-        'hover:border-white/20',
+        'hover:border-bs-border',
         showHoverShadow ? 'hover:shadow-lg hover:shadow-white/5' : '',
         'transition-all duration-300',
         onClick ? 'cursor-pointer' : '',

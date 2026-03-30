@@ -6,7 +6,7 @@ export default function PerksPage() {
     return (
         <div className="space-y-8">
             <div>
-                <h1 className="text-2xl font-mono font-bold text-white tracking-wide">Perks</h1>
+                <h1 className="text-2xl font-mono font-bold text-bs-text-primary tracking-wide">Perks</h1>
                 <p className="text-sm font-mono text-bs-text-tertiary mt-1">
                     Rewards and benefits for your learning journey
                 </p>
@@ -15,7 +15,7 @@ export default function PerksPage() {
             <CardWithCornerShine>
                 <div className="flex flex-col items-center justify-center py-8 md:py-16 text-center px-4">
                     <span className="text-4xl mb-4">🎁</span>
-                    <h2 className="text-lg font-mono font-semibold text-white mb-2">Coming Soon</h2>
+                    <h2 className="text-lg font-mono font-semibold text-bs-text-primary mb-2">Coming Soon</h2>
                     <p className="text-sm font-mono text-bs-text-mute max-w-md">
                         Earn perks and rewards as you progress through lessons and complete challenges.
                         NFTs, badges, and exclusive content await.
