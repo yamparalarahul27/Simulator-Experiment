@@ -12,7 +12,6 @@ const NAV_ITEMS: NavItem[] = [
     { title: 'About', href: '/about', category: 'dropdown' },
     { title: 'Roadmap', href: '/roadmap', category: 'dropdown' },
     { title: 'Exchange Manager', href: '/exchange-manager', category: 'dropdown' },
-    { title: 'Color Palette', href: '/learn2', category: 'dropdown' },
     { title: 'Changelog', href: '/changelog', category: 'dropdown' },
 ];
 
