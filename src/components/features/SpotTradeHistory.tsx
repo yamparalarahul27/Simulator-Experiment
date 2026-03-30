@@ -44,10 +44,10 @@ const SpotTradeHistory = React.memo(function SpotTradeHistory({
     const statusBadge = (status: string) => {
         const colors: Record<string, string> = {
             pending: 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20',
-            partial: 'text-[#69a2f1] bg-[#69a2f1]/10 border-blue-500/20',
-            filled: 'text-[#00e66b] bg-[#00e66b]/10 border-[#00e66b]/20',
-            cancelled: 'text-[#585e6c] bg-[#11141a] border-[#1a1e26]',
-            triggered: 'text-[#00ffff] bg-[#00b3b3]/10 border-[#00b3b3]/20',
+            partial: 'text-bs-brand-ts bg-[#69a2f1]/10 border-blue-500/20',
+            filled: 'text-bs-success bg-bs-success/10 border-[#00e66b]/20',
+            cancelled: 'text-bs-text-mute bg-bs-card border-bs-border',
+            triggered: 'text-bs-brand bg-bs-brand-tertiary/10 border-bs-brand-tertiary/20',
         };
         return (
             <span className={`px-1.5 py-0.5 text-[9px] font-mono font-bold uppercase border ${colors[status] || colors.pending}`}>
@@ -59,7 +59,7 @@ const SpotTradeHistory = React.memo(function SpotTradeHistory({
     return (
         <div>
             {/* Tab Headers */}
-            <div className="flex border-b border-[#1a1e26]">
+            <div className="flex border-b border-bs-border">
                 {([
                     { key: 'open', label: `Open Orders (${openOrders.length})` },
                     { key: 'history', label: 'Trade History' },
@@ -69,8 +69,8 @@ const SpotTradeHistory = React.memo(function SpotTradeHistory({
                         key={t.key}
                         onClick={() => setTab(t.key)}
                         className={`px-4 py-2.5 text-xs font-mono font-medium transition-all border-b-2 ${tab === t.key
-                                ? 'text-white border-[#00b3b3]'
-                                : 'text-[#585e6c] border-transparent hover:text-[#adb9d2]'
+                                ? 'text-white border-bs-brand-tertiary'
+                                : 'text-bs-text-mute border-transparent hover:text-bs-text-tertiary'
                             }`}
                     >
                         {t.label}
@@ -84,13 +84,13 @@ const SpotTradeHistory = React.memo(function SpotTradeHistory({
                 {tab === 'open' && (
                     <div>
                         {openOrders.length === 0 ? (
-                            <div className="py-8 text-center text-xs font-mono text-[#585e6c]">
+                            <div className="py-8 text-center text-xs font-mono text-bs-text-mute">
                                 No open orders
                             </div>
                         ) : (
                             <table className="w-full">
                                 <thead>
-                                    <tr className="text-[9px] font-mono text-[#585e6c] uppercase tracking-wider border-b border-[#1a1e26]">
+                                    <tr className="text-[9px] font-mono text-bs-text-mute uppercase tracking-wider border-b border-bs-border">
                                         <th className="text-left px-3 py-2">Time</th>
                                         <th className="text-left px-3 py-2">Pair</th>
                                         <th className="text-left px-3 py-2">Type</th>
@@ -110,50 +110,50 @@ const SpotTradeHistory = React.memo(function SpotTradeHistory({
                                             : 0;
 
                                         return (
-                                            <tr key={order.id} className="border-b border-[#1a1e26] hover:bg-white/[0.02] transition-colors">
-                                                <td className="text-[10px] font-mono text-[#585e6c] px-3 py-2">
+                                            <tr key={order.id} className="border-b border-bs-border hover:bg-white/[0.02] transition-colors">
+                                                <td className="text-[10px] font-mono text-bs-text-mute px-3 py-2">
                                                     {formatTime(order.createdAt)}
                                                 </td>
-                                                <td className="text-[10px] font-mono text-[#adb9d2] px-3 py-2">{order.pair}</td>
-                                                <td className="text-[10px] font-mono text-[#585e6c] px-3 py-2 uppercase">
+                                                <td className="text-[10px] font-mono text-bs-text-tertiary px-3 py-2">{order.pair}</td>
+                                                <td className="text-[10px] font-mono text-bs-text-mute px-3 py-2 uppercase">
                                                     {order.orderType.replace('_', ' ')}
                                                 </td>
-                                                <td className={`text-[10px] font-mono font-bold px-3 py-2 ${order.side === 'buy' ? 'text-[#00e66b]' : 'text-[#ff285a]'}`}>
+                                                <td className={`text-[10px] font-mono font-bold px-3 py-2 ${order.side === 'buy' ? 'text-bs-success' : 'text-bs-error'}`}>
                                                     {order.side.toUpperCase()}
                                                 </td>
-                                                <td className="text-[10px] font-mono text-[#adb9d2] px-3 py-2 text-right">
+                                                <td className="text-[10px] font-mono text-bs-text-tertiary px-3 py-2 text-right">
                                                     {order.price ? formatPrice(order.price) : order.stopPrice ? `⊘ ${formatPrice(order.stopPrice)}` : '—'}
                                                 </td>
-                                                <td className="text-[10px] font-mono text-[#adb9d2] px-3 py-2 text-right">
+                                                <td className="text-[10px] font-mono text-bs-text-tertiary px-3 py-2 text-right">
                                                     {order.quantity.toFixed(4)}
                                                 </td>
                                                 <td className="px-3 py-2">
                                                     {(order.orderType === 'iceberg' || order.orderType === 'twap') ? (
                                                         <div className="flex items-center gap-1">
-                                                            <div className="flex-1 h-1 bg-[#171a20] rounded-full overflow-hidden">
+                                                            <div className="flex-1 h-1 bg-bs-card-fg rounded-full overflow-hidden">
                                                                 <div
-                                                                    className="h-full bg-[#00b3b3] transition-all"
+                                                                    className="h-full bg-bs-brand-tertiary transition-all"
                                                                     style={{ width: `${fillPct}%` }}
                                                                 />
                                                             </div>
-                                                            <span className="text-[8px] font-mono text-[#585e6c]">{fillPct.toFixed(0)}%</span>
+                                                            <span className="text-[8px] font-mono text-bs-text-mute">{fillPct.toFixed(0)}%</span>
                                                         </div>
                                                     ) : (
-                                                        <span className="text-[10px] font-mono text-[#585e6c] text-center block">—</span>
+                                                        <span className="text-[10px] font-mono text-bs-text-mute text-center block">—</span>
                                                     )}
                                                 </td>
                                                 <td className="px-3 py-2 text-center">{statusBadge(order.status)}</td>
-                                                <td className="text-[9px] font-mono text-[#585e6c] px-3 py-2 text-center">
-                                                    {order.tpPrice ? <span className="text-[#00e66b]/60">TP</span> : null}
+                                                <td className="text-[9px] font-mono text-bs-text-mute px-3 py-2 text-center">
+                                                    {order.tpPrice ? <span className="text-bs-success/60">TP</span> : null}
                                                     {order.tpPrice && order.slPrice ? ' / ' : null}
-                                                    {order.slPrice ? <span className="text-[#ff285a]/60">SL</span> : null}
+                                                    {order.slPrice ? <span className="text-bs-error/60">SL</span> : null}
                                                     {!order.tpPrice && !order.slPrice ? '—' : null}
                                                 </td>
                                                 <td className="px-3 py-2 text-right">
                                                     <button
                                                         onClick={() => handleCancel(order.id)}
                                                         disabled={cancellingId === order.id}
-                                                        className="text-[9px] font-mono text-[#ff285a]/60 hover:text-[#ff285a] transition-colors disabled:opacity-30"
+                                                        className="text-[9px] font-mono text-bs-error/60 hover:text-bs-error transition-colors disabled:opacity-30"
                                                     >
                                                         {cancellingId === order.id ? '...' : 'Cancel'}
                                                     </button>
@@ -171,13 +171,13 @@ const SpotTradeHistory = React.memo(function SpotTradeHistory({
                 {tab === 'history' && (
                     <div>
                         {filledOrders.length === 0 ? (
-                            <div className="py-8 text-center text-xs font-mono text-[#585e6c]">
+                            <div className="py-8 text-center text-xs font-mono text-bs-text-mute">
                                 No trade history yet
                             </div>
                         ) : (
                             <table className="w-full">
                                 <thead>
-                                    <tr className="text-[9px] font-mono text-[#585e6c] uppercase tracking-wider border-b border-[#1a1e26]">
+                                    <tr className="text-[9px] font-mono text-bs-text-mute uppercase tracking-wider border-b border-bs-border">
                                         <th className="text-left px-3 py-2">Date</th>
                                         <th className="text-left px-3 py-2">Time</th>
                                         <th className="text-left px-3 py-2">Pair</th>
@@ -192,26 +192,26 @@ const SpotTradeHistory = React.memo(function SpotTradeHistory({
                                 </thead>
                                 <tbody>
                                     {filledOrders.slice(0, 50).map(order => (
-                                        <tr key={order.id} className="border-b border-[#1a1e26] hover:bg-white/[0.02] transition-colors">
-                                            <td className="text-[10px] font-mono text-[#585e6c] px-3 py-2">{formatDate(order.createdAt)}</td>
-                                            <td className="text-[10px] font-mono text-[#585e6c] px-3 py-2">{formatTime(order.createdAt)}</td>
-                                            <td className="text-[10px] font-mono text-[#adb9d2] px-3 py-2">{order.pair}</td>
-                                            <td className={`text-[10px] font-mono font-bold px-3 py-2 ${order.side === 'buy' ? 'text-[#00e66b]' : 'text-[#ff285a]'}`}>
+                                        <tr key={order.id} className="border-b border-bs-border hover:bg-white/[0.02] transition-colors">
+                                            <td className="text-[10px] font-mono text-bs-text-mute px-3 py-2">{formatDate(order.createdAt)}</td>
+                                            <td className="text-[10px] font-mono text-bs-text-mute px-3 py-2">{formatTime(order.createdAt)}</td>
+                                            <td className="text-[10px] font-mono text-bs-text-tertiary px-3 py-2">{order.pair}</td>
+                                            <td className={`text-[10px] font-mono font-bold px-3 py-2 ${order.side === 'buy' ? 'text-bs-success' : 'text-bs-error'}`}>
                                                 {order.side.toUpperCase()}
                                             </td>
-                                            <td className="text-[10px] font-mono text-[#585e6c] px-3 py-2 uppercase">
+                                            <td className="text-[10px] font-mono text-bs-text-mute px-3 py-2 uppercase">
                                                 {order.orderType.replace('_', ' ')}
                                             </td>
-                                            <td className="text-[10px] font-mono text-[#adb9d2] px-3 py-2 text-right">
+                                            <td className="text-[10px] font-mono text-bs-text-tertiary px-3 py-2 text-right">
                                                 {order.fillPrice ? formatPrice(order.fillPrice) : '—'}
                                             </td>
-                                            <td className="text-[10px] font-mono text-[#adb9d2] px-3 py-2 text-right">
+                                            <td className="text-[10px] font-mono text-bs-text-tertiary px-3 py-2 text-right">
                                                 {order.filledQuantity.toFixed(4)}
                                             </td>
-                                            <td className="text-[10px] font-mono text-[#adb9d2] px-3 py-2 text-right">
+                                            <td className="text-[10px] font-mono text-bs-text-tertiary px-3 py-2 text-right">
                                                 {order.fillPrice ? formatPrice(order.filledQuantity * order.fillPrice) : '—'}
                                             </td>
-                                            <td className="text-[10px] font-mono text-[#585e6c] px-3 py-2 text-right">
+                                            <td className="text-[10px] font-mono text-bs-text-mute px-3 py-2 text-right">
                                                 {formatPrice(order.fee)}
                                             </td>
                                             <td className="px-3 py-2 text-center">{statusBadge(order.status)}</td>
@@ -227,13 +227,13 @@ const SpotTradeHistory = React.memo(function SpotTradeHistory({
                 {tab === 'balances' && (
                     <div>
                         {balances.length === 0 ? (
-                            <div className="py-8 text-center text-xs font-mono text-[#585e6c]">
+                            <div className="py-8 text-center text-xs font-mono text-bs-text-mute">
                                 Connect wallet to see balances
                             </div>
                         ) : (
                             <table className="w-full">
                                 <thead>
-                                    <tr className="text-[9px] font-mono text-[#585e6c] uppercase tracking-wider border-b border-[#1a1e26]">
+                                    <tr className="text-[9px] font-mono text-bs-text-mute uppercase tracking-wider border-b border-bs-border">
                                         <th className="text-left px-3 py-2">Token</th>
                                         <th className="text-right px-3 py-2">Available</th>
                                         <th className="text-right px-3 py-2">In Order</th>
@@ -250,9 +250,9 @@ const SpotTradeHistory = React.memo(function SpotTradeHistory({
                                             : priceData ? total * priceData.price : 0;
 
                                         return (
-                                            <tr key={bal.token} className="border-b border-[#1a1e26] hover:bg-white/[0.02] transition-colors">
+                                            <tr key={bal.token} className="border-b border-bs-border hover:bg-white/[0.02] transition-colors">
                                                 <td className="text-xs font-mono font-bold text-white px-3 py-2.5">{bal.token}</td>
-                                                <td className="text-[10px] font-mono text-[#adb9d2] px-3 py-2.5 text-right">
+                                                <td className="text-[10px] font-mono text-bs-text-tertiary px-3 py-2.5 text-right">
                                                     {bal.available > 1_000_000
                                                         ? bal.available.toLocaleString('en-US', { maximumFractionDigits: 0 })
                                                         : bal.available.toFixed(bal.available < 1 ? 6 : 2)
@@ -261,13 +261,13 @@ const SpotTradeHistory = React.memo(function SpotTradeHistory({
                                                 <td className="text-[10px] font-mono text-yellow-400/50 px-3 py-2.5 text-right">
                                                     {bal.inOrder > 0 ? bal.inOrder.toFixed(bal.inOrder < 1 ? 6 : 2) : '—'}
                                                 </td>
-                                                <td className="text-[10px] font-mono text-[#585e6c] px-3 py-2.5 text-right">
+                                                <td className="text-[10px] font-mono text-bs-text-mute px-3 py-2.5 text-right">
                                                     {total > 1_000_000
                                                         ? total.toLocaleString('en-US', { maximumFractionDigits: 0 })
                                                         : total.toFixed(total < 1 ? 6 : 2)
                                                     }
                                                 </td>
-                                                <td className="text-[10px] font-mono text-[#adb9d2] px-3 py-2.5 text-right">
+                                                <td className="text-[10px] font-mono text-bs-text-tertiary px-3 py-2.5 text-right">
                                                     {formatPrice(usdValue)}
                                                 </td>
                                             </tr>

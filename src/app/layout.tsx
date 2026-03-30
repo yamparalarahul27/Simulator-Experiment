@@ -7,6 +7,7 @@ import {
 import "./globals.css";
 import '@pqina/flip/dist/flip.min.css';
 import { Agentation } from "agentation";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "YDEX — Solving Why of DEX",
@@ -37,7 +38,14 @@ export default function RootLayout({
           antialiased
         `}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
         {process.env.NODE_ENV === "development" && <Agentation />}
       </body>
     </html>

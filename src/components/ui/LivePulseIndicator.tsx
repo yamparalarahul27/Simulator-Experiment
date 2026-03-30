@@ -56,7 +56,7 @@ export interface LivePulseIndicatorProps {
  * <LivePulseIndicator variant="devnet" />
  * 
  * // Large size with custom color
- * <LivePulseIndicator size="lg" customColor="bg-[#00b3b3]" customGlow="0_0_12px_rgba(168,85,247,0.8)" />
+ * <LivePulseIndicator size="lg" customColor="bg-bs-brand-tertiary" customGlow="0_0_12px_rgba(168,85,247,0.8)" />
  * 
  * // Without ping animation
  * <LivePulseIndicator variant="success" noPing />
@@ -89,7 +89,7 @@ export const LivePulseIndicator = ({
             glow: 'shadow-[0_0_8px_rgba(59,130,246,0.6)]',
         },
         success: {
-            color: 'bg-[#00e66b]',
+            color: 'bg-bs-success',
             glow: 'shadow-[0_0_8px_rgba(74,222,128,0.6)]',
         },
         mock: {
@@ -97,7 +97,7 @@ export const LivePulseIndicator = ({
             glow: 'shadow-[0_0_8px_rgba(250,204,21,0.6)]',
         },
         danger: {
-            color: 'bg-[#ff285a]',
+            color: 'bg-bs-error',
             glow: 'shadow-[0_0_8px_rgba(248,113,113,0.6)]',
         },
         info: {

@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
  * 
  * PURPOSE:
  * A custom card component for the welcome screen, similar to CardWithCornerShine
- * but with fixed bg-[#0b0e14]/40 styling and corner shine effects.
+ * but with fixed bg-bs-bg/40 styling and corner shine effects.
  * 
  * DESIGN FEATURES:
  * - Fixed 40% black background opacity
@@ -33,26 +33,26 @@ const CornerAccents = () => {
         <>
             {/* Top-Left Corner */}
             <div className="absolute top-4 left-4 w-4 h-4">
-                <div className="absolute top-0 left-0 w-2 h-px bg-[#1a1e26] group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
-                <div className="absolute top-0 left-0 w-px h-2 bg-[#1a1e26] group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
+                <div className="absolute top-0 left-0 w-2 h-px bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
+                <div className="absolute top-0 left-0 w-px h-2 bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
             </div>
 
             {/* Top-Right Corner */}
             <div className="absolute top-4 right-4 w-4 h-4">
-                <div className="absolute top-0 right-0 w-2 h-px bg-[#1a1e26] group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
-                <div className="absolute top-0 right-0 w-px h-2 bg-[#1a1e26] group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
+                <div className="absolute top-0 right-0 w-2 h-px bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
+                <div className="absolute top-0 right-0 w-px h-2 bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
             </div>
 
             {/* Bottom-Left Corner */}
             <div className="absolute bottom-4 left-4 w-4 h-4">
-                <div className="absolute bottom-0 left-0 w-2 h-px bg-[#1a1e26] group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
-                <div className="absolute bottom-0 left-0 w-px h-2 bg-[#1a1e26] group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
+                <div className="absolute bottom-0 left-0 w-2 h-px bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
+                <div className="absolute bottom-0 left-0 w-px h-2 bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
             </div>
 
             {/* Bottom-Right Corner */}
             <div className="absolute bottom-4 right-4 w-4 h-4">
-                <div className="absolute bottom-0 right-0 w-2 h-px bg-[#1a1e26] group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
-                <div className="absolute bottom-0 right-0 w-px h-2 bg-[#1a1e26] group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
+                <div className="absolute bottom-0 right-0 w-2 h-px bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
+                <div className="absolute bottom-0 right-0 w-px h-2 bg-bs-border group-hover:bg-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all duration-300" />
             </div>
         </>
     );
@@ -66,8 +66,8 @@ export const WelcomeCard = ({ children, className = '' }: WelcomeCardProps) => {
                 min-h-0 sm:min-h-[400px]
                 w-full max-w-[500px]
                 rounded-lg
-                bg-[#0b0e14]/40
-                border border-[#1a1e26]
+                bg-bs-bg/40
+                border border-bs-border
                 hover:border-white/20
                 hover:shadow-lg hover:shadow-white/5
                 transition-all duration-300

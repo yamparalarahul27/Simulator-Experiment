@@ -68,19 +68,19 @@ export default function NewUserModal({ isVisible, onChoice, walletAddress }: New
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                             >
-                                <h1 className="text-xl font-mono uppercase tracking-wider text-[#ced5e4] mb-6">
+                                <h1 className="text-xl font-mono uppercase tracking-wider text-bs-text-secondary mb-6">
                                     {NewUserContent.title}
                                 </h1>
                                 
                                 <div className="space-y-4">
-                                    <p className="text-sm leading-relaxed text-[#adb9d2] max-w-md mx-auto">
+                                    <p className="text-sm leading-relaxed text-bs-text-tertiary max-w-md mx-auto">
                                         {NewUserContent.description}
                                     </p>
                                     
                                     {/* Wallet Address Display */}
-                                    <div className="mt-4 p-3 bg-[#11141a] border border-[#1a1e26] rounded-lg">
-                                        <p className="text-xs text-[#adb9d2] uppercase tracking-wider mb-1">Your Wallet</p>
-                                        <p className="text-sm font-mono text-[#ced5e4]">
+                                    <div className="mt-4 p-3 bg-bs-card border border-bs-border rounded-lg">
+                                        <p className="text-xs text-bs-text-tertiary uppercase tracking-wider mb-1">Your Wallet</p>
+                                        <p className="text-sm font-mono text-bs-text-secondary">
                                             {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
                                         </p>
                                     </div>
@@ -94,7 +94,7 @@ export default function NewUserModal({ isVisible, onChoice, walletAddress }: New
                                 </WelcomeButton>
                                 
                                 <button 
-                                    className="text-white text-sm font-mono hover:text-[#ced5e4] transition-colors cursor-pointer"
+                                    className="text-white text-sm font-mono hover:text-bs-text-secondary transition-colors cursor-pointer"
                                     onClick={handleGoBack}
                                 >
                                     {NewUserContent.secondaryOption}

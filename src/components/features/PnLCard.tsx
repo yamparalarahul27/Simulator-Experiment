@@ -111,16 +111,16 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                                     <h2 className="text-xl font-bold text-white tracking-wide">PnL Analysis</h2>
                                     <InfoTooltip infoKey="pnlCard" />
                                 </div>
-                                <p className="text-sm text-[#585e6c] font-mono">NET PROFIT & LOSS</p>
+                                <p className="text-sm text-bs-text-mute font-mono">NET PROFIT & LOSS</p>
                             </div>
                         </div>
 
                         {/* Drawdown Toggle */}
                         <div className="flex items-center gap-3">
-                            <span className="text-[#adb9d2] text-sm">Show Drawdown on Chart</span>
+                            <span className="text-bs-text-tertiary text-sm">Show Drawdown on Chart</span>
                             <button
                                 onClick={() => setShowDrawdown(!showDrawdown)}
-                                className={`relative inline-flex h-6 w-11 items-center rounded-lg bg-black/10 border border-[#1a1e26] transition-colors duration-300 ${showDrawdown ? 'bg-[#00b3b3]' : 'bg-[#585e6c]'
+                                className={`relative inline-flex h-6 w-11 items-center rounded-lg bg-black/10 border border-bs-border transition-colors duration-300 ${showDrawdown ? 'bg-bs-brand-tertiary' : 'bg-bs-text-mute'
                                     }`}
                             >
                                 <span
@@ -135,17 +135,17 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                     <div className="flex-1 flex flex-col justify-center py-8 space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
                             {/* Divider Line */}
-                            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-[#171a20] hidden md:block" />
+                            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-bs-card-fg hidden md:block" />
 
                             {/* Total PnL */}
                             <div className="text-center space-y-2">
-                                <span className="text-sm text-[#585e6c] uppercase tracking-[0.2em]">Total PnL ({activeFilter})</span>
-                                <div className={`text-num-56 sm:text-num-72 tracking-normal ${pnlData.isPositive ? 'text-[#00e66b]' : 'text-[#ff285a]'} drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]`}>
+                                <span className="text-sm text-bs-text-mute uppercase tracking-[0.2em]">Total PnL ({activeFilter})</span>
+                                <div className={`text-num-56 sm:text-num-72 tracking-normal ${pnlData.isPositive ? 'text-bs-success' : 'text-bs-error'} drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]`}>
                                     <NumberFlow value={Math.abs(pnlData.pnl)} prefix={pnlData.isPositive ? '+$' : '-$'} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 600, easing: 'ease-out' }} />
                                 </div>
                                 {activeFilter !== 'All' && (
                                     <div className="text-center">
-                                        <span className="text-[#585e6c] text-sm font-mono">
+                                        <span className="text-bs-text-mute text-sm font-mono">
                                             {pnlData.isPositive ? '+' : ''}{pnlData.percent} {comparisonLabel}
                                         </span>
                                     </div>
@@ -154,11 +154,11 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
 
                             {/* Max Drawdown */}
                             <div className="text-center space-y-2">
-                                <span className="text-sm text-[#585e6c] uppercase tracking-[0.2em]">Max Drawdown</span>
-                                <div className="text-num-56 sm:text-num-72 text-[#ff285a] drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                                <span className="text-sm text-bs-text-mute uppercase tracking-[0.2em]">Max Drawdown</span>
+                                <div className="text-num-56 sm:text-num-72 text-bs-error drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]">
                                     <NumberFlow value={Math.abs(drawdownStats.maxDrawdown)} prefix="-$" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 600, easing: 'ease-out' }} />
                                 </div>
-                                <div className="text-[#585e6c] text-xs font-mono">
+                                <div className="text-bs-text-mute text-xs font-mono">
                                     ({drawdownStats.maxDrawdownPercentage.toFixed(1)}% peak-to-trough)
                                 </div>
                             </div>
@@ -166,7 +166,7 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                     </div>
 
                     {/* Chart Accordion Section */}
-                    <div className="w-full border-t border-[#1a1e26] pt-4">
+                    <div className="w-full border-t border-bs-border pt-4">
                         <button
                             onClick={() => setIsChartVisible(!isChartVisible)}
                             className="w-full flex items-center justify-center gap-8 group cursor-pointer"
@@ -175,7 +175,7 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
                                 Visualisation Chart
                             </span>
                             <div className={`
-                                p-1.5 rounded-full bg-[#0b0e14] border border-[#1a1e26] 
+                                p-1.5 rounded-full bg-bs-bg border border-bs-border 
                                 group-hover:border-white/30 transition-all duration-300
                                 ${isChartVisible ? 'rotate-180' : ''}
                             `}>
@@ -185,25 +185,25 @@ export default function PnLCard({ activeFilter = 'All', trades }: PnLCardProps) 
 
                         {/* Drawdown Stats Table - Above Chart */}
                         {isChartVisible && showDrawdown && (
-                            <div className="mt-4 p-4 bg-[#0b0e14]/20 border border-[#1a1e26] rounded-sm animate-in fade-in slide-in-from-top-4 duration-300">
+                            <div className="mt-4 p-4 bg-bs-bg/20 border border-bs-border rounded-sm animate-in fade-in slide-in-from-top-4 duration-300">
                                 <div className="grid grid-cols-3 gap-4 text-center">
                                     <div>
-                                        <div className="text-[#ff285a] text-num-32 font-mono">
+                                        <div className="text-bs-error text-num-32 font-mono">
                                             <NumberFlow value={drawdownStats.maxDrawdownPercentage} suffix="%" format={{ minimumFractionDigits: 1, maximumFractionDigits: 1 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
                                         </div>
-                                        <div className="text-[#585e6c] text-xs font-mono uppercase">Max DD</div>
+                                        <div className="text-bs-text-mute text-xs font-mono uppercase">Max DD</div>
                                     </div>
                                     <div>
-                                        <div className="text-[#ced5e4] text-num-32 font-mono">
+                                        <div className="text-bs-text-secondary text-num-32 font-mono">
                                             <NumberFlow value={drawdownStats.avgRecoveryDays} suffix=" days" format={{ minimumFractionDigits: 1, maximumFractionDigits: 1 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
                                         </div>
-                                        <div className="text-[#585e6c] text-xs font-mono uppercase">Avg Recovery</div>
+                                        <div className="text-bs-text-mute text-xs font-mono uppercase">Avg Recovery</div>
                                     </div>
                                     <div>
-                                        <div className="text-[#00ffff] text-num-32 font-mono">
+                                        <div className="text-bs-brand text-num-32 font-mono">
                                             <NumberFlow value={drawdownStats.pnlToDrawdownRatio} suffix="x" format={{ minimumFractionDigits: 1, maximumFractionDigits: 1 }} transformTiming={{ duration: 500, easing: 'ease-out' }} />
                                         </div>
-                                        <div className="text-[#585e6c] text-xs font-mono uppercase">PnL/DD Ratio</div>
+                                        <div className="text-bs-text-mute text-xs font-mono uppercase">PnL/DD Ratio</div>
                                     </div>
                                 </div>
                             </div>

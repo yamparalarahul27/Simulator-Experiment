@@ -7,7 +7,7 @@ export default function ChallengesPage() {
         <div className="space-y-8">
             <div>
                 <h1 className="text-2xl font-mono font-bold text-white tracking-wide">Challenges</h1>
-                <p className="text-sm font-mono text-[#adb9d2] mt-1">
+                <p className="text-sm font-mono text-bs-text-tertiary mt-1">
                     Test your skills with real-world trading scenarios
                 </p>
             </div>
@@ -16,7 +16,7 @@ export default function ChallengesPage() {
                 <div className="flex flex-col items-center justify-center py-8 md:py-16 text-center px-4">
                     <span className="text-4xl mb-4">🏆</span>
                     <h2 className="text-lg font-mono font-semibold text-white mb-2">Coming Soon</h2>
-                    <p className="text-sm font-mono text-[#585e6c] max-w-md">
+                    <p className="text-sm font-mono text-bs-text-mute max-w-md">
                         Trading challenges with leaderboards, rewards, and real-world scenarios are being built.
                         Stay tuned for an exciting way to test your skills.
                     </p>

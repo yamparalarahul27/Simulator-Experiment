@@ -239,8 +239,8 @@ function DepthChart({ orderBook }: { orderBook: OrderBookData }) {
     const askPath = `M${px(asks[0].price)},${h} L${askPoints.join(' L')} L${px(asks[asks.length - 1].price)},${h} Z`;
 
     return (
-        <div className="border border-[#1a1e26] bg-[#0b0e14] p-4">
-            <p className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider mb-2">Depth Chart</p>
+        <div className="border border-bs-border bg-bs-bg p-4">
+            <p className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider mb-2">Depth Chart</p>
             <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-auto" preserveAspectRatio="none">
                 <path d={bidPath} fill="rgba(0,230,107,0.15)" stroke="#00e66b" strokeWidth="1.5" />
                 <path d={askPath} fill="rgba(255,40,90,0.15)" stroke="#ff285a" strokeWidth="1.5" />
@@ -255,8 +255,8 @@ function DepthChart({ orderBook }: { orderBook: OrderBookData }) {
                 />
             </svg>
             <div className="flex justify-between mt-1">
-                <span className="text-[9px] font-mono text-[#00e66b]">Bids (Buy Side)</span>
-                <span className="text-[9px] font-mono text-[#ff285a]">Asks (Sell Side)</span>
+                <span className="text-[9px] font-mono text-bs-success">Bids (Buy Side)</span>
+                <span className="text-[9px] font-mono text-bs-error">Asks (Sell Side)</span>
             </div>
         </div>
     );
@@ -313,7 +313,7 @@ export default function InteractiveOrderBook({
     return (
         <div className="space-y-4">
             {/* Controls */}
-            <div className="flex items-center justify-between border border-[#1a1e26] bg-[#0b0e14] px-4 py-3">
+            <div className="flex items-center justify-between border border-bs-border bg-bs-bg px-4 py-3">
                 <div className="flex items-center gap-2">
                     {PAIRS.map((p, i) => (
                         <button
@@ -321,8 +321,8 @@ export default function InteractiveOrderBook({
                             onClick={() => setPairIdx(i)}
                             className={`px-3 py-1.5 text-xs font-mono border transition-all ${
                                 i === pairIdx
-                                    ? 'bg-[#00b3b3]/20 text-[#00e6e6] border-[#00b3b3]/30'
-                                    : 'text-[#585e6c] border-[#1a1e26] hover:text-[#adb9d2] hover:border-white/10'
+                                    ? 'bg-bs-brand-tertiary/20 text-bs-brand-secondary border-bs-brand-tertiary/30'
+                                    : 'text-bs-text-mute border-bs-border hover:text-bs-text-tertiary hover:border-white/10'
                             }`}
                         >
                             {p.label}
@@ -332,14 +332,14 @@ export default function InteractiveOrderBook({
                 <div className="flex items-center gap-3">
                     {/* Live indicator */}
                     <div className="flex items-center gap-1.5">
-                        <div className={`w-1.5 h-1.5 rounded-full ${isLive ? 'bg-[#00e66b] animate-pulse' : error ? 'bg-[#ff285a]' : 'bg-[#585e6c]'}`} />
-                        <span className={`text-[9px] font-mono ${isLive ? 'text-[#00e66b]' : error ? 'text-[#ff285a]' : 'text-[#585e6c]'}`}>
+                        <div className={`w-1.5 h-1.5 rounded-full ${isLive ? 'bg-bs-success animate-pulse' : error ? 'bg-bs-error' : 'bg-bs-text-mute'}`} />
+                        <span className={`text-[9px] font-mono ${isLive ? 'text-bs-success' : error ? 'text-bs-error' : 'text-bs-text-mute'}`}>
                             {isLive ? 'LIVE' : error ? 'REST' : 'CONNECTING'}
                         </span>
                     </div>
                     <button
                         onClick={refresh}
-                        className="px-3 py-1.5 text-xs font-mono text-[#585e6c] border border-[#1a1e26] hover:text-[#adb9d2] hover:border-white/10 transition-all"
+                        className="px-3 py-1.5 text-xs font-mono text-bs-text-mute border border-bs-border hover:text-bs-text-tertiary hover:border-white/10 transition-all"
                     >
                         Refresh
                     </button>
@@ -348,28 +348,28 @@ export default function InteractiveOrderBook({
 
             {/* Annotations */}
             {showAnnotations && (
-                <div className="flex items-center gap-3 px-4 py-3 bg-[#00b3b3]/5 border border-[#00b3b3]/15">
+                <div className="flex items-center gap-3 px-4 py-3 bg-bs-brand-tertiary/5 border border-bs-brand-tertiary/15">
                     <span className="text-sm">💡</span>
-                    <p className="text-xs font-mono text-[#00e6e6]/60">
-                        This is <strong className="text-[#00e6e6]/80">live data from Binance</strong> — updating every second. Click any price level to inspect it. The <span className="text-[#ff285a]">red rows</span> are asks (sell orders) and <span className="text-[#00e66b]">green rows</span> are bids (buy orders). The colored bars show cumulative depth.
+                    <p className="text-xs font-mono text-bs-brand-secondary/60">
+                        This is <strong className="text-bs-brand-secondary/80">live data from Binance</strong> — updating every second. Click any price level to inspect it. The <span className="text-bs-error">red rows</span> are asks (sell orders) and <span className="text-bs-success">green rows</span> are bids (buy orders). The colored bars show cumulative depth.
                     </p>
                 </div>
             )}
 
             {/* Loading state */}
             {isEmpty && !error && (
-                <div className="flex items-center justify-center py-12 border border-[#1a1e26] bg-[#0b0e14]">
-                    <p className="text-xs font-mono text-[#585e6c]">Loading order book from Binance...</p>
+                <div className="flex items-center justify-center py-12 border border-bs-border bg-bs-bg">
+                    <p className="text-xs font-mono text-bs-text-mute">Loading order book from Binance...</p>
                 </div>
             )}
 
             {/* Error state */}
             {isEmpty && error && (
-                <div className="flex flex-col items-center justify-center gap-3 py-12 border border-[#1a1e26] bg-[#0b0e14]">
-                    <p className="text-xs font-mono text-[#ff285a]">{error}</p>
+                <div className="flex flex-col items-center justify-center gap-3 py-12 border border-bs-border bg-bs-bg">
+                    <p className="text-xs font-mono text-bs-error">{error}</p>
                     <button
                         onClick={refresh}
-                        className="px-4 py-2 text-xs font-mono text-[#00e6e6] border border-[#00b3b3]/30 hover:bg-[#00b3b3]/10 transition-all"
+                        className="px-4 py-2 text-xs font-mono text-bs-brand-secondary border border-bs-brand-tertiary/30 hover:bg-bs-brand-tertiary/10 transition-all"
                     >
                         Retry
                     </button>
@@ -380,13 +380,13 @@ export default function InteractiveOrderBook({
             {!isEmpty && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Order Book */}
-                    <div className="border border-[#1a1e26] bg-[#0b0e14] p-4">
+                    <div className="border border-bs-border bg-bs-bg p-4">
                         <div className="flex items-center justify-between mb-2">
-                            <span className="text-[10px] font-mono text-[#adb9d2] uppercase tracking-wider">Order Book</span>
+                            <span className="text-[10px] font-mono text-bs-text-tertiary uppercase tracking-wider">Order Book</span>
                             <span className="text-[10px] font-mono text-white">{pair.label}</span>
                         </div>
 
-                        <div className="grid grid-cols-3 gap-1 text-[9px] font-mono text-[#585e6c] uppercase tracking-wider mb-1 px-1">
+                        <div className="grid grid-cols-3 gap-1 text-[9px] font-mono text-bs-text-mute uppercase tracking-wider mb-1 px-1">
                             <span>Price</span>
                             <span className="text-right">Size</span>
                             <span className="text-right">Total</span>
@@ -400,24 +400,24 @@ export default function InteractiveOrderBook({
                                     data-price={level.price}
                                     onClick={handlePriceClick}
                                     className={`relative grid grid-cols-3 gap-1 text-[10px] font-mono py-0.5 px-1 transition-colors cursor-pointer ${
-                                        clickedPrice === level.price ? 'bg-[#ff285a]/10' : 'hover:bg-[#11141a]'
+                                        clickedPrice === level.price ? 'bg-bs-error/10' : 'hover:bg-bs-card'
                                     }`}
                                 >
                                     <div
-                                        className="absolute right-0 top-0 bottom-0 bg-[#ff285a]/8 transition-all duration-500"
+                                        className="absolute right-0 top-0 bottom-0 bg-bs-error/8 transition-all duration-500"
                                         style={{ width: `${(level.total / maxTotal) * 100}%` }}
                                     />
-                                    <AnimatedCell value={formatPrice(level.price)} className="text-[#ff285a] relative z-10" />
-                                    <AnimatedCell value={formatSize(level.size)} className="text-[#adb9d2] text-right relative z-10" />
-                                    <AnimatedCell value={formatSize(level.total)} className="text-[#585e6c] text-right relative z-10" />
+                                    <AnimatedCell value={formatPrice(level.price)} className="text-bs-error relative z-10" />
+                                    <AnimatedCell value={formatSize(level.size)} className="text-bs-text-tertiary text-right relative z-10" />
+                                    <AnimatedCell value={formatSize(level.total)} className="text-bs-text-mute text-right relative z-10" />
                                 </button>
                             ))}
                         </div>
 
                         {/* Spread */}
-                        <div className="py-1.5 px-1 border-y border-[#1a1e26] my-0.5 flex items-center justify-between">
-                            <AnimatedCell value={formatPrice(orderBook.spread)} className="text-[10px] font-mono text-[#adb9d2]" />
-                            <AnimatedCell value={`Spread ${orderBook.spreadPercent.toFixed(3)}%`} className="text-[9px] font-mono text-[#585e6c]" />
+                        <div className="py-1.5 px-1 border-y border-bs-border my-0.5 flex items-center justify-between">
+                            <AnimatedCell value={formatPrice(orderBook.spread)} className="text-[10px] font-mono text-bs-text-tertiary" />
+                            <AnimatedCell value={`Spread ${orderBook.spreadPercent.toFixed(3)}%`} className="text-[9px] font-mono text-bs-text-mute" />
                         </div>
 
                         {/* Bids */}
@@ -428,16 +428,16 @@ export default function InteractiveOrderBook({
                                     data-price={level.price}
                                     onClick={handlePriceClick}
                                     className={`relative grid grid-cols-3 gap-1 text-[10px] font-mono py-0.5 px-1 transition-colors cursor-pointer w-full ${
-                                        clickedPrice === level.price ? 'bg-[#00e66b]/10' : 'hover:bg-[#11141a]'
+                                        clickedPrice === level.price ? 'bg-bs-success/10' : 'hover:bg-bs-card'
                                     }`}
                                 >
                                     <div
-                                        className="absolute right-0 top-0 bottom-0 bg-[#00e66b]/8 transition-all duration-500"
+                                        className="absolute right-0 top-0 bottom-0 bg-bs-success/8 transition-all duration-500"
                                         style={{ width: `${(level.total / maxTotal) * 100}%` }}
                                     />
-                                    <AnimatedCell value={formatPrice(level.price)} className="text-[#00e66b] relative z-10" />
-                                    <AnimatedCell value={formatSize(level.size)} className="text-[#adb9d2] text-right relative z-10" />
-                                    <AnimatedCell value={formatSize(level.total)} className="text-[#585e6c] text-right relative z-10" />
+                                    <AnimatedCell value={formatPrice(level.price)} className="text-bs-success relative z-10" />
+                                    <AnimatedCell value={formatSize(level.size)} className="text-bs-text-tertiary text-right relative z-10" />
+                                    <AnimatedCell value={formatSize(level.total)} className="text-bs-text-mute text-right relative z-10" />
                                 </button>
                             ))}
                         </div>
@@ -446,8 +446,8 @@ export default function InteractiveOrderBook({
                     {/* Right side: Info panel */}
                     <div className="space-y-4">
                         {/* Selected price */}
-                        <div className="border border-[#1a1e26] bg-[#0b0e14] p-4">
-                            <p className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider mb-2">Selected Level</p>
+                        <div className="border border-bs-border bg-bs-bg p-4">
+                            <p className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider mb-2">Selected Level</p>
                             {clickedPrice ? (
                                 <div className="space-y-2">
                                     <p className="text-lg font-mono text-white">{formatPrice(clickedPrice)}</p>
@@ -456,19 +456,19 @@ export default function InteractiveOrderBook({
                                         const bidLevel = orderBook.bids.find(l => l.price === clickedPrice);
                                         const level = askLevel || bidLevel;
                                         const side = askLevel ? 'Ask' : 'Bid';
-                                        const color = askLevel ? 'text-[#ff285a]' : 'text-[#00e66b]';
-                                        if (!level) return <p className="text-xs font-mono text-[#585e6c]">Level no longer in book (price moved)</p>;
+                                        const color = askLevel ? 'text-bs-error' : 'text-bs-success';
+                                        if (!level) return <p className="text-xs font-mono text-bs-text-mute">Level no longer in book (price moved)</p>;
                                         return (
                                             <>
                                                 <p className={`text-xs font-mono ${color}`}>{side} Side</p>
                                                 <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                                                     <div>
-                                                        <span className="text-[#585e6c]">Size: </span>
-                                                        <span className="text-[#adb9d2]">{formatSize(level.size)}</span>
+                                                        <span className="text-bs-text-mute">Size: </span>
+                                                        <span className="text-bs-text-tertiary">{formatSize(level.size)}</span>
                                                     </div>
                                                     <div>
-                                                        <span className="text-[#585e6c]">Cumulative: </span>
-                                                        <span className="text-[#adb9d2]">{formatSize(level.total)}</span>
+                                                        <span className="text-bs-text-mute">Cumulative: </span>
+                                                        <span className="text-bs-text-tertiary">{formatSize(level.total)}</span>
                                                     </div>
                                                 </div>
                                             </>
@@ -476,33 +476,33 @@ export default function InteractiveOrderBook({
                                     })()}
                                 </div>
                             ) : (
-                                <p className="text-xs font-mono text-[#585e6c]">Click a price level in the order book</p>
+                                <p className="text-xs font-mono text-bs-text-mute">Click a price level in the order book</p>
                             )}
                         </div>
 
                         {/* Stats */}
-                        <div className="border border-[#1a1e26] bg-[#0b0e14] p-4">
-                            <p className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider mb-3">Book Stats</p>
+                        <div className="border border-bs-border bg-bs-bg p-4">
+                            <p className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider mb-3">Book Stats</p>
                             <div className="space-y-2 text-xs font-mono">
                                 <div className="flex justify-between">
-                                    <span className="text-[#585e6c]">Best Ask</span>
-                                    <span className="text-[#ff285a]">{orderBook.asks.length > 0 ? formatPrice(orderBook.asks[0].price) : '—'}</span>
+                                    <span className="text-bs-text-mute">Best Ask</span>
+                                    <span className="text-bs-error">{orderBook.asks.length > 0 ? formatPrice(orderBook.asks[0].price) : '—'}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-[#585e6c]">Best Bid</span>
-                                    <span className="text-[#00e66b]">{orderBook.bids.length > 0 ? formatPrice(orderBook.bids[0].price) : '—'}</span>
+                                    <span className="text-bs-text-mute">Best Bid</span>
+                                    <span className="text-bs-success">{orderBook.bids.length > 0 ? formatPrice(orderBook.bids[0].price) : '—'}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-[#585e6c]">Spread</span>
-                                    <span className="text-[#adb9d2]">{formatPrice(orderBook.spread)} ({orderBook.spreadPercent.toFixed(3)}%)</span>
+                                    <span className="text-bs-text-mute">Spread</span>
+                                    <span className="text-bs-text-tertiary">{formatPrice(orderBook.spread)} ({orderBook.spreadPercent.toFixed(3)}%)</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-[#585e6c]">Total Ask Depth</span>
-                                    <span className="text-[#ff285a]">{orderBook.asks.length > 0 ? formatSize(orderBook.asks[orderBook.asks.length - 1].total) : '—'}</span>
+                                    <span className="text-bs-text-mute">Total Ask Depth</span>
+                                    <span className="text-bs-error">{orderBook.asks.length > 0 ? formatSize(orderBook.asks[orderBook.asks.length - 1].total) : '—'}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-[#585e6c]">Total Bid Depth</span>
-                                    <span className="text-[#00e66b]">{orderBook.bids.length > 0 ? formatSize(orderBook.bids[orderBook.bids.length - 1].total) : '—'}</span>
+                                    <span className="text-bs-text-mute">Total Bid Depth</span>
+                                    <span className="text-bs-success">{orderBook.bids.length > 0 ? formatSize(orderBook.bids[orderBook.bids.length - 1].total) : '—'}</span>
                                 </div>
                                 {(() => {
                                     const totalBid = orderBook.bids.length > 0 ? orderBook.bids[orderBook.bids.length - 1].total : 0;
@@ -510,9 +510,9 @@ export default function InteractiveOrderBook({
                                     const delta = totalBid - totalAsk;
                                     const isPositive = delta >= 0;
                                     return (
-                                        <div className="flex justify-between pt-2 border-t border-[#1a1e26]">
-                                            <span className="text-[#585e6c]">Depth Delta</span>
-                                            <span className={isPositive ? 'text-[#00e66b]' : 'text-[#ff285a]'}>
+                                        <div className="flex justify-between pt-2 border-t border-bs-border">
+                                            <span className="text-bs-text-mute">Depth Delta</span>
+                                            <span className={isPositive ? 'text-bs-success' : 'text-bs-error'}>
                                                 {isPositive ? '+' : ''}{formatSize(delta)} ({isPositive ? 'Bid heavy' : 'Ask heavy'})
                                             </span>
                                         </div>

@@ -227,14 +227,14 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
       <div className="max-w-7xl mx-auto space-y-6">
 
         {/* Input Mode Switcher */}
-        <div className="flex gap-4 border-b border-[#1a1e26] pb-2">
+        <div className="flex gap-4 border-b border-bs-border pb-2">
           {(['wallet', 'manual'] as InputMode[]).map(mode => (
             <button
               key={mode}
               onClick={() => setInputMode(mode)}
               className={`px-4 py-2 font-semibold uppercase tracking-wide text-sm transition-all ${inputMode === mode
                 ? 'text-white border-b-2 border-blue-400'
-                : 'text-[#585e6c] hover:text-[#ced5e4]'
+                : 'text-bs-text-mute hover:text-bs-text-secondary'
                 }`}
             >
               {mode === 'manual' ? 'Manual Address' : 'Connect Wallet'}
@@ -254,14 +254,14 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
             />
           ) : (
             <div className="flex flex-col items-center gap-4 text-center py-4 w-full">
-              <p className="text-[#adb9d2] max-w-md">
+              <p className="text-bs-text-tertiary max-w-md">
                 Connect your Solana wallet to quickly run the lookup without pasting the address manually.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto justify-center">
                 <button
                   onClick={handleWalletConnect}
                   disabled={connecting || connected}
-                  className="px-6 py-3 bg-[#171a20] border border-white/20 rounded-lg font-semibold text-white hover:bg-[#171a20] transition disabled:opacity-50"
+                  className="px-6 py-3 bg-bs-card-fg border border-white/20 rounded-lg font-semibold text-white hover:bg-bs-card-fg transition disabled:opacity-50"
                 >
                   {connecting
                     ? 'Connecting…'
@@ -272,7 +272,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                 {connected && (
                   <button
                     onClick={handleWalletDisconnect}
-                    className="px-6 py-3 border border-white/20 rounded-lg font-semibold text-white hover:bg-[#171a20] transition"
+                    className="px-6 py-3 border border-white/20 rounded-lg font-semibold text-white hover:bg-bs-card-fg transition"
                   >
                     Disconnect
                   </button>
@@ -287,7 +287,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                 onClick={() => walletAddress && handleAddressSubmit(walletAddress, hasCachedData)}
                 disabled={!walletAddress || loading}
                 className={`px-6 py-3 text-white rounded-lg font-semibold transition disabled:opacity-50 
-                  ${hasCachedData ? 'bg-[#171a20] hover:bg-[#1a1e26] border border-[#1a1e26]' : 'bg-[#69a2f1] hover:bg-[#69a2f1]/80'}`}
+                  ${hasCachedData ? 'bg-bs-card-fg hover:bg-bs-border border border-bs-border' : 'bg-[#69a2f1] hover:bg-[#69a2f1]/80'}`}
               >
                 {loading ? 'Running…' : walletAddress ? (hasCachedData ? 'Force Refresh' : 'Run Lookup') : 'Connect to Run'}
               </button>
@@ -299,12 +299,12 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
         {hasSearched && !loading && (
           <CardWithCornerShine padding="sm" className="space-y-6">
             {/* Results Header */}
-            <div className="flex gap-4 border-b border-[#1a1e26] pb-2">
+            <div className="flex gap-4 border-b border-bs-border pb-2">
               <button
                 onClick={() => setActiveTab('deriverse')}
                 className={`px-6 py-3 font-semibold text-sm uppercase tracking-wide transition-all ${activeTab === 'deriverse'
                   ? 'text-white border-b-2 border-blue-400'
-                  : 'text-[#adb9d2] hover:text-[#eff1f6]'
+                  : 'text-bs-text-tertiary hover:text-bs-text-primary'
                   }`}
               >
                 Deriverse Trades
@@ -318,7 +318,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                 onClick={() => setActiveTab('all')}
                 className={`px-6 py-3 font-semibold text-sm uppercase tracking-wide transition-all ${activeTab === 'all'
                   ? 'text-white border-b-2 border-blue-400'
-                  : 'text-[#adb9d2] hover:text-[#eff1f6]'
+                  : 'text-bs-text-tertiary hover:text-bs-text-primary'
                   }`}
               >
                 All Transactions
@@ -344,10 +344,10 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
             {activeTab === 'deriverse' && (
               <div className="space-y-4">
                 {loadingDeriverse ? (
-                  <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-12 text-center">
+                  <div className="rounded-lg border border-bs-border bg-bs-bg/80 backdrop-blur-xl p-12 text-center">
                     <div className="flex items-center justify-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                      <span className="ml-3 text-[#adb9d2]">Parsing Deriverse trades...</span>
+                      <span className="ml-3 text-bs-text-tertiary">Parsing Deriverse trades...</span>
                     </div>
                   </div>
                 ) : (
@@ -366,65 +366,65 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
             {activeTab === 'all' && (
               <div>
                 {loadingHelius ? (
-                  <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-12 text-center">
+                  <div className="rounded-lg border border-bs-border bg-bs-bg/80 backdrop-blur-xl p-12 text-center">
                     <div className="flex items-center justify-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                      <span className="ml-3 text-[#adb9d2]">Fetching transactions...</span>
+                      <span className="ml-3 text-bs-text-tertiary">Fetching transactions...</span>
                     </div>
                   </div>
                 ) : transactions.length === 0 ? (
-                  <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl p-12 text-center max-w-2xl mx-auto">
-                    <p className="text-[#adb9d2] mb-2">Transaction history is not cached.</p>
-                    <p className="text-[#585e6c] text-sm mb-6 italic">
+                  <div className="rounded-lg border border-bs-border bg-bs-bg/80 backdrop-blur-xl p-12 text-center max-w-2xl mx-auto">
+                    <p className="text-bs-text-tertiary mb-2">Transaction history is not cached.</p>
+                    <p className="text-bs-text-mute text-sm mb-6 italic">
                       "Sorry for the inconvenience, we are working on limited resources, that's why this force refresh is enabled, to save Helius usage."
                     </p>
-                    <p className="text-[#adb9d2] text-sm">
+                    <p className="text-bs-text-tertiary text-sm">
                       Click <span className="text-white font-semibold">"Force Refresh"</span> above to fetch full transaction history from Helius.
                     </p>
                   </div>
                 ) : (
-                  <div className="rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl overflow-hidden">
-                    <div className="px-6 py-4 border-b border-[#1a1e26] bg-gradient-to-r from-white/5 to-transparent">
+                  <div className="rounded-lg border border-bs-border bg-bs-bg/80 backdrop-blur-xl overflow-hidden">
+                    <div className="px-6 py-4 border-b border-bs-border bg-gradient-to-r from-white/5 to-transparent">
                       <h3 className="text-lg font-semibold text-white">All Transactions (via Helius RPC)</h3>
-                      <p className="text-sm text-[#adb9d2] mt-1">Showing last {transactions.length} transactions for this address</p>
+                      <p className="text-sm text-bs-text-tertiary mt-1">Showing last {transactions.length} transactions for this address</p>
                     </div>
                     <div className="overflow-x-auto max-h-[70vh]">
                       <table className="w-full text-left">
-                        <thead className="sticky top-0 bg-[#0b0e14]/90 backdrop-blur-xl border-b border-[#1a1e26]">
+                        <thead className="sticky top-0 bg-bs-bg/90 backdrop-blur-xl border-b border-bs-border">
                           <tr>
-                            <th className="px-6 py-4 text-xs font-semibold text-[#ced5e4] uppercase tracking-wider">Time</th>
-                            <th className="px-6 py-4 text-xs font-semibold text-[#ced5e4] uppercase tracking-wider">Type</th>
-                            <th className="px-6 py-4 text-xs font-semibold text-[#ced5e4] uppercase tracking-wider">Status</th>
-                            <th className="px-6 py-4 text-xs font-semibold text-[#ced5e4] uppercase tracking-wider text-right">Fee (lamports)</th>
-                            <th className="px-6 py-4 text-xs font-semibold text-[#ced5e4] uppercase tracking-wider">Signature</th>
+                            <th className="px-6 py-4 text-xs font-semibold text-bs-text-secondary uppercase tracking-wider">Time</th>
+                            <th className="px-6 py-4 text-xs font-semibold text-bs-text-secondary uppercase tracking-wider">Type</th>
+                            <th className="px-6 py-4 text-xs font-semibold text-bs-text-secondary uppercase tracking-wider">Status</th>
+                            <th className="px-6 py-4 text-xs font-semibold text-bs-text-secondary uppercase tracking-wider text-right">Fee (lamports)</th>
+                            <th className="px-6 py-4 text-xs font-semibold text-bs-text-secondary uppercase tracking-wider">Signature</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-[#1a1e26]">
+                        <tbody className="divide-y divide-bs-border">
                           {transactions.map((tx, index) => (
                             <tr
                               key={tx.signature}
-                              className="hover:bg-[#11141a] transition-all duration-200 group"
+                              className="hover:bg-bs-card transition-all duration-200 group"
                               style={{
                                 animation: `fadeIn 0.3s ease-in-out ${index * 0.05}s both`
                               }}
                             >
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-[#ced5e4]">
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-bs-text-secondary">
                                 {HeliusService.formatTime(tx.time)}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur-sm
                                                 ${tx.type.includes('Transfer') ? 'bg-[#69a2f1]/20 text-blue-300 border border-[#69a2f1]/30' :
-                                    tx.type.includes('Swap') ? 'bg-[#00b3b3]/20 text-[#00e6e6] border border-[#00b3b3]/30' :
-                                      tx.type.includes('Deriverse') ? 'bg-[#00e66b]/20 text-green-300 border border-[#00e66b]/30' :
-                                        'bg-[#585e6c]/20 text-[#ced5e4] border border-[#585e6c]/30'}`}>
+                                    tx.type.includes('Swap') ? 'bg-bs-brand-tertiary/20 text-bs-brand-secondary border border-bs-brand-tertiary/30' :
+                                      tx.type.includes('Deriverse') ? 'bg-bs-success/20 text-green-300 border border-[#00e66b]/30' :
+                                        'bg-bs-text-mute/20 text-bs-text-secondary border border-[#585e6c]/30'}`}>
                                   {tx.type}
                                 </span>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm">
                                 <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur-sm
                                                ${tx.status === 'Confirmed'
-                                    ? 'bg-[#00e66b]/20 text-green-300 border border-[#00e66b]/30'
-                                    : 'bg-[#ff285a]/20 text-red-300 border border-[#ff285a]/30'}`}>
+                                    ? 'bg-bs-success/20 text-green-300 border border-[#00e66b]/30'
+                                    : 'bg-bs-error/20 text-red-300 border border-[#ff285a]/30'}`}>
                                   {tx.status}
                                 </span>
                               </td>
@@ -436,7 +436,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                                   href={`https://solscan.io/tx/${tx.signature}?cluster=devnet`}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-[#69a2f1] hover:text-blue-300 transition-colors font-mono group-hover:underline"
+                                  className="text-bs-brand-ts hover:text-blue-300 transition-colors font-mono group-hover:underline"
                                 >
                                   {tx.signature.slice(0, 8)}...{tx.signature.slice(-8)}
                                 </a>
@@ -460,20 +460,20 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
             collapsible
             value={howItWorksOpen ? 'how-it-works' : undefined}
             onValueChange={value => setHowItWorksOpen(value === 'how-it-works')}
-            className="border border-[#1a1e26] rounded-lg bg-[#0b0e14]/80"
+            className="border border-bs-border rounded-lg bg-bs-bg/80"
           >
             <AccordionItem value="how-it-works" className="px-4">
               <AccordionTrigger className="text-xl font-semibold">
                 <span>How It Works</span>
               </AccordionTrigger>
               <AccordionContent>
-                <div className="text-[#adb9d2] space-y-2">
+                <div className="text-bs-text-tertiary space-y-2">
                   {inputMode === 'manual' ? (
                     <>
                       <p>🎯 <strong>Deriverse Trades</strong>: Parsed on-chain trading activity (spot & perpetual fills, PnL, fees)</p>
                       <p>📊 <strong>All Transactions</strong>: Complete transaction history via Helius RPC</p>
                       <p className="mt-4 font-semibold text-white">Steps:</p>
-                      <ol className="list-decimal list-inside space-y-1 text-[#ced5e4]">
+                      <ol className="list-decimal list-inside space-y-1 text-bs-text-secondary">
                         <li>Paste any Solana wallet address or connect your wallet</li>
                         <li>Click "Run" to fetch Deriverse trades & full history</li>
                         <li>Switch between tabs to compare Deriverse vs. all transactions</li>
@@ -483,7 +483,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                   ) : (
                     <>
                       <p className="mt-4 font-semibold text-white">Steps:</p>
-                      <ol className="list-decimal list-inside space-y-1 text-[#ced5e4]">
+                      <ol className="list-decimal list-inside space-y-1 text-bs-text-secondary">
                         <li>Click "Connect Wallet" to link your Solana wallet</li>
                         <li>Choose your preferred wallet provider (Phantom, Solflare, etc.)</li>
                         <li>Approve the connection to fetch your wallet address</li>
