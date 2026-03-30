@@ -22,7 +22,7 @@ export default function AppBackground() {
     const isLight = resolvedTheme === 'light';
 
     // Base colors
-    const baseBg = isLight ? '#f0ebe3' : '#111827';
+    const baseBg = isLight ? '#f0ebe3' : '#0c1220';
 
     // Grain settings — equally visible in both modes
     const grainBlend = isLight ? 'multiply' : 'soft-light';
@@ -156,7 +156,7 @@ export default function AppBackground() {
                     style={{
                         backgroundColor: isLight
                             ? `rgba(240, 235, 227, ${overlayOpacity / 100})`
-                            : `rgba(17, 24, 39, ${overlayOpacity / 100})`,
+                            : `rgba(12, 18, 32, ${overlayOpacity / 100})`,
                         backdropFilter: blurAmount > 0 ? `blur(${blurAmount}px)` : undefined,
                         WebkitBackdropFilter: blurAmount > 0 ? `blur(${blurAmount}px)` : undefined,
                         transition: 'background-color 0.3s ease, backdrop-filter 0.3s ease',

@@ -109,11 +109,13 @@ function HeroSection({
     onJumpToModules,
     totalLessons,
     activeModules,
+    firstModuleTitle,
 }: {
     onStartLearning: () => void;
     onJumpToModules: () => void;
     totalLessons: number;
     activeModules: number;
+    firstModuleTitle: string;
 }) {
     return (
         <section className="stamp-card">
@@ -137,7 +139,7 @@ function HeroSection({
                             onClick={onStartLearning}
                             className="rounded-xl bg-bs-brand-rust px-5 py-3 text-sm font-semibold text-black"
                         >
-                            Start with Order Types
+                            Start with {firstModuleTitle}
                         </button>
                         <button
                             type="button"
@@ -211,16 +213,18 @@ export default function Web3Hub() {
         }
     };
 
-    const activeModules = MODULES.filter((module) => !module.comingSoon).length;
+    const firstActiveModule = MODULES.find((module) => !module.comingSoon);
+    const activeModulesCount = MODULES.filter((module) => !module.comingSoon).length;
     const totalLessons = MODULES.reduce((count, module) => count + module.lessons.length, 0);
 
     return (
         <div className="space-y-10 pb-4">
             <HeroSection
-                onStartLearning={() => navigateToModule('order-types')}
+                onStartLearning={() => firstActiveModule && navigateToModule(firstActiveModule.moduleSlug)}
                 onJumpToModules={handleJumpToModules}
                 totalLessons={totalLessons}
-                activeModules={activeModules}
+                activeModules={activeModulesCount}
+                firstModuleTitle={firstActiveModule?.title ?? 'Learning'}
             />
 
             <PrinciplesSection />
