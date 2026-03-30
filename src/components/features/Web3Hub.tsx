@@ -59,41 +59,46 @@ function ModuleCard({ module, onClick }: { module: LearningModule; onClick?: () 
             onClick={isActive ? onClick : undefined}
             disabled={!isActive}
             className={cn(
-                'flex h-full w-full flex-col gap-5 rounded-2xl border bg-bs-card p-6 text-left',
+                'stamp-card h-full w-full text-left transition-all duration-200',
                 isActive
-                    ? 'cursor-pointer border-bs-border hover:border-bs-text-tertiary/70'
-                    : 'cursor-not-allowed border-bs-border/70 opacity-65'
+                    ? 'cursor-pointer'
+                    : 'cursor-not-allowed opacity-65'
             )}
         >
-            <div className="flex items-start justify-between gap-3">
-                <div className="space-y-3">
-                    <span className="inline-flex size-11 items-center justify-center rounded-full border border-bs-border bg-bs-card-fg text-lg">
-                        {module.icon}
-                    </span>
-                    <div className="space-y-1">
-                        <h2 className="text-xl font-semibold text-bs-text-primary text-balance">
-                            {module.title}
-                        </h2>
-                        <p className="text-sm text-bs-text-tertiary text-pretty">{module.description}</p>
+            <div className={cn(
+                'stamp-card-inner flex flex-col gap-5 transition-colors duration-200',
+                !isActive && 'pointer-events-none'
+            )}>
+                <div className="flex items-start justify-between gap-3">
+                    <div className="space-y-3">
+                        <span className="inline-flex size-11 items-center justify-center rounded-full border border-bs-border bg-bs-card-fg text-lg">
+                            {module.icon}
+                        </span>
+                        <div className="space-y-1">
+                            <h2 className="text-xl font-semibold text-bs-text-primary text-balance">
+                                {module.title}
+                            </h2>
+                            <p className="text-sm text-bs-text-tertiary text-pretty">{module.description}</p>
+                        </div>
                     </div>
+
+                    {module.comingSoon ? (
+                        <span className="inline-flex rounded-full border border-bs-border px-2.5 py-1 text-[11px] text-bs-text-tertiary">
+                            Coming Soon
+                        </span>
+                    ) : (
+                        <DifficultyBadge level={module.difficulty} />
+                    )}
                 </div>
 
-                {module.comingSoon ? (
-                    <span className="inline-flex rounded-full border border-bs-border px-2.5 py-1 text-[11px] text-bs-text-tertiary">
-                        Coming Soon
+                <div className="mt-auto flex items-center justify-between border-t border-bs-border/80 pt-4 text-sm">
+                    <span className="tabular-nums text-bs-text-secondary">
+                        {lessonCount} lesson{lessonCount === 1 ? '' : 's'}
                     </span>
-                ) : (
-                    <DifficultyBadge level={module.difficulty} />
-                )}
-            </div>
-
-            <div className="mt-auto flex items-center justify-between border-t border-bs-border/80 pt-4 text-sm">
-                <span className="tabular-nums text-bs-text-secondary">
-                    {lessonCount} lesson{lessonCount === 1 ? '' : 's'}
-                </span>
-                <span className={cn('font-medium', isActive ? 'text-bs-text-primary' : 'text-bs-text-mute')}>
-                    {isActive ? 'Open module' : 'Locked'}
-                </span>
+                    <span className={cn('font-medium', isActive ? 'text-bs-text-primary' : 'text-bs-text-mute')}>
+                        {isActive ? 'Open module' : 'Locked'}
+                    </span>
+                </div>
             </div>
         </button>
     );
@@ -111,7 +116,8 @@ function HeroSection({
     activeModules: number;
 }) {
     return (
-        <section className="rounded-3xl border border-bs-border bg-bs-card px-6 py-10 sm:px-10 sm:py-12">
+        <section className="stamp-card">
+            <div className="stamp-card-inner">
             <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr] lg:items-end">
                 <div className="space-y-5">
                     <span className="inline-flex rounded-full border border-bs-border bg-bs-card-fg px-3 py-1 text-sm text-bs-text-secondary">
@@ -143,7 +149,7 @@ function HeroSection({
                     </div>
                 </div>
 
-                <div className="rounded-2xl border border-bs-border bg-bs-card-fg p-5">
+                <div className="rounded-xl border border-bs-border bg-bs-card-fg p-5">
                     <p className="text-sm text-bs-text-tertiary">Learning snapshot</p>
                     <dl className="mt-5 space-y-4">
                         <div className="flex items-end justify-between border-b border-bs-border/80 pb-3">
@@ -165,6 +171,7 @@ function HeroSection({
                     </dl>
                 </div>
             </div>
+            </div>
         </section>
     );
 }
@@ -177,10 +184,12 @@ function PrinciplesSection() {
                 {LEARNING_PRINCIPLES.map((item) => (
                     <article
                         key={item.title}
-                        className="rounded-2xl border border-bs-border bg-bs-card px-5 py-6"
+                        className="stamp-card"
                     >
-                        <h3 className="text-base font-semibold text-bs-text-primary text-balance">{item.title}</h3>
-                        <p className="mt-2 text-sm text-bs-text-secondary text-pretty">{item.description}</p>
+                        <div className="stamp-card-inner">
+                            <h3 className="text-base font-semibold text-bs-text-primary text-balance">{item.title}</h3>
+                            <p className="mt-2 text-sm text-bs-text-secondary text-pretty">{item.description}</p>
+                        </div>
                     </article>
                 ))}
             </div>

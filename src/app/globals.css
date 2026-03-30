@@ -685,6 +685,86 @@ body {
   );
 }
 
+/* ============================================
+   Postage Stamp Card — perforated edges via CSS mask
+   ============================================ */
+
+.stamp-card {
+  background-color: var(--bs-card);
+  position: relative;
+  padding: 1.25rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 1px 4px rgba(0, 0, 0, 0.05),
+    0 4px 12px rgba(0, 0, 0, 0.03);
+
+  /* Perforated edge mask — scalloped semicircles along all 4 edges */
+  --stamp-dot: 6px;    /* perforation hole diameter */
+  --stamp-gap: 12px;   /* spacing between holes */
+  --stamp-half: 3px;   /* half the dot size */
+
+  mask-image:
+    radial-gradient(circle at var(--stamp-half) 0, transparent var(--stamp-half), black calc(var(--stamp-half) + 0.5px)),
+    radial-gradient(circle at var(--stamp-half) 100%, transparent var(--stamp-half), black calc(var(--stamp-half) + 0.5px)),
+    radial-gradient(circle at 0 var(--stamp-half), transparent var(--stamp-half), black calc(var(--stamp-half) + 0.5px)),
+    radial-gradient(circle at 100% var(--stamp-half), transparent var(--stamp-half), black calc(var(--stamp-half) + 0.5px));
+  mask-size:
+    var(--stamp-gap) 100%,
+    var(--stamp-gap) 100%,
+    100% var(--stamp-gap),
+    100% var(--stamp-gap);
+  mask-position:
+    0 0,
+    0 100%,
+    0 0,
+    100% 0;
+  mask-repeat:
+    repeat-x,
+    repeat-x,
+    repeat-y,
+    repeat-y;
+  mask-composite: intersect;
+  -webkit-mask-image:
+    radial-gradient(circle at var(--stamp-half) 0, transparent var(--stamp-half), black calc(var(--stamp-half) + 0.5px)),
+    radial-gradient(circle at var(--stamp-half) 100%, transparent var(--stamp-half), black calc(var(--stamp-half) + 0.5px)),
+    radial-gradient(circle at 0 var(--stamp-half), transparent var(--stamp-half), black calc(var(--stamp-half) + 0.5px)),
+    radial-gradient(circle at 100% var(--stamp-half), transparent var(--stamp-half), black calc(var(--stamp-half) + 0.5px));
+  -webkit-mask-size:
+    var(--stamp-gap) 100%,
+    var(--stamp-gap) 100%,
+    100% var(--stamp-gap),
+    100% var(--stamp-gap);
+  -webkit-mask-position:
+    0 0,
+    0 100%,
+    0 0,
+    100% 0;
+  -webkit-mask-repeat:
+    repeat-x,
+    repeat-x,
+    repeat-y,
+    repeat-y;
+  -webkit-mask-composite: source-in;
+}
+
+.dark .stamp-card {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 1px 4px rgba(0, 0, 0, 0.15),
+    0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Inner frame line — classic stamp inner border */
+.stamp-card-inner {
+  border: 1.5px solid var(--bs-border);
+  padding: 1.25rem;
+  height: 100%;
+}
+
+.stamp-card-inner:hover {
+  border-color: var(--bs-brand);
+}
+
 /* Custom Calendar Styling — theme-aware */
 .custom-calendar {
   color: var(--bs-text-primary);

@@ -90,25 +90,27 @@ function LessonCard({
     return (
         <button
             onClick={onClick}
-            className="w-full text-left bg-bs-bg border border-bs-border hover:border-bs-border hover:bg-white/[0.02] transition-all duration-200 p-5 group"
+            className="w-full text-left stamp-card transition-all duration-200 group"
         >
-            <div className="flex items-start gap-4">
-                <div className="flex items-center justify-center w-10 h-10 bg-bs-card border border-bs-border text-lg shrink-0">
-                    {emoji}
-                </div>
-                <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono text-bs-text-mute">{String(index).padStart(2, '0')}</span>
-                        <h3 className="text-sm font-mono font-semibold text-bs-text-primary">{lesson.title}</h3>
+            <div className="stamp-card-inner">
+                <div className="flex items-start gap-4">
+                    <div className="flex items-center justify-center w-10 h-10 bg-bs-card-fg border border-bs-border text-lg shrink-0">
+                        {emoji}
                     </div>
-                    <p className="text-xs font-mono text-bs-text-mute mt-1">{lesson.description}</p>
-                    {details?.whenToUse && (
-                        <p className="text-[11px] font-mono text-bs-text-mute mt-2 line-clamp-1">{details.whenToUse}</p>
-                    )}
+                    <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-mono text-bs-text-mute">{String(index).padStart(2, '0')}</span>
+                            <h3 className="text-sm font-mono font-semibold text-bs-text-primary">{lesson.title}</h3>
+                        </div>
+                        <p className="text-xs font-mono text-bs-text-mute mt-1">{lesson.description}</p>
+                        {details?.whenToUse && (
+                            <p className="text-[11px] font-mono text-bs-text-mute mt-2 line-clamp-1">{details.whenToUse}</p>
+                        )}
+                    </div>
+                    <span className="text-xs font-mono text-bs-brand/50 group-hover:text-bs-brand/80 transition-colors mt-1">
+                        &rarr;
+                    </span>
                 </div>
-                <span className="text-xs font-mono text-bs-brand/50 group-hover:text-bs-brand/80 transition-colors mt-1">
-                    &rarr;
-                </span>
             </div>
         </button>
     );
