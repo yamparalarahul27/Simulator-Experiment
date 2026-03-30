@@ -4,17 +4,11 @@ import { ReactNode } from 'react';
 import { motion } from 'framer-motion';
 
 /**
- * WelcomeButton Component
- * 
- * PURPOSE:
- * Primary button component for the welcome screen with brand styling.
- * 
- * DESIGN FEATURES:
- * - Class name: "brand_button_primary"
- * - Background: #0A2260
- * - Stroke: #2651C2
- * - No hover effects (static styling)
- * - Rounded corners: none
+ * WelcomeButton Component — Paper Texture UI
+ *
+ * Primary CTA button with warm brand styling.
+ * Light: golden amber on cream
+ * Dark (midnight): warm gold on deep navy
  */
 
 interface WelcomeButtonProps {
@@ -37,14 +31,17 @@ export const WelcomeButton = ({
                 px-8 py-4
                 rounded-lg
                 border-2
-                bg-[#0A2260]
-                border-[#2651C2]
-                text-bs-text-primary
+                bg-bs-brand
+                border-bs-brand-secondary
+                text-white
+                dark:text-bs-bg
                 font-semibold
                 text-base
                 inline-block
                 text-center
                 transition-all duration-300
+                hover:shadow-[0_4px_16px_rgba(139,105,20,0.25)]
+                dark:hover:shadow-[0_4px_16px_rgba(212,165,74,0.25)]
                 ${disabled ? 'opacity-50 cursor-not-allowed grayscale-[0.5]' : 'cursor-pointer'}
                 ${className}
             `}
