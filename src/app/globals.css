@@ -11,118 +11,105 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ============================================
+   Paper Texture UI — Design Tokens
+   Light: warm cream parchment
+   Dark: midnight navy (NOT black)
+   ============================================ */
+
 :root {
-  /* Blueshift Light Palette (default) */
-  --bs-bg: #f5f7fa;
-  --bs-card: #ffffff;
-  --bs-card-fg: #f0f2f5;
-  --bs-border: #d8dce3;
-  --bs-border-active: rgba(0, 120, 120, 0.25);
-  --bs-bg-primary: rgba(0, 153, 153, 0.06);
+  /* Paper Light Palette */
+  --bs-bg: #f0ebe3;
+  --bs-card: #f9f5ee;
+  --bs-card-fg: #eee8dc;
+  --bs-border: #d9d0c1;
+  --bs-border-active: rgba(139, 105, 20, 0.3);
+  --bs-bg-primary: rgba(139, 105, 20, 0.06);
 
-  --bs-text-primary: #0f1218;
-  --bs-text-secondary: #2d3748;
-  --bs-text-tertiary: #5a6578;
-  --bs-text-mute: #9ca3af;
+  --bs-text-primary: #2c2416;
+  --bs-text-secondary: #4a3f32;
+  --bs-text-tertiary: #7a6f60;
+  --bs-text-mute: #a89e8f;
 
-  --bs-brand: #008b8b;
-  --bs-brand-secondary: #009999;
-  --bs-brand-tertiary: #007a7a;
-  --bs-brand-anchor: #2d5a3d;
-  --bs-brand-rust: #c47a30;
-  --bs-brand-ts: #3b6fc2;
+  --bs-brand: #8b6914;
+  --bs-brand-secondary: #a47d1a;
+  --bs-brand-tertiary: #725610;
+  --bs-brand-anchor: #3d5a2d;
+  --bs-brand-rust: #b0693a;
+  --bs-brand-ts: #4a6fa5;
 
-  --bs-success: #059652;
-  --bs-error: #dc2626;
+  --bs-success: #4a7c59;
+  --bs-error: #a63d2f;
 
-  /* Legacy Deriverse tokens mapped to Blueshift */
-  --ds-primary: #007a7a;
-  --ds-secondary: #009999;
-  --ds-accent: #008b8b;
-  --ds-gradient-mid: #009999;
+  /* Legacy Deriverse tokens mapped to Paper */
+  --ds-primary: #725610;
+  --ds-secondary: #a47d1a;
+  --ds-accent: #8b6914;
+  --ds-gradient-mid: #a47d1a;
 
-  /* UI Colors */
-  --ds-bg-dark: #f5f7fa;
-  --ds-bg-light: #2d3748;
-  --ds-border: #d8dce3;
+  --ds-bg-dark: #f0ebe3;
+  --ds-bg-light: #4a3f32;
+  --ds-border: #d9d0c1;
 
-  /* Text Colors */
-  --ds-text-primary: #0f1218;
-  --ds-text-dark: #0f1218;
-  --ds-text-muted: #9ca3af;
-
-  /* Default Theme Mappings */
+  --ds-text-primary: #2c2416;
+  --ds-text-dark: #2c2416;
+  --ds-text-muted: #a89e8f;
 
   --radius: 0.625rem;
 
-  --background: oklch(1 0 0);
+  --background: #f0ebe3;
+  --foreground: #2c2416;
 
-  --foreground: oklch(0.145 0 0);
+  --card: #f9f5ee;
+  --card-foreground: #2c2416;
 
-  --card: oklch(1 0 0);
+  --popover: #f9f5ee;
+  --popover-foreground: #2c2416;
 
-  --card-foreground: oklch(0.145 0 0);
+  --primary: #2c2416;
+  --primary-foreground: #f9f5ee;
 
-  --popover: oklch(1 0 0);
+  --secondary: #eee8dc;
+  --secondary-foreground: #2c2416;
 
-  --popover-foreground: oklch(0.145 0 0);
+  --muted: #eee8dc;
+  --muted-foreground: #7a6f60;
 
-  --primary: oklch(0.205 0 0);
+  --accent: #eee8dc;
+  --accent-foreground: #2c2416;
 
-  --primary-foreground: oklch(0.985 0 0);
+  --destructive: #a63d2f;
 
-  --secondary: oklch(0.97 0 0);
+  --border: #d9d0c1;
+  --input: #d9d0c1;
+  --ring: #a89e8f;
 
-  --secondary-foreground: oklch(0.205 0 0);
+  --chart-1: #8b6914;
+  --chart-2: #4a7c59;
+  --chart-3: #4a6fa5;
+  --chart-4: #b0693a;
+  --chart-5: #a63d2f;
 
-  --muted: oklch(0.97 0 0);
+  --sidebar: #f9f5ee;
+  --sidebar-foreground: #2c2416;
+  --sidebar-primary: #2c2416;
+  --sidebar-primary-foreground: #f9f5ee;
+  --sidebar-accent: #eee8dc;
+  --sidebar-accent-foreground: #2c2416;
+  --sidebar-border: #d9d0c1;
+  --sidebar-ring: #a89e8f;
 
-  --muted-foreground: oklch(0.556 0 0);
-
-  --accent: oklch(0.97 0 0);
-
-  --accent-foreground: oklch(0.205 0 0);
-
-  --destructive: oklch(0.577 0.245 27.325);
-
-  --border: oklch(0.922 0 0);
-
-  --input: oklch(0.922 0 0);
-
-  --ring: oklch(0.708 0 0);
-
-  --chart-1: oklch(0.646 0.222 41.116);
-
-  --chart-2: oklch(0.6 0.118 184.704);
-
-  --chart-3: oklch(0.398 0.07 227.392);
-
-  --chart-4: oklch(0.828 0.189 84.429);
-
-  --chart-5: oklch(0.769 0.188 70.08);
-
-  --sidebar: oklch(0.985 0 0);
-
-  --sidebar-foreground: oklch(0.145 0 0);
-
-  --sidebar-primary: oklch(0.205 0 0);
-
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-
-  --sidebar-accent: oklch(0.97 0 0);
-
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-
-  --sidebar-border: oklch(0.922 0 0);
-
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Paper texture variables */
+  --paper-grain-opacity: 0.4;
+  --paper-fiber-opacity: 0.03;
+  --paper-vignette-opacity: 0.08;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* Expose Blueshift tokens to Tailwind */
+  /* Expose Paper tokens to Tailwind */
   --color-bs-bg: var(--bs-bg);
   --color-bs-card: var(--bs-card);
   --color-bs-card-fg: var(--bs-card-fg);
@@ -148,7 +135,6 @@
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  /* Define all pixel font variables */
   --font-pixel: var(--font-geist-pixel-grid);
   --font-pixel-square: var(--font-geist-pixel-square);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -190,13 +176,12 @@
   font-family: var(--font-pixel);
 }
 
-/* 
-  Number Scale - using Geist Pixel Square for numeric displays 
+/*
+  Number Scale - using Geist Pixel Square for numeric displays
 */
 .text-num-72 {
   font-family: "GeistPixelGridLocal", monospace;
   font-size: 4.5rem;
-  /* 72px */
   line-height: 1;
   font-weight: 500;
 }
@@ -204,7 +189,6 @@
 .text-num-64 {
   font-family: "GeistPixelGridLocal", monospace;
   font-size: 4rem;
-  /* 64px */
   line-height: 1;
   font-weight: 500;
 }
@@ -212,7 +196,6 @@
 .text-num-56 {
   font-family: "GeistPixelGridLocal", monospace;
   font-size: 3.5rem;
-  /* 56px */
   line-height: 1;
   font-weight: 500;
 }
@@ -220,7 +203,6 @@
 .text-num-48 {
   font-family: "GeistPixelGridLocal", monospace;
   font-size: 3rem;
-  /* 48px */
   line-height: 1;
   font-weight: 500;
 }
@@ -228,7 +210,6 @@
 .text-num-40 {
   font-family: "GeistPixelGridLocal", monospace;
   font-size: 2.5rem;
-  /* 40px */
   line-height: 1;
   font-weight: 500;
 }
@@ -247,7 +228,6 @@ body {
 /* Headings - Used for page titles and section headers */
 .text-heading-72 {
   font-size: 4.5rem;
-  /* 72px */
   line-height: 1.05;
   letter-spacing: -0.03em;
   font-weight: 700;
@@ -256,7 +236,6 @@ body {
 
 .text-heading-64 {
   font-size: 4rem;
-  /* 64px */
   line-height: 1.0625;
   letter-spacing: -0.03em;
   font-weight: 700;
@@ -265,7 +244,6 @@ body {
 
 .text-heading-56 {
   font-size: 3.5rem;
-  /* 56px */
   line-height: 1.07;
   letter-spacing: -0.03em;
   font-weight: 700;
@@ -274,7 +252,6 @@ body {
 
 .text-heading-48 {
   font-size: 3rem;
-  /* 48px */
   line-height: 1.08;
   letter-spacing: -0.025em;
   font-weight: 700;
@@ -283,7 +260,6 @@ body {
 
 .text-heading-40 {
   font-size: 2.5rem;
-  /* 40px */
   line-height: 1.1;
   letter-spacing: -0.02em;
   font-weight: 700;
@@ -292,7 +268,6 @@ body {
 
 .text-heading-32 {
   font-size: 2rem;
-  /* 32px */
   line-height: 1.125;
   letter-spacing: -0.015em;
   font-weight: 600;
@@ -301,7 +276,6 @@ body {
 
 .text-heading-24 {
   font-size: 1.5rem;
-  /* 24px */
   line-height: 1.167;
   letter-spacing: -0.01em;
   font-weight: 600;
@@ -310,7 +284,6 @@ body {
 
 .text-heading-20 {
   font-size: 1.25rem;
-  /* 20px */
   line-height: 1.2;
   letter-spacing: -0.005em;
   font-weight: 600;
@@ -319,7 +292,6 @@ body {
 
 .text-heading-16 {
   font-size: 1rem;
-  /* 16px */
   line-height: 1.25;
   letter-spacing: 0;
   font-weight: 600;
@@ -328,7 +300,6 @@ body {
 
 .text-heading-14 {
   font-size: 0.875rem;
-  /* 14px */
   line-height: 1.286;
   letter-spacing: 0;
   font-weight: 600;
@@ -338,7 +309,6 @@ body {
 /* Buttons - Optimized for clickable elements */
 .text-button-16 {
   font-size: 1rem;
-  /* 16px */
   line-height: 1.5;
   letter-spacing: 0;
   font-weight: 500;
@@ -347,7 +317,6 @@ body {
 
 .text-button-14 {
   font-size: 0.875rem;
-  /* 14px */
   line-height: 1.429;
   letter-spacing: 0;
   font-weight: 500;
@@ -356,7 +325,6 @@ body {
 
 .text-button-12 {
   font-size: 0.75rem;
-  /* 12px */
   line-height: 1.5;
   letter-spacing: 0;
   font-weight: 500;
@@ -366,7 +334,6 @@ body {
 /* Labels - For single-line text (tags, metadata, form labels) */
 .text-label-20 {
   font-size: 1.25rem;
-  /* 20px */
   line-height: 1.4;
   letter-spacing: 0;
   font-weight: 400;
@@ -375,7 +342,6 @@ body {
 
 .text-label-18 {
   font-size: 1.125rem;
-  /* 18px */
   line-height: 1.444;
   letter-spacing: 0;
   font-weight: 400;
@@ -384,7 +350,6 @@ body {
 
 .text-label-16 {
   font-size: 1rem;
-  /* 16px */
   line-height: 1.5;
   letter-spacing: 0;
   font-weight: 400;
@@ -393,7 +358,6 @@ body {
 
 .text-label-14 {
   font-size: 0.875rem;
-  /* 14px */
   line-height: 1.429;
   letter-spacing: 0;
   font-weight: 400;
@@ -402,7 +366,6 @@ body {
 
 .text-label-14-mono {
   font-size: 0.875rem;
-  /* 14px */
   line-height: 1.429;
   letter-spacing: 0;
   font-weight: 400;
@@ -411,7 +374,6 @@ body {
 
 .text-label-13 {
   font-size: 0.8125rem;
-  /* 13px */
   line-height: 1.385;
   letter-spacing: 0;
   font-weight: 400;
@@ -420,7 +382,6 @@ body {
 
 .text-label-13-mono {
   font-size: 0.8125rem;
-  /* 13px */
   line-height: 1.385;
   letter-spacing: 0;
   font-weight: 400;
@@ -429,7 +390,6 @@ body {
 
 .text-label-12 {
   font-size: 0.75rem;
-  /* 12px */
   line-height: 1.5;
   letter-spacing: 0;
   font-weight: 400;
@@ -438,7 +398,6 @@ body {
 
 .text-label-12-mono {
   font-size: 0.75rem;
-  /* 12px */
   line-height: 1.5;
   letter-spacing: 0;
   font-weight: 400;
@@ -448,7 +407,6 @@ body {
 /* Copy - For multi-line paragraphs and body text */
 .text-copy-24 {
   font-size: 1.5rem;
-  /* 24px */
   line-height: 1.5;
   letter-spacing: 0;
   font-weight: 400;
@@ -457,7 +415,6 @@ body {
 
 .text-copy-20 {
   font-size: 1.25rem;
-  /* 20px */
   line-height: 1.6;
   letter-spacing: 0;
   font-weight: 400;
@@ -466,7 +423,6 @@ body {
 
 .text-copy-18 {
   font-size: 1.125rem;
-  /* 18px */
   line-height: 1.556;
   letter-spacing: 0;
   font-weight: 400;
@@ -475,7 +431,6 @@ body {
 
 .text-copy-16 {
   font-size: 1rem;
-  /* 16px */
   line-height: 1.625;
   letter-spacing: 0;
   font-weight: 400;
@@ -484,7 +439,6 @@ body {
 
 .text-copy-14 {
   font-size: 0.875rem;
-  /* 14px */
   line-height: 1.571;
   letter-spacing: 0;
   font-weight: 400;
@@ -493,7 +447,6 @@ body {
 
 .text-copy-13 {
   font-size: 0.8125rem;
-  /* 13px */
   line-height: 1.538;
   letter-spacing: 0;
   font-weight: 400;
@@ -502,14 +455,13 @@ body {
 
 .text-copy-13-mono {
   font-size: 0.8125rem;
-  /* 13px */
   line-height: 1.538;
   letter-spacing: 0;
   font-weight: 400;
   font-family: var(--font-geist-mono), monospace;
 }
 
-/* Strong modifier support - use <strong> within typography classes */
+/* Strong modifier support */
 .text-heading-72 strong,
 .text-heading-64 strong,
 .text-heading-56 strong,
@@ -548,72 +500,79 @@ body {
   font-weight: 600;
 }
 
+/* ============================================
+   Midnight Dark Theme
+   Deep navy tones — NOT black
+   ============================================ */
 .dark {
-  /* Blueshift Dark Palette */
-  --bs-bg: #0b0e14;
-  --bs-card: #11141a;
-  --bs-card-fg: #171a20;
-  --bs-border: #1a1e26;
-  --bs-border-active: rgba(173, 185, 210, 0.2);
-  --bs-bg-primary: rgba(0, 153, 153, 0.08);
+  --bs-bg: #111827;
+  --bs-card: #1a2236;
+  --bs-card-fg: #212b42;
+  --bs-border: #2a3555;
+  --bs-border-active: rgba(212, 165, 74, 0.25);
+  --bs-bg-primary: rgba(212, 165, 74, 0.08);
 
-  --bs-text-primary: #eff1f6;
-  --bs-text-secondary: #ced5e4;
-  --bs-text-tertiary: #adb9d2;
-  --bs-text-mute: #585e6c;
+  --bs-text-primary: #e8e4dd;
+  --bs-text-secondary: #c4bfb4;
+  --bs-text-tertiary: #8e8a80;
+  --bs-text-mute: #5a564e;
 
-  --bs-brand: #00ffff;
-  --bs-brand-secondary: #00e6e6;
-  --bs-brand-tertiary: #00b3b3;
-  --bs-brand-anchor: #ddeae0;
-  --bs-brand-rust: #ffad66;
-  --bs-brand-ts: #69a2f1;
+  --bs-brand: #d4a54a;
+  --bs-brand-secondary: #e0b85c;
+  --bs-brand-tertiary: #b8903e;
+  --bs-brand-anchor: #a8c9a0;
+  --bs-brand-rust: #e0965a;
+  --bs-brand-ts: #7da6d4;
 
-  --bs-success: #00e66b;
-  --bs-error: #ff285a;
+  --bs-success: #5fb87a;
+  --bs-error: #e05d4e;
 
-  --ds-primary: #00b3b3;
-  --ds-secondary: #00e6e6;
-  --ds-accent: #00ffff;
-  --ds-gradient-mid: #00e6e6;
-  --ds-bg-dark: #0b0e14;
-  --ds-bg-light: #ced5e4;
-  --ds-border: #1a1e26;
-  --ds-text-primary: #eff1f6;
-  --ds-text-dark: #0b0e14;
-  --ds-text-muted: #585e6c;
+  --ds-primary: #b8903e;
+  --ds-secondary: #e0b85c;
+  --ds-accent: #d4a54a;
+  --ds-gradient-mid: #e0b85c;
+  --ds-bg-dark: #111827;
+  --ds-bg-light: #c4bfb4;
+  --ds-border: #2a3555;
+  --ds-text-primary: #e8e4dd;
+  --ds-text-dark: #111827;
+  --ds-text-muted: #5a564e;
 
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #111827;
+  --foreground: #e8e4dd;
+  --card: #1a2236;
+  --card-foreground: #e8e4dd;
+  --popover: #1a2236;
+  --popover-foreground: #e8e4dd;
+  --primary: #e8e4dd;
+  --primary-foreground: #1a2236;
+  --secondary: #212b42;
+  --secondary-foreground: #e8e4dd;
+  --muted: #212b42;
+  --muted-foreground: #8e8a80;
+  --accent: #212b42;
+  --accent-foreground: #e8e4dd;
+  --destructive: #e05d4e;
+  --border: rgba(212, 165, 74, 0.12);
+  --input: rgba(212, 165, 74, 0.15);
+  --ring: #5a564e;
+  --chart-1: #d4a54a;
+  --chart-2: #5fb87a;
+  --chart-3: #7da6d4;
+  --chart-4: #e0965a;
+  --chart-5: #e05d4e;
+  --sidebar: #1a2236;
+  --sidebar-foreground: #e8e4dd;
+  --sidebar-primary: #d4a54a;
+  --sidebar-primary-foreground: #e8e4dd;
+  --sidebar-accent: #212b42;
+  --sidebar-accent-foreground: #e8e4dd;
+  --sidebar-border: rgba(212, 165, 74, 0.12);
+  --sidebar-ring: #5a564e;
+
+  --paper-grain-opacity: 0.25;
+  --paper-fiber-opacity: 0.02;
+  --paper-vignette-opacity: 0.15;
 }
 
 @layer base {
@@ -624,6 +583,106 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* ============================================
+   Paper Texture Effects (CSS only)
+   ============================================ */
+
+/* SVG noise filter for paper grain — embedded as data URI, no asset imports */
+.paper-grain {
+  position: relative;
+}
+
+.paper-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: var(--paper-grain-opacity, 0.4);
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  mix-blend-mode: multiply;
+}
+
+.dark .paper-grain::before {
+  mix-blend-mode: soft-light;
+  opacity: var(--paper-grain-opacity, 0.25);
+}
+
+/* Paper card styling with embossed feel */
+.paper-card {
+  background-color: var(--bs-card);
+  border: 1px solid var(--bs-border);
+  border-radius: 0.75rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.04),
+    0 1px 3px rgba(0, 0, 0, 0.06),
+    0 4px 12px rgba(0, 0, 0, 0.03);
+  position: relative;
+}
+
+.dark .paper-card {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 1px 3px rgba(0, 0, 0, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Paper fiber overlay — subtle horizontal lines */
+.paper-fibers::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: var(--paper-fiber-opacity, 0.03);
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(139, 105, 20, 0.15) 2px,
+      rgba(139, 105, 20, 0.15) 3px
+    );
+}
+
+.dark .paper-fibers::after {
+  opacity: var(--paper-fiber-opacity, 0.02);
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(212, 165, 74, 0.1) 2px,
+      rgba(212, 165, 74, 0.1) 3px
+    );
+}
+
+/* Vignette overlay for page edges */
+.paper-vignette::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgba(44, 36, 22, var(--paper-vignette-opacity, 0.08)) 100%
+  );
+}
+
+.dark .paper-vignette::before {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(10, 12, 20, var(--paper-vignette-opacity, 0.15)) 100%
+  );
 }
 
 /* Custom Calendar Styling — theme-aware */
