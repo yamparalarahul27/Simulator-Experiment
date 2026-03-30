@@ -57,18 +57,18 @@ export default function CurrencySettingsModal({ isOpen, onClose, currentRate, on
         <>
             {/* Backdrop */}
             <div
-                className="fixed inset-0 bg-[#0b0e14]/60 backdrop-blur-sm z-[80]"
+                className="fixed inset-0 bg-bs-bg/60 backdrop-blur-sm z-[80]"
                 onClick={onClose}
             />
 
             {/* Modal */}
-            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[90] w-[420px] bg-[#0a0a0f] border border-[#1a1e26] shadow-2xl shadow-black/50">
+            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[90] w-[420px] bg-[#0a0a0f] border border-bs-border shadow-2xl shadow-black/50">
                 {/* Header */}
-                <div className="flex items-center justify-between px-5 py-4 border-b border-[#1a1e26]">
+                <div className="flex items-center justify-between px-5 py-4 border-b border-bs-border">
                     <h3 className="text-sm font-mono font-bold text-white">Currency Settings</h3>
                     <button
                         onClick={onClose}
-                        className="text-[#585e6c] hover:text-white transition-colors"
+                        className="text-bs-text-mute hover:text-white transition-colors"
                     >
                         <X size={16} />
                     </button>
@@ -78,25 +78,25 @@ export default function CurrencySettingsModal({ isOpen, onClose, currentRate, on
                 <div className="px-5 py-5 space-y-5">
                     {/* Exchange Rate Input */}
                     <div>
-                        <label className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider block mb-2">
+                        <label className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider block mb-2">
                             Exchange Rate
                         </label>
                         <div className="flex items-center gap-2">
-                            <span className="text-xs font-mono text-[#adb9d2]">1 USD =</span>
+                            <span className="text-xs font-mono text-bs-text-tertiary">1 USD =</span>
                             <input
                                 type="number"
                                 step="0.01"
                                 value={rate}
                                 onChange={e => setRate(parseFloat(e.target.value) || 0)}
-                                className="flex-1 px-3 py-2 bg-[#11141a] border border-[#1a1e26] text-sm font-mono text-white focus:border-[#00b3b3]/50 focus:outline-none transition-colors"
+                                className="flex-1 px-3 py-2 bg-bs-card border border-bs-border text-sm font-mono text-white focus:border-bs-brand-tertiary/50 focus:outline-none transition-colors"
                             />
-                            <span className="text-xs font-mono text-[#adb9d2]">INR</span>
+                            <span className="text-xs font-mono text-bs-text-tertiary">INR</span>
                         </div>
                     </div>
 
                     {/* Quick Presets */}
                     <div>
-                        <label className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider block mb-2">
+                        <label className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider block mb-2">
                             Quick Presets
                         </label>
                         <div className="flex items-center gap-2">
@@ -105,8 +105,8 @@ export default function CurrencySettingsModal({ isOpen, onClose, currentRate, on
                                     key={p}
                                     onClick={() => { setRate(p); setFetchStatus('idle'); }}
                                     className={`flex-1 py-1.5 text-xs font-mono transition-all border ${rate === p
-                                            ? 'bg-[#00b3b3]/20 border-[#00b3b3]/30 text-[#00e6e6]'
-                                            : 'bg-[#11141a] border-[#1a1e26] text-[#585e6c] hover:text-[#adb9d2] hover:bg-[#171a20]'
+                                            ? 'bg-bs-brand-tertiary/20 border-bs-brand-tertiary/30 text-bs-brand-secondary'
+                                            : 'bg-bs-card border-bs-border text-bs-text-mute hover:text-bs-text-tertiary hover:bg-bs-card-fg'
                                         }`}
                                 >
                                     ₹{p}
@@ -121,8 +121,8 @@ export default function CurrencySettingsModal({ isOpen, onClose, currentRate, on
                             onClick={fetchLiveRate}
                             disabled={fetching}
                             className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-mono font-medium
-                                bg-[#11141a] border border-[#1a1e26] text-[#adb9d2]
-                                hover:bg-[#171a20] hover:text-white
+                                bg-bs-card border border-bs-border text-bs-text-tertiary
+                                hover:bg-bs-card-fg hover:text-white
                                 disabled:opacity-50 disabled:cursor-not-allowed
                                 transition-all"
                         >
@@ -130,30 +130,30 @@ export default function CurrencySettingsModal({ isOpen, onClose, currentRate, on
                             {fetching ? 'Fetching live rate...' : 'Reset to Live Rate'}
                         </button>
                         {fetchStatus === 'success' && (
-                            <div className="flex items-center gap-1.5 mt-1.5 text-[10px] font-mono text-[#00e66b]">
+                            <div className="flex items-center gap-1.5 mt-1.5 text-[10px] font-mono text-bs-success">
                                 <Check size={10} />
                                 Live rate fetched: ₹{rate.toFixed(2)} (via Frankfurter API)
                             </div>
                         )}
                         {fetchStatus === 'error' && (
-                            <div className="mt-1.5 text-[10px] font-mono text-[#ff285a]">
+                            <div className="mt-1.5 text-[10px] font-mono text-bs-error">
                                 Failed to fetch live rate. Try again or set manually.
                             </div>
                         )}
                     </div>
 
                     {/* Info note */}
-                    <div className="flex items-start gap-2 p-3 bg-[#11141a] border border-[#1a1e26]">
-                        <Info size={12} className="text-[#00ffff] mt-0.5 shrink-0" />
-                        <p className="text-[10px] font-mono text-[#585e6c] leading-relaxed">
-                            This rate applies only to the <span className="text-[#adb9d2]">Future Concepts</span> tab.
+                    <div className="flex items-start gap-2 p-3 bg-bs-card border border-bs-border">
+                        <Info size={12} className="text-bs-brand mt-0.5 shrink-0" />
+                        <p className="text-[10px] font-mono text-bs-text-mute leading-relaxed">
+                            This rate applies only to the <span className="text-bs-text-tertiary">Future Concepts</span> tab.
                             Spot trading always uses USD.
                         </p>
                     </div>
                 </div>
 
                 {/* Footer */}
-                <div className="px-5 py-4 border-t border-[#1a1e26]">
+                <div className="px-5 py-4 border-t border-bs-border">
                     <button
                         onClick={handleApply}
                         className="w-full py-2.5 text-sm font-mono font-bold

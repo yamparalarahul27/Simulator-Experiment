@@ -33,7 +33,7 @@ export default async function LocaleLayout({
             </Providers>
             <Toaster
                 position="top-right"
-                theme="dark"
+                theme="system"
                 closeButton
                 expand={false}
                 offset={24}

@@ -127,25 +127,25 @@ export const TableUI = <T extends Record<string, any>>({
 
     return (
         <div
-            className={`w-full overflow-hidden rounded-lg border border-[#1a1e26] bg-[#0b0e14]/80 backdrop-blur-xl shadow-2xl flex flex-col ${className}`}
+            className={`w-full overflow-hidden rounded-lg border border-bs-border bg-bs-bg/80 backdrop-blur-xl shadow-2xl flex flex-col ${className}`}
             style={{ maxHeight }}
         >
             <div className="overflow-auto flex-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/20">
                 <table className="w-full text-left text-sm border-collapse table-fixed">
-                    <thead className="sticky top-0 z-10 bg-[#0b0e14]/90 backdrop-blur-md shadow-sm">
+                    <thead className="sticky top-0 z-10 bg-bs-bg/90 backdrop-blur-md shadow-sm">
                         <tr>
                             {tableColumns.map((col) => (
                                 <th
                                     key={col.key}
                                     style={{ width: columnWidths[col.key] }}
-                                    className="relative px-6 py-4 font-semibold text-[#ced5e4] border-b border-[#1a1e26] select-none group"
+                                    className="relative px-6 py-4 font-semibold text-bs-text-secondary border-b border-bs-border select-none group"
                                 >
                                     <div
                                         className="flex items-center gap-2 cursor-pointer hover:text-white transition-colors overflow-hidden"
                                         onClick={() => handleSort(col.key)}
                                     >
                                         <span className="truncate">{col.header}</span>
-                                        <span className="text-[#585e6c] group-hover:text-[#adb9d2] flex-shrink-0">
+                                        <span className="text-bs-text-mute group-hover:text-bs-text-tertiary flex-shrink-0">
                                             {sortConfig?.key === col.key ? (
                                                 sortConfig.direction === 'asc' ? <ChevronUp size={14} /> : <ChevronDown size={14} />
                                             ) : (
@@ -156,7 +156,7 @@ export const TableUI = <T extends Record<string, any>>({
 
                                     {/* Resize Handle */}
                                     <div
-                                        className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-[#00b3b3]/50 transition-colors z-20"
+                                        className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-bs-brand-tertiary/50 transition-colors z-20"
                                         onMouseDown={(e) => startResizing(e, col.key)}
                                         onClick={(e) => e.stopPropagation()} // Prevent sorting when resizing
                                     />
@@ -164,17 +164,17 @@ export const TableUI = <T extends Record<string, any>>({
                             ))}
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#1a1e26]">
+                    <tbody className="divide-y divide-bs-border">
                         {sortedData.length > 0 ? (
                             sortedData.map((row, rowIndex) => (
                                 <tr
                                     key={rowIndex}
-                                    className="hover:bg-[#11141a] transition-colors"
+                                    className="hover:bg-bs-card transition-colors"
                                 >
                                     {tableColumns.map((col) => (
                                         <td
                                             key={`${rowIndex}-${col.key}`}
-                                            className="px-6 py-4 text-[#ced5e4] overflow-hidden text-ellipsis whitespace-nowrap border-r border-transparent hover:border-[#1a1e26] last:border-r-0"
+                                            className="px-6 py-4 text-bs-text-secondary overflow-hidden text-ellipsis whitespace-nowrap border-r border-transparent hover:border-bs-border last:border-r-0"
                                             style={{ maxWidth: columnWidths[col.key] }} // Ensure truncation works
                                         >
                                             {col.render ? col.render(row[col.key], row) : row[col.key]}
@@ -184,7 +184,7 @@ export const TableUI = <T extends Record<string, any>>({
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={tableColumns.length} className="px-6 py-12 text-center text-[#585e6c]">
+                                <td colSpan={tableColumns.length} className="px-6 py-12 text-center text-bs-text-mute">
                                     No data available
                                 </td>
                             </tr>

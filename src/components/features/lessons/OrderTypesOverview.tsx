@@ -90,23 +90,23 @@ function LessonCard({
     return (
         <button
             onClick={onClick}
-            className="w-full text-left bg-[#0b0e14] border border-[#1a1e26] hover:border-white/20 hover:bg-white/[0.02] transition-all duration-200 p-5 group"
+            className="w-full text-left bg-bs-bg border border-bs-border hover:border-white/20 hover:bg-white/[0.02] transition-all duration-200 p-5 group"
         >
             <div className="flex items-start gap-4">
-                <div className="flex items-center justify-center w-10 h-10 bg-[#11141a] border border-[#1a1e26] text-lg shrink-0">
+                <div className="flex items-center justify-center w-10 h-10 bg-bs-card border border-bs-border text-lg shrink-0">
                     {emoji}
                 </div>
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono text-[#585e6c]">{String(index).padStart(2, '0')}</span>
+                        <span className="text-[10px] font-mono text-bs-text-mute">{String(index).padStart(2, '0')}</span>
                         <h3 className="text-sm font-mono font-semibold text-white">{lesson.title}</h3>
                     </div>
-                    <p className="text-xs font-mono text-[#585e6c] mt-1">{lesson.description}</p>
+                    <p className="text-xs font-mono text-bs-text-mute mt-1">{lesson.description}</p>
                     {details?.whenToUse && (
-                        <p className="text-[11px] font-mono text-[#585e6c] mt-2 line-clamp-1">{details.whenToUse}</p>
+                        <p className="text-[11px] font-mono text-bs-text-mute mt-2 line-clamp-1">{details.whenToUse}</p>
                     )}
                 </div>
-                <span className="text-xs font-mono text-[#00ffff]/50 group-hover:text-[#00ffff]/80 transition-colors mt-1">
+                <span className="text-xs font-mono text-bs-brand/50 group-hover:text-bs-brand/80 transition-colors mt-1">
                     &rarr;
                 </span>
             </div>
@@ -128,9 +128,9 @@ function OverviewContent({
     return (
         <div className="space-y-8">
             {/* Intro section */}
-            <div className="border border-[#1a1e26] bg-white/[0.02] p-6 md:p-8">
+            <div className="border border-bs-border bg-white/[0.02] p-6 md:p-8">
                 <h2 className="text-lg font-mono font-semibold text-white mb-4">What are Order Types?</h2>
-                <div className="space-y-3 text-sm font-mono text-[#adb9d2] leading-relaxed">
+                <div className="space-y-3 text-sm font-mono text-bs-text-tertiary leading-relaxed">
                     <p>
                         Order types are instructions you give to an exchange about how to execute your trade.
                         Each type serves a different purpose — speed, precision, risk management, or stealth.
@@ -150,31 +150,31 @@ function OverviewContent({
             </div>
 
             {/* Quick reference table */}
-            <div className="border border-[#1a1e26] bg-white/[0.02] p-6">
-                <h3 className="text-sm font-mono font-semibold text-[#ced5e4] uppercase tracking-wider mb-4">Quick Reference</h3>
+            <div className="border border-bs-border bg-white/[0.02] p-6">
+                <h3 className="text-sm font-mono font-semibold text-bs-text-secondary uppercase tracking-wider mb-4">Quick Reference</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div className="flex items-center gap-2 text-xs font-mono text-[#585e6c]">
+                    <div className="flex items-center gap-2 text-xs font-mono text-bs-text-mute">
                         <span>⚡ Market</span> <span className="text-white/10">—</span> <span>Instant execution</span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs font-mono text-[#585e6c]">
+                    <div className="flex items-center gap-2 text-xs font-mono text-bs-text-mute">
                         <span>🎯 Limit</span> <span className="text-white/10">—</span> <span>Specific price</span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs font-mono text-[#585e6c]">
+                    <div className="flex items-center gap-2 text-xs font-mono text-bs-text-mute">
                         <span>🛑 Stop Market</span> <span className="text-white/10">—</span> <span>Loss protection</span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs font-mono text-[#585e6c]">
+                    <div className="flex items-center gap-2 text-xs font-mono text-bs-text-mute">
                         <span>🔒 Stop Limit</span> <span className="text-white/10">—</span> <span>Controlled stop</span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs font-mono text-[#585e6c]">
+                    <div className="flex items-center gap-2 text-xs font-mono text-bs-text-mute">
                         <span>🧊 Iceberg</span> <span className="text-white/10">—</span> <span>Hidden size</span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs font-mono text-[#585e6c]">
+                    <div className="flex items-center gap-2 text-xs font-mono text-bs-text-mute">
                         <span>⏱️ TWAP</span> <span className="text-white/10">—</span> <span>Time-split</span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs font-mono text-[#585e6c]">
+                    <div className="flex items-center gap-2 text-xs font-mono text-bs-text-mute">
                         <span>📈 Trailing Stop</span> <span className="text-white/10">—</span> <span>Follow trend</span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs font-mono text-[#585e6c]">
+                    <div className="flex items-center gap-2 text-xs font-mono text-bs-text-mute">
                         <span>⚖️ OCO</span> <span className="text-white/10">—</span> <span>TP + SL pair</span>
                     </div>
                 </div>
@@ -182,7 +182,7 @@ function OverviewContent({
 
             {/* Lessons list */}
             <div>
-                <h3 className="text-xs font-mono uppercase tracking-widest text-[#585e6c] mb-4">
+                <h3 className="text-xs font-mono uppercase tracking-widest text-bs-text-mute mb-4">
                     Lessons
                 </h3>
                 <div className="space-y-2">

@@ -41,7 +41,7 @@ export default function OrderTypeRatioCard({ trades }: OrderTypeRatioCardProps) 
       <div className="flex flex-col h-full justify-between relative z-10">
         <div>
           <div className="flex items-center">
-            <h3 className="text-[#585e6c] text-sm font-mono uppercase tracking-wider">Order Type Ratio</h3>
+            <h3 className="text-bs-text-mute text-sm font-mono uppercase tracking-wider">Order Type Ratio</h3>
             <InfoTooltip infoKey="orderTypeRatio" />
           </div>
         </div>
@@ -49,20 +49,20 @@ export default function OrderTypeRatioCard({ trades }: OrderTypeRatioCardProps) 
 
         <div className="space-y-2">
           <div className="flex items-baseline gap-2">
-            <span className="text-num-48 text-[#00e66b] drop-shadow-[0_0_5px_rgba(34,197,94,0.3)]">
+            <span className="text-num-48 text-bs-success drop-shadow-[0_0_5px_rgba(34,197,94,0.3)]">
               <NumberFlow value={ratio.limitPercent} suffix="%" transformTiming={{ duration: 500, easing: 'ease-out' }} />
             </span>
-            <span className="text-[#adb9d2] text-sm font-mono">Limit</span>
+            <span className="text-bs-text-tertiary text-sm font-mono">Limit</span>
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-num-48 text-[#ff285a] drop-shadow-[0_0_5px_rgba(248,113,113,0.3)]">
+            <span className="text-num-48 text-bs-error drop-shadow-[0_0_5px_rgba(248,113,113,0.3)]">
               <NumberFlow value={ratio.marketPercent} suffix="%" transformTiming={{ duration: 500, easing: 'ease-out' }} />
             </span>
-            <span className="text-[#adb9d2] text-sm font-mono">Market</span>
+            <span className="text-bs-text-tertiary text-sm font-mono">Market</span>
           </div>
 
           <div>
-            <span className="px-1.5 py-0.5 bg-[#171a20] text-[#adb9d2] text-xs font-mono rounded-sm">
+            <span className="px-1.5 py-0.5 bg-bs-card-fg text-bs-text-tertiary text-xs font-mono rounded-sm">
               {ratio.limitCount} Limit / {ratio.marketCount} Market
             </span>
           </div>

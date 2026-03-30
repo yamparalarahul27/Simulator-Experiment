@@ -16,7 +16,7 @@ export default function LessonShell({ title, description, onBack, children }: Le
             <div className="flex items-start gap-4">
                 <button
                     onClick={onBack}
-                    className="mt-1 flex items-center gap-1.5 text-sm font-mono text-[#585e6c] hover:text-[#ced5e4] transition-colors shrink-0"
+                    className="mt-1 flex items-center gap-1.5 text-sm font-mono text-bs-text-mute hover:text-bs-text-secondary transition-colors shrink-0"
                 >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -26,7 +26,7 @@ export default function LessonShell({ title, description, onBack, children }: Le
                 <div>
                     <h1 className="text-2xl font-mono font-bold text-white tracking-wide">{title}</h1>
                     {description && (
-                        <p className="text-sm font-mono text-[#adb9d2] mt-1">{description}</p>
+                        <p className="text-sm font-mono text-bs-text-tertiary mt-1">{description}</p>
                     )}
                 </div>
             </div>

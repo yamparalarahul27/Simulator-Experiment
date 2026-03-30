@@ -114,8 +114,8 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
         return (
             <div className="flex items-center justify-center min-h-[50vh]">
                 <div className="text-center">
-                    <div className="spinner mb-4 text-[#00ffff]"></div>
-                    <p className="text-xs font-mono text-[#585e6c]">Loading demo market...</p>
+                    <div className="spinner mb-4 text-bs-brand"></div>
+                    <p className="text-xs font-mono text-bs-text-mute">Loading demo market...</p>
                 </div>
             </div>
         );
@@ -124,31 +124,31 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
     return (
         <div className="space-y-4">
             {/* ─── Token Selector Bar ──────────── */}
-            <div className="relative z-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between bg-[#0b0e14]/60 backdrop-blur-xl border border-[#1a1e26] px-3 sm:px-4 py-3">
+            <div className="relative z-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between bg-bs-bg/60 backdrop-blur-xl border border-bs-border px-3 sm:px-4 py-3">
                 <div className="flex items-center gap-3 sm:gap-6 flex-wrap">
                     {/* Pair selector */}
                     <div className="relative" ref={dropdownRef}>
                         <button
                             onClick={() => setPairDropdownOpen(prev => !prev)}
-                            className="flex items-center gap-2 text-white hover:text-[#ced5e4] transition-colors"
+                            className="flex items-center gap-2 text-white hover:text-bs-text-secondary transition-colors"
                         >
                             <span className="text-heading-16">{selectedPair}</span>
                             <ChevronDown size={14} className={`transition-transform ${pairDropdownOpen ? 'rotate-180' : ''}`} />
                         </button>
 
                         {pairDropdownOpen && (
-                            <div className="absolute top-full left-0 mt-2 min-w-[200px] bg-[#0b0e14]/95 backdrop-blur-xl border border-[#1a1e26] shadow-2xl z-50">
+                            <div className="absolute top-full left-0 mt-2 min-w-[200px] bg-bs-bg/95 backdrop-blur-xl border border-bs-border shadow-2xl z-50">
                                 {DEMO_PAIRS.map(({ token, pair }) => {
                                     const pd = livePrices[token];
                                     return (
                                         <button
                                             key={pair}
                                             onClick={() => { setSelectedPair(pair); setPairDropdownOpen(false); }}
-                                            className={`w-full flex items-center justify-between px-4 py-2.5 text-sm transition-colors ${selectedPair === pair ? 'bg-[#171a20] text-white' : 'text-[#adb9d2] hover:bg-[#11141a] hover:text-white'
+                                            className={`w-full flex items-center justify-between px-4 py-2.5 text-sm transition-colors ${selectedPair === pair ? 'bg-bs-card-fg text-white' : 'text-bs-text-tertiary hover:bg-bs-card hover:text-white'
                                                 }`}
                                         >
                                             <span className="font-mono">{pair}</span>
-                                            <span className="text-xs font-mono text-[#585e6c]">
+                                            <span className="text-xs font-mono text-bs-text-mute">
                                                 {pd ? `$${pd.price > 1000 ? pd.price.toLocaleString('en-US', { maximumFractionDigits: 2 }) : pd.price < 0.01 ? pd.price.toFixed(7) : pd.price.toFixed(4)}` : '—'}
                                             </span>
                                         </button>
@@ -164,7 +164,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                             {currentPrice.price > 0 ? formatPrice(currentPrice.price) : '—'}
                         </span>
                         {currentPrice.price > 0 && (
-                            <span className={`text-xs font-mono font-bold ${currentPrice.change >= 0 ? 'text-[#00e66b]' : 'text-[#ff285a]'}`}>
+                            <span className={`text-xs font-mono font-bold ${currentPrice.change >= 0 ? 'text-bs-success' : 'text-bs-error'}`}>
                                 {currentPrice.change >= 0 ? '+' : ''}{currentPrice.change.toFixed(2)}%
                             </span>
                         )}
@@ -182,13 +182,13 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                                         </>
                                     ) : wsSource === 'rest' ? (
                                         <>
-                                            <Activity size={10} className="text-[#69a2f1]" />
-                                            <span className="text-[9px] font-mono text-[#69a2f1]">REST</span>
+                                            <Activity size={10} className="text-bs-brand-ts" />
+                                            <span className="text-[9px] font-mono text-bs-brand-ts">REST</span>
                                         </>
                                     ) : (
                                         <>
-                                            <Wifi size={10} className="text-[#00e66b]" />
-                                            <span className="text-[9px] font-mono text-[#00e66b]">LIVE</span>
+                                            <Wifi size={10} className="text-bs-success" />
+                                            <span className="text-[9px] font-mono text-bs-success">LIVE</span>
                                         </>
                                     )}
                                 </div>
@@ -214,8 +214,8 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                     <button
                         onClick={onToggleControlPanel}
                         className={`flex items-center gap-1.5 px-3 py-2 text-xs font-mono border transition-all ${controlPanelOpen
-                            ? 'bg-[#00b3b3]/20 border-[#00b3b3]/40 text-[#00e6e6]'
-                            : 'bg-[#11141a] border-[#1a1e26] text-[#adb9d2] hover:bg-[#171a20] hover:text-white'
+                            ? 'bg-bs-brand-tertiary/20 border-bs-brand-tertiary/40 text-bs-brand-secondary'
+                            : 'bg-bs-card border-bs-border text-bs-text-tertiary hover:bg-bs-card-fg hover:text-white'
                             }`}
                     >
                         <Settings size={14} />
@@ -226,7 +226,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
             </div>
 
             {/* ─── Sub-tab strip ──────────────────────────────── */}
-            <div className="flex items-center gap-1 bg-[#0b0e14]/40 backdrop-blur-xl border border-[#1a1e26] p-1">
+            <div className="flex items-center gap-1 bg-bs-bg/40 backdrop-blur-xl border border-bs-border p-1">
                 {([
                     { id: 'orderform', label: 'Order Simulator' },
                     { id: 'orderbook', label: 'Order Book' },
@@ -235,8 +235,8 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                         key={id}
                         onClick={() => setActivePanel(id)}
                         className={`px-4 py-2 text-xs font-mono font-medium transition-all ${activePanel === id
-                            ? 'bg-[#00b3b3]/20 text-[#00e6e6] border border-[#00b3b3]/30'
-                            : 'text-[#adb9d2] hover:text-[#ced5e4] hover:bg-[#11141a] border border-transparent'
+                            ? 'bg-bs-brand-tertiary/20 text-bs-brand-secondary border border-bs-brand-tertiary/30'
+                            : 'text-bs-text-tertiary hover:text-bs-text-secondary hover:bg-bs-card border border-transparent'
                             }`}
                     >
                         {label}
@@ -246,7 +246,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
 
             {/* ─── Panel Content ──────────────────────────────── */}
             {activePanel === 'orderbook' ? (
-                <div className="bg-[#0b0e14]/60 backdrop-blur-xl border border-[#1a1e26] p-4 min-h-[500px]">
+                <div className="bg-bs-bg/60 backdrop-blur-xl border border-bs-border p-4 min-h-[500px]">
                     <SpotOrderBook
                         orderBook={orderBook}
                         formatPrice={formatPrice}
@@ -259,8 +259,8 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                     <div className="flex flex-col gap-3 md:flex-row md:items-stretch md:min-h-[500px]">
 
                         {/* ── Box 1: Order Form ── */}
-                        <div className="bg-[#0b0e14] border border-[#1a1e26] p-4 w-full md:w-[300px] md:flex-shrink-0 flex flex-col">
-                            <p className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider mb-3">Order Form</p>
+                        <div className="bg-bs-bg border border-bs-border p-4 w-full md:w-[300px] md:flex-shrink-0 flex flex-col">
+                            <p className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider mb-3">Order Form</p>
                             <SpotOrderForm
                                 pair={selectedPair}
                                 currentPrice={currentPrice.price}
@@ -274,7 +274,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                         </div>
 
                         {/* ── Box 2: Order Flow ── */}
-                        <div className="bg-[#0b0e14] border border-[#1a1e26] p-4 flex-1 min-w-0 flex flex-col min-h-[300px] md:min-h-0">
+                        <div className="bg-bs-bg border border-bs-border p-4 flex-1 min-w-0 flex flex-col min-h-[300px] md:min-h-0">
                             <OrderFlowVisualiser
                                 orderType={orderType}
                                 side={side}
@@ -288,8 +288,8 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                         </div>
 
                         {/* ── Box 3: Price Scale ── */}
-                        <div className="bg-[#0b0e14] border border-[#1a1e26] p-4 w-full md:w-[120px] md:flex-shrink-0 flex flex-col">
-                            <p className="text-[10px] font-mono text-[#585e6c] uppercase tracking-wider mb-3">Price Scale</p>
+                        <div className="bg-bs-bg border border-bs-border p-4 w-full md:w-[120px] md:flex-shrink-0 flex flex-col">
+                            <p className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider mb-3">Price Scale</p>
                             {!simSnapshot ? (
                                 <div className="flex-1 flex items-center justify-center">
                                     <div className="text-white/15 text-[9px] font-mono text-center leading-relaxed">
@@ -301,7 +301,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                                     {/* Current simPrice */}
                                     <div className="text-center mb-2 flex-shrink-0">
                                         <div className="text-xs font-mono text-white font-bold">{formatPrice(simPrice)}</div>
-                                        <div className={`text-[10px] font-mono ${simPriceChange >= 0 ? 'text-[#00e66b]' : 'text-[#ff285a]'}`}>
+                                        <div className={`text-[10px] font-mono ${simPriceChange >= 0 ? 'text-bs-success' : 'text-bs-error'}`}>
                                             {simPriceChange >= 0 ? '▲' : '▼'} {Math.abs(simPriceChange).toFixed(2)}%
                                         </div>
                                     </div>
@@ -313,17 +313,17 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                                         className="relative flex-1 min-h-[200px] cursor-pointer select-none"
                                         style={SLIDER_MARGIN_STYLE}
                                     >
-                                        <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-[#171a20]" />
+                                        <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-bs-card-fg" />
 
                                         <div className="absolute -top-5 left-0 right-0 text-center">
-                                            <span className="text-[8px] font-mono text-[#adb9d2]">{formatPrice(sliderRange.max)}</span>
+                                            <span className="text-[8px] font-mono text-bs-text-tertiary">{formatPrice(sliderRange.max)}</span>
                                         </div>
 
                                         {/* Entry price line */}
                                         <div className="absolute left-0 right-0 flex items-center gap-1"
                                             style={{ top: `${priceToPercent(simSnapshot.entryPrice)}%` }}>
                                             <div className="flex-1 border-t border-dashed border-white/30" />
-                                            <span className="text-[8px] font-mono text-[#585e6c] whitespace-nowrap">entry</span>
+                                            <span className="text-[8px] font-mono text-bs-text-mute whitespace-nowrap">entry</span>
                                         </div>
 
                                         {/* Don't show stop line for trailing_stop — stopPrice is a % value, not a real price */}
@@ -345,23 +345,23 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                                             <div className="absolute left-0 right-0 flex items-center gap-1"
                                                 style={{ top: `${priceToPercent(simSnapshot.price ?? simSnapshot.limitPrice!)}%` }}>
                                                 <div className="flex-1 h-px bg-blue-500/55" />
-                                                <span className="text-[8px] font-mono text-[#69a2f1]/70 whitespace-nowrap">limit</span>
+                                                <span className="text-[8px] font-mono text-bs-brand-ts/70 whitespace-nowrap">limit</span>
                                             </div>
                                         )}
 
                                         {simSnapshot.tpPrice != null && (
                                             <div className="absolute left-0 right-0 flex items-center gap-1"
                                                 style={{ top: `${priceToPercent(simSnapshot.tpPrice)}%` }}>
-                                                <div className="flex-1 h-px bg-[#00e66b]/55" />
-                                                <span className="text-[8px] font-mono text-[#00e66b]/70 whitespace-nowrap">TP</span>
+                                                <div className="flex-1 h-px bg-bs-success/55" />
+                                                <span className="text-[8px] font-mono text-bs-success/70 whitespace-nowrap">TP</span>
                                             </div>
                                         )}
 
                                         {simSnapshot.slPrice != null && (
                                             <div className="absolute left-0 right-0 flex items-center gap-1"
                                                 style={{ top: `${priceToPercent(simSnapshot.slPrice)}%` }}>
-                                                <div className="flex-1 h-px bg-[#ff285a]/55" />
-                                                <span className="text-[8px] font-mono text-[#ff285a]/70 whitespace-nowrap">SL</span>
+                                                <div className="flex-1 h-px bg-bs-error/55" />
+                                                <span className="text-[8px] font-mono text-bs-error/70 whitespace-nowrap">SL</span>
                                             </div>
                                         )}
 
@@ -374,12 +374,12 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                                         </div>
 
                                         <div className="absolute -bottom-5 left-0 right-0 text-center">
-                                            <span className="text-[8px] font-mono text-[#adb9d2]">{formatPrice(sliderRange.min)}</span>
+                                            <span className="text-[8px] font-mono text-bs-text-tertiary">{formatPrice(sliderRange.min)}</span>
                                         </div>
                                     </div>
 
                                     <div className="text-center mt-1 flex-shrink-0">
-                                        <span className="text-[9px] font-mono text-[#adb9d2]">Drag to simulate</span>
+                                        <span className="text-[9px] font-mono text-bs-text-tertiary">Drag to simulate</span>
                                     </div>
                                 </div>
                             )}
@@ -387,7 +387,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                     </div>
 
                     {/* ── Bottom row: Trade Summary (full width) ── */}
-                    <div className="bg-[#0b0e14] border border-[#1a1e26] p-4 overflow-y-auto custom-scrollbar">
+                    <div className="bg-bs-bg border border-bs-border p-4 overflow-y-auto custom-scrollbar">
                         <TradeSummaryPanel
                             simSnapshot={simSnapshot}
                             formatPrice={formatPrice}

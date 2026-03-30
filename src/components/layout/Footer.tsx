@@ -13,17 +13,17 @@ export default function Footer() {
         <footer className="mt-12 mb-8">
             <div className="relative">
                 {/* Glassmorphism Container */}
-                <div className="relative overflow-hidden rounded-lg border border-[#1a1e26] bg-black/2">
+                <div className="relative overflow-hidden rounded-lg border border-bs-border bg-black/2">
                     {/* Corner Accents */}
-                    <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#00b3b3]/40"></div>
-                    <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#00b3b3]/40"></div>
-                    <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#00b3b3]/40"></div>
-                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#00b3b3]/40"></div>
+                    <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-bs-brand-tertiary/40"></div>
+                    <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-bs-brand-tertiary/40"></div>
+                    <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-bs-brand-tertiary/40"></div>
+                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-bs-brand-tertiary/40"></div>
 
                     {/* Content */}
                     <div className="relative z-10 py-4 px-4 md:py-6 md:px-6">
                         <div className="flex flex-col items-center justify-center gap-2">
-                            <p className="text-[#adb9d2] text-sm font-mono text-center">
+                            <p className="text-bs-text-tertiary text-sm font-mono text-center">
                                 Design & Engineered by{' '}
                                 <button
                                     type="button"
@@ -48,9 +48,9 @@ export default function Footer() {
                         className="absolute inset-0 bg-black/70"
                         onClick={() => setIsScanOpen(false)}
                     />
-                    <div className="relative z-10 w-full max-w-sm rounded-lg border border-[#1a1e26] bg-[#05050c]/95 p-6 text-center shadow-2xl">
+                    <div className="relative z-10 w-full max-w-sm rounded-lg border border-bs-border bg-[#05050c]/95 p-6 text-center shadow-2xl">
                         <h4 className="text-lg font-semibold text-white">Scan to say hi!</h4>
-                        <p className="mt-2 text-sm text-[#ced5e4]">Waiting to talk to you soon.</p>
+                        <p className="mt-2 text-sm text-bs-text-secondary">Waiting to talk to you soon.</p>
                         <div className="mt-6 overflow-hidden rounded-lg">
                             <Image
                                 src={QR_IMAGE_SRC}
@@ -63,7 +63,7 @@ export default function Footer() {
                         </div>
                         <button
                             aria-label="Close QR modal"
-                            className="mt-6 inline-flex items-center justify-center rounded-lg border border-white/20 px-4 py-2 text-sm text-[#ced5e4] transition hover:text-white"
+                            className="mt-6 inline-flex items-center justify-center rounded-lg border border-white/20 px-4 py-2 text-sm text-bs-text-secondary transition hover:text-white"
                             onClick={() => setIsScanOpen(false)}
                         >
                             <X className="h-4 w-4" />

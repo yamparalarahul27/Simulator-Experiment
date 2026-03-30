@@ -65,7 +65,7 @@ export default function AddressInput({ onSubmit, loading = false }: AddressInput
               value={address}
               onChange={handleInputChange}
               placeholder="Paste Solana wallet address (44 characters, base58 format)"
-              className="w-full px-4 py-3 bg-[#0b0e14]/60 border border-[#1a1e26] rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-bs-bg/60 border border-bs-border rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
               disabled={loading}
             />
           </div>
@@ -80,7 +80,7 @@ export default function AddressInput({ onSubmit, loading = false }: AddressInput
         </div>
 
         {error && (
-          <p className="text-[#69a2f1] text-sm">{error}</p>
+          <p className="text-bs-brand-ts text-sm">{error}</p>
         )}
       </div>
     </div>

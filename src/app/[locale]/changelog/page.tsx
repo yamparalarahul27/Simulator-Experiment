@@ -23,13 +23,13 @@ interface ChangelogEntry {
 // ============================================
 
 const TAG = {
-    added:    { label: 'Added',    color: 'text-[#00e66b] bg-[#00e66b]/10 border-[#00e66b]/20' },
-    improved: { label: 'Improved', color: 'text-[#00ffff] bg-[#00ffff]/10 border-[#00ffff]/20' },
-    fixed:    { label: 'Fixed',    color: 'text-[#69a2f1] bg-[#69a2f1]/10 border-[#69a2f1]/20' },
+    added:    { label: 'Added',    color: 'text-bs-success bg-bs-success/10 border-[#00e66b]/20' },
+    improved: { label: 'Improved', color: 'text-bs-brand bg-bs-brand/10 border-bs-brand/20' },
+    fixed:    { label: 'Fixed',    color: 'text-bs-brand-ts bg-[#69a2f1]/10 border-[#69a2f1]/20' },
     changed:  { label: 'Changed',  color: 'text-[#ffad66] bg-[#ffad66]/10 border-[#ffad66]/20' },
-    removed:  { label: 'Removed',  color: 'text-[#ff285a] bg-[#ff285a]/10 border-[#ff285a]/20' },
+    removed:  { label: 'Removed',  color: 'text-bs-error bg-bs-error/10 border-[#ff285a]/20' },
     dep:      { label: 'Dependency', color: 'text-[#c084fc] bg-[#c084fc]/10 border-[#c084fc]/20' },
-    infra:    { label: 'Infra',    color: 'text-[#585e6c] bg-[#585e6c]/10 border-[#585e6c]/20' },
+    infra:    { label: 'Infra',    color: 'text-bs-text-mute bg-bs-text-mute/10 border-[#585e6c]/20' },
 } as const;
 
 // ============================================
@@ -234,8 +234,8 @@ function TabButton({
             onClick={onClick}
             className={`flex-1 px-4 py-3 text-left transition-all border ${
                 active
-                    ? 'bg-[#00b3b3]/10 border-[#00b3b3]/30 text-[#00e6e6]'
-                    : 'bg-transparent border-[#1a1e26] text-[#585e6c] hover:text-[#adb9d2] hover:border-white/10'
+                    ? 'bg-bs-brand-tertiary/10 border-bs-brand-tertiary/30 text-bs-brand-secondary'
+                    : 'bg-transparent border-bs-border text-bs-text-mute hover:text-bs-text-tertiary hover:border-white/10'
             }`}
         >
             <div className="flex items-center gap-2">
@@ -254,21 +254,21 @@ function EntryItem({ entry }: { entry: ChangelogEntry }) {
                 <span className={`shrink-0 mt-0.5 px-1.5 py-0.5 text-[10px] font-mono font-semibold border rounded-lg ${entry.tag.color}`}>
                     {entry.tag.label}
                 </span>
-                <span className="text-sm text-[#ced5e4] font-mono leading-relaxed">
+                <span className="text-sm text-bs-text-secondary font-mono leading-relaxed">
                     {entry.title}
                 </span>
             </div>
             {entry.description && (
-                <p className="text-xs font-mono text-[#585e6c] leading-relaxed ml-[calc(0.625rem+10px+0.625rem)]">
+                <p className="text-xs font-mono text-bs-text-mute leading-relaxed ml-[calc(0.625rem+10px+0.625rem)]">
                     {entry.description}
                 </p>
             )}
             {(entry.credit || entry.source) && (
                 <div className="flex items-center gap-2 ml-[calc(0.625rem+10px+0.625rem)]">
                     {entry.credit && (
-                        <span className="text-[10px] font-mono text-[#adb9d2]/50">
+                        <span className="text-[10px] font-mono text-bs-text-tertiary/50">
                             Credit: {entry.source ? (
-                                <a href={entry.source} target="_blank" rel="noopener noreferrer" className="text-[#00b3b3]/60 hover:text-[#00e6e6] transition-colors underline underline-offset-2">
+                                <a href={entry.source} target="_blank" rel="noopener noreferrer" className="text-bs-brand-tertiary/60 hover:text-bs-brand-secondary transition-colors underline underline-offset-2">
                                     {entry.credit}
                                 </a>
                             ) : entry.credit}
@@ -290,14 +290,14 @@ export default function ChangelogPage() {
     const days = groupByDate(entries);
 
     return (
-        <div className="min-h-screen text-[#eff1f6]">
+        <div className="min-h-screen text-bs-text-primary">
             <div className="max-w-3xl mx-auto py-8 md:py-12 space-y-8">
                 {/* Header */}
                 <div>
-                    <h1 className="text-2xl md:text-3xl font-bold font-mono text-[#eff1f6]">
+                    <h1 className="text-2xl md:text-3xl font-bold font-mono text-bs-text-primary">
                         Changelog
                     </h1>
-                    <p className="text-[#adb9d2] text-sm mt-2 font-mono">
+                    <p className="text-bs-text-tertiary text-sm mt-2 font-mono">
                         What&apos;s new in Deriverse
                     </p>
                 </div>
@@ -316,24 +316,24 @@ export default function ChangelogPage() {
 
                 {/* Timeline */}
                 {days.length === 0 ? (
-                    <p className="text-[#585e6c] font-mono text-sm">No entries yet.</p>
+                    <p className="text-bs-text-mute font-mono text-sm">No entries yet.</p>
                 ) : (
                     <div className="relative">
                         {/* Timeline line */}
-                        <div className="absolute left-[7px] top-2 bottom-2 w-px bg-[#1a1e26]" />
+                        <div className="absolute left-[7px] top-2 bottom-2 w-px bg-bs-border" />
 
                         <div className="space-y-10">
                             {days.map((day) => (
                                 <div key={day.dateKey} className="relative pl-8">
                                     {/* Timeline dot */}
-                                    <div className="absolute left-0 top-1.5 w-[15px] h-[15px] rounded-full bg-[#00ffff]/20 border-2 border-[#00ffff] z-10" />
+                                    <div className="absolute left-0 top-1.5 w-[15px] h-[15px] rounded-full bg-bs-brand/20 border-2 border-bs-brand z-10" />
 
                                     {/* Date header */}
                                     <div className="flex items-center gap-3 mb-4">
-                                        <h2 className="text-base font-semibold text-[#eff1f6] font-mono">
+                                        <h2 className="text-base font-semibold text-bs-text-primary font-mono">
                                             {day.displayDate}
                                         </h2>
-                                        <span className="text-[10px] text-[#585e6c] font-mono border border-[#1a1e26] px-2 py-0.5 rounded-lg">
+                                        <span className="text-[10px] text-bs-text-mute font-mono border border-bs-border px-2 py-0.5 rounded-lg">
                                             {day.entries.length} {day.entries.length === 1 ? 'change' : 'changes'}
                                         </span>
                                     </div>

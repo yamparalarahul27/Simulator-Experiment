@@ -29,7 +29,7 @@ export default function UnsavedChangesModal({
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onCancel}
-                        className="fixed inset-0 z-[100] bg-[#0b0e14]/60 backdrop-blur-sm"
+                        className="fixed inset-0 z-[100] bg-bs-bg/60 backdrop-blur-sm"
                     />
 
                     {/* Modal */}
@@ -42,7 +42,7 @@ export default function UnsavedChangesModal({
                             className="relative w-full max-w-md"
                         >
                             {/* Glassmorphism Container */}
-                            <div className="relative overflow-hidden rounded-lg border border-[#1a1e26] bg-[#0b0e14]/95 backdrop-blur-xl shadow-2xl">
+                            <div className="relative overflow-hidden rounded-lg border border-bs-border bg-bs-bg/95 backdrop-blur-xl shadow-2xl">
                                 {/* Corner Accents */}
                                 <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-blue-400/40"></div>
                                 <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-blue-400/40"></div>
@@ -55,7 +55,7 @@ export default function UnsavedChangesModal({
                                     <div className="mb-4 flex justify-center">
                                         <div className="rounded-full bg-[#69a2f1]/10 p-3">
                                             <svg
-                                                className="h-6 w-6 text-[#69a2f1]"
+                                                className="h-6 w-6 text-bs-brand-ts"
                                                 fill="none"
                                                 viewBox="0 0 24 24"
                                                 stroke="currentColor"
@@ -76,7 +76,7 @@ export default function UnsavedChangesModal({
                                     </h3>
 
                                     {/* Message */}
-                                    <p className="mb-6 text-center text-sm text-[#adb9d2]">
+                                    <p className="mb-6 text-center text-sm text-bs-text-tertiary">
                                         Save the annotation or it will be lost
                                     </p>
 
@@ -84,13 +84,13 @@ export default function UnsavedChangesModal({
                                     <div className="flex gap-3">
                                         <button
                                             onClick={onDiscard}
-                                            className="flex-1 rounded-lg border border-[#1a1e26] bg-[#11141a] px-4 py-2.5 text-sm font-medium text-[#ced5e4] transition-colors hover:bg-[#171a20]"
+                                            className="flex-1 rounded-lg border border-bs-border bg-bs-card px-4 py-2.5 text-sm font-medium text-bs-text-secondary transition-colors hover:bg-bs-card-fg"
                                         >
                                             Discard
                                         </button>
                                         <button
                                             onClick={onCancel}
-                                            className="flex-1 rounded-lg border border-[#1a1e26] bg-[#11141a] px-4 py-2.5 text-sm font-medium text-[#ced5e4] transition-colors hover:bg-[#171a20]"
+                                            className="flex-1 rounded-lg border border-bs-border bg-bs-card px-4 py-2.5 text-sm font-medium text-bs-text-secondary transition-colors hover:bg-bs-card-fg"
                                         >
                                             Cancel
                                         </button>

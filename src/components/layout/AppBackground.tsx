@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useState } from 'react';
+import { useTheme } from 'next-themes';
 import { useAppearance } from '@/lib/context/AppearanceContext';
 import GeneratedBackground from '@/components/ui/GeneratedBackground';
 
@@ -8,11 +9,13 @@ export default function AppBackground() {
     const { preferences } = useAppearance();
     const { bgType, bgImagePath, bgColor, overlayOpacity, blurAmount } = preferences;
     const [imgError, setImgError] = useState(false);
+    const { resolvedTheme } = useTheme();
 
     const handleImgError = useCallback(() => setImgError(true), []);
 
     // Determine if we should show a custom image
     const hasCustomImage = bgType === 'custom' && bgImagePath && !imgError;
+    const isLight = resolvedTheme === 'light';
 
     return (
         <div>
@@ -45,6 +48,10 @@ export default function AppBackground() {
                         className="hidden"
                     />
                 </div>
+            ) : isLight ? (
+                <div
+                    className="fixed inset-0 -z-20 bg-bs-bg transition-colors duration-500"
+                />
             ) : (
                 <GeneratedBackground className="fixed inset-0 -z-20" />
             )}
