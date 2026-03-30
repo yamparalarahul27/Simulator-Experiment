@@ -4,17 +4,10 @@ import { ReactNode } from 'react';
 import { motion } from 'framer-motion';
 
 /**
- * WelcomeCard Component
- * 
- * PURPOSE:
- * A custom card component for the welcome screen, similar to CardWithCornerShine
- * but with fixed bg-bs-bg/40 styling and corner shine effects.
- * 
- * DESIGN FEATURES:
- * - Fixed 40% black background opacity
- * - Corner shine effects on hover
- * - Rounded corners (none)
- * - Smooth transitions
+ * WelcomeCard Component — Paper Texture UI
+ *
+ * Card with embossed paper feel, warm corner accents,
+ * and subtle inset shadows for depth.
  */
 
 interface WelcomeCardProps {
@@ -22,37 +15,31 @@ interface WelcomeCardProps {
     className?: string;
 }
 
-/**
- * CornerAccents Component
- * 
- * Reuses the corner shine logic from CardWithCornerShine
- * Creates L-shaped glowing corners on hover
- */
 const CornerAccents = () => {
     return (
         <>
             {/* Top-Left Corner */}
             <div className="absolute top-4 left-4 w-4 h-4">
-                <div className="absolute top-0 left-0 w-2 h-px bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
-                <div className="absolute top-0 left-0 w-px h-2 bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
+                <div className="absolute top-0 left-0 w-2 h-px bg-bs-border group-hover:bg-bs-brand group-hover:shadow-[0_0_8px_rgba(139,105,20,0.4)] dark:group-hover:shadow-[0_0_8px_rgba(212,165,74,0.4)] transition-all duration-300" />
+                <div className="absolute top-0 left-0 w-px h-2 bg-bs-border group-hover:bg-bs-brand group-hover:shadow-[0_0_8px_rgba(139,105,20,0.4)] dark:group-hover:shadow-[0_0_8px_rgba(212,165,74,0.4)] transition-all duration-300" />
             </div>
 
             {/* Top-Right Corner */}
             <div className="absolute top-4 right-4 w-4 h-4">
-                <div className="absolute top-0 right-0 w-2 h-px bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
-                <div className="absolute top-0 right-0 w-px h-2 bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
+                <div className="absolute top-0 right-0 w-2 h-px bg-bs-border group-hover:bg-bs-brand group-hover:shadow-[0_0_8px_rgba(139,105,20,0.4)] dark:group-hover:shadow-[0_0_8px_rgba(212,165,74,0.4)] transition-all duration-300" />
+                <div className="absolute top-0 right-0 w-px h-2 bg-bs-border group-hover:bg-bs-brand group-hover:shadow-[0_0_8px_rgba(139,105,20,0.4)] dark:group-hover:shadow-[0_0_8px_rgba(212,165,74,0.4)] transition-all duration-300" />
             </div>
 
             {/* Bottom-Left Corner */}
             <div className="absolute bottom-4 left-4 w-4 h-4">
-                <div className="absolute bottom-0 left-0 w-2 h-px bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
-                <div className="absolute bottom-0 left-0 w-px h-2 bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
+                <div className="absolute bottom-0 left-0 w-2 h-px bg-bs-border group-hover:bg-bs-brand group-hover:shadow-[0_0_8px_rgba(139,105,20,0.4)] dark:group-hover:shadow-[0_0_8px_rgba(212,165,74,0.4)] transition-all duration-300" />
+                <div className="absolute bottom-0 left-0 w-px h-2 bg-bs-border group-hover:bg-bs-brand group-hover:shadow-[0_0_8px_rgba(139,105,20,0.4)] dark:group-hover:shadow-[0_0_8px_rgba(212,165,74,0.4)] transition-all duration-300" />
             </div>
 
             {/* Bottom-Right Corner */}
             <div className="absolute bottom-4 right-4 w-4 h-4">
-                <div className="absolute bottom-0 right-0 w-2 h-px bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
-                <div className="absolute bottom-0 right-0 w-px h-2 bg-bs-border group-hover:bg-bs-text-primary group-hover:shadow-[0_0_8px_rgba(0,180,170,0.4)] transition-all duration-300" />
+                <div className="absolute bottom-0 right-0 w-2 h-px bg-bs-border group-hover:bg-bs-brand group-hover:shadow-[0_0_8px_rgba(139,105,20,0.4)] dark:group-hover:shadow-[0_0_8px_rgba(212,165,74,0.4)] transition-all duration-300" />
+                <div className="absolute bottom-0 right-0 w-px h-2 bg-bs-border group-hover:bg-bs-brand group-hover:shadow-[0_0_8px_rgba(139,105,20,0.4)] dark:group-hover:shadow-[0_0_8px_rgba(212,165,74,0.4)] transition-all duration-300" />
             </div>
         </>
     );
@@ -66,10 +53,11 @@ export const WelcomeCard = ({ children, className = '' }: WelcomeCardProps) => {
                 min-h-0 sm:min-h-[400px]
                 w-full max-w-[500px]
                 rounded-lg
-                bg-bs-bg/40
+                bg-bs-card/80
                 border border-bs-border
-                hover:border-bs-border
-                hover:shadow-lg hover:shadow-white/5
+                hover:border-bs-brand/30
+                shadow-[inset_0_1px_0_rgba(255,255,255,0.08),inset_0_-1px_0_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)]
+                dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.2),0_1px_3px_rgba(0,0,0,0.2),0_4px_16px_rgba(0,0,0,0.15)]
                 transition-all duration-300
                 p-5 sm:p-8
                 ${className}

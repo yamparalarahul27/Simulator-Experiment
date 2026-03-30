@@ -172,7 +172,7 @@ export default function WelcomeScreen({ onComplete, isVisible }: WelcomeScreenPr
                                     <motion.div
                                         initial={{ opacity: 0, y: -10 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        className="text-orange-400 text-sm text-center max-w-md"
+                                        className="text-bs-error text-sm text-center max-w-md"
                                     >
                                         {walletError}
                                     </motion.div>
