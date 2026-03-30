@@ -24,7 +24,7 @@ export default function LessonShell({ title, description, onBack, children }: Le
                     Back
                 </button>
                 <div>
-                    <h1 className="text-2xl font-mono font-bold text-white tracking-wide">{title}</h1>
+                    <h1 className="text-2xl font-mono font-bold text-bs-text-primary tracking-wide">{title}</h1>
                     {description && (
                         <p className="text-sm font-mono text-bs-text-tertiary mt-1">{description}</p>
                     )}

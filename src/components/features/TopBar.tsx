@@ -76,8 +76,8 @@ const FILTER_LABELS: Record<FilterType, string> = {
                             type="button"
                             onClick={() => onFilterChange(filter)}
                             className={`px-4 py-2 rounded-lg text-sm font-mono transition-all duration-200 border-b-2 ${activeFilter === filter
-                                ? 'bg-bs-brand-tertiary/20 border-bs-brand-tertiary text-white/100'
-                                : 'bg-bs-card border-x border-t border-bs-border border-b-transparent text-bs-text-tertiary hover:bg-bs-card-fg hover:border-white/20'
+                                ? 'bg-bs-brand-tertiary/20 border-bs-brand-tertiary text-bs-text-primary/100'
+                                : 'bg-bs-card border-x border-t border-bs-border border-b-transparent text-bs-text-tertiary hover:bg-bs-card-fg hover:border-bs-border'
                                 }`}
                         >
                             {FILTER_LABELS[filter]}

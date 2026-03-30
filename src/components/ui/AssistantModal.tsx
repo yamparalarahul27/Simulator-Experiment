@@ -104,7 +104,7 @@ export default function AssistantModal() {
             {/* Floating AI Button */}
             <button
                 onClick={() => setIsOpen(true)}
-                className={`fixed bottom-24 left-6 z-50 flex items-center justify-center w-14 h-14 rounded-full border border-bs-brand-tertiary/60 shadow-lg shadow-[#00b3b3]/20 text-white transition-all duration-300 hover:scale-110 active:scale-95 ${isOpen ? "hidden" : ""}`}
+                className={`fixed bottom-24 left-6 z-50 flex items-center justify-center w-14 h-14 rounded-full border border-bs-brand-tertiary/60 shadow-lg shadow-[#00b3b3]/20 text-bs-text-primary transition-all duration-300 hover:scale-110 active:scale-95 ${isOpen ? "hidden" : ""}`}
             >
                 <Telescope className="w-6 h-6" />
             </button>
@@ -148,13 +148,13 @@ export default function AssistantModal() {
                                     <Telescope className="w-4 h-4 text-bs-brand" />
                                 </div>
                                 <div>
-                                    <h2 className="text-sm font-semibold text-white">YDEX AI Assistant</h2>
+                                    <h2 className="text-sm font-semibold text-bs-text-primary">YDEX AI Assistant</h2>
                                     <p className="text-[10px] text-bs-text-mute font-mono">Powered by Gemini 2.5 Flash</p>
                                 </div>
                             </div>
                             <button
                                 onClick={() => setIsOpen(false)}
-                                className="p-2 bg-bs-card hover:bg-bs-card-fg text-bs-text-mute hover:text-white transition-colors"
+                                className="p-2 bg-bs-card hover:bg-bs-card-fg text-bs-text-mute hover:text-bs-text-primary transition-colors"
                             >
                                 <X className="w-4 h-4" />
                             </button>
@@ -187,7 +187,7 @@ export default function AssistantModal() {
                                         <div
                                             className={`px-3.5 py-2.5 text-sm leading-relaxed ${
                                                 message.role === "user"
-                                                    ? "bg-[#69a2f1] text-white"
+                                                    ? "bg-[#69a2f1] text-bs-text-primary"
                                                     : "bg-bs-card border border-bs-border text-bs-text-secondary whitespace-pre-wrap"
                                             }`}
                                         >
@@ -224,12 +224,12 @@ export default function AssistantModal() {
                                     onChange={(e) => setInput(e.target.value)}
                                     placeholder="Ask about trades or markets..."
                                     disabled={isLoading}
-                                    className="min-w-0 flex-1 bg-bs-card border border-bs-border py-2.5 px-3 text-base text-white placeholder:text-bs-text-mute focus:outline-none focus:border-bs-brand-tertiary/50 disabled:opacity-50 transition-all"
+                                    className="min-w-0 flex-1 bg-bs-card border border-bs-border py-2.5 px-3 text-base text-bs-text-primary placeholder:text-bs-text-mute focus:outline-none focus:border-bs-brand-tertiary/50 disabled:opacity-50 transition-all"
                                 />
                                 <button
                                     type="submit"
                                     disabled={!input.trim() || isLoading}
-                                    className="shrink-0 p-3 bg-gradient-to-r from-[#00b3b3] to-[#00ffff] text-white hover:scale-105 active:scale-95 disabled:opacity-30 transition-all duration-200"
+                                    className="shrink-0 p-3 bg-gradient-to-r from-[#00b3b3] to-[#00ffff] text-bs-text-primary hover:scale-105 active:scale-95 disabled:opacity-30 transition-all duration-200"
                                 >
                                     <Send className="w-4 h-4" />
                                 </button>

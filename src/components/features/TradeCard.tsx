@@ -54,7 +54,7 @@ export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardPr
                         />
 
                         <div>
-                            <h3 className="text-white font-bold text-lg">{trade.symbol}</h3>
+                            <h3 className="text-bs-text-primary font-bold text-lg">{trade.symbol}</h3>
                             <p className="text-bs-text-tertiary text-sm font-mono">
                                 {trade.side.toUpperCase()} • {trade.orderType}
                             </p>
@@ -76,7 +76,7 @@ export default function TradeCard({ trade, annotation, onAnnotate }: TradeCardPr
                 <div className="mb-4">
                     <div className="flex items-baseline gap-2">
                         <span className={`text-num-40 ${trade.pnl >= 0 ? 'text-bs-success' : 'text-bs-error'
-                            } drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]`}>
+                            } drop-shadow-[0_0_10px_rgba(0,180,170,0.2)]`}>
                             {trade.pnl >= 0 ? '+' : ''}{formatUsd(trade.pnl)}
                         </span>
                         <span className={`text-sm font-medium ${trade.isWin ? 'text-bs-success' : 'text-bs-error'

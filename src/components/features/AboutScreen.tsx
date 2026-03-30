@@ -37,7 +37,7 @@ export default function AboutScreen() {
         <section className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-10 rounded-lg px-4 py-4 sm:p-8 text-bs-text-secondary backdrop-blur">
             <header className="space-y-4">
                 <p className="text-center text-sm uppercase tracking-[0.4em] text-bs-text-mute">About YDEX</p>
-                <h1 className="text-center text-lg font-semibold text-white sm:text-xl md:text-3xl">
+                <h1 className="text-center text-lg font-semibold text-bs-text-primary sm:text-xl md:text-3xl">
                     Make Decentralised Exchanges easy to understand for the New Age Traders on Solana.
                 </h1>
                 <div className="text-center space-y-4 md:space-y-6 text-sm md:text-base leading-relaxed text-bs-text-secondary">
@@ -57,14 +57,14 @@ export default function AboutScreen() {
             <div className="grid gap-6 md:grid-cols-2">
                 <div className="rounded-lg border border-bs-border bg-bs-bg/40 p-5 shadow-inner shadow-black/10">
                     <p className="text-sm uppercase tracking-[0.3em] text-cyan-400/70">Pillar 1</p>
-                    <p className="mt-1 text-base font-semibold text-white">DEX Integration & Insights</p>
+                    <p className="mt-1 text-base font-semibold text-bs-text-primary">DEX Integration & Insights</p>
                     <p className="mt-3 text-sm leading-relaxed text-bs-text-secondary">
                         Integrate Solana DEXes into the app and surface useful analytics from real on-chain trades.
                     </p>
                 </div>
                 <div className="rounded-lg border border-bs-border bg-bs-bg/40 p-5 shadow-inner shadow-black/10">
                     <p className="text-sm uppercase tracking-[0.3em] text-bs-brand/70">Pillar 2</p>
-                    <p className="mt-1 text-base font-semibold text-white">Education & Simulation</p>
+                    <p className="mt-1 text-base font-semibold text-bs-text-primary">Education & Simulation</p>
                     <p className="mt-3 text-sm leading-relaxed text-bs-text-secondary">
                         Make complex trading concepts simple so traders can simulate setups, and in future execute from the platform on their preferred DEX.
                     </p>
@@ -73,7 +73,7 @@ export default function AboutScreen() {
 
             {/* Feature Inventory */}
             <div className="space-y-2">
-                <h2 className="text-xl text-center font-semibold text-white">What&apos;s Built</h2>
+                <h2 className="text-xl text-center font-semibold text-bs-text-primary">What&apos;s Built</h2>
                 <p className="text-center text-sm text-bs-text-mute">Phase 0 + Phase 1 complete</p>
             </div>
 
@@ -113,7 +113,7 @@ export default function AboutScreen() {
 
             {/* Design Principles */}
             <div className="space-y-4 rounded-lg border border-bs-border bg-bs-bg/40 p-4 md:p-6">
-                <h3 className="text-base font-semibold text-white">Design Principles</h3>
+                <h3 className="text-base font-semibold text-bs-text-primary">Design Principles</h3>
                 <div className="grid gap-3 grid-cols-1 md:grid-cols-2">
                     {[
                         { label: 'Education-first', desc: 'Every feature teaches something.' },
@@ -124,13 +124,13 @@ export default function AboutScreen() {
                     ].map((p) => (
                         <div key={p.label} className="flex items-start gap-2">
                             <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-cyan-400 flex-shrink-0" />
-                            <p className="text-sm text-bs-text-secondary"><span className="text-white/90 font-medium">{p.label}</span> — {p.desc}</p>
+                            <p className="text-sm text-bs-text-secondary"><span className="text-bs-text-primary/90 font-medium">{p.label}</span> — {p.desc}</p>
                         </div>
                     ))}
                 </div>
             </div>
 
-            <div className="space-y-4 rounded-lg bg-gradient-to-r from-[#00ffff]/15 via-[#00e6e6]/15 to-[#00b3b3]/15 p-4 md:p-6 text-sm leading-relaxed text-white/85">
+            <div className="space-y-4 rounded-lg bg-gradient-to-r from-[#00ffff]/15 via-[#00e6e6]/15 to-[#00b3b3]/15 p-4 md:p-6 text-sm leading-relaxed text-bs-text-primary/85">
                 <p>
                     Check out the Roadmap tab for what&apos;s shipping next — from funding rate explainers and multi-DEX support
                     to paper trading and live trade execution via Jupiter.
@@ -140,12 +140,12 @@ export default function AboutScreen() {
                         If you run a fund or just want to support what I'm building, I'd love to chat. Hit me up on Telegram or
                         scan the QR code.
                     </p>
-                    <div className="flex flex-wrap items-center gap-3 text-white">
+                    <div className="flex flex-wrap items-center gap-3 text-bs-text-primary">
                         <a
                             href={TELEGRAM_URL}
                             target="_blank"
                             rel="noreferrer"
-                            className="rounded-lg border border-white/15 px-4 py-2 text-sm font-medium text-white/90 transition-colors hover:border-white/40"
+                            className="rounded-lg border border-bs-border px-4 py-2 text-sm font-medium text-bs-text-primary/90 transition-colors hover:border-white/40"
                         >
                             {TELEGRAM_URL.replace('https://', '')}
                         </a>
@@ -153,7 +153,7 @@ export default function AboutScreen() {
                             type="button"
                             onClick={handleCopy}
                             aria-label="Copy Telegram handle"
-                            className="flex items-center gap-2 rounded-lg border border-white/15 px-4 py-2 text-sm font-medium text-bs-text-secondary transition-colors hover:border-white/40"
+                            className="flex items-center gap-2 rounded-lg border border-bs-border px-4 py-2 text-sm font-medium text-bs-text-secondary transition-colors hover:border-white/40"
                         >
                             {copied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4" />}
                             {copied ? 'Copied' : 'Copy handle'}
@@ -161,7 +161,7 @@ export default function AboutScreen() {
                         <button
                             type="button"
                             onClick={() => setIsQrOpen(true)}
-                            className="flex items-center gap-2 rounded-lg border border-white/15 px-4 py-2 text-sm font-medium text-bs-text-secondary transition-colors hover:border-white/40"
+                            className="flex items-center gap-2 rounded-lg border border-bs-border px-4 py-2 text-sm font-medium text-bs-text-secondary transition-colors hover:border-white/40"
                         >
                             <QrCode className="h-4 w-4" />
                             View QR
@@ -172,9 +172,9 @@ export default function AboutScreen() {
 
             {isQrOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-                    <div className="absolute inset-0 bg-black/70" onClick={() => setIsQrOpen(false)} />
+                    <div className="absolute inset-0 bg-bs-bg/70" onClick={() => setIsQrOpen(false)} />
                     <div className="relative z-10 w-full max-w-sm rounded-lg border border-bs-border bg-[#05050c]/95 p-6 text-center shadow-2xl">
-                        <h4 className="text-lg font-semibold text-white">Scan to say Hi!</h4>
+                        <h4 className="text-lg font-semibold text-bs-text-primary">Scan to say Hi!</h4>
                         <p className="mt-2 text-sm text-bs-text-secondary">Waiting to talk to you soon.</p>
                         <div className="mt-6 overflow-hidden rounded-lg">
                             <Image
@@ -188,7 +188,7 @@ export default function AboutScreen() {
                         </div>
                         <button
                             aria-label="Close QR modal"
-                            className="Center rounded-lg border border-bs-border p-2 text-bs-text-tertiary transition-colors hover:text-white"
+                            className="Center rounded-lg border border-bs-border p-2 text-bs-text-tertiary transition-colors hover:text-bs-text-primary"
                             onClick={() => setIsQrOpen(false)}
                         >
                             <X className="h-4 w-4" />

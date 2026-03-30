@@ -26,10 +26,10 @@ export default function ControlPanel({ isOpen, onClose, trade }: ControlPanelPro
             </div>
             {/* Header */}
             <div className="sticky top-0 bg-bs-bg/95 backdrop-blur-xl border-b border-bs-border px-4 py-3 flex items-center justify-between z-10">
-                <h3 className="text-heading-14 text-white">Control Panel</h3>
+                <h3 className="text-heading-14 text-bs-text-primary">Control Panel</h3>
                 <button
                     onClick={onClose}
-                    className="text-bs-text-mute hover:text-white text-lg transition-colors p-1"
+                    className="text-bs-text-mute hover:text-bs-text-primary text-lg transition-colors p-1"
                 >
                     ✕
                 </button>
@@ -61,7 +61,7 @@ export default function ControlPanel({ isOpen, onClose, trade }: ControlPanelPro
                                     {/* Token header */}
                                     <div className="flex items-center justify-between mb-2">
                                         <div className="flex items-center gap-2">
-                                            <span className="text-xs font-mono font-bold text-white">{token}</span>
+                                            <span className="text-xs font-mono font-bold text-bs-text-primary">{token}</span>
                                             {isOverridden ? (
                                                 <WifiOff size={10} className="text-bs-error" />
                                             ) : (
@@ -89,7 +89,7 @@ export default function ControlPanel({ isOpen, onClose, trade }: ControlPanelPro
                                                 const val = e.target.value ? parseFloat(e.target.value) : null;
                                                 setPriceOverride(token, val);
                                             }}
-                                            className="flex-1 bg-bs-bg/50 border border-bs-border text-white text-xs font-mono px-2 py-1.5 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-bs-text-mute"
+                                            className="flex-1 bg-bs-bg/50 border border-bs-border text-bs-text-primary text-xs font-mono px-2 py-1.5 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-bs-text-mute"
                                         />
                                         <button
                                             onClick={() => setPriceOverride(token, currentPrice * 1.05)}
@@ -106,7 +106,7 @@ export default function ControlPanel({ isOpen, onClose, trade }: ControlPanelPro
                                         {isOverridden && (
                                             <button
                                                 onClick={() => setPriceOverride(token, null)}
-                                                className="px-1.5 py-1.5 text-[9px] font-mono text-bs-text-mute bg-bs-card border border-bs-border hover:text-white hover:bg-bs-card-fg transition-colors"
+                                                className="px-1.5 py-1.5 text-[9px] font-mono text-bs-text-mute bg-bs-card border border-bs-border hover:text-bs-text-primary hover:bg-bs-card-fg transition-colors"
                                             >
                                                 ✕
                                             </button>

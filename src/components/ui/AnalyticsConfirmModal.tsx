@@ -43,7 +43,7 @@ export const AnalyticsConfirmModal = ({
 
                     {/* Title & Description */}
                     <div>
-                        <h3 className="text-xl font-bold text-white mb-2">Trades Saved Successfully!</h3>
+                        <h3 className="text-xl font-bold text-bs-text-primary mb-2">Trades Saved Successfully!</h3>
                         <p className="text-bs-text-tertiary">
                             You've saved {tradeCount} trades to your database.
                         </p>
@@ -56,13 +56,13 @@ export const AnalyticsConfirmModal = ({
                     <div className="grid grid-cols-2 gap-3 pt-2">
                         <button
                             onClick={onCancel}
-                            className="px-4 py-2.5 rounded-lg border border-bs-border bg-bs-card text-bs-text-tertiary hover:text-white hover:bg-bs-card-fg transition-colors font-mono text-sm"
+                            className="px-4 py-2.5 rounded-lg border border-bs-border bg-bs-card text-bs-text-tertiary hover:text-bs-text-primary hover:bg-bs-card-fg transition-colors font-mono text-sm"
                         >
                             No
                         </button>
                         <button
                             onClick={onConfirm}
-                            className="px-4 py-2.5 rounded-lg bg-bs-brand-tertiary/10 text-white hover:bg-bs-brand-tertiary/40 transition-colors font-mono text-sm shadow-lg shadow-[#00b3b3]/20 border border-bs-brand-tertiary/50"
+                            className="px-4 py-2.5 rounded-lg bg-bs-brand-tertiary/10 text-bs-text-primary hover:bg-bs-brand-tertiary/40 transition-colors font-mono text-sm shadow-lg shadow-[#00b3b3]/20 border border-bs-brand-tertiary/50"
                         >
                             Yes
                         </button>

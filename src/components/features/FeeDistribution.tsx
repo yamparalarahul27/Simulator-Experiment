@@ -33,7 +33,7 @@ export default function FeeDistribution({ summary, className }: FeeDistributionP
                         <span className="text-bs-text-tertiary text-xs font-mono uppercase tracking-wider">
                             Total Fees Paid
                         </span>
-                        <span className="text-num-48 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
+                        <span className="text-num-48 text-bs-text-primary drop-shadow-[0_0_10px_rgba(0,180,170,0.2)]">
                             {formatUsd(cumulativeFees)}
                         </span>
                     </div>
@@ -53,7 +53,7 @@ export default function FeeDistribution({ summary, className }: FeeDistributionP
 
                             {/* Amount and Percentage */}
                             <div className="flex items-center gap-3">
-                                <span className="text-white font-mono text-sm tabular-nums">
+                                <span className="text-bs-text-primary font-mono text-sm tabular-nums">
                                     {formatUsd(item.amount)}
                                 </span>
                                 <span className="px-2 py-0.5 bg-bs-card-fg text-bs-text-tertiary text-xs font-mono rounded-sm tabular-nums min-w-[60px] text-center">

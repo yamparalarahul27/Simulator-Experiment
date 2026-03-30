@@ -39,7 +39,7 @@ export const WelcomeButton = ({
                 border-2
                 bg-[#0A2260]
                 border-[#2651C2]
-                text-white
+                text-bs-text-primary
                 font-semibold
                 text-base
                 inline-block

@@ -108,19 +108,19 @@ const SpotTradeChart = React.memo(function SpotTradeChart({ currentPrice, pair, 
                             </defs>
                             <CartesianGrid
                                 strokeDasharray="3 3"
-                                stroke="rgba(255,255,255,0.03)"
+                                stroke="var(--bs-border)"
                                 vertical={false}
                             />
                             <XAxis
                                 dataKey="time"
-                                tick={{ fontSize: 9, fill: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-geist-mono)' }}
-                                axisLine={{ stroke: 'rgba(255,255,255,0.05)' }}
+                                tick={{ fontSize: 9, fill: 'var(--bs-text-mute)', fontFamily: 'var(--font-geist-mono)' }}
+                                axisLine={{ stroke: 'var(--bs-border)' }}
                                 tickLine={false}
                                 interval={Math.floor(data.length / 6)}
                             />
                             <YAxis
                                 domain={['auto', 'auto']}
-                                tick={{ fontSize: 9, fill: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-geist-mono)' }}
+                                tick={{ fontSize: 9, fill: 'var(--bs-text-mute)', fontFamily: 'var(--font-geist-mono)' }}
                                 axisLine={false}
                                 tickLine={false}
                                 width={60}
@@ -128,14 +128,14 @@ const SpotTradeChart = React.memo(function SpotTradeChart({ currentPrice, pair, 
                             />
                             <Tooltip
                                 contentStyle={{
-                                    backgroundColor: 'rgba(0,0,0,0.9)',
-                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    backgroundColor: 'var(--bs-card)',
+                                    border: '1px solid var(--bs-border)',
                                     borderRadius: 0,
                                     fontFamily: 'var(--font-geist-mono)',
                                     fontSize: '11px',
                                 }}
-                                labelStyle={{ color: 'rgba(255,255,255,0.5)', fontSize: '10px' }}
-                                itemStyle={{ color: '#fff' }}
+                                labelStyle={{ color: 'var(--bs-text-mute)', fontSize: '10px' }}
+                                itemStyle={{ color: 'var(--bs-text-primary)' }}
                                 formatter={(value: number | undefined) => [formatPrice(value ?? 0), 'Price']}
                             />
                             <Area
@@ -145,7 +145,7 @@ const SpotTradeChart = React.memo(function SpotTradeChart({ currentPrice, pair, 
                                 strokeWidth={1.5}
                                 fill="url(#priceGradient)"
                                 dot={false}
-                                activeDot={{ r: 3, fill: lineColor, stroke: '#fff', strokeWidth: 1 }}
+                                activeDot={{ r: 3, fill: lineColor, stroke: 'var(--bs-text-primary)', strokeWidth: 1 }}
                             />
                         </AreaChart>
                     </ResponsiveContainer>

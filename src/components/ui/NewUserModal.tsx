@@ -94,7 +94,7 @@ export default function NewUserModal({ isVisible, onChoice, walletAddress }: New
                                 </WelcomeButton>
                                 
                                 <button 
-                                    className="text-white text-sm font-mono hover:text-bs-text-secondary transition-colors cursor-pointer"
+                                    className="text-bs-text-primary text-sm font-mono hover:text-bs-text-secondary transition-colors cursor-pointer"
                                     onClick={handleGoBack}
                                 >
                                     {NewUserContent.secondaryOption}

@@ -11,9 +11,9 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-bs-card-fg text-white hover:bg-bs-card-fg border border-bs-border",
-        outline: "border border-white/15 bg-bs-bg/40 text-white hover:bg-bs-card-fg",
-        ghost: "bg-transparent text-bs-text-secondary hover:bg-bs-card-fg hover:text-white",
+        default: "bg-bs-card-fg text-bs-text-primary hover:bg-bs-card-fg border border-bs-border",
+        outline: "border border-bs-border bg-bs-bg/40 text-bs-text-primary hover:bg-bs-card-fg",
+        ghost: "bg-transparent text-bs-text-secondary hover:bg-bs-card-fg hover:text-bs-text-primary",
       },
       size: {
         default: "h-10 px-4 py-2",

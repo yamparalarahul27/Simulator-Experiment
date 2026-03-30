@@ -71,7 +71,7 @@ export default function UnsavedChangesModal({
                                     </div>
 
                                     {/* Title */}
-                                    <h3 className="mb-2 text-center text-lg font-semibold text-white">
+                                    <h3 className="mb-2 text-center text-lg font-semibold text-bs-text-primary">
                                         Unsaved Changes
                                     </h3>
 
@@ -96,7 +96,7 @@ export default function UnsavedChangesModal({
                                         </button>
                                         <button
                                             onClick={onSave}
-                                            className="flex-1 rounded-lg bg-blue-500 px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+                                            className="flex-1 rounded-lg bg-blue-500 px-4 py-2.5 text-sm font-medium text-bs-text-primary transition-opacity hover:opacity-90"
                                         >
                                             Save
                                         </button>

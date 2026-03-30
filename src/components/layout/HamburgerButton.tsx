@@ -108,8 +108,8 @@ export const HamburgerButton = ({
 
     // Color mappings
     const colorClasses = {
-        white: 'bg-white',
-        black: 'bg-black',
+        white: 'bg-bs-text-primary',
+        black: 'bg-bs-bg',
         gray: 'bg-bs-text-tertiary',
         custom: customColorClass || 'bg-white',
     };

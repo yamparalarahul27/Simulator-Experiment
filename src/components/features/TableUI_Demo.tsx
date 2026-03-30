@@ -131,7 +131,7 @@ export default function TableUI_Demo({ activeFilter = 'All', trades }: TableUIDe
         <div className="pt-8 space-y-6">
             <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                    <h2 className="text-2xl font-bold text-white">Your Trade Data</h2>
+                    <h2 className="text-2xl font-bold text-bs-text-primary">Your Trade Data</h2>
                     <InfoTooltip infoKey="transactionTable" />
                 </div>
                 <p className="text-bs-text-tertiary">Showing recent {tableData.length} trades from {activeFilter} Filter</p>

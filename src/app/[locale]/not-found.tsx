@@ -32,7 +32,7 @@ export default function NotFound() {
                             <WifiOff size={24} className="md:w-8 md:h-8" />
                         </div>
                         <div className="space-y-3 md:space-y-4 min-w-0">
-                            <h1 className="text-2xl md:text-4xl font-bold text-white uppercase tracking-tighter leading-none">SIGNAL LOST</h1>
+                            <h1 className="text-2xl md:text-4xl font-bold text-bs-text-primary uppercase tracking-tighter leading-none">SIGNAL LOST</h1>
                             <p className="text-bs-text-mute text-xs md:text-sm leading-relaxed uppercase tracking-tighter">
                                 The requested coordinate does not exist within the current simulation grid. Packet loss at 100%.
                                 Data retrieval failed.
@@ -44,11 +44,11 @@ export default function NotFound() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="p-4 bg-bs-card border border-bs-border">
                             <span className="text-[12px] text-bs-text-mute uppercase block mb-1 font-bold">Error Code</span>
-                            <span className="text-sm font-bold text-white">404_PAGE_NOT_FOUND</span>
+                            <span className="text-sm font-bold text-bs-text-primary">404_PAGE_NOT_FOUND</span>
                         </div>
                         <div className="p-4 bg-bs-card border border-bs-border">
                             <span className="text-[12px] text-bs-text-mute uppercase block mb-1 font-bold">Subsystem</span>
-                            <span className="text-sm font-bold text-white">ROUTING_MANAGER_V2</span>
+                            <span className="text-sm font-bold text-bs-text-primary">ROUTING_MANAGER_V2</span>
                         </div>
                     </div>
 

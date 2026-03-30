@@ -249,7 +249,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-white">Journal</h1>
+                    <h1 className="text-3xl font-bold text-bs-text-primary">Journal</h1>
                     <p className="text-bs-text-tertiary text-sm mt-1 font-mono tracking-tight">
                         REFLECT ON YOUR TRADES AND TRACK YOUR GROWTH
                     </p>
@@ -297,7 +297,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                                     {selectedTags.length > 0 && (
                                         <button
                                             onClick={() => setSelectedTags([])}
-                                            className="w-full mt-2 pt-2 border-t border-bs-border text-[10px] text-bs-text-mute hover:text-white transition-colors text-center pb-1"
+                                            className="w-full mt-2 pt-2 border-t border-bs-border text-[10px] text-bs-text-mute hover:text-bs-text-primary transition-colors text-center pb-1"
                                         >
                                             Clear All
                                         </button>
@@ -324,7 +324,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
 
             {/* Loading State */}
             {loading && (
-                <div className="flex flex-col items-center justify-center min-h-[300px] text-white">
+                <div className="flex flex-col items-center justify-center min-h-[300px] text-bs-text-primary">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-bs-brand-tertiary mb-4"></div>
                     <p className="text-bs-text-tertiary">Loading journal entries...</p>
                 </div>
@@ -336,7 +336,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                     <div>
                         <img src="/assets/graphic_no_trade_data_onJournal.png" alt="No trade data" className="w-64" />
                     </div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Connect Wallet to view your Journal</h3>
+                    <h3 className="text-xl font-semibold text-bs-text-primary mb-2">Connect Wallet to view your Journal</h3>
                     <p className="text-bs-text-tertiary max-w-md mb-6">
                         {network === 'devnet' && !analyzingWallet
                             ? "Go to Wallet Lookup to load your trades."
@@ -348,7 +348,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
             {/* Filtered Empty State */}
             {!loading && trades.length > 0 && filteredTrades.length === 0 && (
                 <div className="flex flex-col items-center justify-center min-h-[300px] text-center border border-dashed border-bs-border bg-bs-card p-8">
-                    <p className="text-xl text-white font-medium mb-3">
+                    <p className="text-xl text-bs-text-primary font-medium mb-3">
                         {selectedTags.includes('FOMO')
                             ? "No trades found with tag '#FOMO' — that's actually a good thing!"
                             : selectedTags.includes('Revenge')
@@ -420,7 +420,7 @@ export default function Journal({ network = 'mock', analyzingWallet, onNavigateT
                                                 key={page}
                                                 onClick={() => goToPage(page)}
                                                 className={`min-w-[40px] rounded-lg px-3 py-2 text-sm font-medium transition-colors ${page === currentPage
-                                                    ? 'bg-bs-brand-tertiary text-white'
+                                                    ? 'bg-bs-brand-tertiary text-bs-text-primary'
                                                     : 'border border-bs-border bg-bs-card text-bs-text-secondary hover:bg-bs-card-fg'
                                                     }`}
                                             >

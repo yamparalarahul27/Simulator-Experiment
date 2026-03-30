@@ -47,7 +47,7 @@ export default function FutureConcepts({ currency, usdInrRate }: FutureConceptsP
                     >
                         {label}
                         {!enabled && (
-                            <span className="ml-1.5 text-[8px] text-white/15 uppercase">soon</span>
+                            <span className="ml-1.5 text-[8px] text-bs-text-primary/15 uppercase">soon</span>
                         )}
                     </button>
                 ))}

@@ -45,7 +45,7 @@ function ModuleCard({ module, onClick }: { module: LearningModule; onClick?: () 
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <span className="text-lg">{module.icon}</span>
-                    <h2 className="text-base font-mono font-semibold text-white">{module.title}</h2>
+                    <h2 className="text-base font-mono font-semibold text-bs-text-primary">{module.title}</h2>
                 </div>
                 {module.comingSoon ? (
                     <span className="text-[9px] font-mono uppercase tracking-wider text-bs-brand/70 bg-bs-brand-tertiary/10 px-2 py-0.5 border border-bs-brand-tertiary/20">
@@ -81,7 +81,7 @@ function HeroSection({ onStartLearning }: { onStartLearning: () => void }) {
             <div
                 className="absolute inset-0 opacity-[0.03]"
                 style={{
-                    backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)',
+                    backgroundImage: 'linear-gradient(var(--bs-border) 1px, transparent 1px), linear-gradient(90deg, var(--bs-border) 1px, transparent 1px)',
                     backgroundSize: '40px 40px',
                 }}
             />
@@ -94,7 +94,7 @@ function HeroSection({ onStartLearning }: { onStartLearning: () => void }) {
                                 Featured Lab
                             </span>
                         </div>
-                        <h2 className="text-xl sm:text-2xl md:text-3xl font-mono font-bold text-white">
+                        <h2 className="text-xl sm:text-2xl md:text-3xl font-mono font-bold text-bs-text-primary">
                             Order Types Lab
                         </h2>
                         <p className="text-sm font-mono text-bs-text-tertiary max-w-lg leading-relaxed">
@@ -103,15 +103,15 @@ function HeroSection({ onStartLearning }: { onStartLearning: () => void }) {
                         </p>
                         <div className="flex items-center gap-3 text-xs font-mono text-bs-text-mute">
                             <span>9 lessons</span>
-                            <span className="text-white/10">|</span>
+                            <span className="text-bs-text-primary/10">|</span>
                             <span>Interactive simulator</span>
-                            <span className="text-white/10">|</span>
+                            <span className="text-bs-text-primary/10">|</span>
                             <span>Live prices</span>
                         </div>
                     </div>
                     <button
                         onClick={onStartLearning}
-                        className="px-8 py-3 bg-bs-brand-tertiary/80 hover:bg-bs-brand-tertiary border border-bs-brand-tertiary/30 text-white font-mono text-sm font-medium transition-all duration-200 whitespace-nowrap"
+                        className="px-8 py-3 bg-bs-brand-tertiary/80 hover:bg-bs-brand-tertiary border border-bs-brand-tertiary/30 text-bs-text-primary font-mono text-sm font-medium transition-all duration-200 whitespace-nowrap"
                     >
                         Start Learning &rarr;
                     </button>
@@ -136,7 +136,7 @@ export default function Web3Hub() {
         <div className="space-y-8">
             {/* Header */}
             <div>
-                <h1 className="text-2xl font-mono font-bold text-white tracking-wide">Learn</h1>
+                <h1 className="text-2xl font-mono font-bold text-bs-text-primary tracking-wide">Learn</h1>
                 <p className="text-sm font-mono text-bs-text-tertiary mt-1">
                     Solving Why of DEX — interactive lessons & simulators
                 </p>

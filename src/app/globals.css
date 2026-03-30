@@ -234,8 +234,9 @@
 }
 
 body {
-  background-color: var(--bs-bg, #0b0e14);
+  background-color: var(--bs-bg);
   font-family: var(--font-geist-mono), monospace;
+  color: var(--bs-text-primary);
 }
 
 /* ============================================
@@ -624,17 +625,17 @@ body {
   }
 }
 
-/* Custom Calendar Styling for Dark Theme */
+/* Custom Calendar Styling — theme-aware */
 .custom-calendar {
-  color: white;
+  color: var(--bs-text-primary);
 }
 
 .custom-calendar .rdp-nav_button {
-  color: white;
+  color: var(--bs-text-primary);
 }
 
 .custom-calendar .rdp-nav_button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--bs-border);
 }
 
 .custom-calendar .rdp-day {

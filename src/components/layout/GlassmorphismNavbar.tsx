@@ -456,7 +456,7 @@ export const GlassmorphismNavbar = ({
                 <div className="fixed inset-0 z-40 lg:hidden">
                     {/* Backdrop */}
                     <div
-                        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+                        className="absolute inset-0 bg-bs-bg/70 backdrop-blur-sm"
                         onClick={() => setIsMobileMenuOpen(false)}
                     />
 

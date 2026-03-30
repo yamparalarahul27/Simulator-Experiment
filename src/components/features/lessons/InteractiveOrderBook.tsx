@@ -242,14 +242,14 @@ function DepthChart({ orderBook }: { orderBook: OrderBookData }) {
         <div className="border border-bs-border bg-bs-bg p-4">
             <p className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider mb-2">Depth Chart</p>
             <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-auto" preserveAspectRatio="none">
-                <path d={bidPath} fill="rgba(0,230,107,0.15)" stroke="#00e66b" strokeWidth="1.5" />
-                <path d={askPath} fill="rgba(255,40,90,0.15)" stroke="#ff285a" strokeWidth="1.5" />
+                <path d={bidPath} fill="rgba(0,230,107,0.15)" stroke="var(--bs-success)" strokeWidth="1.5" />
+                <path d={askPath} fill="rgba(255,40,90,0.15)" stroke="var(--bs-error)" strokeWidth="1.5" />
                 <line
                     x1={px((bids[0].price + asks[0].price) / 2)}
                     y1={0}
                     x2={px((bids[0].price + asks[0].price) / 2)}
                     y2={h}
-                    stroke="#585e6c"
+                    stroke="var(--bs-text-mute)"
                     strokeWidth="0.5"
                     strokeDasharray="4 2"
                 />
@@ -322,7 +322,7 @@ export default function InteractiveOrderBook({
                             className={`px-3 py-1.5 text-xs font-mono border transition-all ${
                                 i === pairIdx
                                     ? 'bg-bs-brand-tertiary/20 text-bs-brand-secondary border-bs-brand-tertiary/30'
-                                    : 'text-bs-text-mute border-bs-border hover:text-bs-text-tertiary hover:border-white/10'
+                                    : 'text-bs-text-mute border-bs-border hover:text-bs-text-tertiary hover:border-bs-border'
                             }`}
                         >
                             {p.label}
@@ -339,7 +339,7 @@ export default function InteractiveOrderBook({
                     </div>
                     <button
                         onClick={refresh}
-                        className="px-3 py-1.5 text-xs font-mono text-bs-text-mute border border-bs-border hover:text-bs-text-tertiary hover:border-white/10 transition-all"
+                        className="px-3 py-1.5 text-xs font-mono text-bs-text-mute border border-bs-border hover:text-bs-text-tertiary hover:border-bs-border transition-all"
                     >
                         Refresh
                     </button>
@@ -383,7 +383,7 @@ export default function InteractiveOrderBook({
                     <div className="border border-bs-border bg-bs-bg p-4">
                         <div className="flex items-center justify-between mb-2">
                             <span className="text-[10px] font-mono text-bs-text-tertiary uppercase tracking-wider">Order Book</span>
-                            <span className="text-[10px] font-mono text-white">{pair.label}</span>
+                            <span className="text-[10px] font-mono text-bs-text-primary">{pair.label}</span>
                         </div>
 
                         <div className="grid grid-cols-3 gap-1 text-[9px] font-mono text-bs-text-mute uppercase tracking-wider mb-1 px-1">
@@ -450,7 +450,7 @@ export default function InteractiveOrderBook({
                             <p className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider mb-2">Selected Level</p>
                             {clickedPrice ? (
                                 <div className="space-y-2">
-                                    <p className="text-lg font-mono text-white">{formatPrice(clickedPrice)}</p>
+                                    <p className="text-lg font-mono text-bs-text-primary">{formatPrice(clickedPrice)}</p>
                                     {(() => {
                                         const askLevel = orderBook.asks.find(l => l.price === clickedPrice);
                                         const bidLevel = orderBook.bids.find(l => l.price === clickedPrice);
