@@ -663,27 +663,6 @@ body {
     );
 }
 
-/* Vignette overlay for page edges */
-.paper-vignette::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 2;
-  background: radial-gradient(
-    ellipse at center,
-    transparent 50%,
-    rgba(44, 36, 22, var(--paper-vignette-opacity, 0.08)) 100%
-  );
-}
-
-.dark .paper-vignette::before {
-  background: radial-gradient(
-    ellipse at center,
-    transparent 40%,
-    rgba(10, 12, 20, var(--paper-vignette-opacity, 0.15)) 100%
-  );
-}
 
 /* ============================================
    Postage Stamp Card — perforated edges via CSS mask
