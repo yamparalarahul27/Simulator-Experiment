@@ -9,6 +9,7 @@ import CurrencySettingsModal from './CurrencySettingsModal';
 import { useSpotTrade } from '@/lib/hooks/useSpotTrade';
 import { LivePricesProvider } from '@/lib/context/LivePricesContext';
 import { Settings } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 /**
  * DemoMarket — Page shell with Spot/Future tabs and Control Panel drawer.
@@ -65,68 +66,73 @@ function DemoMarketInner({ walletAddress, simulatorKind }: { walletAddress?: str
     const closeCurrencyModal = useCallback(() => setCurrencyModalOpen(false), []);
 
     return (
-        <div className="relative p-1">
-            {/* Header */}
-            <div className="flex flex-col gap-3 mb-4 md:mb-6 md:flex-row md:items-center md:justify-between">
-                <div className="flex items-center gap-2 md:gap-4 min-w-0">
-                    <h1 className="text-lg md:text-heading-24 text-bs-text-primary truncate">Demo Market Simulator</h1>
-                    <span className="px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-widest bg-[#69a2f1]/20 text-bs-brand-ts border border-[#69a2f1]/30 rounded-lg shrink-0">
-                        Experiment
-                    </span>
+        <div className="relative space-y-4 p-1">
+            <header className="flex flex-col gap-4 rounded-2xl border border-bs-border bg-bs-card px-4 py-4 md:flex-row md:items-start md:justify-between md:px-5">
+                <div>
+                    <p className="text-sm text-bs-text-tertiary">Trading Sandbox</p>
+                    <h2 className="mt-1 text-2xl font-semibold text-bs-text-primary text-balance md:text-3xl">
+                        Demo market simulator
+                    </h2>
                 </div>
 
-                <div className="flex items-center justify-between gap-2 md:flex-col md:items-end md:gap-1">
-                    {/* Currency Toggle + Settings Icon */}
+                <div className="flex flex-col items-start gap-2 md:items-end">
                     <div className="flex items-center gap-1.5">
                         <button
                             onClick={toggleCurrency}
-                            className="flex items-center gap-2 px-3 py-2 text-xs font-mono bg-bs-card border border-bs-border hover:bg-bs-card-fg transition-all text-bs-text-secondary hover:text-bs-text-primary"
+                            className="flex items-center gap-2 rounded-lg border border-bs-border bg-bs-card-fg px-3 py-2 text-xs text-bs-text-secondary"
                         >
-                            <span className={currency === 'USD' ? 'text-bs-success' : 'text-bs-text-mute'}>USD</span>
+                            <span className={cn(currency === 'USD' ? 'text-bs-success' : 'text-bs-text-mute')}>USD</span>
                             <span className="text-bs-text-mute">⇄</span>
-                            <span className={currency === 'INR' ? 'text-orange-400' : 'text-bs-text-mute'}>INR</span>
+                            <span className={cn(currency === 'INR' ? 'text-bs-brand-rust' : 'text-bs-text-mute')}>INR</span>
                         </button>
                         <button
                             onClick={() => setCurrencyModalOpen(true)}
-                            className="p-2 bg-bs-card border border-bs-border hover:bg-bs-card-fg transition-all text-bs-text-mute hover:text-bs-text-primary"
+                            className="rounded-lg border border-bs-border bg-bs-card-fg p-2 text-bs-text-mute hover:text-bs-text-primary"
                             title="Currency Settings"
+                            aria-label="Currency Settings"
                         >
                             <Settings size={14} />
                         </button>
                     </div>
-                    <span className="text-[10px] font-mono text-bs-text-primary">
-                        1 USD = ₹<NumberFlow value={usdInrRate} format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 400, easing: 'ease-out' }} />
+                    <span className="text-xs tabular-nums text-bs-text-secondary">
+                        1 USD = ₹
+                        <NumberFlow
+                            value={usdInrRate}
+                            format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+                            transformTiming={{ duration: 400, easing: 'ease-out' }}
+                        />
                     </span>
                 </div>
-            </div>
+            </header>
 
-            {/* Spot / Future Tabs — only shown when both are available */}
             {showTabs && (
-                <div className="flex border-b border-bs-border mb-4 md:mb-6">
+                <div className="flex rounded-xl border border-bs-border bg-bs-card-fg p-1">
                     <button
                         onClick={() => setActiveTab('spot')}
-                        className={`flex-1 md:flex-none px-4 md:px-6 py-3 text-sm font-mono font-medium transition-all border-b-2 ${activeTab === 'spot'
-                            ? 'text-bs-text-primary border-bs-brand-tertiary'
-                            : 'text-bs-text-mute border-transparent hover:text-bs-text-secondary'
-                            }`}
+                        className={cn(
+                            'flex-1 rounded-lg px-4 py-2 text-sm font-medium',
+                            activeTab === 'spot'
+                                ? 'bg-bs-card text-bs-text-primary'
+                                : 'text-bs-text-tertiary hover:text-bs-text-secondary'
+                        )}
                     >
                         Spot Concepts
                     </button>
                     <button
                         onClick={() => setActiveTab('future')}
-                        className={`flex-1 md:flex-none px-4 md:px-6 py-3 text-sm font-mono font-medium transition-all border-b-2 ${activeTab === 'future'
-                            ? 'text-bs-text-primary border-bs-brand-tertiary'
-                            : 'text-bs-text-mute border-transparent hover:text-bs-text-secondary'
-                            }`}
+                        className={cn(
+                            'flex-1 rounded-lg px-4 py-2 text-sm font-medium',
+                            activeTab === 'future'
+                                ? 'bg-bs-card text-bs-text-primary'
+                                : 'text-bs-text-tertiary hover:text-bs-text-secondary'
+                        )}
                     >
                         Future Concepts
                     </button>
                 </div>
             )}
 
-            {/* Tab Content */}
             <div className="flex gap-0">
-                {/* Main Content */}
                 <div className="flex-1">
                     {activeTab === 'spot' ? (
                         <SpotConcepts
@@ -139,14 +145,13 @@ function DemoMarketInner({ walletAddress, simulatorKind }: { walletAddress?: str
                     )}
                 </div>
 
-                {/* Control Panel (side drawer) */}
                 <ControlPanel
                     isOpen={controlPanelOpen}
                     onClose={closeControlPanel}
                     trade={spotTrade}
                 />
             </div>
-            {/* Currency Settings Modal */}
+
             <CurrencySettingsModal
                 isOpen={currencyModalOpen}
                 onClose={closeCurrencyModal}

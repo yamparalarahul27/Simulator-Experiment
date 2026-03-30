@@ -12,19 +12,34 @@ const FAQ_ITEMS = [
     {
         value: 'wallets',
         title: 'How do I switch between wallets?',
-        body: 'Use the network pill in the navbar. You can connect multiple wallets and toggle between mock, devnet, or mainnet data. Each wallet keeps its own journal context.'
+        body: 'Use the network selector in the navbar. You can connect multiple wallets and move between mock, devnet, or mainnet contexts while keeping your journal flow intact.',
     },
     {
         value: 'missing-trades',
-        title: 'My trades are missing—what now?',
-        body: 'Try re-syncing from the Trade History tab. If you still do not see your data, export a CSV from your CEX and drag it into the uploader. We normalize everything on import.'
+        title: 'My trades are missing. What should I do?',
+        body: 'Start with a re-sync from Trade History. If trades are still missing, import your CSV export and YDEX will normalize the records for analysis.',
     },
     {
         value: 'collaboration',
         title: 'Can I collaborate with teammates?',
-        body: 'Shared workspaces are on the roadmap. For now, export a PDF snapshot or invite a teammate to view using a read-only link.'
-    }
-];
+        body: 'Shared workspaces are on the roadmap. For now, share exported snapshots or use read-only views for reviews.',
+    },
+] as const;
+
+const SUPPORT_PATHS = [
+    {
+        title: 'Quick Answers',
+        description: 'Resolve common issues in seconds from FAQs and known fixes.',
+    },
+    {
+        title: 'Guided Recovery',
+        description: 'Get practical steps for sync, wallet, and simulator troubleshooting.',
+    },
+    {
+        title: 'Direct Support',
+        description: 'Reach out to Rahul directly when you need tailored help.',
+    },
+] as const;
 
 export default function HelpScreen() {
     const [copied, setCopied] = useState(false);
@@ -53,83 +68,85 @@ export default function HelpScreen() {
     }, []);
 
     return (
-        <section className="mx-auto flex max-w-4xl flex-col gap-6 md:gap-8 rounded-lg text-bs-text-secondary backdrop-blur">
-            <header className="space-y-3">
-                <p className="text-xs md:text-sm uppercase tracking-[0.4em] text-bs-text-mute">Need a hand?</p>
-                <h1 className="text-2xl md:text-4xl font-semibold text-bs-text-primary">Help Center</h1>
-                <p className="text-base md:text-lg leading-relaxed text-bs-text-secondary">
-                    Quick answers to the most common questions.
+        <section className="mx-auto flex max-w-6xl flex-col gap-8">
+            <header className="rounded-2xl border border-bs-border bg-bs-card px-5 py-7 md:px-6">
+                <p className="text-sm text-bs-text-tertiary">YDEX Help</p>
+                <h1 className="mt-1 text-3xl font-semibold text-bs-text-primary text-balance md:text-4xl">
+                    Get unstuck quickly.
+                </h1>
+                <p className="mt-3 max-w-2xl text-sm text-bs-text-secondary text-pretty md:text-base">
+                    Answers for common issues, practical fixes, and direct support when you need a fast hand.
                 </p>
             </header>
 
-            <Accordion
-                type="single"
-                collapsible
-                defaultValue="wallets"
-                className="rounded-lg border border-bs-border bg-bs-card text-base leading-relaxed"
-            >
-                {FAQ_ITEMS.map((item) => (
-                    <AccordionItem key={item.value} value={item.value} className="px-4">
-                        <AccordionTrigger className="text-bs-text-primary text-base md:text-lg">
-                            {item.title}
-                        </AccordionTrigger>
-                        <AccordionContent className="text-bs-text-secondary text-sm">
-                            {item.body}
-                        </AccordionContent>
-                    </AccordionItem>
+            <section className="grid gap-4 md:grid-cols-3">
+                {SUPPORT_PATHS.map((path) => (
+                    <article key={path.title} className="rounded-2xl border border-bs-border bg-bs-card px-5 py-6">
+                        <h2 className="text-lg font-semibold text-bs-text-primary text-balance">{path.title}</h2>
+                        <p className="mt-2 text-sm text-bs-text-secondary text-pretty">{path.description}</p>
+                    </article>
                 ))}
-            </Accordion>
+            </section>
 
-            <footer className="space-y-4 rounded-lg bg-gradient-to-r from-[#00ffff]/15 via-[#00e6e6]/15 to-[#00b3b3]/15 p-4 md:p-6 text-sm leading-relaxed text-bs-text-primary/85">
-
-                <div className="text-center space-y-3 rounded-lg border border-bs-border bg-bs-bg/20 p-4 text-bs-text-secondary">
-                    <p>
-                        If you have any other question or need help, connect with me on Telegram
-                    </p>
-                    <div className="flex flex-col sm:flex-row justify-center flex-wrap items-center gap-2 sm:gap-3 text-bs-text-primary">
-                        <a
-                            href={TELEGRAM_URL}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="rounded-lg border border-bs-border px-4 py-2 text-sm font-medium text-bs-text-primary/90 transition-colors hover:border-white/40"
-                        >
-                            {TELEGRAM_URL.replace('https://', '')}
-                        </a>
-                        <button
-                            type="button"
-                            onClick={handleCopy}
-                            aria-label="Copy Telegram handle"
-                            className="flex items-center gap-2 rounded-lg border border-bs-border px-4 py-2 text-sm font-medium text-bs-text-secondary transition-colors hover:border-white/40"
-                        >
-                            {copied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4" />}
-                            {copied ? 'Copied' : 'Copy handle'}
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setIsQrOpen(true)}
-                            className="flex items-center gap-2 rounded-lg border border-bs-border px-4 py-2 text-sm font-medium text-bs-text-secondary transition-colors hover:border-white/40"
-                        >
-                            <QrCode className="h-4 w-4" />
-                            View QR
-                        </button>
-                    </div>
+            <section className="rounded-2xl border border-bs-border bg-bs-card">
+                <div className="border-b border-bs-border px-5 py-4">
+                    <h2 className="text-xl font-semibold text-bs-text-primary text-balance">Frequently asked questions</h2>
                 </div>
-            </footer>
+                <Accordion type="single" collapsible defaultValue="wallets" className="px-4 pb-2 pt-1">
+                    {FAQ_ITEMS.map((item) => (
+                        <AccordionItem key={item.value} value={item.value} className="border-bs-border px-1">
+                            <AccordionTrigger className="text-left text-base text-bs-text-primary">
+                                {item.title}
+                            </AccordionTrigger>
+                            <AccordionContent className="text-sm text-bs-text-secondary">{item.body}</AccordionContent>
+                        </AccordionItem>
+                    ))}
+                </Accordion>
+            </section>
+
+            <section className="rounded-2xl border border-bs-border bg-bs-card-fg px-5 py-6">
+                <p className="text-sm text-bs-text-secondary text-pretty">
+                    Need more than a FAQ? Connect directly on Telegram for help with setup, data issues, or product
+                    feedback.
+                </p>
+                <div className="mt-4 flex flex-wrap items-center gap-3">
+                    <a
+                        href={TELEGRAM_URL}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="rounded-xl border border-bs-border px-4 py-2 text-sm font-medium text-bs-text-primary"
+                    >
+                        {TELEGRAM_URL.replace('https://', '')}
+                    </a>
+                    <button
+                        type="button"
+                        onClick={handleCopy}
+                        aria-label="Copy Telegram handle"
+                        className="inline-flex items-center gap-2 rounded-xl border border-bs-border px-4 py-2 text-sm font-medium text-bs-text-secondary"
+                    >
+                        {copied ? <Check className="h-4 w-4 text-bs-success" /> : <Copy className="h-4 w-4" />}
+                        {copied ? 'Copied' : 'Copy handle'}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setIsQrOpen(true)}
+                        className="inline-flex items-center gap-2 rounded-xl border border-bs-border px-4 py-2 text-sm font-medium text-bs-text-secondary"
+                    >
+                        <QrCode className="h-4 w-4" />
+                        View QR
+                    </button>
+                </div>
+            </section>
 
             {isQrOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-                    <div className="absolute inset-0 bg-bs-bg/70 backdrop-blur-sm" onClick={() => setIsQrOpen(false)} />
-                    <div className="relative z-10 w-full max-w-sm rounded-lg bg-[#05050c]/95 p-6 text-center shadow-2xl">
-                        <button
-                            aria-label="Close QR modal"
-                            className="absolute right-4 top-4 rounded-lg border border-bs-border p-1 text-bs-text-tertiary transition-colors hover:text-bs-text-primary"
-                            onClick={() => setIsQrOpen(false)}
-                        >
-                            <X className="h-4 w-4" />
-                        </button>
-                        <h4 className="text-lg font-semibold text-bs-text-primary">Scan to say hi!</h4>
-                        <p className="mt-2 text-sm text-bs-text-secondary">Waiting to talk to you soon.</p>
-                        <div className="mt-6 overflow-hidden rounded-lg">
+                    <div className="absolute inset-0 bg-black/65" onClick={() => setIsQrOpen(false)} />
+                    <div className="relative z-10 w-full max-w-sm rounded-2xl border border-bs-border bg-bs-card p-6 text-center">
+                        <h4 className="text-lg font-semibold text-bs-text-primary text-balance">Scan to connect</h4>
+                        <p className="mt-2 text-sm text-bs-text-secondary text-pretty">
+                            Share feedback, issues, or product ideas directly.
+                        </p>
+                        <div className="mt-6 overflow-hidden rounded-xl border border-bs-border">
                             <Image
                                 src={QR_IMAGE_SRC}
                                 alt="Telegram QR code"
@@ -139,6 +156,13 @@ export default function HelpScreen() {
                                 priority
                             />
                         </div>
+                        <button
+                            aria-label="Close QR modal"
+                            className="mt-6 inline-flex items-center justify-center rounded-lg border border-bs-border px-4 py-2 text-sm text-bs-text-secondary"
+                            onClick={() => setIsQrOpen(false)}
+                        >
+                            <X className="h-4 w-4" />
+                        </button>
                     </div>
                 </div>
             )}

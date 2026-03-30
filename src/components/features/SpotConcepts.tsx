@@ -11,6 +11,7 @@ import { useLivePrices } from '@/lib/context/LivePricesContext';
 import type { DemoOrderType } from '@/services/SupabaseDemoService';
 import { ChevronDown, Wifi, WifiOff, Activity, Settings } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 
 // Static style constant (avoids creating a new object on every render)
 const SLIDER_MARGIN_STYLE = { marginTop: '16px', marginBottom: '16px' } as const;
@@ -124,20 +125,20 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
     return (
         <div className="space-y-4">
             {/* ─── Token Selector Bar ──────────── */}
-            <div className="relative z-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between bg-bs-bg/60 backdrop-blur-xl border border-bs-border px-3 sm:px-4 py-3">
+            <div className="relative z-10 flex flex-col gap-3 rounded-2xl border border-bs-border bg-bs-card px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-4">
                 <div className="flex items-center gap-3 sm:gap-6 flex-wrap">
                     {/* Pair selector */}
                     <div className="relative" ref={dropdownRef}>
                         <button
                             onClick={() => setPairDropdownOpen(prev => !prev)}
-                            className="flex items-center gap-2 text-bs-text-primary hover:text-bs-text-secondary transition-colors"
+                            className="flex items-center gap-2 rounded-lg px-2 py-1 text-bs-text-primary hover:bg-bs-card-fg"
                         >
                             <span className="text-heading-16">{selectedPair}</span>
                             <ChevronDown size={14} className={`transition-transform ${pairDropdownOpen ? 'rotate-180' : ''}`} />
                         </button>
 
                         {pairDropdownOpen && (
-                            <div className="absolute top-full left-0 mt-2 min-w-[200px] bg-bs-bg/95 backdrop-blur-xl border border-bs-border shadow-2xl z-50">
+                            <div className="absolute left-0 top-full z-50 mt-2 min-w-[200px] overflow-hidden rounded-xl border border-bs-border bg-bs-card shadow-lg">
                                 {DEMO_PAIRS.map(({ token, pair }) => {
                                     const pd = livePrices[token];
                                     return (
@@ -213,10 +214,12 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                     )}
                     <button
                         onClick={onToggleControlPanel}
-                        className={`flex items-center gap-1.5 px-3 py-2 text-xs font-mono border transition-all ${controlPanelOpen
-                            ? 'bg-bs-brand-tertiary/20 border-bs-brand-tertiary/40 text-bs-brand-secondary'
-                            : 'bg-bs-card border-bs-border text-bs-text-tertiary hover:bg-bs-card-fg hover:text-bs-text-primary'
-                            }`}
+                        className={cn(
+                            'flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs',
+                            controlPanelOpen
+                                ? 'border-bs-border-active bg-bs-card-fg text-bs-text-primary'
+                                : 'border-bs-border bg-bs-card-fg text-bs-text-tertiary hover:text-bs-text-primary'
+                        )}
                     >
                         <Settings size={14} />
                         <span className="hidden sm:inline">Set Manual Prices</span>
@@ -226,7 +229,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
             </div>
 
             {/* ─── Sub-tab strip ──────────────────────────────── */}
-            <div className="flex items-center gap-1 bg-bs-bg/40 backdrop-blur-xl border border-bs-border p-1">
+            <div className="flex items-center gap-1 rounded-xl border border-bs-border bg-bs-card-fg p-1">
                 {([
                     { id: 'orderform', label: 'Order Simulator' },
                     { id: 'orderbook', label: 'Order Book' },
@@ -234,10 +237,12 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                     <button
                         key={id}
                         onClick={() => setActivePanel(id)}
-                        className={`px-4 py-2 text-xs font-mono font-medium transition-all ${activePanel === id
-                            ? 'bg-bs-brand-tertiary/20 text-bs-brand-secondary border border-bs-brand-tertiary/30'
-                            : 'text-bs-text-tertiary hover:text-bs-text-secondary hover:bg-bs-card border border-transparent'
-                            }`}
+                        className={cn(
+                            'rounded-lg border px-4 py-2 text-xs font-medium',
+                            activePanel === id
+                                ? 'border-bs-border bg-bs-card text-bs-text-primary'
+                                : 'border-transparent text-bs-text-tertiary hover:text-bs-text-secondary'
+                        )}
                     >
                         {label}
                     </button>
@@ -246,7 +251,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
 
             {/* ─── Panel Content ──────────────────────────────── */}
             {activePanel === 'orderbook' ? (
-                <div className="bg-bs-bg/60 backdrop-blur-xl border border-bs-border p-4 min-h-[500px]">
+                <div className="min-h-[500px] rounded-2xl border border-bs-border bg-bs-card p-4">
                     <SpotOrderBook
                         orderBook={orderBook}
                         formatPrice={formatPrice}
@@ -259,7 +264,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                     <div className="flex flex-col gap-3 md:flex-row md:items-stretch md:min-h-[500px]">
 
                         {/* ── Box 1: Order Form ── */}
-                        <div className="bg-bs-bg border border-bs-border p-4 w-full md:w-[300px] md:flex-shrink-0 flex flex-col">
+                        <div className="flex w-full flex-col rounded-2xl border border-bs-border bg-bs-card p-4 md:w-[300px] md:flex-shrink-0">
                             <p className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider mb-3">Order Form</p>
                             <SpotOrderForm
                                 pair={selectedPair}
@@ -274,7 +279,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                         </div>
 
                         {/* ── Box 2: Order Flow ── */}
-                        <div className="bg-bs-bg border border-bs-border p-4 flex-1 min-w-0 flex flex-col min-h-[300px] md:min-h-0">
+                        <div className="flex min-h-[300px] min-w-0 flex-1 flex-col rounded-2xl border border-bs-border bg-bs-card p-4 md:min-h-0">
                             <OrderFlowVisualiser
                                 orderType={orderType}
                                 side={side}
@@ -288,7 +293,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                         </div>
 
                         {/* ── Box 3: Price Scale ── */}
-                        <div className="bg-bs-bg border border-bs-border p-4 w-full md:w-[120px] md:flex-shrink-0 flex flex-col">
+                        <div className="flex w-full flex-col rounded-2xl border border-bs-border bg-bs-card p-4 md:w-[120px] md:flex-shrink-0">
                             <p className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider mb-3">Price Scale</p>
                             {!simSnapshot ? (
                                 <div className="flex-1 flex items-center justify-center">
@@ -387,7 +392,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                     </div>
 
                     {/* ── Bottom row: Trade Summary (full width) ── */}
-                    <div className="bg-bs-bg border border-bs-border p-4 overflow-y-auto custom-scrollbar">
+                    <div className="overflow-y-auto rounded-2xl border border-bs-border bg-bs-card p-4 custom-scrollbar">
                         <TradeSummaryPanel
                             simSnapshot={simSnapshot}
                             formatPrice={formatPrice}

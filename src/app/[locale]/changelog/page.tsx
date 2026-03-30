@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Clock } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 // ============================================
 // Types
@@ -23,13 +23,13 @@ interface ChangelogEntry {
 // ============================================
 
 const TAG = {
-    added:    { label: 'Added',    color: 'text-bs-success bg-bs-success/10 border-[#00e66b]/20' },
-    improved: { label: 'Improved', color: 'text-bs-brand bg-bs-brand/10 border-bs-brand/20' },
-    fixed:    { label: 'Fixed',    color: 'text-bs-brand-ts bg-[#69a2f1]/10 border-[#69a2f1]/20' },
-    changed:  { label: 'Changed',  color: 'text-[#ffad66] bg-[#ffad66]/10 border-[#ffad66]/20' },
-    removed:  { label: 'Removed',  color: 'text-bs-error bg-bs-error/10 border-[#ff285a]/20' },
-    dep:      { label: 'Dependency', color: 'text-[#c084fc] bg-[#c084fc]/10 border-[#c084fc]/20' },
-    infra:    { label: 'Infra',    color: 'text-bs-text-mute bg-bs-text-mute/10 border-[#585e6c]/20' },
+    added: { label: 'Added', color: 'border-bs-success/30 bg-bs-success/10 text-bs-success' },
+    improved: { label: 'Improved', color: 'border-bs-brand/30 bg-bs-brand/10 text-bs-brand' },
+    fixed: { label: 'Fixed', color: 'border-bs-brand-ts/35 bg-bs-brand-ts/10 text-bs-brand-ts' },
+    changed: { label: 'Changed', color: 'border-bs-brand-rust/35 bg-bs-brand-rust/10 text-bs-brand-rust' },
+    removed: { label: 'Removed', color: 'border-bs-error/30 bg-bs-error/10 text-bs-error' },
+    dep: { label: 'Dependency', color: 'border-bs-brand-ts/30 bg-bs-brand-ts/10 text-bs-brand-ts' },
+    infra: { label: 'Infra', color: 'border-bs-border bg-bs-card-fg text-bs-text-secondary' },
 } as const;
 
 // ============================================
@@ -278,43 +278,49 @@ function TabButton({
     return (
         <button
             onClick={onClick}
-            className={`flex-1 px-4 py-3 text-left transition-all border ${
+            className={cn(
+                'flex-1 rounded-xl border px-4 py-3 text-left transition-colors',
                 active
-                    ? 'bg-bs-brand-tertiary/10 border-bs-brand-tertiary/30 text-bs-brand-secondary'
-                    : 'bg-transparent border-bs-border text-bs-text-mute hover:text-bs-text-tertiary hover:border-bs-border'
-            }`}
+                    ? 'border-bs-border bg-bs-card text-bs-text-primary'
+                    : 'border-bs-border bg-bs-card-fg text-bs-text-tertiary'
+            )}
         >
             <div className="flex items-center gap-2">
                 <span className="text-sm">{icon}</span>
-                <span className="text-sm font-mono font-semibold">{label}</span>
+                <span className="text-sm font-semibold">{label}</span>
             </div>
-            <p className="text-[10px] font-mono mt-1 opacity-60">{description}</p>
+            <p className="mt-1 text-xs text-bs-text-tertiary">{description}</p>
         </button>
     );
 }
 
 function EntryItem({ entry }: { entry: ChangelogEntry }) {
     return (
-        <li className="space-y-1.5">
-            <div className="flex items-start gap-2.5">
-                <span className={`shrink-0 mt-0.5 px-1.5 py-0.5 text-[10px] font-mono font-semibold border rounded-lg ${entry.tag.color}`}>
+        <li className="space-y-2 rounded-xl border border-bs-border bg-bs-card px-4 py-4">
+            <div className="flex items-start gap-3">
+                <span className={`mt-0.5 shrink-0 rounded-full border px-2.5 py-1 text-xs font-medium ${entry.tag.color}`}>
                     {entry.tag.label}
                 </span>
-                <span className="text-sm text-bs-text-secondary font-mono leading-relaxed">
+                <span className="text-sm leading-relaxed text-bs-text-primary text-pretty">
                     {entry.title}
                 </span>
             </div>
             {entry.description && (
-                <p className="text-xs font-mono text-bs-text-mute leading-relaxed ml-[calc(0.625rem+10px+0.625rem)]">
+                <p className="pl-12 text-sm leading-relaxed text-bs-text-secondary text-pretty">
                     {entry.description}
                 </p>
             )}
             {(entry.credit || entry.source) && (
-                <div className="flex items-center gap-2 ml-[calc(0.625rem+10px+0.625rem)]">
+                <div className="flex items-center gap-2 pl-12">
                     {entry.credit && (
-                        <span className="text-[10px] font-mono text-bs-text-tertiary/50">
+                        <span className="text-xs text-bs-text-tertiary">
                             Credit: {entry.source ? (
-                                <a href={entry.source} target="_blank" rel="noopener noreferrer" className="text-bs-brand-tertiary/60 hover:text-bs-brand-secondary transition-colors underline underline-offset-2">
+                                <a
+                                    href={entry.source}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-bs-brand-ts hover:underline"
+                                >
                                     {entry.credit}
                                 </a>
                             ) : entry.credit}
@@ -336,66 +342,50 @@ export default function ChangelogPage() {
     const days = groupByDate(entries);
 
     return (
-        <div className="min-h-screen text-bs-text-primary">
-            <div className="max-w-3xl mx-auto py-8 md:py-12 space-y-8">
-                {/* Header */}
-                <div>
-                    <h1 className="text-2xl md:text-3xl font-bold font-mono text-bs-text-primary">
-                        Changelog
-                    </h1>
-                    <p className="text-bs-text-tertiary text-sm mt-2 font-mono">
-                        What&apos;s new in Deriverse
-                    </p>
-                </div>
+        <div className="space-y-8">
+            <header className="rounded-2xl border border-bs-border bg-bs-card px-5 py-7 md:px-6">
+                <p className="text-sm text-bs-text-tertiary">Changelog</p>
+                <h1 className="mt-1 text-3xl font-semibold text-bs-text-primary text-balance md:text-4xl">
+                    What changed in YDEX
+                </h1>
+                <p className="mt-3 max-w-3xl text-sm text-bs-text-secondary text-pretty md:text-base">
+                    Product, design, and engineering updates tracked with clear context.
+                </p>
+            </header>
 
-                {/* Tabs */}
-                <div className="flex gap-2">
-                    {(['product', 'design', 'dev'] as ChangelogTab[]).map((tab) => (
-                        <TabButton
-                            key={tab}
-                            tab={tab}
-                            active={activeTab === tab}
-                            onClick={() => setActiveTab(tab)}
-                        />
+            <div className="flex flex-wrap gap-2">
+                {(['product', 'design', 'dev'] as ChangelogTab[]).map((tab) => (
+                    <TabButton
+                        key={tab}
+                        tab={tab}
+                        active={activeTab === tab}
+                        onClick={() => setActiveTab(tab)}
+                    />
+                ))}
+            </div>
+
+            {days.length === 0 ? (
+                <p className="text-sm text-bs-text-mute">No entries yet.</p>
+            ) : (
+                <div className="space-y-6">
+                    {days.map((day) => (
+                        <section key={day.dateKey} className="space-y-3">
+                            <div className="flex flex-wrap items-center gap-3">
+                                <h2 className="text-xl font-semibold text-bs-text-primary text-balance">{day.displayDate}</h2>
+                                <span className="rounded-full border border-bs-border bg-bs-card-fg px-3 py-1 text-xs text-bs-text-tertiary">
+                                    {day.entries.length} {day.entries.length === 1 ? 'change' : 'changes'}
+                                </span>
+                            </div>
+
+                            <ul className="space-y-3">
+                                {day.entries.map((entry, index) => (
+                                    <EntryItem key={`${day.dateKey}-${index}`} entry={entry} />
+                                ))}
+                            </ul>
+                        </section>
                     ))}
                 </div>
-
-                {/* Timeline */}
-                {days.length === 0 ? (
-                    <p className="text-bs-text-mute font-mono text-sm">No entries yet.</p>
-                ) : (
-                    <div className="relative">
-                        {/* Timeline line */}
-                        <div className="absolute left-[7px] top-2 bottom-2 w-px bg-bs-border" />
-
-                        <div className="space-y-10">
-                            {days.map((day) => (
-                                <div key={day.dateKey} className="relative pl-8">
-                                    {/* Timeline dot */}
-                                    <div className="absolute left-0 top-1.5 w-[15px] h-[15px] rounded-full bg-bs-brand/20 border-2 border-bs-brand z-10" />
-
-                                    {/* Date header */}
-                                    <div className="flex items-center gap-3 mb-4">
-                                        <h2 className="text-base font-semibold text-bs-text-primary font-mono">
-                                            {day.displayDate}
-                                        </h2>
-                                        <span className="text-[10px] text-bs-text-mute font-mono border border-bs-border px-2 py-0.5 rounded-lg">
-                                            {day.entries.length} {day.entries.length === 1 ? 'change' : 'changes'}
-                                        </span>
-                                    </div>
-
-                                    {/* Entries */}
-                                    <ul className="space-y-4">
-                                        {day.entries.map((entry, i) => (
-                                            <EntryItem key={`${day.dateKey}-${i}`} entry={entry} />
-                                        ))}
-                                    </ul>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-            </div>
+            )}
         </div>
     );
 }
