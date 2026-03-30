@@ -211,7 +211,7 @@ export const GlassmorphismNavbar = ({
             <nav className={`fixed left-0 right-0 top-3 z-50 ${className}`}>
                 <div className="px-3 py-2 sm:px-6 sm:py-3">
                     {/* Navigation container */}
-                    <div className="mx-auto max-w-6xl rounded-2xl border border-bs-border bg-bs-card/95 px-3 py-2 sm:px-4 shadow-lg">
+                    <div className="mx-auto max-w-6xl rounded-2xl border border-bs-border bg-bs-card/95 px-3 py-2 sm:px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_1px_3px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)]">
                         <div className="flex items-center justify-between">
                             {/* Logo */}
                             <Link
@@ -453,7 +453,7 @@ export const GlassmorphismNavbar = ({
                     <div className="absolute inset-0 bg-black/55" onClick={() => setIsMobileMenuOpen(false)} />
 
                     {/* Menu panel */}
-                    <div className="absolute bottom-4 left-3 right-3 top-24 flex flex-col overflow-hidden rounded-2xl border border-bs-border bg-bs-card shadow-xl">
+                    <div className="absolute bottom-4 left-3 right-3 top-24 flex flex-col overflow-hidden rounded-2xl border border-bs-border bg-bs-card shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_4px_24px_rgba(0,0,0,0.1)]">
                         {/* Scrollable content */}
                         <div className="flex-1 overflow-y-auto p-6 space-y-6">
                             {/* Main navigation */}

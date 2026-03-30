@@ -15,7 +15,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
     }
 
     return (
-        <div className="min-h-dvh text-bs-text-primary">
+        <div className="min-h-dvh text-bs-text-primary paper-vignette">
             <RouteBasedNavbar />
             <div className="h-full">
                 <div className="mx-auto max-w-6xl px-4 pb-8 pt-24 md:px-6 md:pt-32">
