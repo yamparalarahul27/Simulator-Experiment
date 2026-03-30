@@ -9,16 +9,14 @@ import React from 'react';
  *   - /assets/background.png          → <GeneratedBackground />
  *   - /assets/background_wallpaper_dot.png → <GeneratedBackground dotOverlay />
  *
- * Benefits: eliminates ~5.3 MB of static PNGs, resolution-independent,
- * and can be animated or themed in the future.
+ * The arc is created using a large off-screen ring (circle with transparent
+ * center and gradient border) so only the curved edge is visible — producing
+ * a natural crescent shape instead of an elliptical blob.
  */
 
 interface GeneratedBackgroundProps {
-    /** Show the dot-grid overlay (replaces background_wallpaper_dot.png) */
     dotOverlay?: boolean;
-    /** Additional className for the wrapper */
     className?: string;
-    /** Additional inline styles */
     style?: React.CSSProperties;
 }
 
@@ -32,123 +30,148 @@ export default function GeneratedBackground({
             className={`absolute inset-0 overflow-hidden ${className}`}
             style={{ backgroundColor: '#050510', ...style }}
         >
-            {/* Aurora arc - main teal/cyan sweep */}
+            {/* Layer 1: Main arc — large ring positioned off-screen
+                A 1600px circle with only the right edge visible creates
+                the sweeping crescent curve from the original image. */}
             <div
                 style={{
                     position: 'absolute',
-                    width: '140%',
-                    height: '140%',
-                    top: '-20%',
-                    left: '-20%',
-                    background: `
-                        radial-gradient(
-                            ellipse 50% 70% at 58% 52%,
-                            rgba(0, 210, 190, 0.35) 0%,
-                            rgba(0, 150, 180, 0.2) 25%,
-                            rgba(0, 80, 160, 0.1) 45%,
-                            transparent 65%
-                        )
+                    width: '1600px',
+                    height: '1600px',
+                    top: '-55%',
+                    left: '-45%',
+                    borderRadius: '50%',
+                    background: 'transparent',
+                    boxShadow: `
+                        120px 80px 120px 0px rgba(0, 180, 170, 0.18),
+                        160px 60px 80px 0px rgba(0, 220, 200, 0.12),
+                        80px 120px 160px 20px rgba(0, 80, 160, 0.15),
+                        200px 40px 60px 0px rgba(0, 230, 200, 0.08)
                     `,
+                    border: '80px solid transparent',
+                    borderRightColor: 'rgba(0, 180, 170, 0.08)',
+                    borderBottomColor: 'rgba(0, 100, 170, 0.06)',
+                    filter: 'blur(40px)',
+                    transform: 'rotate(-25deg)',
+                }}
+            />
+
+            {/* Layer 2: Curved glow trail — conic gradient for the arc sweep */}
+            <div
+                style={{
+                    position: 'absolute',
+                    width: '1400px',
+                    height: '1400px',
+                    top: '-50%',
+                    left: '-35%',
+                    borderRadius: '50%',
+                    background: `conic-gradient(
+                        from 160deg,
+                        transparent 0deg,
+                        rgba(0, 60, 140, 0.08) 20deg,
+                        rgba(0, 130, 170, 0.14) 45deg,
+                        rgba(0, 200, 185, 0.18) 70deg,
+                        rgba(0, 230, 200, 0.15) 90deg,
+                        rgba(0, 180, 170, 0.08) 110deg,
+                        transparent 130deg,
+                        transparent 360deg
+                    )`,
+                    filter: 'blur(60px)',
                     transform: 'rotate(-15deg)',
                 }}
             />
 
-            {/* Secondary blue glow - left side ambient */}
+            {/* Layer 3: Bright teal focal point at the arc's apex */}
             <div
                 style={{
                     position: 'absolute',
-                    width: '80%',
-                    height: '80%',
-                    top: '10%',
-                    left: '-10%',
+                    width: '500px',
+                    height: '400px',
+                    top: '5%',
+                    right: '15%',
                     background: `
                         radial-gradient(
-                            ellipse 60% 50% at 35% 55%,
-                            rgba(20, 60, 160, 0.25) 0%,
-                            rgba(10, 30, 100, 0.12) 40%,
+                            ellipse 70% 80% at 50% 55%,
+                            rgba(0, 230, 200, 0.25) 0%,
+                            rgba(0, 190, 175, 0.12) 35%,
                             transparent 70%
                         )
                     `,
+                    filter: 'blur(30px)',
                 }}
             />
 
-            {/* Bright teal focal point at the arc apex */}
-            <div
-                style={{
-                    position: 'absolute',
-                    width: '60%',
-                    height: '60%',
-                    top: '5%',
-                    left: '30%',
-                    background: `
-                        radial-gradient(
-                            ellipse 40% 50% at 55% 60%,
-                            rgba(0, 230, 200, 0.3) 0%,
-                            rgba(0, 180, 170, 0.15) 30%,
-                            transparent 60%
-                        )
-                    `,
-                }}
-            />
-
-            {/* Curved arc shape using a clipped pseudo-gradient */}
-            <div
-                style={{
-                    position: 'absolute',
-                    width: '120%',
-                    height: '120%',
-                    top: '-10%',
-                    left: '-10%',
-                    background: `
-                        conic-gradient(
-                            from 200deg at 55% 50%,
-                            transparent 0deg,
-                            rgba(0, 80, 180, 0.15) 30deg,
-                            rgba(0, 180, 170, 0.2) 60deg,
-                            rgba(0, 220, 190, 0.18) 80deg,
-                            transparent 120deg,
-                            transparent 360deg
-                        )
-                    `,
-                    filter: 'blur(60px)',
-                }}
-            />
-
-            {/* Bottom-right subtle blue wash */}
+            {/* Layer 4: Secondary blue glow — left/center ambient */}
             <div
                 style={{
                     position: 'absolute',
                     width: '70%',
-                    height: '50%',
-                    bottom: '-5%',
-                    right: '-5%',
+                    height: '70%',
+                    top: '15%',
+                    left: '-5%',
                     background: `
                         radial-gradient(
-                            ellipse 70% 60% at 60% 70%,
-                            rgba(0, 60, 140, 0.18) 0%,
-                            rgba(0, 30, 80, 0.08) 50%,
-                            transparent 80%
+                            ellipse 55% 50% at 40% 55%,
+                            rgba(15, 50, 150, 0.2) 0%,
+                            rgba(10, 30, 100, 0.1) 45%,
+                            transparent 75%
                         )
                     `,
                 }}
             />
 
-            {/* Vignette - darken edges */}
+            {/* Layer 5: Bottom-right blue wash */}
+            <div
+                style={{
+                    position: 'absolute',
+                    width: '60%',
+                    height: '45%',
+                    bottom: '-5%',
+                    right: '0%',
+                    background: `
+                        radial-gradient(
+                            ellipse 65% 55% at 55% 65%,
+                            rgba(0, 50, 130, 0.15) 0%,
+                            rgba(0, 25, 70, 0.06) 55%,
+                            transparent 85%
+                        )
+                    `,
+                }}
+            />
+
+            {/* Layer 6: Subtle lower arc hint — the faint curve at bottom-right */}
+            <div
+                style={{
+                    position: 'absolute',
+                    width: '1200px',
+                    height: '1200px',
+                    bottom: '-85%',
+                    right: '-30%',
+                    borderRadius: '50%',
+                    boxShadow: '-60px -40px 100px 0px rgba(0, 120, 160, 0.06)',
+                    border: '40px solid transparent',
+                    borderTopColor: 'rgba(0, 140, 160, 0.04)',
+                    borderLeftColor: 'rgba(0, 80, 140, 0.03)',
+                    filter: 'blur(30px)',
+                }}
+            />
+
+            {/* Layer 7: Vignette — darken edges */}
             <div
                 style={{
                     position: 'absolute',
                     inset: 0,
                     background: `
                         radial-gradient(
-                            ellipse 80% 80% at 55% 45%,
-                            transparent 30%,
-                            rgba(5, 5, 16, 0.6) 100%
+                            ellipse 75% 75% at 55% 40%,
+                            transparent 25%,
+                            rgba(5, 5, 16, 0.65) 100%
                         )
                     `,
                 }}
             />
 
-            {/* Dot grid overlay (for wallpaper variant) */}
+            {/* Layer 8: Dot grid overlay (wallpaper variant) */}
             {dotOverlay && (
                 <div
                     style={{
