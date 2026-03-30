@@ -3,127 +3,190 @@
 import type { LearningModule } from '@/lib/types';
 import { MODULES } from '@/lib/modules';
 import { useRouter } from '@/i18n/navigation';
+import { cn } from '@/lib/utils';
 
-// ============================================
-// Difficulty Badge
-// ============================================
+const LEARNING_PRINCIPLES = [
+    {
+        title: 'Understand The Why',
+        description: 'Each lesson explains the market behavior before asking you to act.',
+    },
+    {
+        title: 'Practice With Context',
+        description: 'Interactive scenarios show what changes in real order flow and risk.',
+    },
+    {
+        title: 'Trade With Discipline',
+        description: 'Move from impulse to repeatable process through guided checkpoints.',
+    },
+] as const;
 
 function DifficultyBadge({ level }: { level: LearningModule['difficulty'] }) {
     const config = {
-        beginner: { label: 'Beginner', color: 'text-bs-success/80 bg-bs-success/10 border-[#00e66b]/20' },
-        intermediate: { label: 'Intermediate', color: 'text-yellow-400/80 bg-yellow-500/10 border-yellow-500/20' },
-        advanced: { label: 'Advanced', color: 'text-bs-error/80 bg-bs-error/10 border-[#ff285a]/20' },
+        beginner: {
+            label: 'Beginner',
+            className: 'border-bs-success/30 bg-bs-success/10 text-bs-success',
+        },
+        intermediate: {
+            label: 'Intermediate',
+            className: 'border-bs-brand-rust/35 bg-bs-brand-rust/10 text-bs-brand-rust',
+        },
+        advanced: {
+            label: 'Advanced',
+            className: 'border-bs-error/30 bg-bs-error/10 text-bs-error',
+        },
     };
-    const { label, color } = config[level];
+    const { label, className } = config[level];
 
     return (
-        <span className={`text-[9px] font-mono uppercase tracking-wider px-2 py-0.5 border ${color}`}>
+        <span
+            className={cn(
+                'inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium',
+                className
+            )}
+        >
             {label}
         </span>
     );
 }
 
-// ============================================
-// Module Card
-// ============================================
-
 function ModuleCard({ module, onClick }: { module: LearningModule; onClick?: () => void }) {
     const isActive = !module.comingSoon;
+    const lessonCount = module.lessons.length;
 
     return (
         <button
+            type="button"
             onClick={isActive ? onClick : undefined}
             disabled={!isActive}
-            className={`
-                w-full text-left bg-bs-bg border p-6 flex flex-col gap-3 transition-all duration-200
-                ${isActive
-                    ? 'border-bs-border hover:border-white/25 hover:bg-white/[0.02] cursor-pointer'
-                    : 'border-bs-border opacity-50 cursor-not-allowed'
-                }
-            `}
+            className={cn(
+                'flex h-full w-full flex-col gap-5 rounded-2xl border bg-bs-card p-6 text-left',
+                isActive
+                    ? 'cursor-pointer border-bs-border hover:border-bs-text-tertiary/70'
+                    : 'cursor-not-allowed border-bs-border/70 opacity-65'
+            )}
         >
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                    <span className="text-lg">{module.icon}</span>
-                    <h2 className="text-base font-mono font-semibold text-bs-text-primary">{module.title}</h2>
+            <div className="flex items-start justify-between gap-3">
+                <div className="space-y-3">
+                    <span className="inline-flex size-11 items-center justify-center rounded-full border border-bs-border bg-bs-card-fg text-lg">
+                        {module.icon}
+                    </span>
+                    <div className="space-y-1">
+                        <h2 className="text-xl font-semibold text-bs-text-primary text-balance">
+                            {module.title}
+                        </h2>
+                        <p className="text-sm text-bs-text-tertiary text-pretty">{module.description}</p>
+                    </div>
                 </div>
+
                 {module.comingSoon ? (
-                    <span className="text-[9px] font-mono uppercase tracking-wider text-bs-brand/70 bg-bs-brand-tertiary/10 px-2 py-0.5 border border-bs-brand-tertiary/20">
+                    <span className="inline-flex rounded-full border border-bs-border px-2.5 py-1 text-[11px] text-bs-text-tertiary">
                         Coming Soon
                     </span>
                 ) : (
                     <DifficultyBadge level={module.difficulty} />
                 )}
             </div>
-            <p className="text-xs font-mono text-bs-text-mute leading-relaxed">{module.description}</p>
-            {isActive && module.lessons.length > 0 && (
-                <div className="flex items-center justify-between mt-1">
-                    <span className="text-[10px] font-mono text-bs-text-mute">
-                        {module.lessons.length} lessons
-                    </span>
-                    <span className="text-xs font-mono text-bs-brand/70">
-                        Start &rarr;
-                    </span>
-                </div>
-            )}
+
+            <div className="mt-auto flex items-center justify-between border-t border-bs-border/80 pt-4 text-sm">
+                <span className="tabular-nums text-bs-text-secondary">
+                    {lessonCount} lesson{lessonCount === 1 ? '' : 's'}
+                </span>
+                <span className={cn('font-medium', isActive ? 'text-bs-text-primary' : 'text-bs-text-mute')}>
+                    {isActive ? 'Open module' : 'Locked'}
+                </span>
+            </div>
         </button>
     );
 }
 
-// ============================================
-// Hero Section
-// ============================================
-
-function HeroSection({ onStartLearning }: { onStartLearning: () => void }) {
+function HeroSection({
+    onStartLearning,
+    onJumpToModules,
+    totalLessons,
+    activeModules,
+}: {
+    onStartLearning: () => void;
+    onJumpToModules: () => void;
+    totalLessons: number;
+    activeModules: number;
+}) {
     return (
-        <div className="relative border border-bs-border bg-gradient-to-br from-[#00b3b3]/20 via-black to-black overflow-hidden">
-            {/* Subtle grid pattern */}
-            <div
-                className="absolute inset-0 opacity-[0.03]"
-                style={{
-                    backgroundImage: 'linear-gradient(var(--bs-border) 1px, transparent 1px), linear-gradient(90deg, var(--bs-border) 1px, transparent 1px)',
-                    backgroundSize: '40px 40px',
-                }}
-            />
+        <section className="rounded-3xl border border-bs-border bg-bs-card px-6 py-10 sm:px-10 sm:py-12">
+            <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr] lg:items-end">
+                <div className="space-y-5">
+                    <span className="inline-flex rounded-full border border-bs-border bg-bs-card-fg px-3 py-1 text-sm text-bs-text-secondary">
+                        YDEX Academy
+                    </span>
+                    <h1 className="text-4xl font-semibold text-bs-text-primary text-balance sm:text-5xl">
+                        Think before you trade.
+                    </h1>
+                    <p className="max-w-2xl text-base text-bs-text-secondary text-pretty sm:text-lg">
+                        Learn how order flow, risk, and execution actually work, then practice inside guided
+                        simulators built for Solana trading.
+                    </p>
 
-            <div className="relative p-4 sm:p-8 md:p-12">
-                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                    <div className="space-y-3">
-                        <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-mono uppercase tracking-widest text-bs-brand/80 bg-bs-brand-tertiary/10 px-2.5 py-1 border border-bs-brand-tertiary/20">
-                                Featured Lab
-                            </span>
-                        </div>
-                        <h2 className="text-xl sm:text-2xl md:text-3xl font-mono font-bold text-bs-text-primary">
-                            Order Types Lab
-                        </h2>
-                        <p className="text-sm font-mono text-bs-text-tertiary max-w-lg leading-relaxed">
-                            Learn all 8 order types with live simulation. Place orders, watch them execute
-                            on an interactive state diagram, and understand exactly how each type works.
-                        </p>
-                        <div className="flex items-center gap-3 text-xs font-mono text-bs-text-mute">
-                            <span>9 lessons</span>
-                            <span className="text-bs-text-primary/10">|</span>
-                            <span>Interactive simulator</span>
-                            <span className="text-bs-text-primary/10">|</span>
-                            <span>Live prices</span>
-                        </div>
+                    <div className="flex flex-wrap gap-3">
+                        <button
+                            type="button"
+                            onClick={onStartLearning}
+                            className="rounded-xl bg-bs-brand-rust px-5 py-3 text-sm font-semibold text-black"
+                        >
+                            Start with Order Types
+                        </button>
+                        <button
+                            type="button"
+                            onClick={onJumpToModules}
+                            className="rounded-xl border border-bs-border px-5 py-3 text-sm font-medium text-bs-text-primary"
+                        >
+                            Browse modules
+                        </button>
                     </div>
-                    <button
-                        onClick={onStartLearning}
-                        className="px-8 py-3 bg-bs-brand-tertiary/80 hover:bg-bs-brand-tertiary border border-bs-brand-tertiary/30 text-bs-text-primary font-mono text-sm font-medium transition-all duration-200 whitespace-nowrap"
-                    >
-                        Start Learning &rarr;
-                    </button>
+                </div>
+
+                <div className="rounded-2xl border border-bs-border bg-bs-card-fg p-5">
+                    <p className="text-sm text-bs-text-tertiary">Learning snapshot</p>
+                    <dl className="mt-5 space-y-4">
+                        <div className="flex items-end justify-between border-b border-bs-border/80 pb-3">
+                            <dt className="text-sm text-bs-text-secondary">Live modules</dt>
+                            <dd className="text-2xl font-semibold tabular-nums text-bs-text-primary">
+                                {activeModules}
+                            </dd>
+                        </div>
+                        <div className="flex items-end justify-between border-b border-bs-border/80 pb-3">
+                            <dt className="text-sm text-bs-text-secondary">Hands-on lessons</dt>
+                            <dd className="text-2xl font-semibold tabular-nums text-bs-text-primary">
+                                {totalLessons}
+                            </dd>
+                        </div>
+                        <div className="flex items-end justify-between">
+                            <dt className="text-sm text-bs-text-secondary">Format</dt>
+                            <dd className="text-sm font-medium text-bs-text-primary">Interactive + concise</dd>
+                        </div>
+                    </dl>
                 </div>
             </div>
-        </div>
+        </section>
     );
 }
 
-// ============================================
-// Web3Hub (Learn Hub) — Main Component
-// ============================================
+function PrinciplesSection() {
+    return (
+        <section className="space-y-4">
+            <h2 className="text-xl font-semibold text-bs-text-primary text-balance">How this academy teaches</h2>
+            <div className="grid gap-4 md:grid-cols-3">
+                {LEARNING_PRINCIPLES.map((item) => (
+                    <article
+                        key={item.title}
+                        className="rounded-2xl border border-bs-border bg-bs-card px-5 py-6"
+                    >
+                        <h3 className="text-base font-semibold text-bs-text-primary text-balance">{item.title}</h3>
+                        <p className="mt-2 text-sm text-bs-text-secondary text-pretty">{item.description}</p>
+                    </article>
+                ))}
+            </div>
+        </section>
+    );
+}
 
 export default function Web3Hub() {
     const router = useRouter();
@@ -132,25 +195,35 @@ export default function Web3Hub() {
         router.push(`/lessons/${slug}`);
     };
 
+    const handleJumpToModules = () => {
+        const modulesSection = document.getElementById('learning-modules');
+        if (modulesSection) {
+            modulesSection.scrollIntoView({ block: 'start' });
+        }
+    };
+
+    const activeModules = MODULES.filter((module) => !module.comingSoon).length;
+    const totalLessons = MODULES.reduce((count, module) => count + module.lessons.length, 0);
+
     return (
-        <div className="space-y-8">
-            {/* Header */}
-            <div>
-                <h1 className="text-2xl font-mono font-bold text-bs-text-primary tracking-wide">Learn</h1>
-                <p className="text-sm font-mono text-bs-text-tertiary mt-1">
-                    Solving Why of DEX — interactive lessons & simulators
-                </p>
-            </div>
+        <div className="space-y-10 pb-4">
+            <HeroSection
+                onStartLearning={() => navigateToModule('order-types')}
+                onJumpToModules={handleJumpToModules}
+                totalLessons={totalLessons}
+                activeModules={activeModules}
+            />
 
-            {/* Featured Hero */}
-            <HeroSection onStartLearning={() => navigateToModule('order-types')} />
+            <PrinciplesSection />
 
-            {/* Module Grid */}
-            <div>
-                <h3 className="text-xs font-mono uppercase tracking-widest text-bs-text-mute mb-4">
-                    Learning Modules
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <section id="learning-modules" className="space-y-4">
+                <div className="space-y-1">
+                    <h2 className="text-2xl font-semibold text-bs-text-primary text-balance">Modules</h2>
+                    <p className="text-sm text-bs-text-secondary text-pretty">
+                        Start with active tracks today, then continue with upcoming curriculum as it ships.
+                    </p>
+                </div>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     {MODULES.map((module) => (
                         <ModuleCard
                             key={module.moduleSlug}
@@ -159,7 +232,7 @@ export default function Web3Hub() {
                         />
                     ))}
                 </div>
-            </div>
+            </section>
         </div>
     );
 }

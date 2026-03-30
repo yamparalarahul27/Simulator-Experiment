@@ -62,7 +62,7 @@ export default function RouteBasedNavbar() {
             onProfileSettingsClick={() => router.push('/profile-settings')}
             onExchangeManagerClick={() => router.push('/exchange-manager')}
             onLogoClick={() => router.push('/lessons')}
-            className="mb-8"
+            className="mb-4"
         />
     );
 }

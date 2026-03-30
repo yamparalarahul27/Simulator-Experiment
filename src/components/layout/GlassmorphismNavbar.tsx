@@ -148,11 +148,6 @@ export const GlassmorphismNavbar = ({
     const dropdownItems = navItems.filter((item) => item.category === 'dropdown');
     const infoItems = navItems.filter((item) => item.category === 'info');
 
-    // Close mobile menu when path changes
-    useEffect(() => {
-        setIsMobileMenuOpen(false);
-    }, [activePath]);
-
     // Prevent body scroll when mobile menu is open
     useEffect(() => {
         if (isMobileMenuOpen) {
@@ -213,10 +208,10 @@ export const GlassmorphismNavbar = ({
     return (
         <>
             {/* Fixed navigation bar */}
-            <nav className={`fixed left-0 right-0 z-50 top-2.5 ${className}`}>
-                <div className="px-3 sm:px-6 py-2 sm:py-3">
-                    {/* Glassmorphism container */}
-                    <div className="bg-bs-bg/80 max-w-7xl mx-auto backdrop-blur-xl border border-bs-border rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 shadow-2xl shadow-black/20">
+            <nav className={`fixed left-0 right-0 top-3 z-50 ${className}`}>
+                <div className="px-3 py-2 sm:px-6 sm:py-3">
+                    {/* Navigation container */}
+                    <div className="mx-auto max-w-6xl rounded-2xl border border-bs-border bg-bs-card/95 px-3 py-2 sm:px-4 shadow-lg">
                         <div className="flex items-center justify-between">
                             {/* Logo */}
                             <Link
@@ -233,7 +228,7 @@ export const GlassmorphismNavbar = ({
                             </Link>
 
                             {/* Desktop Navigation */}
-                            <div className="hidden lg:flex items-center gap-0.5 xl:gap-1">
+                            <div className="hidden items-center gap-1 lg:flex">
                                 {/* Main navigation items */}
                                 {mainItems.map((item) => (
                                     <Link
@@ -245,9 +240,9 @@ export const GlassmorphismNavbar = ({
                                                 item.onClick(e);
                                             }
                                         }}
-                                        className={`px-3 xl:px-4 py-1.5 xl:py-2 rounded-lg text-sm xl:text-base font-medium transition-all duration-300 border-b-2 ${isActive(item.href)
-                                            ? 'text-bs-text-primary border-bs-brand-tertiary'
-                                            : 'text-bs-text-tertiary border-transparent hover:text-bs-text-primary hover:bg-bs-card'
+                                        className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors xl:px-4 ${isActive(item.href)
+                                            ? 'bg-bs-card-fg text-bs-text-primary'
+                                            : 'text-bs-text-tertiary hover:bg-bs-card-fg hover:text-bs-text-primary'
                                             }`}
                                     >
                                         {item.title}
@@ -264,7 +259,7 @@ export const GlassmorphismNavbar = ({
                                     >
                                         <button
                                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                            className="px-3 xl:px-4 py-1.5 xl:py-2 rounded-lg text-sm xl:text-base font-medium text-bs-text-tertiary hover:text-bs-text-primary hover:bg-bs-card transition-all duration-300 flex items-center gap-1 border-b-2 border-transparent"
+                                            className="flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-bs-text-tertiary transition-colors hover:bg-bs-card-fg hover:text-bs-text-primary xl:px-4"
                                         >
                                             {dropdownTitle}
                                             <svg
@@ -280,8 +275,8 @@ export const GlassmorphismNavbar = ({
 
                                         {/* Dropdown panel */}
                                         {isDropdownOpen && (
-                                            <div className="absolute top-full right-0 pt-2 min-w-[200px]">
-                                                <div className="bg-bs-bg/95 backdrop-blur-xl border border-bs-border rounded-lg shadow-2xl overflow-hidden">
+                                            <div className="absolute right-0 top-full min-w-[200px] pt-2">
+                                                <div className="overflow-hidden rounded-xl border border-bs-border bg-bs-card shadow-lg">
                                                     {dropdownItems.map((item) => (
                                                         <Link
                                                             key={item.href}
@@ -294,8 +289,8 @@ export const GlassmorphismNavbar = ({
                                                                 setIsDropdownOpen(false);
                                                             }}
                                                             className={`block px-4 py-2.5 text-sm transition-colors ${isActive(item.href)
-                                                                ? 'text-bs-text-primary bg-bs-text-primary/10'
-                                                                : 'text-bs-text-tertiary hover:text-bs-text-primary hover:bg-bs-card'
+                                                                ? 'bg-bs-card-fg text-bs-text-primary'
+                                                                : 'text-bs-text-tertiary hover:bg-bs-card-fg hover:text-bs-text-primary'
                                                                 }`}
                                                         >
                                                             {item.title}
@@ -318,9 +313,9 @@ export const GlassmorphismNavbar = ({
                                                 item.onClick(e);
                                             }
                                         }}
-                                        className={`px-3 xl:px-4 py-1.5 xl:py-2 rounded-lg text-sm xl:text-base font-medium transition-all duration-300 border-b-2 ${isActive(item.href)
-                                            ? 'text-bs-text-primary border-bs-brand-tertiary'
-                                            : 'text-bs-text-tertiary border-transparent hover:text-bs-text-primary hover:bg-bs-card'
+                                        className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors xl:px-4 ${isActive(item.href)
+                                            ? 'bg-bs-card-fg text-bs-text-primary'
+                                            : 'text-bs-text-tertiary hover:bg-bs-card-fg hover:text-bs-text-primary'
                                             }`}
                                     >
                                         {item.title}
@@ -335,7 +330,7 @@ export const GlassmorphismNavbar = ({
                                     <div className="hidden sm:block relative" ref={networkDropdownRef}>
                                         <button
                                             onClick={() => setIsNetworkDropdownOpen(!isNetworkDropdownOpen)}
-                                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-bs-card border border-bs-border hover:bg-bs-card-fg transition-all duration-300 cursor-pointer"
+                                            className="flex cursor-pointer items-center gap-2 rounded-lg border border-bs-border bg-bs-card px-3 py-1.5 transition-colors hover:bg-bs-card-fg"
                                         >
                                             <LivePulseIndicator
                                                 variant={networkStatus.variant}
@@ -356,13 +351,13 @@ export const GlassmorphismNavbar = ({
                                         </button>
 
                                         {isNetworkDropdownOpen && (
-                                            <div className="absolute top-full right-0 pt-2 min-w-[200px]">
-                                                <div className="bg-bs-bg/95 backdrop-blur-xl border border-bs-border rounded-lg shadow-2xl overflow-hidden">
+                                            <div className="absolute right-0 top-full min-w-[200px] pt-2">
+                                                <div className="overflow-hidden rounded-xl border border-bs-border bg-bs-card shadow-lg">
                                                     <button
                                                         onClick={() => handleNetworkChange('mock')}
                                                         className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${networkStatus.variant === 'mock'
-                                                            ? 'text-bs-text-primary bg-bs-text-primary/10'
-                                                            : 'text-bs-text-tertiary hover:text-bs-text-primary hover:bg-bs-card'
+                                                            ? 'bg-bs-card-fg text-bs-text-primary'
+                                                            : 'text-bs-text-tertiary hover:bg-bs-card-fg hover:text-bs-text-primary'
                                                             }`}
                                                     >
                                                         <LivePulseIndicator variant="mock" size="sm" />
@@ -371,8 +366,8 @@ export const GlassmorphismNavbar = ({
                                                     <button
                                                         onClick={() => handleNetworkChange('devnet')}
                                                         className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${networkStatus.variant === 'devnet'
-                                                            ? 'text-bs-text-primary bg-bs-text-primary/10'
-                                                            : 'text-bs-text-tertiary hover:text-bs-text-primary hover:bg-bs-card'
+                                                            ? 'bg-bs-card-fg text-bs-text-primary'
+                                                            : 'text-bs-text-tertiary hover:bg-bs-card-fg hover:text-bs-text-primary'
                                                             }`}
                                                     >
                                                         <LivePulseIndicator variant="devnet" size="sm" />
@@ -402,22 +397,22 @@ export const GlassmorphismNavbar = ({
                                 >
                                     <button
                                         onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                                        className="flex items-center justify-center w-8 h-8 rounded-full cursor-pointer"
+                                        className="flex h-8 w-8 items-center justify-center rounded-full border border-bs-border bg-bs-card-fg"
                                         aria-label="Profile Options"
                                     >
-                                        <img src="/assets/Profile_icon.png" alt="Profile &amp; Settings" className="w-6 h-6 opacity-80 hover:opacity-100 transition-opacity" />
+                                        <img src="/assets/Profile_icon.png" alt="Profile &amp; Settings" className="h-5 w-5 opacity-85" />
                                     </button>
 
                                     {isProfileDropdownOpen && (
-                                        <div className="absolute top-full right-0 pt-2 min-w-[200px]">
-                                            <div className="bg-bs-bg/95 backdrop-blur-xl border border-bs-border rounded-lg shadow-2xl overflow-hidden flex flex-col">
+                                        <div className="absolute right-0 top-full min-w-[200px] pt-2">
+                                            <div className="flex flex-col overflow-hidden rounded-xl border border-bs-border bg-bs-card shadow-lg">
                                                 <Link
                                                     href="/profile-settings"
                                                     onClick={() => {
                                                         setIsProfileDropdownOpen(false);
                                                         onProfileSettingsClick?.();
                                                     }}
-                                                    className={`block w-full text-left px-4 py-2.5 text-sm transition-colors ${activePath === '/profile-settings' ? 'text-bs-text-primary bg-bs-text-primary/10' : 'text-bs-text-tertiary hover:text-bs-text-primary hover:bg-bs-card'}`}
+                                                    className={`block w-full px-4 py-2.5 text-left text-sm transition-colors ${activePath === '/profile-settings' ? 'bg-bs-card-fg text-bs-text-primary' : 'text-bs-text-tertiary hover:bg-bs-card-fg hover:text-bs-text-primary'}`}
                                                 >
                                                     Profile &amp; Settings
                                                 </Link>
@@ -427,7 +422,7 @@ export const GlassmorphismNavbar = ({
                                                         setIsProfileDropdownOpen(false);
                                                         onExchangeManagerClick?.();
                                                     }}
-                                                    className={`block w-full text-left px-4 py-2.5 text-sm transition-colors ${activePath === '/exchange-manager' ? 'text-bs-text-primary bg-bs-text-primary/10' : 'text-bs-text-tertiary hover:text-bs-text-primary hover:bg-bs-card'}`}
+                                                    className={`block w-full px-4 py-2.5 text-left text-sm transition-colors ${activePath === '/exchange-manager' ? 'bg-bs-card-fg text-bs-text-primary' : 'text-bs-text-tertiary hover:bg-bs-card-fg hover:text-bs-text-primary'}`}
                                                 >
                                                     Exchange Manager
                                                 </Link>
@@ -455,13 +450,10 @@ export const GlassmorphismNavbar = ({
             {isMobileMenuOpen && (
                 <div className="fixed inset-0 z-40 lg:hidden">
                     {/* Backdrop */}
-                    <div
-                        className="absolute inset-0 bg-bs-bg/70 backdrop-blur-sm"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                    />
+                    <div className="absolute inset-0 bg-black/55" onClick={() => setIsMobileMenuOpen(false)} />
 
                     {/* Menu panel */}
-                    <div className="absolute top-24 bottom-4 left-3 right-3 bg-bs-bg/95 backdrop-blur-xl border border-bs-border rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-top duration-300">
+                    <div className="absolute bottom-4 left-3 right-3 top-24 flex flex-col overflow-hidden rounded-2xl border border-bs-border bg-bs-card shadow-xl">
                         {/* Scrollable content */}
                         <div className="flex-1 overflow-y-auto p-6 space-y-6">
                             {/* Main navigation */}
@@ -481,8 +473,8 @@ export const GlassmorphismNavbar = ({
                                                     setIsMobileMenuOpen(false);
                                                 }}
                                                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive(item.href)
-                                                    ? 'text-bs-text-primary bg-bs-text-primary/10'
-                                                    : 'text-bs-text-tertiary hover:text-bs-text-primary hover:bg-bs-card'
+                                                    ? 'bg-bs-card-fg text-bs-text-primary'
+                                                    : 'text-bs-text-tertiary hover:bg-bs-card-fg hover:text-bs-text-primary'
                                                     }`}
                                             >
                                                 <span className={`w-1.5 h-1.5 rounded-full ${isActive(item.href) ? 'bg-white' : 'bg-bs-border'}`} />
@@ -510,8 +502,8 @@ export const GlassmorphismNavbar = ({
                                                     setIsMobileMenuOpen(false);
                                                 }}
                                                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive(item.href)
-                                                    ? 'text-bs-text-primary bg-bs-text-primary/10'
-                                                    : 'text-bs-text-tertiary hover:text-bs-text-primary hover:bg-bs-card'
+                                                    ? 'bg-bs-card-fg text-bs-text-primary'
+                                                    : 'text-bs-text-tertiary hover:bg-bs-card-fg hover:text-bs-text-primary'
                                                     }`}
                                             >
                                                 <span className={`w-1.5 h-1.5 rounded-full ${isActive(item.href) ? 'bg-white' : 'bg-bs-border'}`} />
@@ -539,8 +531,8 @@ export const GlassmorphismNavbar = ({
                                                     setIsMobileMenuOpen(false);
                                                 }}
                                                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive(item.href)
-                                                    ? 'text-bs-text-primary bg-bs-text-primary/10'
-                                                    : 'text-bs-text-tertiary hover:text-bs-text-primary hover:bg-bs-card'
+                                                    ? 'bg-bs-card-fg text-bs-text-primary'
+                                                    : 'text-bs-text-tertiary hover:bg-bs-card-fg hover:text-bs-text-primary'
                                                     }`}
                                             >
                                                 <span className={`w-1.5 h-1.5 rounded-full ${isActive(item.href) ? 'bg-white' : 'bg-bs-border'}`} />
@@ -561,7 +553,7 @@ export const GlassmorphismNavbar = ({
                                             onProfileSettingsClick?.();
                                             setIsMobileMenuOpen(false);
                                         }}
-                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${activePath === '/profile-settings' ? 'text-bs-text-primary bg-bs-text-primary/10' : 'text-bs-text-tertiary hover:text-bs-text-primary hover:bg-bs-card'}`}
+                                        className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-colors ${activePath === '/profile-settings' ? 'bg-bs-card-fg text-bs-text-primary' : 'text-bs-text-tertiary hover:bg-bs-card-fg hover:text-bs-text-primary'}`}
                                     >
                                         <span className={`w-1.5 h-1.5 rounded-full ${activePath === '/profile-settings' ? 'bg-white' : 'bg-bs-border'}`} />
                                         Profile &amp; Settings
@@ -572,7 +564,7 @@ export const GlassmorphismNavbar = ({
                                             onExchangeManagerClick?.();
                                             setIsMobileMenuOpen(false);
                                         }}
-                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${activePath === '/exchange-manager' ? 'text-bs-text-primary bg-bs-text-primary/10' : 'text-bs-text-tertiary hover:text-bs-text-primary hover:bg-bs-card'}`}
+                                        className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-colors ${activePath === '/exchange-manager' ? 'bg-bs-card-fg text-bs-text-primary' : 'text-bs-text-tertiary hover:bg-bs-card-fg hover:text-bs-text-primary'}`}
                                     >
                                         <span className={`w-1.5 h-1.5 rounded-full ${activePath === '/exchange-manager' ? 'bg-white' : 'bg-bs-border'}`} />
                                         Exchange Manager

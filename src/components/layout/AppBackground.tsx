@@ -3,7 +3,6 @@
 import React, { useCallback, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { useAppearance } from '@/lib/context/AppearanceContext';
-import GeneratedBackground from '@/components/ui/GeneratedBackground';
 
 export default function AppBackground() {
     const { preferences } = useAppearance();
@@ -49,10 +48,22 @@ export default function AppBackground() {
                     />
                 </div>
             ) : (
-                <GeneratedBackground
-                    className="fixed inset-0 -z-20"
-                    variant={isLight ? 'light' : 'dark'}
-                />
+                <>
+                    <div
+                        className="fixed inset-0 -z-20"
+                        style={{
+                            backgroundColor: isLight ? '#f5f7fa' : '#0a0d12',
+                        }}
+                    />
+                    <div
+                        className="fixed inset-0 -z-10 opacity-[0.16]"
+                        style={{
+                            backgroundImage: "url('/assets/background_wallpaper_dot.png')",
+                            backgroundRepeat: 'repeat',
+                            backgroundSize: '540px 540px',
+                        }}
+                    />
+                </>
             )}
 
             {/* Overlay Layer — darkness + blur */}

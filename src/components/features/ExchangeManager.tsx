@@ -1,139 +1,155 @@
 'use client';
 
 import { useMemo } from 'react';
+import { cn } from '@/lib/utils';
 
 interface Exchange {
-  name: string;
-  status: 'connected' | 'disconnected';
-  accounts: number;
-  lastSynced: string;
-  network: string;
+    name: string;
+    status: 'connected' | 'disconnected';
+    accounts: number;
+    lastSynced: string;
+    network: string;
 }
 
 const exchanges: Exchange[] = [
-  {
-    name: 'Binance (CEX)',
-    status: 'connected',
-    accounts: 2,
-    lastSynced: '5m ago',
-    network: 'API Key'
-  },
-  {
-    name: 'Raydium (DEX)',
-    status: 'connected',
-    accounts: 3,
-    lastSynced: '10m ago',
-    network: 'Solana'
-  },
-  {
-    name: 'Jupiter (Aggregator)',
-    status: 'disconnected',
-    accounts: 0,
-    lastSynced: 'Not synced',
-    network: 'Solana'
-  },
-  {
-    name: 'Pacifica DEX',
-    status: 'disconnected',
-    accounts: 0,
-    lastSynced: 'Not synced',
-    network: 'https://pacificadex.com/'
-  },
-  {
-    name: 'Backpack Exchange',
-    status: 'disconnected',
-    accounts: 0,
-    lastSynced: 'Not synced',
-    network: 'https://backpack.exchange/'
-  }
+    {
+        name: 'Binance (CEX)',
+        status: 'connected',
+        accounts: 2,
+        lastSynced: '5m ago',
+        network: 'API Key',
+    },
+    {
+        name: 'Raydium (DEX)',
+        status: 'connected',
+        accounts: 3,
+        lastSynced: '10m ago',
+        network: 'Solana',
+    },
+    {
+        name: 'Jupiter (Aggregator)',
+        status: 'disconnected',
+        accounts: 0,
+        lastSynced: 'Not synced',
+        network: 'Solana',
+    },
+    {
+        name: 'Pacifica DEX',
+        status: 'disconnected',
+        accounts: 0,
+        lastSynced: 'Not synced',
+        network: 'https://pacificadex.com/',
+    },
+    {
+        name: 'Backpack Exchange',
+        status: 'disconnected',
+        accounts: 0,
+        lastSynced: 'Not synced',
+        network: 'https://backpack.exchange/',
+    },
 ];
 
 export default function ExchangeManager() {
-  const summary = useMemo(() => {
-    const connected = exchanges.filter(e => e.status === 'connected').length;
-    const totalAccounts = exchanges.reduce((sum, e) => sum + e.accounts, 0);
-    return { connected, totalAccounts };
-  }, []);
+    const summary = useMemo(() => {
+        const connected = exchanges.filter((exchange) => exchange.status === 'connected').length;
+        const totalAccounts = exchanges.reduce((sum, exchange) => sum + exchange.accounts, 0);
+        return { connected, totalAccounts };
+    }, []);
 
-  return (
-    <div className="space-y-8">
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-bs-text-mute">Exchange Manager</p>
-            <h1 className="text-xl md:text-3xl font-semibold text-bs-text-primary">Connect and manage exchanges</h1>
-            <p className="text-bs-text-tertiary mt-2 max-w-2xl text-sm md:text-base">
-              Control centralized and decentralized exchange connections in one place. Add API keys, refresh balances,
-              and keep your trade data in sync across networks.
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <button className="px-4 py-2 bg-white text-black font-semibold uppercase tracking-wide text-xs border border-bs-border hover:bg-white/90 transition-colors">
-              Add Exchange
-            </button>
-            <button className="px-4 py-2 bg-transparent text-bs-text-primary font-semibold uppercase tracking-wide text-xs border border-white/30 hover:border-white hover:bg-bs-card transition-colors">
-              Sync All
-            </button>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="border border-bs-border bg-bs-card p-4">
-            <p className="text-bs-text-tertiary text-xs uppercase tracking-[0.2em]">Connected Exchanges</p>
-            <p className="text-3xl font-semibold text-bs-text-primary">{summary.connected}</p>
-            <p className="text-bs-text-tertiary text-sm">Active connections across CEX and DEX</p>
-          </div>
-          <div className="border border-bs-border bg-bs-card p-4">
-            <p className="text-bs-text-tertiary text-xs uppercase tracking-[0.2em]">Tracked Accounts</p>
-            <p className="text-3xl font-semibold text-bs-text-primary">{summary.totalAccounts}</p>
-            <p className="text-bs-text-tertiary text-sm">Wallets and subaccounts being monitored</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="border border-bs-border bg-bs-card">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-bs-border">
-          <h2 className="text-base md:text-lg font-semibold text-bs-text-primary">Connections</h2>
-          <span className="text-xs text-bs-text-tertiary hidden md:inline">Status · Network · Accounts · Last Sync</span>
-        </div>
-        <div className="divide-y divide-bs-border">
-          {exchanges.map((exchange) => (
-            <div key={exchange.name} className="flex flex-col gap-3 px-4 py-3 md:flex-row md:flex-wrap md:items-center md:gap-4">
-              <div className="flex-1 min-w-0 md:min-w-[200px]">
-                <p className="text-bs-text-primary font-medium text-sm md:text-base">{exchange.name}</p>
-                <p className="text-bs-text-tertiary text-xs md:text-sm truncate">{exchange.network}</p>
-              </div>
-              <div className="flex items-center justify-between gap-4 md:contents">
-                <div className="flex items-center gap-2">
-                  <span
-                    className={`h-2 w-2 rounded-full ${exchange.status === 'connected' ? 'bg-emerald-400' : 'bg-orange-400'}`}
-                    aria-hidden
-                  />
-                  <span className="text-bs-text-secondary text-sm capitalize">{exchange.status}</span>
+    return (
+        <div className="space-y-8">
+            <header className="rounded-2xl border border-bs-border bg-bs-card px-5 py-7 md:px-6">
+                <p className="text-sm text-bs-text-tertiary">Exchange Manager</p>
+                <h1 className="mt-1 text-3xl font-semibold text-bs-text-primary text-balance md:text-4xl">
+                    Connect and govern every exchange in one view.
+                </h1>
+                <p className="mt-3 max-w-3xl text-sm text-bs-text-secondary text-pretty md:text-base">
+                    Add connections, monitor sync state, and keep wallet plus CEX activity organized across your
+                    workflow.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                    <button className="rounded-xl bg-bs-brand-rust px-4 py-2 text-sm font-semibold text-black">
+                        Add Exchange
+                    </button>
+                    <button className="rounded-xl border border-bs-border px-4 py-2 text-sm font-medium text-bs-text-primary">
+                        Sync All
+                    </button>
                 </div>
-                <div className="text-bs-text-secondary text-sm">{exchange.accounts} accounts</div>
-                <div className="text-bs-text-tertiary text-sm">{exchange.lastSynced}</div>
-              </div>
-              <div className="flex items-center gap-2 md:ml-auto">
-                <button className="flex-1 md:flex-none px-3 py-2 text-xs uppercase tracking-wide border border-bs-border text-bs-text-primary hover:border-bs-border0">
-                  Manage
-                </button>
-                <button className="flex-1 md:flex-none px-3 py-2 text-xs uppercase tracking-wide border border-bs-border text-bs-text-primary hover:border-bs-border0">
-                  Sync
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+            </header>
 
-      <div className="border border-dashed border-bs-border bg-bs-card p-4">
-        <h3 className="text-bs-text-primary font-semibold mb-2">Integration notes</h3>
-        <ul className="text-bs-text-tertiary text-sm list-disc pl-4 space-y-1">
-          <li>Use API keys or wallet connections depending on the exchange type.</li>
-          <li>We never store private keys; only signed transactions and encrypted secrets.</li>
-          <li>Per-exchange rate limits are respected to avoid throttling during sync.</li>
-        </ul>
-      </div>
-    </div>
-  );
+            <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <article className="rounded-2xl border border-bs-border bg-bs-card px-5 py-6">
+                    <p className="text-sm text-bs-text-tertiary">Connected exchanges</p>
+                    <p className="mt-1 text-4xl font-semibold tabular-nums text-bs-text-primary">{summary.connected}</p>
+                    <p className="mt-2 text-sm text-bs-text-secondary">Active CEX and DEX integrations.</p>
+                </article>
+                <article className="rounded-2xl border border-bs-border bg-bs-card px-5 py-6">
+                    <p className="text-sm text-bs-text-tertiary">Tracked accounts</p>
+                    <p className="mt-1 text-4xl font-semibold tabular-nums text-bs-text-primary">{summary.totalAccounts}</p>
+                    <p className="mt-2 text-sm text-bs-text-secondary">Wallets and exchange subaccounts monitored.</p>
+                </article>
+            </section>
+
+            <section className="overflow-hidden rounded-2xl border border-bs-border bg-bs-card">
+                <div className="border-b border-bs-border px-5 py-4">
+                    <h2 className="text-xl font-semibold text-bs-text-primary text-balance">Connections</h2>
+                </div>
+                <div className="divide-y divide-bs-border">
+                    {exchanges.map((exchange) => (
+                        <article
+                            key={exchange.name}
+                            className="flex flex-col gap-3 px-5 py-4 md:flex-row md:items-center md:justify-between"
+                        >
+                            <div className="min-w-0">
+                                <h3 className="text-base font-semibold text-bs-text-primary text-balance">{exchange.name}</h3>
+                                <p className="mt-1 truncate text-sm text-bs-text-tertiary">{exchange.network}</p>
+                            </div>
+
+                            <div className="flex flex-wrap items-center gap-3 md:justify-end">
+                                <span
+                                    className={cn(
+                                        'inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium',
+                                        exchange.status === 'connected'
+                                            ? 'border-bs-success/30 bg-bs-success/10 text-bs-success'
+                                            : 'border-bs-brand-rust/30 bg-bs-brand-rust/10 text-bs-brand-rust'
+                                    )}
+                                >
+                                    <span className="size-1.5 rounded-full bg-current" />
+                                    {exchange.status}
+                                </span>
+                                <span className="text-sm tabular-nums text-bs-text-secondary">
+                                    {exchange.accounts} account{exchange.accounts === 1 ? '' : 's'}
+                                </span>
+                                <span className="text-sm text-bs-text-tertiary">{exchange.lastSynced}</span>
+                            </div>
+
+                            <div className="flex items-center gap-2 md:ml-4">
+                                <button className="rounded-lg border border-bs-border px-3 py-1.5 text-xs font-medium text-bs-text-primary">
+                                    Manage
+                                </button>
+                                <button className="rounded-lg border border-bs-border px-3 py-1.5 text-xs font-medium text-bs-text-primary">
+                                    Sync
+                                </button>
+                            </div>
+                        </article>
+                    ))}
+                </div>
+            </section>
+
+            <section className="rounded-2xl border border-bs-border bg-bs-card-fg px-5 py-6">
+                <h3 className="text-lg font-semibold text-bs-text-primary text-balance">Integration notes</h3>
+                <ul className="mt-3 grid gap-2">
+                    <li className="text-sm text-bs-text-secondary text-pretty">
+                        Use API keys or wallet connections depending on exchange type.
+                    </li>
+                    <li className="text-sm text-bs-text-secondary text-pretty">
+                        Private keys are never stored. Only encrypted credentials and signed metadata are persisted.
+                    </li>
+                    <li className="text-sm text-bs-text-secondary text-pretty">
+                        Per-exchange rate limits are respected automatically during sync runs.
+                    </li>
+                </ul>
+            </section>
+        </div>
+    );
 }

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import LiquidationSimulator from './LiquidationSimulator';
 import { useLivePrices } from '@/lib/context/LivePricesContext';
+import { cn } from '@/lib/utils';
 
 /**
  * FutureConcepts — Educational section shell for the "Future Concepts" tab.
@@ -32,18 +33,20 @@ export default function FutureConcepts({ currency, usdInrRate }: FutureConceptsP
     return (
         <div className="space-y-4">
             {/* Section Navigation */}
-            <div className="flex items-center gap-1 bg-bs-bg/40 backdrop-blur-xl border border-bs-border p-1">
+            <div className="flex items-center gap-1 rounded-xl border border-bs-border bg-bs-card-fg p-1">
                 {sections.map(({ id, label, enabled }) => (
                     <button
                         key={id}
                         onClick={() => enabled && setActiveSection(id)}
                         disabled={!enabled}
-                        className={`px-4 py-2 text-xs font-mono font-medium transition-all ${activeSection === id
-                            ? 'bg-bs-brand-tertiary/20 text-bs-brand-secondary border border-bs-brand-tertiary/30'
-                            : enabled
-                                ? 'text-bs-text-tertiary hover:text-bs-text-secondary hover:bg-bs-card border border-transparent'
-                                : 'text-bs-text-mute cursor-not-allowed border border-transparent'
-                            }`}
+                        className={cn(
+                            'rounded-lg border px-4 py-2 text-xs font-medium',
+                            activeSection === id
+                                ? 'border-bs-border bg-bs-card text-bs-text-primary'
+                                : enabled
+                                    ? 'border-transparent text-bs-text-tertiary hover:text-bs-text-secondary'
+                                    : 'cursor-not-allowed border-transparent text-bs-text-mute'
+                        )}
                     >
                         {label}
                         {!enabled && (
