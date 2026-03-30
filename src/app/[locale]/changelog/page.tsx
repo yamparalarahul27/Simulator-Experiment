@@ -41,7 +41,13 @@ const PRODUCT_LOG: ChangelogEntry[] = [
         date: '2026-03-30',
         tag: TAG.added,
         title: 'Light / Dark / System theme switching',
-        description: 'Full theme support with next-themes. Toggle cycles Light → Dark → System. Light mode includes a soft aurora background variant. 80+ component files updated to use CSS variable tokens.',
+        description: 'Full theme support with next-themes. Toggle in navbar cycles Light → Dark → System. Light mode includes a soft aurora background variant. 80+ component files updated to use CSS variable tokens.',
+    },
+    {
+        date: '2026-03-30',
+        tag: TAG.changed,
+        title: 'Changelog rewritten with 3-tab curated layout',
+        description: 'Removed auto-fetch from GitHub API. Replaced with manually curated entries across Product, Design, and Dev tabs. Each entry has date, tag, title, description, and optional credit/source.',
     },
     {
         date: '2026-03-30',
@@ -96,6 +102,12 @@ const PRODUCT_LOG: ChangelogEntry[] = [
 ];
 
 const DESIGN_LOG: ChangelogEntry[] = [
+    {
+        date: '2026-03-30',
+        tag: TAG.added,
+        title: 'Theme toggle button in navbar',
+        description: 'Sun/Moon/Monitor icon button added next to profile icon on desktop and in Settings section on mobile menu.',
+    },
     {
         date: '2026-03-30',
         tag: TAG.added,
