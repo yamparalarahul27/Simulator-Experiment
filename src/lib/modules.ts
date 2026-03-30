@@ -23,6 +23,23 @@ export const MODULES: LearningModule[] = [
         ],
     },
     {
+        moduleSlug: 'order-book',
+        title: 'Order Book',
+        description: 'Heatmap, Depth, Overlay — read real supply & demand',
+        icon: '📊',
+        difficulty: 'intermediate',
+        comingSoon: false,
+        walletRequired: false,
+        lessons: [
+            { lessonSlug: 'overview', title: 'What is an Order Book?', description: 'Real-time list of all open buy and sell limit orders for a trading pair' },
+            { lessonSlug: 'limit-vs-market', title: 'Limit vs Market Orders', description: 'How passive limit orders and aggressive market orders interact to move price' },
+            { lessonSlug: 'heatmap', title: 'Heatmap', description: 'Visualize the order book on the chart over time — spot big walls and traps' },
+            { lessonSlug: 'depth', title: 'Depth', description: 'Understand liquidity depth, thick vs thin books, and depth delta calculations' },
+            { lessonSlug: 'depth-overlay', title: 'Depth Overlay', description: 'Chart indicator showing bid/ask liquidity imbalance as colored bands' },
+            { lessonSlug: 'pro-tips', title: 'Pro Tips', description: 'Spot vs Perps, spoofing detection, and real-world trading signals' },
+        ],
+    },
+    {
         moduleSlug: 'risk-management',
         title: 'Risk Management',
         description: 'Position sizing, stop losses, TP/SL, R:R ratios',
