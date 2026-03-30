@@ -48,12 +48,11 @@ export default function AppBackground() {
                         className="hidden"
                     />
                 </div>
-            ) : isLight ? (
-                <div
-                    className="fixed inset-0 -z-20 bg-bs-bg transition-colors duration-500"
-                />
             ) : (
-                <GeneratedBackground className="fixed inset-0 -z-20" />
+                <GeneratedBackground
+                    className="fixed inset-0 -z-20"
+                    variant={isLight ? 'light' : 'dark'}
+                />
             )}
 
             {/* Overlay Layer — darkness + blur */}
