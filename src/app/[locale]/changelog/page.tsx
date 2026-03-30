@@ -60,17 +60,34 @@ function summarize(message: string): string {
     let m = message.replace(/\s*\(#\d+\)\s*$/, '').trim();
     // Strip conventional commit prefix for display
     m = m.replace(/^(feat|fix|style|chore|docs|refactor|perf|test):\s*/i, '');
+    // Strip session URLs
+    m = m.replace(/https:\/\/claude\.ai\/code\/\S+/g, '').trim();
     // Capitalize first letter
+    if (m.length === 0) return 'Update';
     return m.charAt(0).toUpperCase() + m.slice(1);
 }
 
 function getTag(message: string): { label: string; color: string } {
     const lower = message.toLowerCase();
+    // Conventional commit prefixes
     if (lower.startsWith('feat')) return { label: 'Added', color: 'text-[#00e66b] bg-[#00e66b]/10 border-[#00e66b]/20' };
     if (lower.startsWith('fix')) return { label: 'Fixed', color: 'text-[#69a2f1] bg-[#69a2f1]/10 border-[#69a2f1]/20' };
     if (lower.startsWith('style')) return { label: 'Styled', color: 'text-[#00ffff] bg-[#00ffff]/10 border-[#00ffff]/20' };
     if (lower.startsWith('chore') || lower.startsWith('docs')) return { label: 'Chore', color: 'text-[#585e6c] bg-[#585e6c]/10 border-[#585e6c]/20' };
     if (lower.startsWith('refactor')) return { label: 'Refactored', color: 'text-[#ffad66] bg-[#ffad66]/10 border-[#ffad66]/20' };
+    // Keyword-based detection for non-conventional commits
+    if (/^add\b/i.test(lower) || /^create\b/i.test(lower) || /^implement\b/i.test(lower) || /^introduce\b/i.test(lower)) {
+        return { label: 'Added', color: 'text-[#00e66b] bg-[#00e66b]/10 border-[#00e66b]/20' };
+    }
+    if (/^replace\b/i.test(lower) || /^update\b/i.test(lower) || /^upgrade\b/i.test(lower) || /^improve\b/i.test(lower)) {
+        return { label: 'Improved', color: 'text-[#00ffff] bg-[#00ffff]/10 border-[#00ffff]/20' };
+    }
+    if (/^use\b/i.test(lower) || /^switch\b/i.test(lower) || /^migrate\b/i.test(lower)) {
+        return { label: 'Changed', color: 'text-[#ffad66] bg-[#ffad66]/10 border-[#ffad66]/20' };
+    }
+    if (/^remove\b/i.test(lower) || /^delete\b/i.test(lower) || /^drop\b/i.test(lower)) {
+        return { label: 'Removed', color: 'text-[#ff285a] bg-[#ff285a]/10 border-[#ff285a]/20' };
+    }
     return { label: 'Updated', color: 'text-[#adb9d2] bg-[#adb9d2]/10 border-[#adb9d2]/20' };
 }
 
