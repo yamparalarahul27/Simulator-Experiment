@@ -16,23 +16,15 @@ import React from 'react';
 
 interface GeneratedBackgroundProps {
     dotOverlay?: boolean;
+    variant?: 'dark' | 'light';
     className?: string;
     style?: React.CSSProperties;
 }
 
-export default function GeneratedBackground({
-    dotOverlay = false,
-    className = '',
-    style,
-}: GeneratedBackgroundProps) {
+function DarkAurora() {
     return (
-        <div
-            className={`absolute inset-0 overflow-hidden ${className}`}
-            style={{ backgroundColor: '#050510', ...style }}
-        >
-            {/* Layer 1: Main arc — large ring positioned off-screen
-                A 1600px circle with only the right edge visible creates
-                the sweeping crescent curve from the original image. */}
+        <>
+            {/* Layer 1: Main arc — large ring positioned off-screen */}
             <div
                 style={{
                     position: 'absolute',
@@ -139,7 +131,7 @@ export default function GeneratedBackground({
                 }}
             />
 
-            {/* Layer 6: Subtle lower arc hint — the faint curve at bottom-right */}
+            {/* Layer 6: Subtle lower arc hint */}
             <div
                 style={{
                     position: 'absolute',
@@ -170,8 +162,171 @@ export default function GeneratedBackground({
                     `,
                 }}
             />
+        </>
+    );
+}
 
-            {/* Layer 8: Dot grid overlay (wallpaper variant) */}
+function LightAurora() {
+    return (
+        <>
+            {/* Layer 1: Main arc — softer teal crescent on light base */}
+            <div
+                style={{
+                    position: 'absolute',
+                    width: '1600px',
+                    height: '1600px',
+                    top: '-55%',
+                    left: '-45%',
+                    borderRadius: '50%',
+                    background: 'transparent',
+                    boxShadow: `
+                        120px 80px 120px 0px rgba(0, 180, 170, 0.12),
+                        160px 60px 80px 0px rgba(0, 200, 190, 0.08),
+                        80px 120px 160px 20px rgba(60, 120, 200, 0.10),
+                        200px 40px 60px 0px rgba(0, 210, 190, 0.06)
+                    `,
+                    border: '80px solid transparent',
+                    borderRightColor: 'rgba(0, 180, 170, 0.06)',
+                    borderBottomColor: 'rgba(60, 130, 200, 0.04)',
+                    filter: 'blur(50px)',
+                    transform: 'rotate(-25deg)',
+                }}
+            />
+
+            {/* Layer 2: Curved glow trail — lighter conic sweep */}
+            <div
+                style={{
+                    position: 'absolute',
+                    width: '1400px',
+                    height: '1400px',
+                    top: '-50%',
+                    left: '-35%',
+                    borderRadius: '50%',
+                    background: `conic-gradient(
+                        from 160deg,
+                        transparent 0deg,
+                        rgba(60, 130, 200, 0.06) 20deg,
+                        rgba(0, 170, 180, 0.10) 45deg,
+                        rgba(0, 200, 185, 0.12) 70deg,
+                        rgba(0, 210, 195, 0.10) 90deg,
+                        rgba(0, 180, 170, 0.06) 110deg,
+                        transparent 130deg,
+                        transparent 360deg
+                    )`,
+                    filter: 'blur(70px)',
+                    transform: 'rotate(-15deg)',
+                }}
+            />
+
+            {/* Layer 3: Teal focal point — softer for light bg */}
+            <div
+                style={{
+                    position: 'absolute',
+                    width: '500px',
+                    height: '400px',
+                    top: '5%',
+                    right: '15%',
+                    background: `
+                        radial-gradient(
+                            ellipse 70% 80% at 50% 55%,
+                            rgba(0, 200, 180, 0.15) 0%,
+                            rgba(0, 180, 170, 0.08) 35%,
+                            transparent 70%
+                        )
+                    `,
+                    filter: 'blur(35px)',
+                }}
+            />
+
+            {/* Layer 4: Secondary blue ambient — left/center */}
+            <div
+                style={{
+                    position: 'absolute',
+                    width: '70%',
+                    height: '70%',
+                    top: '15%',
+                    left: '-5%',
+                    background: `
+                        radial-gradient(
+                            ellipse 55% 50% at 40% 55%,
+                            rgba(80, 130, 220, 0.10) 0%,
+                            rgba(60, 110, 200, 0.05) 45%,
+                            transparent 75%
+                        )
+                    `,
+                }}
+            />
+
+            {/* Layer 5: Bottom-right blue wash */}
+            <div
+                style={{
+                    position: 'absolute',
+                    width: '60%',
+                    height: '45%',
+                    bottom: '-5%',
+                    right: '0%',
+                    background: `
+                        radial-gradient(
+                            ellipse 65% 55% at 55% 65%,
+                            rgba(60, 120, 200, 0.08) 0%,
+                            rgba(40, 90, 170, 0.04) 55%,
+                            transparent 85%
+                        )
+                    `,
+                }}
+            />
+
+            {/* Layer 6: Subtle lower arc hint */}
+            <div
+                style={{
+                    position: 'absolute',
+                    width: '1200px',
+                    height: '1200px',
+                    bottom: '-85%',
+                    right: '-30%',
+                    borderRadius: '50%',
+                    boxShadow: '-60px -40px 100px 0px rgba(0, 150, 180, 0.04)',
+                    border: '40px solid transparent',
+                    borderTopColor: 'rgba(0, 160, 180, 0.03)',
+                    borderLeftColor: 'rgba(60, 120, 180, 0.02)',
+                    filter: 'blur(30px)',
+                }}
+            />
+
+            {/* Layer 7: Vignette — lighten edges subtly */}
+            <div
+                style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: `
+                        radial-gradient(
+                            ellipse 75% 75% at 55% 40%,
+                            transparent 25%,
+                            rgba(245, 247, 250, 0.4) 100%
+                        )
+                    `,
+                }}
+            />
+        </>
+    );
+}
+
+export default function GeneratedBackground({
+    dotOverlay = false,
+    variant = 'dark',
+    className = '',
+    style,
+}: GeneratedBackgroundProps) {
+    const baseBg = variant === 'light' ? '#f5f7fa' : '#050510';
+
+    return (
+        <div
+            className={`absolute inset-0 overflow-hidden ${className}`}
+            style={{ backgroundColor: baseBg, ...style }}
+        >
+            {variant === 'light' ? <LightAurora /> : <DarkAurora />}
+
+            {/* Dot grid overlay (wallpaper variant) */}
             {dotOverlay && (
                 <div
                     style={{
@@ -179,7 +334,10 @@ export default function GeneratedBackground({
                         inset: 0,
                         backgroundImage: `radial-gradient(
                             circle,
-                            rgba(255, 255, 255, 0.08) 1px,
+                            ${variant === 'light'
+                                ? 'rgba(0, 0, 0, 0.04)'
+                                : 'rgba(255, 255, 255, 0.08)'
+                            } 1px,
                             transparent 1px
                         )`,
                         backgroundSize: '20px 20px',

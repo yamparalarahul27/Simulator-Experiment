@@ -40,6 +40,12 @@ const PRODUCT_LOG: ChangelogEntry[] = [
     {
         date: '2026-03-30',
         tag: TAG.added,
+        title: 'Light / Dark / System theme switching',
+        description: 'Full theme support with next-themes. Toggle cycles Light → Dark → System. Light mode includes a soft aurora background variant. 80+ component files updated to use CSS variable tokens.',
+    },
+    {
+        date: '2026-03-30',
+        tag: TAG.added,
         title: 'Order Book learning module with 6 interactive lessons',
         description: 'New intermediate-level module covering order book basics, limit vs market orders, heatmap reading, depth delta calculations, depth overlay indicator, and pro tips. Includes interactive order book with live Binance data.',
         credit: '@exitpumpBTC',
@@ -92,6 +98,18 @@ const PRODUCT_LOG: ChangelogEntry[] = [
 const DESIGN_LOG: ChangelogEntry[] = [
     {
         date: '2026-03-30',
+        tag: TAG.added,
+        title: 'Light aurora background variant',
+        description: 'Softer teal/blue crescent aurora for light theme — same ring-based technique with reduced opacity and warm edge vignette.',
+    },
+    {
+        date: '2026-03-30',
+        tag: TAG.changed,
+        title: '1000+ hardcoded hex colors replaced with CSS variable tokens',
+        description: 'All bg-[#0b0e14], text-[#ced5e4], border-[#1a1e26] etc. now use bg-bs-bg, text-bs-text-secondary, border-bs-border — enabling theme switching.',
+    },
+    {
+        date: '2026-03-30',
         tag: TAG.improved,
         title: 'Aurora background reshaped into proper crescent curve',
         description: 'Replaced elliptical radial gradients with ring-based approach: large off-screen circles with gradient borders so only the curved edge is visible.',
@@ -131,6 +149,22 @@ const DESIGN_LOG: ChangelogEntry[] = [
 ];
 
 const DEV_LOG: ChangelogEntry[] = [
+    {
+        date: '2026-03-30',
+        tag: TAG.dep,
+        title: '@chenglou/pretext installed',
+        description: 'Pure JS/TS multiline text measurement and layout library with broad international language support. Renders to DOM, Canvas, SVG, and server-side.',
+        credit: 'Cheng Lou',
+        source: 'https://www.npmjs.com/package/@chenglou/pretext',
+    },
+    {
+        date: '2026-03-30',
+        tag: TAG.dep,
+        title: 'next-themes installed',
+        description: 'Abstraction for light/dark/system theme switching in Next.js. Handles class toggling, system preference detection, and localStorage persistence.',
+        credit: 'pacocoursey/next-themes',
+        source: 'https://github.com/pacocoursey/next-themes',
+    },
     {
         date: '2026-03-30',
         tag: TAG.dep,
