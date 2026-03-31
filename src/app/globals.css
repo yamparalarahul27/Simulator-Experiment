@@ -586,9 +586,6 @@ body {
 
   body {
     @apply bg-background text-foreground;
-    /* Extend into iOS safe areas */
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
   }
 }
 
