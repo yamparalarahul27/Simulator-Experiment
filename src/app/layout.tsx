@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import {
@@ -9,16 +9,21 @@ import '@pqina/flip/dist/flip.min.css';
 import { Agentation } from "agentation";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f0ebe3" },
+    { media: "(prefers-color-scheme: dark)", color: "#0c1220" },
+  ],
+};
+
 export const metadata: Metadata = {
   title: "YDEX — Solving Why of DEX",
   description: "Learn DEX trading through interactive simulators and guided lessons. Understand order types, risk management, and the Solana ecosystem — hands-on.",
   icons: {
     icon: "/favicon.png",
-  },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    viewportFit: "cover",
   },
   openGraph: {
     title: "YDEX — Solving Why of DEX",
