@@ -102,7 +102,7 @@ function LessonCard({
                             <span className="text-[10px] font-mono text-bs-text-mute">{String(index).padStart(2, '0')}</span>
                             <h3 className="text-sm font-mono font-semibold text-bs-text-primary">{lesson.title}</h3>
                         </div>
-                        <p className="text-xs font-mono text-bs-text-mute mt-1">{lesson.description}</p>
+                        <p className="text-xs font-mono text-bs-text-secondary mt-1">{lesson.description}</p>
                         {details?.whenToUse && (
                             <p className="text-[11px] font-mono text-bs-text-mute mt-2 line-clamp-1">{details.whenToUse}</p>
                         )}

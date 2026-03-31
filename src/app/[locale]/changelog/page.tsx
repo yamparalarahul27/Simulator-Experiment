@@ -38,6 +38,60 @@ const TAG = {
 
 const PRODUCT_LOG: ChangelogEntry[] = [
     {
+        date: '2026-03-31',
+        tag: TAG.changed,
+        title: 'Navigation streamlined — Learn, Simulator, Changelog, About',
+        description: 'Removed Perks, Help, Roadmap, and Exchange Manager from nav. Moved Changelog to main nav, About out of dropdown. Profile icon links directly to settings without dropdown.',
+    },
+    {
+        date: '2026-03-31',
+        tag: TAG.changed,
+        title: 'Dark theme temporarily disabled to focus on light theme polish',
+        description: 'Forced light theme via next-themes forcedTheme. Theme toggle removed from navbar. Will re-enable after light theme is finalized.',
+    },
+    {
+        date: '2026-03-31',
+        tag: TAG.added,
+        title: 'Simulator page now uses standard layout with navbar',
+        description: 'Simulator was previously a full-screen route without navigation. Now shares the same layout shell, navbar, and footer as other pages.',
+    },
+    {
+        date: '2026-03-31',
+        tag: TAG.fixed,
+        title: 'Hydration mismatch on theme-dependent components',
+        description: 'Server rendered dark colors while client resolved to light. Fixed by changing isLight check from resolvedTheme === "light" to resolvedTheme !== "dark" so undefined (SSR) defaults to light.',
+    },
+    {
+        date: '2026-03-31',
+        tag: TAG.improved,
+        title: 'Hero CTA button restyled with gold brand fill',
+        description: '"Start with Order Types" button updated from flat dark fill to bg-bs-brand (gold) with white text for clear visual affordance in both themes.',
+    },
+    {
+        date: '2026-03-31',
+        tag: TAG.improved,
+        title: 'Lesson shell back button repositioned above title',
+        description: 'Back button moved from side-by-side with title to stacked above it. Icon changed to Undo2 from Lucide.',
+    },
+    {
+        date: '2026-03-31',
+        tag: TAG.removed,
+        title: 'AI assistant button temporarily disabled',
+        description: 'Floating AI assistant button commented out as the chat API is not yet functional.',
+    },
+    {
+        date: '2026-03-30',
+        tag: TAG.added,
+        title: 'Logo splash animation on app load',
+        description: 'Replaced welcome screen with a branded logo splash that fades out after loading. Covers iOS safe areas correctly.',
+    },
+    {
+        date: '2026-03-30',
+        tag: TAG.fixed,
+        title: 'iOS Safari chrome tint and safe area issues',
+        description: 'Added theme-color meta tag, viewport-fit=cover, and fixed splash screen not covering iOS safe areas. Resolved white overlay and flat color strips at edges.',
+    },
+    {
         date: '2026-03-30',
         tag: TAG.added,
         title: 'Light / Dark / System theme switching',
@@ -103,16 +157,40 @@ const PRODUCT_LOG: ChangelogEntry[] = [
 
 const DESIGN_LOG: ChangelogEntry[] = [
     {
-        date: '2026-03-30',
-        tag: TAG.added,
-        title: 'Theme toggle button in navbar',
-        description: 'Sun/Moon/Monitor icon button added next to profile icon on desktop and in Settings section on mobile menu.',
+        date: '2026-03-31',
+        tag: TAG.improved,
+        title: 'Module card layout improved — removed emoji icons, better badge wrapping',
+        description: 'Removed circular emoji badges from module cards. Difficulty badges now use whitespace-nowrap and flex-wrap to sit beside the title or flow below it on narrow screens.',
+    },
+    {
+        date: '2026-03-31',
+        tag: TAG.improved,
+        title: 'Network selector and AI button removed from navbar for cleaner UI',
+        description: 'Commented out the "On Mock Data" network switcher and AI assistant floating button. Profile dropdown replaced with direct link to settings.',
     },
     {
         date: '2026-03-30',
         tag: TAG.added,
-        title: 'Light aurora background variant',
-        description: 'Softer teal/blue crescent aurora for light theme — same ring-based technique with reduced opacity and warm edge vignette.',
+        title: 'Paper Texture UI design system',
+        description: 'Replaced aurora backgrounds with an all-CSS paper texture system. Warm parchment cream for light mode, deep midnight navy for dark. Includes grain, fiber lines, age spots, and vignette — all generated via CSS gradients and SVG data URIs.',
+    },
+    {
+        date: '2026-03-30',
+        tag: TAG.added,
+        title: 'Postage stamp card design applied to all learn cards',
+        description: 'Cards now use a stamp-card style with inner borders and subtle paper texture feel.',
+    },
+    {
+        date: '2026-03-30',
+        tag: TAG.changed,
+        title: 'Logo switched from PNG to theme-aware SVG using CSS mask',
+        description: 'Logo now uses a CSS mask with LogoPath.svg, colored via backgroundColor. Adapts to theme automatically.',
+    },
+    {
+        date: '2026-03-30',
+        tag: TAG.added,
+        title: 'Theme toggle button in navbar',
+        description: 'Sun/Moon/Monitor icon button added next to profile icon on desktop and in Settings section on mobile menu.',
     },
     {
         date: '2026-03-30',
@@ -122,15 +200,9 @@ const DESIGN_LOG: ChangelogEntry[] = [
     },
     {
         date: '2026-03-30',
-        tag: TAG.improved,
-        title: 'Aurora background reshaped into proper crescent curve',
-        description: 'Replaced elliptical radial gradients with ring-based approach: large off-screen circles with gradient borders so only the curved edge is visible.',
-    },
-    {
-        date: '2026-03-30',
         tag: TAG.changed,
-        title: 'Background PNGs replaced with CSS-generated aurora effect',
-        description: 'Eliminated ~5.3 MB of static assets (background.png + background_wallpaper_dot.png) by recreating the aurora gradient with CSS radial/conic gradients and blur.',
+        title: 'Background PNGs replaced with CSS-generated effects',
+        description: 'Eliminated ~5.3 MB of static assets by recreating backgrounds with CSS gradients and paper texture.',
     },
     {
         date: '2026-03-30',
@@ -161,6 +233,30 @@ const DESIGN_LOG: ChangelogEntry[] = [
 ];
 
 const DEV_LOG: ChangelogEntry[] = [
+    {
+        date: '2026-03-31',
+        tag: TAG.infra,
+        title: 'Storybook 8 added for component development',
+        description: 'Configured Storybook with .storybook/ directory and src/stories/ for isolated component development and visual testing.',
+    },
+    {
+        date: '2026-03-31',
+        tag: TAG.infra,
+        title: 'Vitest configured for unit testing',
+        description: 'Added vitest.config.ts and vitest.shims.d.ts for fast Vite-native unit testing alongside the Next.js app.',
+    },
+    {
+        date: '2026-03-31',
+        tag: TAG.changed,
+        title: 'ESLint config updated (eslint.config.mjs)',
+        description: 'Refreshed ESLint flat config to align with current project conventions.',
+    },
+    {
+        date: '2026-03-31',
+        tag: TAG.infra,
+        title: 'Theme forced to light — removed system/dark SSR paths',
+        description: 'next-themes configured with forcedTheme="light". Eliminates SSR mismatch for theme-dependent components (AppBackground, GeneratedBackground).',
+    },
     {
         date: '2026-03-30',
         tag: TAG.dep,
