@@ -15,6 +15,11 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.png",
   },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    viewportFit: "cover",
+  },
   openGraph: {
     title: "YDEX — Solving Why of DEX",
     description: "Learn DEX trading through interactive simulators and guided lessons.",
