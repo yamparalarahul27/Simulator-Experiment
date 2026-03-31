@@ -45,7 +45,13 @@ export default function LoadingScreen() {
         <AnimatePresence>
             {isVisible && (
                 <motion.div
-                    className="loading-screen fixed inset-0 z-50 flex items-center justify-center"
+                    className="loading-screen fixed inset-0 z-50 flex items-center justify-center bg-bs-bg"
+                    style={{
+                        top: 'calc(-1 * env(safe-area-inset-top, 0px))',
+                        bottom: 'calc(-1 * env(safe-area-inset-bottom, 0px))',
+                        left: 'calc(-1 * env(safe-area-inset-left, 0px))',
+                        right: 'calc(-1 * env(safe-area-inset-right, 0px))',
+                    }}
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0, transition: { duration: 0.6, ease: "easeInOut" } }}
                 >
