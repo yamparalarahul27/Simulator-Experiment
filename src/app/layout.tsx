@@ -48,6 +48,16 @@ export default function RootLayout({
           antialiased
         `}
       >
+        {/* Static splash overlay — renders before React hydrates to prevent dark flash */}
+        <div
+          id="splash-overlay"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 50,
+            backgroundColor: 'var(--bs-bg)',
+          }}
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
