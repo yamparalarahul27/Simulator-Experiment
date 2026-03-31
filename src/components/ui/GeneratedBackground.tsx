@@ -119,7 +119,7 @@ export default function GeneratedBackground({
 
     return (
         <div
-            className={`absolute inset-0 overflow-hidden ${className}`}
+            className={`absolute inset-0 ${className}`}
             style={style}
         >
             <PaperTexture isLight={isLight} />
