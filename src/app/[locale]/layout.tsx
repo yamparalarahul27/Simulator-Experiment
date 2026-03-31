@@ -29,7 +29,7 @@ export default async function LocaleLayout({
                 <AppBackground />
                 <LayoutShell>{children}</LayoutShell>
                 <LoadingScreen />
-                <AssistantModal />
+                {/* <AssistantModal /> — temporarily disabled */}
             </Providers>
             <Toaster
                 position="top-right"

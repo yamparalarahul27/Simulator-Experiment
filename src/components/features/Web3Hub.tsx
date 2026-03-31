@@ -131,7 +131,7 @@ function HeroSection({
                         <button
                             type="button"
                             onClick={onStartLearning}
-                            className="rounded-xl bg-bs-brand-rust px-6 py-3 text-sm font-semibold text-white shadow-md shadow-bs-brand-rust/25 transition-all duration-200 hover:brightness-110 hover:shadow-lg hover:shadow-bs-brand-rust/30 active:scale-[0.97]"
+                            className="rounded-xl bg-bs-brand px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:opacity-90 active:scale-[0.97]"
                         >
                             Start with {firstModuleTitle}
                         </button>

@@ -386,10 +386,24 @@ export const GlassmorphismNavbar = ({
                                 )}
                                 */}
 
+                                {/* Theme toggle — temporarily disabled while focusing on light theme
                                 <div className="hidden sm:block">
                                     <ThemeToggle />
                                 </div>
+                                */}
 
+                                {/* Profile dropdown — temporarily disabled, direct link instead */}
+                                <div className="hidden sm:block">
+                                    <Link
+                                        href="/profile-settings"
+                                        onClick={() => onProfileSettingsClick?.()}
+                                        className="flex h-8 w-8 items-center justify-center rounded-full border border-bs-border bg-bs-card-fg"
+                                        aria-label="Profile &amp; Settings"
+                                    >
+                                        <img src="/assets/Profile_icon.png" alt="Profile &amp; Settings" className="h-5 w-5 opacity-85" />
+                                    </Link>
+                                </div>
+                                {/* Original profile dropdown with Exchange Manager:
                                 <div
                                     className="hidden sm:block relative"
                                     ref={profileDropdownRef}
@@ -431,6 +445,7 @@ export const GlassmorphismNavbar = ({
                                         </div>
                                     )}
                                 </div>
+                                */}
 
                                 {/* Hamburger button (mobile only) */}
                                 <div className="lg:hidden">
@@ -559,6 +574,7 @@ export const GlassmorphismNavbar = ({
                                         <span className={`w-1.5 h-1.5 rounded-full ${activePath === '/profile-settings' ? 'bg-white' : 'bg-bs-border'}`} />
                                         Profile &amp; Settings
                                     </Link>
+                                    {/* Exchange Manager — temporarily disabled
                                     <Link
                                         href="/exchange-manager"
                                         onClick={() => {
@@ -570,10 +586,13 @@ export const GlassmorphismNavbar = ({
                                         <span className={`w-1.5 h-1.5 rounded-full ${activePath === '/exchange-manager' ? 'bg-white' : 'bg-bs-border'}`} />
                                         Exchange Manager
                                     </Link>
+                                    */}
+                                    {/* Theme toggle — temporarily disabled
                                     <div className="flex items-center gap-3 px-4 py-3">
                                         <ThemeToggle />
                                         <span className="text-bs-text-tertiary text-sm">Theme</span>
                                     </div>
+                                    */}
                                 </div>
                             </div>
                         </div>
