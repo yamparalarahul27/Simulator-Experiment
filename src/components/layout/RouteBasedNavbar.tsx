@@ -47,9 +47,28 @@ export default function RouteBasedNavbar() {
 
     const activePath = resolveActivePath(pathname);
 
+    const navLogo = (
+        <div
+            aria-label="YDEX"
+            className="h-6 sm:h-7"
+            style={{
+                aspectRatio: '627 / 235',
+                backgroundColor: 'var(--bs-text-primary)',
+                maskImage: 'url(/assets/LogoPath.svg)',
+                maskSize: 'contain',
+                maskRepeat: 'no-repeat',
+                maskPosition: 'center',
+                WebkitMaskImage: 'url(/assets/LogoPath.svg)',
+                WebkitMaskSize: 'contain',
+                WebkitMaskRepeat: 'no-repeat',
+                WebkitMaskPosition: 'center',
+            }}
+        />
+    );
+
     return (
         <GlassmorphismNavbar
-            logo="/Logo.png"
+            logo={navLogo}
             navItems={NAV_ITEMS}
             activePath={activePath}
             networkStatus={{
