@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
+import { useTheme } from 'next-themes';
 import GeneratedBackground from './GeneratedBackground';
 
 /**
@@ -11,17 +11,16 @@ import GeneratedBackground from './GeneratedBackground';
  * Shows a brief logo animation on app load, then fades out
  * to reveal the lessons page directly. No welcome screen.
  *
- * Sequence:
- * 1. Paper texture background appears
- * 2. Logo fades in + scales up
- * 3. Hold for a moment
- * 4. Everything fades out, app content revealed
+ * Uses the SVG logo as a CSS mask so the fill color adapts to theme:
+ * - Light: deep warm brown on cream
+ * - Dark: warm gold on midnight navy
  */
 export default function LoadingScreen() {
     const [isVisible, setIsVisible] = useState(true);
+    const { resolvedTheme } = useTheme();
+    const isLight = resolvedTheme === 'light';
 
     useEffect(() => {
-        // Total splash duration: ~2.5s
         const timer = setTimeout(() => {
             setIsVisible(false);
         }, 2500);
@@ -29,17 +28,18 @@ export default function LoadingScreen() {
         return () => clearTimeout(timer);
     }, []);
 
-    // Hide body content while splash is showing
     useEffect(() => {
         if (isVisible) {
             document.body.style.overflow = 'hidden';
         } else {
             const bufferTimer = setTimeout(() => {
                 document.body.style.overflow = '';
-            }, 800); // wait for exit animation
+            }, 800);
             return () => clearTimeout(bufferTimer);
         }
     }, [isVisible]);
+
+    const logoColor = isLight ? '#2c1810' : '#d4a54a';
 
     return (
         <AnimatePresence>
@@ -64,13 +64,22 @@ export default function LoadingScreen() {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
-                        <Image
-                            src="/Logo.png"
-                            alt="YDEX"
-                            width={180}
-                            height={180}
-                            priority
-                            className="h-auto w-[120px] sm:w-[160px]"
+                        <div
+                            aria-label="YDEX"
+                            role="img"
+                            className="w-[120px] sm:w-[160px]"
+                            style={{
+                                aspectRatio: '627 / 235',
+                                backgroundColor: logoColor,
+                                maskImage: 'url(/assets/LogoPath.svg)',
+                                maskSize: 'contain',
+                                maskRepeat: 'no-repeat',
+                                maskPosition: 'center',
+                                WebkitMaskImage: 'url(/assets/LogoPath.svg)',
+                                WebkitMaskSize: 'contain',
+                                WebkitMaskRepeat: 'no-repeat',
+                                WebkitMaskPosition: 'center',
+                            }}
                         />
                         <motion.p
                             className="text-sm font-mono uppercase tracking-[0.3em] text-bs-text-tertiary"
