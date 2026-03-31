@@ -19,7 +19,7 @@ export default function AppBackground() {
     const { bgType, bgColor, overlayOpacity, blurAmount } = preferences;
     const { resolvedTheme } = useTheme();
 
-    const isLight = resolvedTheme === 'light';
+    const isLight = resolvedTheme !== 'dark';
 
     // Base colors
     const baseBg = isLight ? '#f0ebe3' : '#0c1220';

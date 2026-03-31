@@ -104,7 +104,7 @@ export default function AssistantModal() {
             {/* Floating AI Button */}
             <button
                 onClick={() => setIsOpen(true)}
-                className={`fixed bottom-24 left-6 z-50 flex items-center justify-center w-14 h-14 rounded-full border border-bs-brand-tertiary/60 shadow-lg shadow-[#00b3b3]/20 text-bs-text-primary transition-all duration-300 hover:scale-110 active:scale-95 ${isOpen ? "hidden" : ""}`}
+                className={`fixed bottom-24 left-6 z-50 flex items-center justify-center w-14 h-14 rounded-full border border-bs-border bg-bs-card shadow-lg text-bs-text-primary transition-all duration-300 hover:scale-110 active:scale-95 ${isOpen ? "hidden" : ""}`}
             >
                 <Telescope className="w-6 h-6" />
             </button>

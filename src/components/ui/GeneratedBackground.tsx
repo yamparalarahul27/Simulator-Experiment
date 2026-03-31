@@ -115,7 +115,7 @@ export default function GeneratedBackground({
     style,
 }: GeneratedBackgroundProps) {
     const { resolvedTheme } = useTheme();
-    const isLight = resolvedTheme === 'light';
+    const isLight = resolvedTheme !== 'dark';
 
     return (
         <div
