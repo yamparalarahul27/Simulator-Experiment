@@ -325,7 +325,7 @@ export const GlassmorphismNavbar = ({
 
                             {/* Right side: Network status + Settings + Hamburger */}
                             <div className="flex items-center gap-2">
-                                {/* Network status selector (hidden on mobile) */}
+                                {/* Network status selector — temporarily hidden
                                 {networkStatus && (
                                     <div className="hidden sm:block relative" ref={networkDropdownRef}>
                                         <button
@@ -384,6 +384,7 @@ export const GlassmorphismNavbar = ({
                                         )}
                                     </div>
                                 )}
+                                */}
 
                                 <div className="hidden sm:block">
                                     <ThemeToggle />
