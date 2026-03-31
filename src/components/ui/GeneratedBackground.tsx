@@ -105,17 +105,6 @@ function PaperTexture({ isLight }: { isLight: boolean }) {
                     opacity: isLight ? 0.5 : 0.45,
                 }}
             />
-
-            {/* Layer 7: Vignette */}
-            <div
-                style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: isLight
-                        ? 'radial-gradient(ellipse at center, transparent 40%, rgba(44, 36, 22, 0.1) 100%)'
-                        : 'radial-gradient(ellipse at center, transparent 35%, rgba(6, 8, 16, 0.3) 100%)',
-                }}
-            />
         </>
     );
 }
