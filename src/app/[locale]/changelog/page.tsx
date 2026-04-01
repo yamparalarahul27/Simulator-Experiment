@@ -16,6 +16,8 @@ interface ChangelogEntry {
     description?: string;
     credit?: string;
     source?: string;
+    testHref?: string;
+    testLabel?: string;
 }
 
 // ============================================
@@ -37,6 +39,16 @@ const TAG = {
 // ============================================
 
 const PRODUCT_LOG: ChangelogEntry[] = [
+    {
+        date: '2026-04-01',
+        tag: TAG.added,
+        title: 'Hot DEX Tokens discovery feed added to Simulator and Home Analytics',
+        description: 'Added a live discovery API (`/api/discovery/hot`) and a UI panel with chain presets, scoring, and token metrics. Includes a built-in "Test API JSON" button for quick validation.',
+        credit: 'vibeforge1111 (inspiration from dexscreener-cli-mcp-tool)',
+        source: 'https://github.com/vibeforge1111/dexscreener-cli-mcp-tool',
+        testHref: '/simulator',
+        testLabel: 'Test in Simulator',
+    },
     {
         date: '2026-03-31',
         tag: TAG.changed,
@@ -422,6 +434,16 @@ function EntryItem({ entry }: { entry: ChangelogEntry }) {
                             ) : entry.credit}
                         </span>
                     )}
+                </div>
+            )}
+            {entry.testHref && (
+                <div className="pl-12">
+                    <a
+                        href={entry.testHref}
+                        className="inline-flex rounded-md border border-bs-border px-2.5 py-1 text-xs text-bs-text-secondary hover:text-bs-text-primary"
+                    >
+                        {entry.testLabel ?? 'Test now'}
+                    </a>
                 </div>
             )}
         </li>
