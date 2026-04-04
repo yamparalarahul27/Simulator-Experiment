@@ -35,7 +35,7 @@ export const AnalyticsConfirmModal = ({
             <div className="relative bg-bs-bg/90 border border-bs-border rounded-lg p-6 max-w-md w-full animate-in fade-in zoom-in-95 duration-200">
                 <div className="text-center space-y-4">
                     {/* Success Icon */}
-                    <div className="mx-auto w-12 h-12 rounded-lg bg-bs-success/20 border border-[#00e66b]/30 flex items-center justify-center">
+                    <div className="mx-auto w-12 h-12 rounded-lg bg-bs-success/20 border border-bs-buy/30 flex items-center justify-center">
                         <svg className="w-6 h-6 text-bs-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
@@ -62,7 +62,7 @@ export const AnalyticsConfirmModal = ({
                         </button>
                         <button
                             onClick={onConfirm}
-                            className="px-4 py-2.5 rounded-lg bg-bs-brand-tertiary/10 text-bs-text-primary hover:bg-bs-brand-tertiary/40 transition-colors font-mono text-sm shadow-lg shadow-[#00b3b3]/20 border border-bs-brand-tertiary/50"
+                            className="px-4 py-2.5 rounded-lg bg-bs-brand-tertiary/10 text-bs-text-primary hover:bg-bs-brand-tertiary/40 transition-colors font-mono text-sm shadow-lg shadow-bs-accent-cyan/20 border border-bs-brand-tertiary/50"
                         >
                             Yes
                         </button>

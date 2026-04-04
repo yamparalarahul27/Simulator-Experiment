@@ -107,7 +107,7 @@ function ScenarioBlock({
 }) {
     const isProfit = type === 'tp';
     const color = isProfit ? 'text-bs-success' : 'text-bs-error';
-    const bgColor = isProfit ? 'bg-bs-success/8 border-[#00e66b]/15' : 'bg-bs-error/8 border-[#ff285a]/15';
+    const bgColor = isProfit ? 'bg-bs-success/8 border-bs-buy/15' : 'bg-bs-error/8 border-bs-sell/15';
     const label = isProfit ? 'Take Profit' : 'Stop Loss';
     const sign = pnl.total >= 0 ? '+' : '';
 
@@ -186,8 +186,8 @@ const TradeSummaryPanel = React.memo(function TradeSummaryPanel({ simSnapshot, f
             {/* Order Snapshot */}
             <div className="flex items-center gap-2 flex-wrap">
                 <span className={`px-2 py-0.5 text-[9px] font-mono font-bold border ${simSnapshot.side === 'buy'
-                    ? 'bg-bs-success/10 text-bs-success border-[#00e66b]/20'
-                    : 'bg-bs-error/10 text-bs-error border-[#ff285a]/20'
+                    ? 'bg-bs-buy/10 text-bs-buy border-bs-buy/20'
+                    : 'bg-bs-sell/10 text-bs-sell border-bs-sell/20'
                     }`}>
                     {simSnapshot.side.toUpperCase()}
                 </span>
@@ -231,7 +231,7 @@ const TradeSummaryPanel = React.memo(function TradeSummaryPanel({ simSnapshot, f
                                     <span className="text-[11px] font-mono font-bold text-bs-text-primary">
                                         1 : {rrRatio}
                                     </span>
-                                    <span className={`text-[9px] font-mono ${parseFloat(rrRatio) >= 1.5 ? 'text-bs-success' : parseFloat(rrRatio) >= 1 ? 'text-yellow-400' : 'text-bs-error'}`}>
+                                    <span className={`text-[9px] font-mono ${parseFloat(rrRatio) >= 1.5 ? 'text-bs-success' : parseFloat(rrRatio) >= 1 ? 'text-bs-warning' : 'text-bs-error'}`}>
                                         {parseFloat(rrRatio) >= 2 ? '✓ Favourable' : parseFloat(rrRatio) >= 1 ? '~ Neutral' : '✗ Unfavourable'}
                                     </span>
                                 </div>
@@ -282,8 +282,8 @@ const TradeSummaryPanel = React.memo(function TradeSummaryPanel({ simSnapshot, f
                             </p>
                         </div>
                     </div>
-                    <div className="bg-yellow-500/5 border border-yellow-500/10 px-2 py-1.5 rounded">
-                        <p className="text-[9px] font-mono text-yellow-400/70 leading-relaxed">
+                    <div className="bg-bs-warning/5 border border-bs-warning/10 px-2 py-1.5 rounded">
+                        <p className="text-[9px] font-mono text-bs-warning/70 leading-relaxed">
                             ⚠ Stop Loss does NOT rebuy the asset at a lower price. It <span className="font-bold">closes the position</span>. To re-enter, you must place a new order manually.
                         </p>
                     </div>

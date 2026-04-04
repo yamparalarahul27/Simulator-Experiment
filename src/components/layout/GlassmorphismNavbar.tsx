@@ -199,7 +199,7 @@ export const GlassmorphismNavbar = ({
     const getStatusColor = (variant: string) => {
         switch (variant) {
             case 'mainnet': return 'text-bs-brand-ts';
-            case 'mock': return 'text-yellow-500';
+            case 'mock': return 'text-bs-warning';
             case 'devnet':
             default: return 'text-bs-success';
         }

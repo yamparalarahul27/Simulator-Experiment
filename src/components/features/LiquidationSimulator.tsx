@@ -33,10 +33,10 @@ interface SimulationResult {
 type LiqStatus = 'safe' | 'ok' | 'warning' | 'negative' | 'liquidated';
 
 const STATUS_CONFIG: Record<LiqStatus, { color: string; bg: string; border: string; label: string; sublabel: string }> = {
-    safe: { color: 'text-bs-success', bg: 'bg-bs-success', border: 'border-[#00e66b]/30', label: 'Safe', sublabel: 'Position Open' },
-    ok: { color: 'text-bs-brand-ts', bg: 'bg-blue-500', border: 'border-[#69a2f1]/30', label: 'OK', sublabel: 'Position Open' },
-    warning: { color: 'text-yellow-400', bg: 'bg-yellow-500', border: 'border-yellow-500/30', label: 'Warning', sublabel: 'Near Liquidation' },
-    negative: { color: 'text-bs-error', bg: 'bg-bs-error', border: 'border-[#ff285a]/30', label: 'Negative', sublabel: 'About to Liquidate' },
+    safe: { color: 'text-bs-success', bg: 'bg-bs-success', border: 'border-bs-buy/30', label: 'Safe', sublabel: 'Position Open' },
+    ok: { color: 'text-bs-brand-ts', bg: 'bg-bs-info', border: 'border-bs-info/30', label: 'OK', sublabel: 'Position Open' },
+    warning: { color: 'text-bs-warning', bg: 'bg-bs-warning', border: 'border-bs-warning/30', label: 'Warning', sublabel: 'Near Liquidation' },
+    negative: { color: 'text-bs-error', bg: 'bg-bs-error', border: 'border-bs-sell/30', label: 'Negative', sublabel: 'About to Liquidate' },
     liquidated: { color: 'text-bs-text-tertiary', bg: 'bg-white/30', border: 'border-bs-border', label: 'Liquidated', sublabel: 'Liquidated' },
 };
 
@@ -286,9 +286,9 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                             max={100}
                             value={leverage}
                             onChange={e => setLeverage(parseInt(e.target.value))}
-                            className="w-full h-1.5 appearance-none bg-bs-card-fg rounded-lg cursor-pointer accent-[#00b3b3]
-                                [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-[#00e6e6] [&::-webkit-slider-thumb]:rounded-lg [&::-webkit-slider-thumb]:cursor-pointer
-                                [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:bg-[#00e6e6] [&::-moz-range-thumb]:rounded-lg [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer"
+                            className="w-full h-1.5 appearance-none bg-bs-card-fg rounded-lg cursor-pointer accent-bs-accent-cyan
+                                [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-bs-accent-cyan [&::-webkit-slider-thumb]:rounded-lg [&::-webkit-slider-thumb]:cursor-pointer
+                                [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:bg-bs-accent-cyan [&::-moz-range-thumb]:rounded-lg [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer"
                         />
                         <div className="flex justify-between text-[8px] font-mono text-bs-text-mute mt-0.5">
                             <span>1x</span>
@@ -329,7 +329,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                             <button
                                 onClick={() => setSide('long')}
                                 className={`py-2 text-xs font-mono font-bold transition-all ${side === 'long'
-                                    ? 'bg-bs-success/20 text-bs-success border-r border-[#00e66b]/30'
+                                    ? 'bg-bs-success/20 text-bs-success border-r border-bs-buy/30'
                                     : 'bg-bs-card text-bs-text-mute hover:bg-bs-card-fg border-r border-bs-border'
                                     }`}
                             >
@@ -352,8 +352,8 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                         onClick={runSimulation}
                         disabled={!xrpPrice || xrpPrice <= 0}
                         className="w-full flex items-center justify-center gap-2 py-3 text-sm font-mono font-bold
-                            bg-gradient-to-r from-[#00b3b3] to-[#00ffff] text-bs-text-primary
-                            hover:from-[#00e6e6] hover:to-[#00ffff]
+                            bg-bs-accent-cyan text-white
+                            hover:opacity-90
                             disabled:opacity-30 disabled:cursor-not-allowed
                             transition-all active:scale-[0.98]"
                     >
@@ -411,7 +411,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                             </div>
 
                             {/* Unrealized PnL */}
-                            <div className={`p-3 border ${results.pnl >= 0 ? 'border-[#00e66b]/20 bg-bs-success/5' : 'border-[#ff285a]/20 bg-bs-error/5'}`}>
+                            <div className={`p-3 border ${results.pnl >= 0 ? 'border-bs-buy/20 bg-bs-success/5' : 'border-bs-sell/20 bg-bs-error/5'}`}>
                                 <div className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider mb-1">Unrealized PnL</div>
                                 <div className={`text-lg font-mono font-bold ${results.pnl >= 0 ? 'text-bs-success' : 'text-bs-error'}`}>
                                     {results.pnl >= 0 ? '+' : ''}{fmt(results.pnl)}
@@ -514,10 +514,10 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                                     style={{ top: `${priceToPercent(simPrice)}%` }}
                                 >
                                     <div className={`w-5 h-5 border-2 ring-2 ring-black/50 ${results?.status === 'liquidated' ? 'bg-white/30 border-white/40' :
-                                        results?.status === 'negative' ? 'bg-bs-error border-red-400' :
-                                            results?.status === 'warning' ? 'bg-yellow-500 border-yellow-400' :
-                                                results?.status === 'ok' ? 'bg-blue-500 border-blue-400' :
-                                                    'bg-bs-success border-green-400'
+                                        results?.status === 'negative' ? 'bg-bs-error border-bs-sell' :
+                                            results?.status === 'warning' ? 'bg-bs-warning border-bs-warning' :
+                                                results?.status === 'ok' ? 'bg-bs-info border-bs-info' :
+                                                    'bg-bs-success border-bs-buy'
                                         } cursor-grab active:cursor-grabbing shadow-lg`} />
                                 </div>
 
@@ -579,7 +579,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                                         <span>Short positions are liquidated when price rises above the liquidation price.</span>
                                     </li>
                                     <li className="flex items-start gap-2">
-                                        <span className="text-yellow-400 mt-0.5">•</span>
+                                        <span className="text-bs-warning mt-0.5">•</span>
                                         <span>Maintenance margin rate determines the minimum margin to keep a position open.</span>
                                     </li>
                                 </ul>

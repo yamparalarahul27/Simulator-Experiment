@@ -222,7 +222,7 @@ export default function AnnotationModal({
                                                     <button
                                                         key={tag}
                                                         onClick={() => toggleTag(tag)}
-                                                        className="px-3 py-1 text-xs font-medium bg-[#69a2f1]/20 border border-blue-400 text-blue-300 transition-all"
+                                                        className="px-3 py-1 text-xs font-medium bg-bs-info/10 border border-bs-info text-bs-info transition-all"
                                                     >
                                                         {tag}
                                                     </button>
@@ -265,10 +265,10 @@ export default function AnnotationModal({
                                                     }
                                                 }}
                                                 placeholder="Add your thoughts, entry reasons, or emotional state..."
-                                                className="w-full h-28 rounded-lg border border-bs-border bg-bs-card px-4 py-3 text-bs-text-primary placeholder:text-bs-text-mute focus:border-bs-brand-tertiary/40 focus:outline-none focus:ring-1 focus:ring-[#00b3b3]/20 resize-none text-sm"
+                                                className="w-full h-28 rounded-lg border border-bs-border bg-bs-card px-4 py-3 text-bs-text-primary placeholder:text-bs-text-mute focus:border-bs-brand-tertiary/40 focus:outline-none focus:ring-1 focus:ring-bs-accent-cyan/20 resize-none text-sm"
                                             />
                                             <div className="flex justify-end text-[10px] font-mono">
-                                                <span className={`transition-colors ${remainingNoteChars < 50 ? 'text-yellow-400' : 'text-bs-text-mute'}`}>
+                                                <span className={`transition-colors ${remainingNoteChars < 50 ? 'text-bs-warning' : 'text-bs-text-mute'}`}>
                                                     {remainingNoteChars} / {MAX_NOTE_CHARS}
                                                 </span>
                                             </div>
@@ -316,7 +316,7 @@ export default function AnnotationModal({
                                     </div>
 
                                     {/* Subtle gradient overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-[#00b3b3]/5 to-transparent pointer-events-none"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-bs-accent-cyan/5 to-transparent pointer-events-none"></div>
                                 </div>
                             </motion.div>
                         </div>

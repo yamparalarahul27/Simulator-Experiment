@@ -43,9 +43,9 @@ const SpotTradeHistory = React.memo(function SpotTradeHistory({
 
     const statusBadge = (status: string) => {
         const colors: Record<string, string> = {
-            pending: 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20',
-            partial: 'text-bs-brand-ts bg-[#69a2f1]/10 border-blue-500/20',
-            filled: 'text-bs-success bg-bs-success/10 border-[#00e66b]/20',
+            pending: 'text-bs-warning bg-bs-warning/10 border-bs-warning/20',
+            partial: 'text-bs-brand-ts bg-bs-info/10 border-bs-info/20',
+            filled: 'text-bs-success bg-bs-success/10 border-bs-buy/20',
             cancelled: 'text-bs-text-mute bg-bs-card border-bs-border',
             triggered: 'text-bs-brand bg-bs-brand-tertiary/10 border-bs-brand-tertiary/20',
         };
@@ -258,7 +258,7 @@ const SpotTradeHistory = React.memo(function SpotTradeHistory({
                                                         : bal.available.toFixed(bal.available < 1 ? 6 : 2)
                                                     }
                                                 </td>
-                                                <td className="text-[10px] font-mono text-yellow-400/50 px-3 py-2.5 text-right">
+                                                <td className="text-[10px] font-mono text-bs-warning/50 px-3 py-2.5 text-right">
                                                     {bal.inOrder > 0 ? bal.inOrder.toFixed(bal.inOrder < 1 ? 6 : 2) : '—'}
                                                 </td>
                                                 <td className="text-[10px] font-mono text-bs-text-mute px-3 py-2.5 text-right">

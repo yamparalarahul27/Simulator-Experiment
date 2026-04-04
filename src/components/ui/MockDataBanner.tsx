@@ -26,7 +26,7 @@ export const MockDataBanner = ({
         <div className="mb- p-2 bg-bs-card rounded-lg px-4 py-2 backdrop-blur-sm">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                 <div>
-                    <h3 className="text-sm font-semibold text-yellow-500 mb-1">
+                    <h3 className="text-sm font-semibold text-bs-warning mb-1">
                         Mock Data Mode Active
                     </h3>
                     <p className="text-sm text-bs-text-secondary">
