@@ -279,7 +279,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                 )}
               </div>
               {walletAddress && (
-                <div className="text-sm text-blue-300 font-mono">
+                <div className="text-sm text-bs-info font-mono">
                   {walletName ? `${walletName} • ${shortAddress}` : shortAddress}
                 </div>
               )}
@@ -287,7 +287,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                 onClick={() => walletAddress && handleAddressSubmit(walletAddress, hasCachedData)}
                 disabled={!walletAddress || loading}
                 className={`px-6 py-3 text-bs-text-primary rounded-lg font-semibold transition disabled:opacity-50 
-                  ${hasCachedData ? 'bg-bs-card-fg hover:bg-bs-border border border-bs-border' : 'bg-[#69a2f1] hover:bg-[#69a2f1]/80'}`}
+                  ${hasCachedData ? 'bg-bs-card-fg hover:bg-bs-border border border-bs-border' : 'bg-bs-info hover:bg-bs-info/80'}`}
               >
                 {loading ? 'Running…' : walletAddress ? (hasCachedData ? 'Force Refresh' : 'Run Lookup') : 'Connect to Run'}
               </button>
@@ -309,7 +309,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
               >
                 Deriverse Trades
                 {deriverseTrades.length > 0 && (
-                  <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-[#69a2f1]/20 text-blue-300">
+                  <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-bs-info/10 text-bs-info">
                     {deriverseTrades.length}
                   </span>
                 )}
@@ -323,7 +323,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
               >
                 All Transactions
                 {transactions.length > 0 && (
-                  <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-[#69a2f1]/20 text-blue-300">
+                  <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-bs-info/10 text-bs-info">
                     {transactions.length}
                   </span>
                 )}
@@ -413,18 +413,18 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur-sm
-                                                ${tx.type.includes('Transfer') ? 'bg-[#69a2f1]/20 text-blue-300 border border-[#69a2f1]/30' :
+                                                ${tx.type.includes('Transfer') ? 'bg-bs-info/10 text-bs-info border border-bs-info/30' :
                                     tx.type.includes('Swap') ? 'bg-bs-brand-tertiary/20 text-bs-brand-secondary border border-bs-brand-tertiary/30' :
-                                      tx.type.includes('Deriverse') ? 'bg-bs-success/20 text-green-300 border border-[#00e66b]/30' :
-                                        'bg-bs-text-mute/20 text-bs-text-secondary border border-[#585e6c]/30'}`}>
+                                      tx.type.includes('Deriverse') ? 'bg-bs-success/20 text-bs-buy border border-bs-buy/30' :
+                                        'bg-bs-text-mute/20 text-bs-text-secondary border border-bs-border/30'}`}>
                                   {tx.type}
                                 </span>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm">
                                 <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur-sm
                                                ${tx.status === 'Confirmed'
-                                    ? 'bg-bs-success/20 text-green-300 border border-[#00e66b]/30'
-                                    : 'bg-bs-error/20 text-red-300 border border-[#ff285a]/30'}`}>
+                                    ? 'bg-bs-success/20 text-bs-buy border border-bs-buy/30'
+                                    : 'bg-bs-error/20 text-bs-sell border border-bs-sell/30'}`}>
                                   {tx.status}
                                 </span>
                               </td>
@@ -436,7 +436,7 @@ export default function TradeHistory({ onSwitchToRealData }: TradeHistoryProps =
                                   href={`https://solscan.io/tx/${tx.signature}?cluster=devnet`}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-bs-brand-ts hover:text-blue-300 transition-colors font-mono group-hover:underline"
+                                  className="text-bs-brand-ts hover:text-bs-info transition-colors font-mono group-hover:underline"
                                 >
                                   {tx.signature.slice(0, 8)}...{tx.signature.slice(-8)}
                                 </a>

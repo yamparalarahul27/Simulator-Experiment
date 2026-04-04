@@ -74,7 +74,7 @@ export default function TimeBasedPerformanceCard({
     return (
       <div className="bg-bs-bg/90 border border-bs-border p-3 rounded-lg shadow-xl backdrop-blur-md">
         <p className="text-bs-text-tertiary text-xs mb-1 font-mono">{viewMode === 'session' ? 'Session' : 'Hour'}: {label}</p>
-        <p className="text-sm font-mono font-bold" style={{ color: value >= 0 ? '#4ade80' : '#f87171' }}>
+        <p className="text-sm font-mono font-bold" style={{ color: value >= 0 ? 'var(--bs-chart-green)' : 'var(--bs-chart-red)' }}>
           PnL: {formatPnL(value)}
         </p>
       </div>
@@ -141,7 +141,7 @@ export default function TimeBasedPerformanceCard({
                   <Tooltip content={<CustomTooltip />} cursor={{ fill: 'var(--bs-bg-primary)' }} />
                   <Bar dataKey="pnl" radius={[0, 0, 0, 0]} isAnimationActive={false}>
                     {chartData.map((entry, idx) => (
-                      <Cell key={`cell-${idx}`} fill={entry.pnl >= 0 ? 'rgba(74, 222, 128, 0.8)' : 'rgba(248, 113, 113, 0.8)'} />
+                      <Cell key={`cell-${idx}`} fill={entry.pnl >= 0 ? 'var(--bs-chart-green)' : 'var(--bs-chart-red)'} />
                     ))}
                   </Bar>
                 </BarChart>

@@ -106,14 +106,14 @@ export const PnLChart: React.FC<PnLChartProps> = ({ data, height = 400, showDraw
                 >
                     <defs>
                         <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset={gradientOffset} stopColor="#4ade80" stopOpacity={0.1} />
-                            <stop offset={gradientOffset} stopColor="#4ade80" stopOpacity={0} />
-                            <stop offset={gradientOffset} stopColor="#fb923c" stopOpacity={0} />
-                            <stop offset={gradientOffset} stopColor="#fb923c" stopOpacity={0.1} />
+                            <stop offset={gradientOffset} stopColor="var(--bs-chart-green)" stopOpacity={0.1} />
+                            <stop offset={gradientOffset} stopColor="var(--bs-chart-green)" stopOpacity={0} />
+                            <stop offset={gradientOffset} stopColor="var(--bs-chart-red)" stopOpacity={0} />
+                            <stop offset={gradientOffset} stopColor="var(--bs-chart-red)" stopOpacity={0.1} />
                         </linearGradient>
                         <linearGradient id="splitStroke" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset={gradientOffset} stopColor="#4ade80" />
-                            <stop offset={gradientOffset} stopColor="#fb923c" />
+                            <stop offset={gradientOffset} stopColor="var(--bs-chart-green)" />
+                            <stop offset={gradientOffset} stopColor="var(--bs-chart-red)" />
                         </linearGradient>
                     </defs>
 
@@ -160,8 +160,8 @@ export const PnLChart: React.FC<PnLChartProps> = ({ data, height = 400, showDraw
                         <Area
                             type="monotone"
                             dataKey="drawdown"
-                            fill="rgba(248, 113, 113, 0.2)"
-                            stroke="rgba(248, 113, 113, 0.5)"
+                            fill="rgba(196, 48, 48, 0.2)"
+                            stroke="rgba(196, 48, 48, 0.5)"
                             strokeWidth={1}
                             isAnimationActive={true}
                             animationDuration={300}
@@ -173,7 +173,7 @@ export const PnLChart: React.FC<PnLChartProps> = ({ data, height = 400, showDraw
                         <Line
                             type="monotone"
                             dataKey="pnlToDrawdownRatio"
-                            stroke="#8b5cf6"
+                            stroke="var(--bs-brand)"
                             strokeWidth={2}
                             dot={false}
                             isAnimationActive={true}

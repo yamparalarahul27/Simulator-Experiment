@@ -67,12 +67,12 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
                     <p className="text-2xl font-semibold text-bs-text-primary font-mono"><NumberFlow value={totalFees} suffix=" USDC" format={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} transformTiming={{ duration: 400, easing: 'ease-out' }} />
                     </p>
                 </div>
-                <div className="rounded-lg bg-blue-600/10 backdrop-blur-xl flex flex-col justify-center md:col-span-1 p-4">
+                <div className="rounded-lg bg-bs-info/10 backdrop-blur-xl flex flex-col justify-center md:col-span-1 p-4">
                     {onSaveTrades && trades.length > 0 && currentWalletAddress ? (
                         <button
                             onClick={onSaveTrades}
                             disabled={savingTrades}
-                            className="px-4 py-2 bg-[#69a2f1] border border-bs-border text-bs-text-primary rounded-lg font-semibold hover:bg-[#69a2f1]/80 transition disabled:bg-blue-900/40 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
+                            className="px-4 py-2 bg-bs-info border border-bs-border text-white rounded-lg font-semibold hover:bg-bs-info/80 transition disabled:bg-bs-info/30 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
                         >
                             {savingTrades ? (
                                 <>
@@ -138,15 +138,15 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
                                             <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur-sm
                                       ${isPerp
                                                     ? 'bg-bs-brand-tertiary/20 text-bs-brand-secondary border border-bs-brand-tertiary/30'
-                                                    : 'bg-[#69a2f1]/20 text-blue-300 border border-[#69a2f1]/30'}`}>
+                                                    : 'bg-bs-info/20 text-bs-info border border-bs-info/30'}`}>
                                                 {isPerp ? 'Perpetual' : 'Spot'}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur-sm
                                       ${trade.side === 'buy' || trade.side === 'long'
-                                                    ? 'bg-bs-success/20 text-green-300 border border-[#00e66b]/30'
-                                                    : 'bg-bs-error/20 text-red-300 border border-[#ff285a]/30'}`}>
+                                                    ? 'bg-bs-buy/10 text-bs-buy border border-bs-buy/30'
+                                                    : 'bg-bs-sell/10 text-bs-sell border border-bs-sell/30'}`}>
                                                 {trade.side.toUpperCase()}
                                             </span>
                                         </td>
@@ -171,7 +171,7 @@ export default function DeriverseTradesTable({ trades, onSaveTrades, savingTrade
                                                 href={`https://solscan.io/tx/${trade.txSignature}?cluster=devnet`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="text-bs-brand-ts hover:text-blue-300 transition-colors font-mono group-hover:underline"
+                                                className="text-bs-brand-ts hover:text-bs-info transition-colors font-mono group-hover:underline"
                                             >
                                                 {trade.txSignature.slice(0, 8)}...{trade.txSignature.slice(-8)}
                                             </a>
