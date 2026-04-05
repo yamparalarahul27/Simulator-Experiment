@@ -4,8 +4,11 @@ import React, { useCallback, useRef, useState } from 'react';
 import { useRouter } from '@/i18n/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import { useAppearance } from '@/lib/context/AppearanceContext';
+import { useThemePreset } from '@/lib/context/ThemePresetContext';
 import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 import type { AppearancePreferences } from '@/services/SupabaseProfileService';
+import { PRESETS, PRESET_ORDER } from '@/lib/presets';
+import type { PresetId } from '@/lib/presets';
 import { cn } from '@/lib/utils';
 
 type BgMode = AppearancePreferences['bgType'];
@@ -15,6 +18,66 @@ const BG_MODES: { value: BgMode; label: string; icon: string }[] = [
     { value: 'custom', label: 'Upload', icon: '📁' },
     { value: 'color', label: 'Color', icon: '■' },
 ];
+
+function PresetSection() {
+    const { presetId, setPresetId } = useThemePreset();
+
+    return (
+        <section className="overflow-hidden rounded-2xl border border-bs-border bg-bs-card">
+            <header className="border-b border-bs-border px-5 py-4">
+                <h2 className="text-xl font-semibold text-bs-text-primary text-balance">Theme Preset</h2>
+                <p className="mt-1 text-sm text-bs-text-tertiary">Choose a color palette and texture for your workspace.</p>
+            </header>
+
+            <div className="px-5 py-5">
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+                    {PRESET_ORDER.map((id) => {
+                        const preset = PRESETS[id];
+                        const isActive = presetId === id;
+
+                        return (
+                            <button
+                                key={id}
+                                type="button"
+                                onClick={() => setPresetId(id as PresetId)}
+                                className={cn(
+                                    'group relative flex flex-col items-center gap-2 rounded-xl border p-3 transition-all',
+                                    isActive
+                                        ? 'border-bs-brand bg-bs-bg-primary ring-1 ring-bs-brand/20'
+                                        : 'border-bs-border bg-bs-card-fg hover:border-bs-border-active'
+                                )}
+                            >
+                                {/* Color swatches preview */}
+                                <div className="flex w-full gap-1 overflow-hidden rounded-lg">
+                                    {preset.swatches.map((color, i) =>
+                                        color ? (
+                                            <div
+                                                key={i}
+                                                className="h-6 flex-1"
+                                                style={{ backgroundColor: color }}
+                                            />
+                                        ) : null
+                                    )}
+                                </div>
+                                <span className={cn(
+                                    'text-xs font-medium',
+                                    isActive ? 'text-bs-brand' : 'text-bs-text-secondary'
+                                )}>
+                                    {preset.name}
+                                </span>
+                                {isActive && (
+                                    <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-bs-brand text-[10px] leading-none text-white">
+                                        ✓
+                                    </div>
+                                )}
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+        </section>
+    );
+}
 
 function AppearanceSection() {
     const { connected } = useWalletConnection();
@@ -264,6 +327,7 @@ export default function ProfileSettings() {
                 </p>
             </header>
 
+            <PresetSection />
             <AppearanceSection />
 
             <div className="flex justify-end">

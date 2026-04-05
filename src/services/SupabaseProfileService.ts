@@ -10,6 +10,7 @@ export interface AppearancePreferences {
     bgColor: string;
     overlayOpacity: number;
     blurAmount: number;
+    presetId?: string;
 }
 
 export interface UserPreferences {
