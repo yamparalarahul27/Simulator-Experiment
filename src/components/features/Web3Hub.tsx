@@ -1,7 +1,7 @@
 'use client';
 
 import type { LearningModule } from '@/lib/types';
-import { MODULES } from '@/lib/modules';
+import { useModules } from '@/lib/hooks/useContent';
 import { useRouter } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 
@@ -195,6 +195,7 @@ function PrinciplesSection() {
 
 export default function Web3Hub() {
     const router = useRouter();
+    const { data: modules = [] } = useModules();
 
     const navigateToModule = (slug: string) => {
         router.push(`/lessons/${slug}`);
@@ -207,9 +208,9 @@ export default function Web3Hub() {
         }
     };
 
-    const firstActiveModule = MODULES.find((module) => !module.comingSoon);
-    const activeModulesCount = MODULES.filter((module) => !module.comingSoon).length;
-    const totalLessons = MODULES.reduce((count, module) => count + module.lessons.length, 0);
+    const firstActiveModule = modules.find((module) => !module.comingSoon);
+    const activeModulesCount = modules.filter((module) => !module.comingSoon).length;
+    const totalLessons = modules.reduce((count, module) => count + module.lessons.length, 0);
 
     return (
         <div className="space-y-10 pb-4">
@@ -231,7 +232,7 @@ export default function Web3Hub() {
                     </p>
                 </div>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                    {MODULES.map((module) => (
+                    {modules.map((module) => (
                         <ModuleCard
                             key={module.moduleSlug}
                             module={module}
