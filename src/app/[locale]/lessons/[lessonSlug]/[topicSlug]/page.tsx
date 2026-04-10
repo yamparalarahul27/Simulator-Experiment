@@ -2,7 +2,7 @@
 
 import { use } from 'react';
 import { notFound } from 'next/navigation';
-import { MODULES } from '@/lib/modules';
+import { useModules } from '@/lib/hooks/useContent';
 import OrderTypeLesson from '@/components/features/lessons/OrderTypeLesson';
 import { useRouter } from '@/i18n/navigation';
 
@@ -13,7 +13,8 @@ export default function TopicPage({
 }) {
     const { lessonSlug, topicSlug } = use(params);
     const router = useRouter();
-    const module = MODULES.find(m => m.moduleSlug === lessonSlug);
+    const { data: modules = [] } = useModules();
+    const module = modules.find(m => m.moduleSlug === lessonSlug);
 
     if (!module || module.comingSoon) {
         notFound();
