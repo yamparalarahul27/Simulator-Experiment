@@ -52,9 +52,9 @@ const AnimatedCell = memo(function AnimatedCell({
             className={`${className} transition-colors duration-300`}
             style={{
                 backgroundColor: flash === 'up'
-                    ? 'rgba(0, 230, 107, 0.15)'
+                    ? 'rgba(26, 122, 58, 0.15)'
                     : flash === 'down'
-                    ? 'rgba(255, 40, 90, 0.15)'
+                    ? 'rgba(196, 43, 58, 0.15)'
                     : 'transparent',
             }}
         >
@@ -242,8 +242,8 @@ function DepthChart({ orderBook }: { orderBook: OrderBookData }) {
         <div className="border border-bs-border bg-bs-bg p-4">
             <p className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider mb-2">Depth Chart</p>
             <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-auto" preserveAspectRatio="none">
-                <path d={bidPath} fill="rgba(0,230,107,0.15)" stroke="var(--bs-success)" strokeWidth="1.5" />
-                <path d={askPath} fill="rgba(255,40,90,0.15)" stroke="var(--bs-error)" strokeWidth="1.5" />
+                <path d={bidPath} fill="rgba(26,122,58,0.15)" stroke="var(--bs-success)" strokeWidth="1.5" />
+                <path d={askPath} fill="rgba(196,43,58,0.15)" stroke="var(--bs-error)" strokeWidth="1.5" />
                 <line
                     x1={px((bids[0].price + asks[0].price) / 2)}
                     y1={0}

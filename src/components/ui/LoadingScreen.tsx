@@ -32,6 +32,10 @@ export default function LoadingScreen() {
         if (isVisible) {
             document.body.style.overflow = 'hidden';
         } else {
+            // Hide the static splash overlay from layout.tsx
+            const staticOverlay = document.getElementById('splash-overlay');
+            if (staticOverlay) staticOverlay.style.display = 'none';
+
             const bufferTimer = setTimeout(() => {
                 document.body.style.overflow = '';
             }, 800);
@@ -81,14 +85,6 @@ export default function LoadingScreen() {
                                 WebkitMaskPosition: 'center',
                             }}
                         />
-                        <motion.p
-                            className="text-sm font-mono uppercase tracking-[0.3em] text-bs-text-tertiary"
-                            initial={{ opacity: 0, y: 8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-                        >
-                            Solving Y of DEX
-                        </motion.p>
                     </motion.div>
                 </motion.div>
             )}

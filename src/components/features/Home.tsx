@@ -8,6 +8,7 @@ import TopBar from './TopBar';
 import InfoTooltip from '../ui/InfoTooltip';
 import LargestTradesCard from './LargestTradesCard';
 import MockDataBanner from '../ui/MockDataBanner';
+import HotDexTokensPanel from './HotDexTokensPanel';
 import { MOCK_TRADES, calculateFeeBreakdown } from '../../lib/mockData';
 
 // Dynamic Imports for Heavy Components
@@ -296,6 +297,7 @@ export default function Home({ network = 'mock', analyzingWallet, onNavigateToLo
           onSelectedPairsChange={setDraftSelectedPairs}
           onApply={handleApplyFilters}
         />
+        <HotDexTokensPanel limit={6} />
         {network === 'mock' && (
           <MockDataBanner onFetchTrades={onNavigateToLookup} />
         )}

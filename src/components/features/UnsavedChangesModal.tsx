@@ -53,7 +53,7 @@ export default function UnsavedChangesModal({
                                 <div className="relative z-10 p-6">
                                     {/* Icon */}
                                     <div className="mb-4 flex justify-center">
-                                        <div className="rounded-full bg-[#69a2f1]/10 p-3">
+                                        <div className="rounded-full bg-bs-info/10 p-3">
                                             <svg
                                                 className="h-6 w-6 text-bs-brand-ts"
                                                 fill="none"
@@ -96,7 +96,7 @@ export default function UnsavedChangesModal({
                                         </button>
                                         <button
                                             onClick={onSave}
-                                            className="flex-1 rounded-lg bg-blue-500 px-4 py-2.5 text-sm font-medium text-bs-text-primary transition-opacity hover:opacity-90"
+                                            className="flex-1 rounded-lg bg-bs-info px-4 py-2.5 text-sm font-medium text-bs-text-primary transition-opacity hover:opacity-90"
                                         >
                                             Save
                                         </button>
@@ -104,7 +104,7 @@ export default function UnsavedChangesModal({
                                 </div>
 
                                 {/* Subtle gradient overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#00b3b3]/5 to-transparent pointer-events-none"></div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-bs-accent-cyan/5 to-transparent pointer-events-none"></div>
                             </div>
                         </motion.div>
                     </div>

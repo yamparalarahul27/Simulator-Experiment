@@ -42,7 +42,7 @@ export default function ControlPanel({ isOpen, onClose, trade }: ControlPanelPro
                         <h4 className="text-label-12 text-bs-text-tertiary uppercase tracking-wider">Price Control</h4>
                         <button
                             onClick={resetAllOverrides}
-                            className="flex items-center gap-1 text-[10px] font-mono text-yellow-400 hover:text-yellow-300 transition-colors"
+                            className="flex items-center gap-1 text-[10px] font-mono text-bs-warning hover:text-bs-warning/80 transition-colors"
                         >
                             <RefreshCw size={10} />
                             Reset All
@@ -68,7 +68,7 @@ export default function ControlPanel({ isOpen, onClose, trade }: ControlPanelPro
                                                 <Wifi size={10} className="text-bs-success" />
                                             )}
                                         </div>
-                                        <span className={`text-xs font-mono ${isOverridden ? 'text-yellow-400' : 'text-bs-text-tertiary'}`}>
+                                        <span className={`text-xs font-mono ${isOverridden ? 'text-bs-warning' : 'text-bs-text-tertiary'}`}>
                                             ${currentPrice > 1000
                                                 ? currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
                                                 : currentPrice < 0.01
@@ -114,7 +114,7 @@ export default function ControlPanel({ isOpen, onClose, trade }: ControlPanelPro
                                     </div>
 
                                     {isOverridden && (
-                                        <div className="mt-1.5 text-[9px] font-mono text-yellow-400/70">
+                                        <div className="mt-1.5 text-[9px] font-mono text-bs-warning/70">
                                             ⚡ WebSocket disabled — using manual price
                                         </div>
                                     )}

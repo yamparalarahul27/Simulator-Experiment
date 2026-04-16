@@ -1,70 +1,13 @@
+'use client';
+
 import { cn } from '@/lib/utils';
-
-const phases = [
-    {
-        title: 'Phase 0 — Foundation',
-        status: 'done' as const,
-        subtitle: 'Analytics, Journal, Wallet Lookup',
-        items: [
-            'Trading analytics dashboard with PnL, drawdown, session performance, and fee distribution',
-            'Trade journal with annotations, tags, and streak tracking',
-            'Wallet lookup via Helius RPC plus Deriverse parsing',
-            'Mock and devnet data modes',
-            'Supabase cloud persistence',
-            'Initial product shell and navigation framework',
-        ],
-    },
-    {
-        title: 'Phase 1 — Education Engine',
-        status: 'done' as const,
-        subtitle: 'Spot Simulator, Order Flow, Liquidation',
-        items: [
-            'Spot simulator with eight core order types',
-            'Interactive order-flow visualizer with state-machine diagrams',
-            'Price-scale slider with TP and SL simulation',
-            'Liquidation simulator with visual margin context',
-            'Live price feeds with WebSocket plus REST fallback',
-            'Trade summary panel with risk and reward framing',
-            'AI assistant integration',
-        ],
-    },
-    {
-        title: 'Phase 2 — Expand & Polish',
-        status: 'next' as const,
-        subtitle: 'More concepts, more DEXes, mainnet',
-        items: [
-            'Funding-rate interactive explainer',
-            'Leverage mechanics visual explainer',
-            'Slippage and price-impact simulator',
-            'Multi-DEX integration across major Solana venues',
-            'Mainnet wallet support',
-            'Wallet-based account model',
-            'Mobile-optimized learning flows',
-            'Position-level PnL grouping',
-        ],
-    },
-    {
-        title: 'Phase 3 — Execute & Scale',
-        status: 'future' as const,
-        subtitle: 'From simulation to real trading',
-        items: [
-            'Paper trading against real market conditions',
-            'Live trade execution through aggregator routing',
-            'Multi-wallet portfolio aggregation',
-            'Real-time portfolio and unrealized PnL tracking',
-            'Push notifications and actionable alerts',
-            'Social and collaborative learning features',
-        ],
-    },
-] as const;
-
-const statusCopy = {
-    done: 'Complete',
-    next: 'Up Next',
-    future: 'Planned',
-} as const;
+import { useRoadmap } from '@/lib/hooks/useContent';
+import { STATUS_COPY } from '@/lib/fallbacks/roadmap';
+import type { RoadmapStatus } from '@/lib/types';
 
 export default function RoadmapScreen() {
+    const { data: phases = [] } = useRoadmap();
+
     return (
         <section className="mx-auto flex max-w-6xl flex-col gap-8">
             <header className="rounded-2xl border border-bs-border bg-bs-card px-5 py-7 md:px-6">
@@ -103,7 +46,7 @@ export default function RoadmapScreen() {
                                     phase.status === 'future' && 'border-bs-border bg-bs-card-fg text-bs-text-secondary'
                                 )}
                             >
-                                {statusCopy[phase.status]}
+                                {STATUS_COPY[phase.status as RoadmapStatus] ?? phase.status}
                             </span>
                         </div>
 

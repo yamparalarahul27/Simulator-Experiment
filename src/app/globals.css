@@ -22,38 +22,48 @@
   --bs-bg: #f0ebe3;
   --bs-card: #f9f5ee;
   --bs-card-fg: #eee8dc;
-  --bs-border: #d9d0c1;
-  --bs-border-active: rgba(139, 105, 20, 0.3);
-  --bs-bg-primary: rgba(139, 105, 20, 0.06);
+  --bs-border: #8d877d;
+  --bs-border-subtle: #d9d0c1;
+  --bs-border-active: rgba(134, 101, 19, 0.3);
+  --bs-bg-primary: rgba(134, 101, 19, 0.06);
 
   --bs-text-primary: #2c2416;
   --bs-text-secondary: #4a3f32;
-  --bs-text-tertiary: #7a6f60;
-  --bs-text-mute: #a89e8f;
+  --bs-text-tertiary: #73695b;
+  --bs-text-mute: #70695f;
 
-  --bs-brand: #8b6914;
-  --bs-brand-secondary: #a47d1a;
+  --bs-brand: #866513;
+  --bs-brand-secondary: #866615;
   --bs-brand-tertiary: #725610;
   --bs-brand-anchor: #3d5a2d;
-  --bs-brand-rust: #b0693a;
-  --bs-brand-ts: #4a6fa5;
+  --bs-brand-rust: #995b32;
+  --bs-brand-ts: #476ba0;
 
-  --bs-success: #4a7c59;
+  --bs-success: #457453;
   --bs-error: #a63d2f;
+
+  /* Semantic accent colors — WCAG AA on cream */
+  --bs-buy: #1a7a3a;
+  --bs-sell: #c42b3a;
+  --bs-info: #2d6ab4;
+  --bs-accent-cyan: #097575;
+  --bs-warning: #8a6207;
+  --bs-chart-green: #267842;
+  --bs-chart-red: #c43030;
 
   /* Legacy Deriverse tokens mapped to Paper */
   --ds-primary: #725610;
-  --ds-secondary: #a47d1a;
-  --ds-accent: #8b6914;
-  --ds-gradient-mid: #a47d1a;
+  --ds-secondary: #866615;
+  --ds-accent: #866513;
+  --ds-gradient-mid: #866615;
 
   --ds-bg-dark: #f0ebe3;
   --ds-bg-light: #4a3f32;
-  --ds-border: #d9d0c1;
+  --ds-border: #8d877d;
 
   --ds-text-primary: #2c2416;
   --ds-text-dark: #2c2416;
-  --ds-text-muted: #a89e8f;
+  --ds-text-muted: #70695f;
 
   --radius: 0.625rem;
 
@@ -73,21 +83,21 @@
   --secondary-foreground: #2c2416;
 
   --muted: #eee8dc;
-  --muted-foreground: #7a6f60;
+  --muted-foreground: #73695b;
 
   --accent: #eee8dc;
   --accent-foreground: #2c2416;
 
   --destructive: #a63d2f;
 
-  --border: #d9d0c1;
-  --input: #d9d0c1;
-  --ring: #a89e8f;
+  --border: #8d877d;
+  --input: #8d877d;
+  --ring: #70695f;
 
-  --chart-1: #8b6914;
-  --chart-2: #4a7c59;
-  --chart-3: #4a6fa5;
-  --chart-4: #b0693a;
+  --chart-1: #866513;
+  --chart-2: #457453;
+  --chart-3: #476ba0;
+  --chart-4: #995b32;
   --chart-5: #a63d2f;
 
   --sidebar: #f9f5ee;
@@ -96,8 +106,8 @@
   --sidebar-primary-foreground: #f9f5ee;
   --sidebar-accent: #eee8dc;
   --sidebar-accent-foreground: #2c2416;
-  --sidebar-border: #d9d0c1;
-  --sidebar-ring: #a89e8f;
+  --sidebar-border: #8d877d;
+  --sidebar-ring: #70695f;
 
   /* Paper texture variables */
   --paper-grain-opacity: 0.4;
@@ -124,6 +134,14 @@
   --color-bs-brand-tertiary: var(--bs-brand-tertiary);
   --color-bs-success: var(--bs-success);
   --color-bs-error: var(--bs-error);
+  --color-bs-border-subtle: var(--bs-border-subtle);
+  --color-bs-buy: var(--bs-buy);
+  --color-bs-sell: var(--bs-sell);
+  --color-bs-info: var(--bs-info);
+  --color-bs-accent-cyan: var(--bs-accent-cyan);
+  --color-bs-warning: var(--bs-warning);
+  --color-bs-chart-green: var(--bs-chart-green);
+  --color-bs-chart-red: var(--bs-chart-red);
 
   /* Legacy Deriverse tokens */
   --color-primary: var(--ds-primary);

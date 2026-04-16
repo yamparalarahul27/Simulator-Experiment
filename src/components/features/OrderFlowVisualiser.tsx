@@ -548,11 +548,11 @@ export function computeKnobColor(snap: SimConfig | null, simPrice: number, maxEx
     if (!snap) return 'bg-bs-border border-white/30';
     const { activeIds } = computeActiveNode(snap, simPrice, maxExtremum, sessionMin, sessionMax, postFillMin, postFillMax);
 
-    if (activeIds.includes('tp_filled')) return 'bg-emerald-400 border-emerald-300';
-    if (activeIds.includes('sl_filled')) return 'bg-bs-error border-red-400';
-    if (activeIds.includes('filled') || activeIds.includes('limit_filled') || activeIds.includes('stop_filled')) return 'bg-bs-success border-green-400';
-    if (activeIds.some(id => id === 'cancel')) return 'bg-bs-text-mute border-gray-500';
-    return 'bg-blue-500 border-blue-400';
+    if (activeIds.includes('tp_filled')) return 'bg-bs-buy border-bs-success';
+    if (activeIds.includes('sl_filled')) return 'bg-bs-error border-bs-sell';
+    if (activeIds.includes('filled') || activeIds.includes('limit_filled') || activeIds.includes('stop_filled')) return 'bg-bs-success border-bs-buy';
+    if (activeIds.some(id => id === 'cancel')) return 'bg-bs-text-mute border-bs-border';
+    return 'bg-bs-info border-bs-brand-ts';
 }
 
 // ─── Layout ────────────────────────────────────────────────────────────────────
@@ -652,25 +652,25 @@ function bezierMid(e: LayoutEdge): { x: number; y: number } {
 // ─── Colours ───────────────────────────────────────────────────────────────────
 
 const NODE_STYLE: Record<NodeKind, { fill: string; activeFill: string; stroke: string; text: string; sub: string }> = {
-    start: { fill: 'rgba(139,92,246,0.15)', activeFill: 'rgba(139,92,246,0.40)', stroke: 'rgba(139,92,246,0.80)', text: '#c4b5fd', sub: 'rgba(196,181,253,0.55)' },
-    state: { fill: 'var(--bs-bg-primary)', activeFill: 'rgba(0,180,170,0.14)', stroke: 'var(--bs-brand-tertiary)', text: 'var(--bs-text-secondary)', sub: 'var(--bs-text-mute)' },
-    terminal: { fill: 'rgba(34,197,94,0.12)', activeFill: 'rgba(34,197,94,0.38)', stroke: 'rgba(34,197,94,0.75)', text: '#86efac', sub: 'rgba(134,239,172,0.55)' },
-    tp: { fill: 'rgba(34,197,94,0.10)', activeFill: 'rgba(34,197,94,0.34)', stroke: 'rgba(34,197,94,0.70)', text: '#4ade80', sub: 'rgba(74,222,128,0.55)' },
-    sl: { fill: 'rgba(239,68,68,0.10)', activeFill: 'rgba(239,68,68,0.32)', stroke: 'rgba(239,68,68,0.70)', text: '#f87171', sub: 'rgba(248,113,113,0.55)' },
-    cancel: { fill: 'rgba(107,114,128,0.05)', activeFill: 'rgba(107,114,128,0.12)', stroke: 'rgba(107,114,128,0.35)', text: 'var(--bs-text-mute)', sub: 'rgba(107,114,128,0.45)' },
+    start: { fill: 'rgba(114,86,16,0.12)', activeFill: 'rgba(114,86,16,0.30)', stroke: 'rgba(114,86,16,0.70)', text: 'var(--bs-brand)', sub: 'var(--bs-brand-secondary)' },
+    state: { fill: 'var(--bs-bg-primary)', activeFill: 'rgba(9,117,117,0.12)', stroke: 'var(--bs-brand-tertiary)', text: 'var(--bs-text-secondary)', sub: 'var(--bs-text-mute)' },
+    terminal: { fill: 'rgba(26,122,58,0.10)', activeFill: 'rgba(26,122,58,0.28)', stroke: 'rgba(26,122,58,0.65)', text: 'var(--bs-buy)', sub: 'var(--bs-success)' },
+    tp: { fill: 'rgba(38,120,66,0.10)', activeFill: 'rgba(38,120,66,0.28)', stroke: 'rgba(38,120,66,0.65)', text: 'var(--bs-chart-green)', sub: 'var(--bs-success)' },
+    sl: { fill: 'rgba(196,48,48,0.10)', activeFill: 'rgba(196,48,48,0.28)', stroke: 'rgba(196,48,48,0.65)', text: 'var(--bs-chart-red)', sub: 'var(--bs-error)' },
+    cancel: { fill: 'rgba(112,105,95,0.05)', activeFill: 'rgba(112,105,95,0.12)', stroke: 'rgba(112,105,95,0.35)', text: 'var(--bs-text-mute)', sub: 'rgba(112,105,95,0.45)' },
 };
 
 function resolveNodeStyle(kind: NodeKind, side: 'buy' | 'sell') {
     if (side === 'sell' && kind === 'terminal') {
-        return { fill: 'rgba(239,68,68,0.12)', activeFill: 'rgba(239,68,68,0.38)', stroke: 'rgba(239,68,68,0.75)', text: '#fca5a5', sub: 'rgba(252,165,165,0.55)' };
+        return { fill: 'rgba(196,48,48,0.10)', activeFill: 'rgba(196,48,48,0.28)', stroke: 'rgba(196,48,48,0.65)', text: 'var(--bs-sell)', sub: 'var(--bs-error)' };
     }
     return NODE_STYLE[kind];
 }
 
 const EDGE_STROKE: Record<EdgeColor, string> = {
     neutral: 'var(--bs-text-mute)',
-    tp: 'rgba(74,222,128,0.65)',
-    sl: 'rgba(248,113,113,0.65)',
+    tp: 'rgba(38,120,66,0.65)',
+    sl: 'rgba(196,48,48,0.65)',
 };
 
 // ─── SVG Sub-components ────────────────────────────────────────────────────────
@@ -963,11 +963,11 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
                     {ORDER_TYPE_LABELS[orderType]}
                 </span>
                 {side === 'buy'
-                    ? <span className="px-2 py-0.5 text-[9px] font-mono font-bold bg-bs-success/10 text-bs-success border border-[#00e66b]/20">BUY</span>
-                    : <span className="px-2 py-0.5 text-[9px] font-mono font-bold bg-bs-error/10 text-bs-error border border-[#ff285a]/20">SELL</span>
+                    ? <span className="px-2 py-0.5 text-[9px] font-mono font-bold bg-bs-success/10 text-bs-success border border-bs-buy/20">BUY</span>
+                    : <span className="px-2 py-0.5 text-[9px] font-mono font-bold bg-bs-error/10 text-bs-error border border-bs-sell/20">SELL</span>
                 }
-                {tpEnabled && <span className="px-1.5 py-0.5 text-[9px] font-mono bg-bs-success/8 text-bs-success/70 border border-[#00e66b]/15">TP</span>}
-                {slEnabled && <span className="px-1.5 py-0.5 text-[9px] font-mono bg-bs-error/8 text-bs-error/70 border border-[#ff285a]/15">SL</span>}
+                {tpEnabled && <span className="px-1.5 py-0.5 text-[9px] font-mono bg-bs-success/8 text-bs-success/70 border border-bs-buy/15">TP</span>}
+                {slEnabled && <span className="px-1.5 py-0.5 text-[9px] font-mono bg-bs-error/8 text-bs-error/70 border border-bs-sell/15">SL</span>}
                 {simSnapshot && (
                     <span className="px-2 py-0.5 text-[9px] font-mono bg-bs-brand-tertiary/10 text-bs-brand/70 border border-bs-brand-tertiary/15">
                         SIM RUNNING
@@ -1008,10 +1008,10 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
                                 <path d="M0,0 L0,6 L7,3 z" fill="var(--bs-text-mute)" />
                             </marker>
                             <marker id="arr-tp" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
-                                <path d="M0,0 L0,6 L7,3 z" fill="rgba(74,222,128,0.75)" />
+                                <path d="M0,0 L0,6 L7,3 z" fill="var(--bs-chart-green)" />
                             </marker>
                             <marker id="arr-sl" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
-                                <path d="M0,0 L0,6 L7,3 z" fill="rgba(248,113,113,0.75)" />
+                                <path d="M0,0 L0,6 L7,3 z" fill="var(--bs-chart-red)" />
                             </marker>
                             <marker id="arr-dashed" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
                                 <path d="M0,0 L0,6 L7,3 z" fill="var(--bs-text-mute)" />
@@ -1032,7 +1032,7 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
 
             {/* Flow Done Banner */}
             {isFlowDone && (
-                <div className="flex items-center justify-center gap-2 py-2 mt-1 border border-[#00e66b]/15 bg-bs-success/5">
+                <div className="flex items-center justify-center gap-2 py-2 mt-1 border border-bs-buy/15 bg-bs-success/5">
                     <span className="text-[10px] font-mono text-bs-success/70">Order flow complete</span>
                     <span className="text-[10px] font-mono text-bs-text-mute">—</span>
                     <span className="text-[10px] font-mono text-bs-text-mute">Re-run Simulation to replay</span>
@@ -1042,11 +1042,11 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
             {/* Legend */}
             <div className="flex items-center gap-3 mt-3 pt-2 border-t border-bs-border flex-wrap">
                 {([
-                    { color: 'rgba(139,92,246,0.55)', label: 'Start' },
+                    { color: 'var(--bs-brand)', label: 'Start' },
                     { color: 'var(--bs-text-mute)', label: 'State' },
-                    { color: 'rgba(34,197,94,0.45)', label: 'Filled' },
-                    { color: 'rgba(74,222,128,0.5)', label: 'TP' },
-                    { color: 'rgba(248,113,113,0.5)', label: 'SL' },
+                    { color: 'var(--bs-success)', label: 'Filled' },
+                    { color: 'var(--bs-chart-green)', label: 'TP' },
+                    { color: 'var(--bs-chart-red)', label: 'SL' },
                     { color: 'var(--bs-border)', label: 'Cancelled' },
                 ] as { color: string; label: string }[]).map(({ color, label }) => (
                     <div key={label} className="flex items-center gap-1">
@@ -1056,7 +1056,7 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
                 ))}
                 <div className="flex items-center gap-3 ml-2">
                     <div className="flex items-center gap-1">
-                        <div className="w-3 h-3 rounded-sm border-2 bg-blue-500/30 border-blue-400/60 flex-shrink-0" />
+                        <div className="w-3 h-3 rounded-sm border-2 bg-bs-info/30 border-bs-info/60 flex-shrink-0" />
                         <span className="text-[8px] font-mono text-bs-text-mute">Active</span>
                     </div>
                     <div className="flex items-center gap-1">

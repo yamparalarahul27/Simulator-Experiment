@@ -4,47 +4,18 @@ import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Check, Copy, QrCode, X } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
+import { useFAQ } from '@/lib/hooks/useContent';
 
 const TELEGRAM_URL = 'https://t.me/yamparalarahul1';
 const QR_IMAGE_SRC = '/assets/QR_image.png';
-
-const FAQ_ITEMS = [
-    {
-        value: 'wallets',
-        title: 'How do I switch between wallets?',
-        body: 'Use the network selector in the navbar. You can connect multiple wallets and move between mock, devnet, or mainnet contexts while keeping your journal flow intact.',
-    },
-    {
-        value: 'missing-trades',
-        title: 'My trades are missing. What should I do?',
-        body: 'Start with a re-sync from Trade History. If trades are still missing, import your CSV export and YDEX will normalize the records for analysis.',
-    },
-    {
-        value: 'collaboration',
-        title: 'Can I collaborate with teammates?',
-        body: 'Shared workspaces are on the roadmap. For now, share exported snapshots or use read-only views for reviews.',
-    },
-] as const;
-
-const SUPPORT_PATHS = [
-    {
-        title: 'Quick Answers',
-        description: 'Resolve common issues in seconds from FAQs and known fixes.',
-    },
-    {
-        title: 'Guided Recovery',
-        description: 'Get practical steps for sync, wallet, and simulator troubleshooting.',
-    },
-    {
-        title: 'Direct Support',
-        description: 'Reach out to Rahul directly when you need tailored help.',
-    },
-] as const;
 
 export default function HelpScreen() {
     const [copied, setCopied] = useState(false);
     const [isQrOpen, setIsQrOpen] = useState(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const { data } = useFAQ();
+    const faqItems = data?.faq ?? [];
+    const supportPaths = data?.supportPaths ?? [];
 
     const handleCopy = useCallback(async () => {
         try {
@@ -80,7 +51,7 @@ export default function HelpScreen() {
             </header>
 
             <section className="grid gap-4 md:grid-cols-3">
-                {SUPPORT_PATHS.map((path) => (
+                {supportPaths.map((path) => (
                     <article key={path.title} className="rounded-2xl border border-bs-border bg-bs-card px-5 py-6">
                         <h2 className="text-lg font-semibold text-bs-text-primary text-balance">{path.title}</h2>
                         <p className="mt-2 text-sm text-bs-text-secondary text-pretty">{path.description}</p>
@@ -93,7 +64,7 @@ export default function HelpScreen() {
                     <h2 className="text-xl font-semibold text-bs-text-primary text-balance">Frequently asked questions</h2>
                 </div>
                 <Accordion type="single" collapsible defaultValue="wallets" className="px-4 pb-2 pt-1">
-                    {FAQ_ITEMS.map((item) => (
+                    {faqItems.map((item) => (
                         <AccordionItem key={item.value} value={item.value} className="border-bs-border px-1">
                             <AccordionTrigger className="text-left text-base text-bs-text-primary">
                                 {item.title}
