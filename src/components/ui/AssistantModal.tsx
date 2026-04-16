@@ -104,7 +104,7 @@ export default function AssistantModal() {
             {/* Floating AI Button */}
             <button
                 onClick={() => setIsOpen(true)}
-                className={`fixed bottom-24 left-6 z-50 flex items-center justify-center w-14 h-14 rounded-full border border-bs-brand-tertiary/60 shadow-lg shadow-[#00b3b3]/20 text-bs-text-primary transition-all duration-300 hover:scale-110 active:scale-95 ${isOpen ? "hidden" : ""}`}
+                className={`fixed bottom-24 left-6 z-50 flex items-center justify-center w-14 h-14 rounded-full border border-bs-border bg-bs-card shadow-lg text-bs-text-primary transition-all duration-300 hover:scale-110 active:scale-95 ${isOpen ? "hidden" : ""}`}
             >
                 <Telescope className="w-6 h-6" />
             </button>
@@ -129,7 +129,7 @@ export default function AssistantModal() {
                         className="fixed z-[70]
                             inset-x-0 bottom-0 max-h-[85vh] max-w-[100vw] overflow-x-hidden rounded-t-2xl
                             md:inset-x-auto md:bottom-auto md:top-0 md:right-0 md:max-h-none md:max-w-none md:h-full md:w-[420px] md:rounded-none
-                            bg-[#0B0E14]/95 backdrop-blur-xl border-t border-bs-border md:border-t-0 md:border-l
+                            bg-bs-card/95 backdrop-blur-xl border-t border-bs-border md:border-t-0 md:border-l
                             flex flex-col shadow-2xl shadow-black/50"
                         initial={isDesktop ? { x: "100%", y: 0 } : { y: "100%", x: 0 }}
                         animate={{ x: 0, y: 0 }}
@@ -173,7 +173,7 @@ export default function AssistantModal() {
                                         <div
                                             className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center mt-1 ${
                                                 message.role === "user"
-                                                    ? "bg-[#69a2f1]/20 text-bs-brand-ts border border-[#69a2f1]/30"
+                                                    ? "bg-bs-info/20 text-bs-brand-ts border border-bs-info/30"
                                                     : "bg-bs-brand-tertiary/20 text-bs-brand border border-bs-brand-tertiary/30"
                                             }`}
                                         >
@@ -187,7 +187,7 @@ export default function AssistantModal() {
                                         <div
                                             className={`px-3.5 py-2.5 text-sm leading-relaxed ${
                                                 message.role === "user"
-                                                    ? "bg-[#69a2f1] text-bs-text-primary"
+                                                    ? "bg-bs-info text-bs-text-primary"
                                                     : "bg-bs-card border border-bs-border text-bs-text-secondary whitespace-pre-wrap"
                                             }`}
                                         >
@@ -204,9 +204,9 @@ export default function AssistantModal() {
                                             <Telescope className="w-3.5 h-3.5" />
                                         </div>
                                         <div className="px-4 py-3 border border-bs-border bg-bs-card flex items-center gap-1.5">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-[#00e6e6] animate-bounce" style={{ animationDelay: "0ms" }} />
-                                            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "150ms" }} />
-                                            <span className="w-1.5 h-1.5 rounded-full bg-[#00e6e6] animate-bounce" style={{ animationDelay: "300ms" }} />
+                                            <span className="w-1.5 h-1.5 rounded-full bg-bs-accent-cyan animate-bounce" style={{ animationDelay: "0ms" }} />
+                                            <span className="w-1.5 h-1.5 rounded-full bg-bs-info animate-bounce" style={{ animationDelay: "150ms" }} />
+                                            <span className="w-1.5 h-1.5 rounded-full bg-bs-accent-cyan animate-bounce" style={{ animationDelay: "300ms" }} />
                                         </div>
                                     </div>
                                 </div>
@@ -229,7 +229,7 @@ export default function AssistantModal() {
                                 <button
                                     type="submit"
                                     disabled={!input.trim() || isLoading}
-                                    className="shrink-0 p-3 bg-gradient-to-r from-[#00b3b3] to-[#00ffff] text-bs-text-primary hover:scale-105 active:scale-95 disabled:opacity-30 transition-all duration-200"
+                                    className="shrink-0 p-3 bg-bs-accent-cyan text-white hover:opacity-90 hover:scale-105 active:scale-95 disabled:opacity-30 transition-all duration-200"
                                 >
                                     <Send className="w-4 h-4" />
                                 </button>

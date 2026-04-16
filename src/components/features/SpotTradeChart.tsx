@@ -69,8 +69,8 @@ const SpotTradeChart = React.memo(function SpotTradeChart({ currentPrice, pair, 
     );
 
     const isPositive = data.length >= 2 && data[data.length - 1].price >= data[0].price;
-    const gradientColor = isPositive ? '#22c55e' : '#ef4444';
-    const lineColor = isPositive ? '#22c55e' : '#ef4444';
+    const gradientColor = isPositive ? 'var(--bs-chart-green)' : 'var(--bs-chart-red)';
+    const lineColor = isPositive ? 'var(--bs-chart-green)' : 'var(--bs-chart-red)';
 
     const timeframes: Timeframe[] = ['1m', '5m', '15m', '1h'];
 

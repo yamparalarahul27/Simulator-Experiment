@@ -81,28 +81,28 @@ export const LivePulseIndicator = ({
     // Variant color and glow mappings
     const variantStyles = {
         devnet: {
-            color: 'bg-emerald-400',
-            glow: 'shadow-[0_0_8px_rgba(52,211,153,0.6)]',
+            color: 'bg-bs-success',
+            glow: 'shadow-[0_0_8px_rgba(69,116,83,0.6)]',
         },
         mainnet: {
-            color: 'bg-blue-400',
-            glow: 'shadow-[0_0_8px_rgba(59,130,246,0.6)]',
+            color: 'bg-bs-info',
+            glow: 'shadow-[0_0_8px_rgba(45,106,180,0.6)]',
         },
         success: {
             color: 'bg-bs-success',
-            glow: 'shadow-[0_0_8px_rgba(74,222,128,0.6)]',
+            glow: 'shadow-[0_0_8px_rgba(69,116,83,0.6)]',
         },
         mock: {
-            color: 'bg-yellow-400',
-            glow: 'shadow-[0_0_8px_rgba(250,204,21,0.6)]',
+            color: 'bg-bs-warning',
+            glow: 'shadow-[0_0_8px_rgba(138,98,7,0.6)]',
         },
         danger: {
             color: 'bg-bs-error',
-            glow: 'shadow-[0_0_8px_rgba(248,113,113,0.6)]',
+            glow: 'shadow-[0_0_8px_rgba(166,61,47,0.6)]',
         },
         info: {
-            color: 'bg-cyan-400',
-            glow: 'shadow-[0_0_8px_rgba(34,211,238,0.6)]',
+            color: 'bg-bs-accent-cyan',
+            glow: 'shadow-[0_0_8px_rgba(9,117,117,0.6)]',
         },
     };
 

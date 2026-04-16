@@ -121,3 +121,62 @@ export interface LearningModule {
     comingSoon: boolean;
     walletRequired: boolean;
 }
+
+// ============================================
+// Content Types (Supabase-backed)
+// ============================================
+
+export type ChangelogCategory = 'product' | 'design' | 'dev';
+
+export interface ChangelogTag {
+    label: string;
+    color: string;
+}
+
+export interface ChangelogEntry {
+    id?: number;
+    category?: ChangelogCategory;
+    date: string;
+    tag: ChangelogTag;
+    title: string;
+    description?: string;
+    credit?: string;
+    source?: string;
+    testHref?: string;
+    testLabel?: string;
+}
+
+export type RoadmapStatus = 'done' | 'next' | 'future';
+
+export interface RoadmapPhase {
+    id?: number;
+    title: string;
+    status: RoadmapStatus;
+    subtitle: string;
+    items: string[];
+}
+
+export interface FAQItem {
+    id?: number;
+    value: string;
+    title: string;
+    body: string;
+}
+
+export interface SupportPath {
+    id?: number;
+    title: string;
+    description: string;
+}
+
+export interface OrderTypeDetail {
+    emoji: string;
+    whenToUse: string;
+    risk: string;
+    example: string;
+}
+
+export interface OrderBookDetail {
+    emoji: string;
+    sections: { heading: string; body: string }[];
+}

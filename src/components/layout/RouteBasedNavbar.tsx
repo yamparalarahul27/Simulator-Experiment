@@ -7,12 +7,12 @@ import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
 const NAV_ITEMS: NavItem[] = [
     { title: 'Learn', href: '/lessons', category: 'main' },
     { title: 'Simulator', href: '/simulator', category: 'main' },
-    { title: 'Perks', href: '/perks', category: 'main' },
-    { title: 'Help', href: '/help', category: 'main' },
-    { title: 'About', href: '/about', category: 'dropdown' },
-    { title: 'Roadmap', href: '/roadmap', category: 'dropdown' },
-    { title: 'Exchange Manager', href: '/exchange-manager', category: 'dropdown' },
-    { title: 'Changelog', href: '/changelog', category: 'dropdown' },
+    // { title: 'Perks', href: '/perks', category: 'main' },
+    { title: 'Changelog', href: '/changelog', category: 'main' },
+    // { title: 'Help', href: '/help', category: 'main' },
+    { title: 'About', href: '/about', category: 'main' },
+    // { title: 'Roadmap', href: '/roadmap', category: 'dropdown' },
+    // { title: 'Exchange Manager', href: '/exchange-manager', category: 'dropdown' },
 ];
 
 function getNetworkName(net: 'devnet' | 'mainnet' | 'mock') {

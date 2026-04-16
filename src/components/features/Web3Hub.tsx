@@ -1,7 +1,7 @@
 'use client';
 
 import type { LearningModule } from '@/lib/types';
-import { MODULES } from '@/lib/modules';
+import { useModules } from '@/lib/hooks/useContent';
 import { useRouter } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 
@@ -40,7 +40,7 @@ function DifficultyBadge({ level }: { level: LearningModule['difficulty'] }) {
     return (
         <span
             className={cn(
-                'inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium',
+                'inline-flex whitespace-nowrap rounded-full border px-2.5 py-1 text-[11px] font-medium',
                 className
             )}
         >
@@ -69,26 +69,20 @@ function ModuleCard({ module, onClick }: { module: LearningModule; onClick?: () 
                 'stamp-card-inner flex flex-col gap-5 transition-colors duration-200',
                 !isActive && 'pointer-events-none'
             )}>
-                <div className="flex items-start justify-between gap-3">
-                    <div className="space-y-3">
-                        <span className="inline-flex size-11 items-center justify-center rounded-full border border-bs-border bg-bs-card-fg text-lg">
-                            {module.icon}
-                        </span>
-                        <div className="space-y-1">
-                            <h2 className="text-xl font-semibold text-bs-text-primary text-balance">
-                                {module.title}
-                            </h2>
-                            <p className="text-sm text-bs-text-tertiary text-pretty">{module.description}</p>
-                        </div>
+                <div className="space-y-2">
+                    <div className="flex flex-wrap items-start justify-between gap-2">
+                        <h2 className="text-xl font-semibold text-bs-text-primary text-balance">
+                            {module.title}
+                        </h2>
+                        {module.comingSoon ? (
+                            <span className="inline-flex whitespace-nowrap rounded-full border border-bs-border px-2.5 py-1 text-[11px] text-bs-text-tertiary">
+                                Coming Soon
+                            </span>
+                        ) : (
+                            <DifficultyBadge level={module.difficulty} />
+                        )}
                     </div>
-
-                    {module.comingSoon ? (
-                        <span className="inline-flex rounded-full border border-bs-border px-2.5 py-1 text-[11px] text-bs-text-tertiary">
-                            Coming Soon
-                        </span>
-                    ) : (
-                        <DifficultyBadge level={module.difficulty} />
-                    )}
+                    <p className="text-sm text-bs-text-tertiary text-pretty">{module.description}</p>
                 </div>
 
                 <div className="mt-auto flex items-center justify-between border-t border-bs-border/80 pt-4 text-sm">
@@ -137,7 +131,7 @@ function HeroSection({
                         <button
                             type="button"
                             onClick={onStartLearning}
-                            className="rounded-xl bg-bs-brand-rust px-5 py-3 text-sm font-semibold text-black"
+                            className="rounded-xl bg-bs-brand px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:opacity-90 active:scale-[0.97]"
                         >
                             Start with {firstModuleTitle}
                         </button>
@@ -201,6 +195,7 @@ function PrinciplesSection() {
 
 export default function Web3Hub() {
     const router = useRouter();
+    const { data: modules = [] } = useModules();
 
     const navigateToModule = (slug: string) => {
         router.push(`/lessons/${slug}`);
@@ -213,9 +208,9 @@ export default function Web3Hub() {
         }
     };
 
-    const firstActiveModule = MODULES.find((module) => !module.comingSoon);
-    const activeModulesCount = MODULES.filter((module) => !module.comingSoon).length;
-    const totalLessons = MODULES.reduce((count, module) => count + module.lessons.length, 0);
+    const firstActiveModule = modules.find((module) => !module.comingSoon);
+    const activeModulesCount = modules.filter((module) => !module.comingSoon).length;
+    const totalLessons = modules.reduce((count, module) => count + module.lessons.length, 0);
 
     return (
         <div className="space-y-10 pb-4">
@@ -237,7 +232,7 @@ export default function Web3Hub() {
                     </p>
                 </div>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                    {MODULES.map((module) => (
+                    {modules.map((module) => (
                         <ModuleCard
                             key={module.moduleSlug}
                             module={module}

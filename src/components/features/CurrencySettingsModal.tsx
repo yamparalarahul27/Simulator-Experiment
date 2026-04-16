@@ -62,7 +62,7 @@ export default function CurrencySettingsModal({ isOpen, onClose, currentRate, on
             />
 
             {/* Modal */}
-            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[90] w-[420px] bg-[#0a0a0f] border border-bs-border shadow-2xl shadow-black/50">
+            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[90] w-[420px] bg-bs-card border border-bs-border shadow-2xl shadow-black/10">
                 {/* Header */}
                 <div className="flex items-center justify-between px-5 py-4 border-b border-bs-border">
                     <h3 className="text-sm font-mono font-bold text-bs-text-primary">Currency Settings</h3>
@@ -157,8 +157,8 @@ export default function CurrencySettingsModal({ isOpen, onClose, currentRate, on
                     <button
                         onClick={handleApply}
                         className="w-full py-2.5 text-sm font-mono font-bold
-                            bg-gradient-to-r from-[#00b3b3] to-[#00ffff] text-bs-text-primary
-                            hover:from-[#00e6e6] hover:to-[#00ffff]
+                            bg-bs-accent-cyan text-white
+                            hover:opacity-90
                             transition-all active:scale-[0.98]"
                     >
                         Apply

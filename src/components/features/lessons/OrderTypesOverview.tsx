@@ -1,75 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import type { LearningModule, LessonConfig } from '@/lib/types';
+import type { LearningModule, LessonConfig, OrderTypeDetail } from '@/lib/types';
+import { useOrderTypeDetails } from '@/lib/hooks/useContent';
 import LessonShell from './LessonShell';
 import OrderTypeLesson from './OrderTypeLesson';
-
-// ============================================
-// Order Type educational content
-// ============================================
-
-const ORDER_TYPE_DETAILS: Record<string, {
-    emoji: string;
-    whenToUse: string;
-    risk: string;
-    example: string;
-}> = {
-    overview: {
-        emoji: '📋',
-        whenToUse: '',
-        risk: '',
-        example: '',
-    },
-    market: {
-        emoji: '⚡',
-        whenToUse: 'When you need immediate execution and price certainty is less important than speed.',
-        risk: 'Slippage — you may get a worse price than expected in volatile markets.',
-        example: 'SOL is crashing and you want to exit immediately. A market sell guarantees execution.',
-    },
-    limit: {
-        emoji: '🎯',
-        whenToUse: 'When you want to buy/sell at a specific price or better. You\'re willing to wait.',
-        risk: 'Your order may never fill if the price doesn\'t reach your limit.',
-        example: 'SOL is at $150. You set a limit buy at $140. If price drops to $140, your order fills.',
-    },
-    'stop-market': {
-        emoji: '🛑',
-        whenToUse: 'To protect against losses. Triggers a market order when price hits your stop.',
-        risk: 'Slippage after trigger — fast-moving markets may fill at a worse price.',
-        example: 'You\'re long SOL at $150. Set a stop-market at $140 to limit downside.',
-    },
-    'stop-limit': {
-        emoji: '🔒',
-        whenToUse: 'Like stop-market but with price control. Triggers a limit order instead.',
-        risk: 'Order may not fill if price blows past your limit after triggering.',
-        example: 'Stop at $140, limit at $139. Triggers at $140 but only fills at $139 or better.',
-    },
-    iceberg: {
-        emoji: '🧊',
-        whenToUse: 'For large orders — hides total size behind smaller visible portions.',
-        risk: 'Slower execution. Other traders may detect the pattern.',
-        example: 'Want to buy 1000 SOL but show only 100 at a time to avoid moving the market.',
-    },
-    twap: {
-        emoji: '⏱️',
-        whenToUse: 'To execute large orders over time, reducing market impact.',
-        risk: 'Price may move against you during the execution window.',
-        example: 'Split a 1000 SOL buy into 10 orders over 10 minutes — 100 SOL each.',
-    },
-    'trailing-stop': {
-        emoji: '📈',
-        whenToUse: 'To lock in profits as price moves in your favor. Stop follows the price.',
-        risk: 'Whipsaws — a brief pullback can trigger your stop before the trend continues.',
-        example: 'SOL at $150, trailing offset $10. Price rises to $170, stop moves to $160.',
-    },
-    oco: {
-        emoji: '⚖️',
-        whenToUse: 'To set both a take-profit and stop-loss simultaneously. One cancels the other.',
-        risk: 'Complexity — misunderstanding the mechanics can lead to unexpected fills.',
-        example: 'Long SOL at $150. TP limit at $170, SL stop at $140. Whichever hits first, the other cancels.',
-    },
-};
 
 // ============================================
 // Lesson Card
@@ -78,13 +13,14 @@ const ORDER_TYPE_DETAILS: Record<string, {
 function LessonCard({
     lesson,
     index,
+    details,
     onClick,
 }: {
     lesson: LessonConfig;
     index: number;
+    details?: OrderTypeDetail;
     onClick: () => void;
 }) {
-    const details = ORDER_TYPE_DETAILS[lesson.lessonSlug];
     const emoji = details?.emoji || '📖';
 
     return (
@@ -102,7 +38,7 @@ function LessonCard({
                             <span className="text-[10px] font-mono text-bs-text-mute">{String(index).padStart(2, '0')}</span>
                             <h3 className="text-sm font-mono font-semibold text-bs-text-primary">{lesson.title}</h3>
                         </div>
-                        <p className="text-xs font-mono text-bs-text-mute mt-1">{lesson.description}</p>
+                        <p className="text-xs font-mono text-bs-text-secondary mt-1">{lesson.description}</p>
                         {details?.whenToUse && (
                             <p className="text-[11px] font-mono text-bs-text-mute mt-2 line-clamp-1">{details.whenToUse}</p>
                         )}
@@ -122,9 +58,11 @@ function LessonCard({
 
 function OverviewContent({
     module,
+    detailsMap,
     onSelectLesson,
 }: {
     module: LearningModule;
+    detailsMap: Record<string, OrderTypeDetail>;
     onSelectLesson: (slug: string) => void;
 }) {
     return (
@@ -193,6 +131,7 @@ function OverviewContent({
                             key={lesson.lessonSlug}
                             lesson={lesson}
                             index={i + 1}
+                            details={detailsMap[lesson.lessonSlug]}
                             onClick={() => onSelectLesson(lesson.lessonSlug)}
                         />
                     ))}
@@ -213,12 +152,13 @@ interface OrderTypesOverviewProps {
 
 export default function OrderTypesOverview({ module, onBack }: OrderTypesOverviewProps) {
     const [activeLesson, setActiveLesson] = useState<string | null>(null);
+    const { data: orderTypeDetails = {} } = useOrderTypeDetails();
 
     // Individual lesson view
     if (activeLesson) {
         const lesson = module.lessons.find(l => l.lessonSlug === activeLesson);
         if (lesson) {
-            const details = ORDER_TYPE_DETAILS[lesson.lessonSlug];
+            const details = orderTypeDetails[lesson.lessonSlug];
             return (
                 <OrderTypeLesson
                     lesson={lesson}
@@ -236,7 +176,7 @@ export default function OrderTypesOverview({ module, onBack }: OrderTypesOvervie
             description="Learn all 8 order types with interactive simulators"
             onBack={onBack}
         >
-            <OverviewContent module={module} onSelectLesson={setActiveLesson} />
+            <OverviewContent module={module} detailsMap={orderTypeDetails} onSelectLesson={setActiveLesson} />
         </LessonShell>
     );
 }

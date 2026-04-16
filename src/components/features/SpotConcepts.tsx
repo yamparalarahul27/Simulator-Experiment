@@ -178,8 +178,8 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                                 <div className="flex items-center gap-1.5 cursor-help">
                                     {currentPrice.isOverridden ? (
                                         <>
-                                            <WifiOff size={10} className="text-yellow-400" />
-                                            <span className="text-[9px] font-mono text-yellow-400">MANUAL</span>
+                                            <WifiOff size={10} className="text-bs-warning" />
+                                            <span className="text-[9px] font-mono text-bs-warning">MANUAL</span>
                                         </>
                                     ) : wsSource === 'rest' ? (
                                         <>
@@ -349,7 +349,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                                         {(simSnapshot.price != null || simSnapshot.limitPrice != null) && (
                                             <div className="absolute left-0 right-0 flex items-center gap-1"
                                                 style={{ top: `${priceToPercent(simSnapshot.price ?? simSnapshot.limitPrice!)}%` }}>
-                                                <div className="flex-1 h-px bg-blue-500/55" />
+                                                <div className="flex-1 h-px bg-bs-info/55" />
                                                 <span className="text-[8px] font-mono text-bs-brand-ts/70 whitespace-nowrap">limit</span>
                                             </div>
                                         )}

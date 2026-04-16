@@ -223,7 +223,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                 <button
                     onClick={() => onSideChange('buy')}
                     className={`py-2.5 text-sm font-mono font-bold transition-all ${side === 'buy'
-                        ? 'bg-bs-success/20 text-bs-success border border-[#00e66b]/30'
+                        ? 'bg-bs-buy/10 text-bs-buy border border-bs-buy/30'
                         : 'bg-bs-card text-bs-text-mute border border-bs-border hover:text-bs-text-tertiary'
                         }`}
                 >
@@ -232,7 +232,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                 <button
                     onClick={() => onSideChange('sell')}
                     className={`py-2.5 text-sm font-mono font-bold transition-all ${side === 'sell'
-                        ? 'bg-bs-error/20 text-bs-error border border-[#ff285a]/30'
+                        ? 'bg-bs-sell/10 text-bs-sell border border-bs-sell/30'
                         : 'bg-bs-card text-bs-text-mute border border-bs-border hover:text-bs-text-tertiary'
                         }`}
                 >
@@ -260,7 +260,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
             <div className="space-y-3 flex-1 overflow-y-auto pr-1 custom-scrollbar">
 
                 {warning && (
-                    <div className="flex items-start gap-2 p-2 bg-yellow-500/10 border border-yellow-500/20 text-yellow-500/90 text-[10px] font-mono leading-tight">
+                    <div className="flex items-start gap-2 p-2 bg-bs-warning/10 border border-bs-warning/20 text-bs-warning text-[10px] font-mono leading-tight">
                         <AlertTriangle size={12} className="shrink-0 mt-0.5" />
                         <span>{warning}</span>
                     </div>
@@ -361,11 +361,11 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                 {orderType === 'limit' && (
                     <div className="flex items-center gap-4 mt-2">
                         <label className="flex items-center gap-2 cursor-pointer group">
-                            <input type="checkbox" checked={form.tpEnabled} onChange={e => handleField('tpEnabled', e.target.checked)} className="accent-[#00b3b3] cursor-pointer" />
+                            <input type="checkbox" checked={form.tpEnabled} onChange={e => handleField('tpEnabled', e.target.checked)} className="accent-bs-accent-cyan cursor-pointer" />
                             <span className="text-[10px] font-mono text-bs-text-tertiary group-hover:text-bs-text-secondary transition-colors">TP</span>
                         </label>
                         <label className="flex items-center gap-2 cursor-pointer group">
-                            <input type="checkbox" checked={form.slEnabled} onChange={e => handleField('slEnabled', e.target.checked)} className="accent-[#00b3b3] cursor-pointer" />
+                            <input type="checkbox" checked={form.slEnabled} onChange={e => handleField('slEnabled', e.target.checked)} className="accent-bs-accent-cyan cursor-pointer" />
                             <span className="text-[10px] font-mono text-bs-text-tertiary group-hover:text-bs-text-secondary transition-colors">SL</span>
                         </label>
                     </div>
@@ -381,7 +381,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                             placeholder="Target profit price..."
                             value={form.tpPrice}
                             onChange={(e) => handleField('tpPrice', e.target.value)}
-                            className="w-full bg-bs-bg/50 border border-[#00e66b]/20 text-bs-text-primary text-xs font-mono px-3 py-2 flex items-center justify-between focus:outline-none focus:border-[#00e66b]/50 placeholder:text-bs-text-primary/15"
+                            className="w-full bg-bs-bg/50 border border-bs-buy/20 text-bs-text-primary text-xs font-mono px-3 py-2 flex items-center justify-between focus:outline-none focus:border-bs-buy/50 placeholder:text-bs-text-primary/15"
                         />
                     </div>
                 )}
@@ -394,7 +394,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                             placeholder="Stop loss trigger..."
                             value={form.slPrice}
                             onChange={(e) => handleField('slPrice', e.target.value)}
-                            className="w-full bg-bs-bg/50 border border-[#ff285a]/20 text-bs-text-primary text-xs font-mono px-3 py-2 flex items-center justify-between focus:outline-none focus:border-[#ff285a]/50 placeholder:text-bs-text-primary/15"
+                            className="w-full bg-bs-bg/50 border border-bs-sell/20 text-bs-text-primary text-xs font-mono px-3 py-2 flex items-center justify-between focus:outline-none focus:border-bs-sell/50 placeholder:text-bs-text-primary/15"
                         />
                     </div>
                 )}
@@ -406,9 +406,9 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                     if (risk === 0) return null;
                     const rr = (gain / risk).toFixed(2);
                     const rrNum = parseFloat(rr);
-                    const color = rrNum >= 1.5 ? 'text-bs-success border-[#00e66b]/20 bg-bs-success/8'
-                        : rrNum >= 1.0 ? 'text-yellow-400 border-yellow-500/20 bg-yellow-500/8'
-                            : 'text-bs-error border-[#ff285a]/20 bg-bs-error/8';
+                    const color = rrNum >= 1.5 ? 'text-bs-success border-bs-buy/20 bg-bs-success/8'
+                        : rrNum >= 1.0 ? 'text-bs-warning border-bs-warning/20 bg-bs-warning/8'
+                            : 'text-bs-error border-bs-sell/20 bg-bs-error/8';
                     const label = rrNum >= 1.5 ? '✓ Favourable' : rrNum >= 1.0 ? '~ Neutral' : '✗ Poor — risk exceeds reward';
                     return (
                         <div className={`flex items-center justify-between px-2 py-1.5 border text-[10px] font-mono ${color}`}>
@@ -478,7 +478,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                 className={`w-full py-3 text-sm font-mono font-bold transition-all mt-4 flex items-center justify-center gap-2 text-bs-text-primary
                     ${isInvalid || amountNum <= 0 || currentPrice <= 0
                         ? 'bg-bs-card-fg text-bs-text-mute cursor-not-allowed border border-bs-border'
-                        : 'bg-gradient-to-r from-[#00b3b3] to-[#00ffff] hover:from-[#00e6e6] hover:to-[#00ffff] border border-transparent shadow-[0_0_15px_rgba(0,179,179,0.4)]'
+                        : 'bg-bs-accent-cyan text-white hover:opacity-90 border border-transparent shadow-[0_0_15px_rgba(9,117,117,0.3)]'
                     }`}
             >
                 <Play size={13} fill="currentColor" />

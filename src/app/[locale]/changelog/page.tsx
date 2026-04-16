@@ -2,229 +2,23 @@
 
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { useChangelog } from '@/lib/hooks/useContent';
+import type { ChangelogEntry, ChangelogCategory } from '@/lib/types';
 
 // ============================================
 // Types
 // ============================================
 
-type ChangelogTab = 'product' | 'design' | 'dev';
-
-interface ChangelogEntry {
-    date: string;
-    tag: { label: string; color: string };
-    title: string;
-    description?: string;
-    credit?: string;
-    source?: string;
-}
+type ChangelogTab = ChangelogCategory;
 
 // ============================================
-// Tag helpers
+// Tab metadata
 // ============================================
 
-const TAG = {
-    added: { label: 'Added', color: 'border-bs-success/30 bg-bs-success/10 text-bs-success' },
-    improved: { label: 'Improved', color: 'border-bs-brand/30 bg-bs-brand/10 text-bs-brand' },
-    fixed: { label: 'Fixed', color: 'border-bs-brand-ts/35 bg-bs-brand-ts/10 text-bs-brand-ts' },
-    changed: { label: 'Changed', color: 'border-bs-brand-rust/35 bg-bs-brand-rust/10 text-bs-brand-rust' },
-    removed: { label: 'Removed', color: 'border-bs-error/30 bg-bs-error/10 text-bs-error' },
-    dep: { label: 'Dependency', color: 'border-bs-brand-ts/30 bg-bs-brand-ts/10 text-bs-brand-ts' },
-    infra: { label: 'Infra', color: 'border-bs-border bg-bs-card-fg text-bs-text-secondary' },
-} as const;
-
-// ============================================
-// Changelog data — manually curated
-// ============================================
-
-const PRODUCT_LOG: ChangelogEntry[] = [
-    {
-        date: '2026-03-30',
-        tag: TAG.added,
-        title: 'Light / Dark / System theme switching',
-        description: 'Full theme support with next-themes. Toggle in navbar cycles Light → Dark → System. Light mode includes a soft aurora background variant. 80+ component files updated to use CSS variable tokens.',
-    },
-    {
-        date: '2026-03-30',
-        tag: TAG.changed,
-        title: 'Changelog rewritten with 3-tab curated layout',
-        description: 'Removed auto-fetch from GitHub API. Replaced with manually curated entries across Product, Design, and Dev tabs. Each entry has date, tag, title, description, and optional credit/source.',
-    },
-    {
-        date: '2026-03-30',
-        tag: TAG.added,
-        title: 'Order Book learning module with 6 interactive lessons',
-        description: 'New intermediate-level module covering order book basics, limit vs market orders, heatmap reading, depth delta calculations, depth overlay indicator, and pro tips. Includes interactive order book with live Binance data.',
-        credit: '@exitpumpBTC',
-        source: 'https://x.com/exitpumpbtc/status/2002814707380707576',
-    },
-    {
-        date: '2026-03-29',
-        tag: TAG.added,
-        title: 'Auto-logged changelog page',
-        description: 'Fetches commits from GitHub API grouped by date with timeline UI.',
-    },
-    {
-        date: '2026-03-29',
-        tag: TAG.added,
-        title: 'NumberFlow animated number transitions',
-        description: 'Smooth spring-based number animations across PnLCard, StatsRow, DrawdownCard, DeriverseTradesTable, DemoMarket, and more.',
-        credit: '@number-flow/react',
-        source: 'https://number-flow.barvian.me',
-    },
-    {
-        date: '2026-03-29',
-        tag: TAG.fixed,
-        title: 'Safari auto-zoom on AI chat input',
-        description: 'Safari auto-zooms inputs with font-size < 16px. Changed input to text-base (16px).',
-    },
-    {
-        date: '2026-03-29',
-        tag: TAG.fixed,
-        title: 'Horizontal scroll in AI panel input area',
-        description: 'Replaced absolute positioning with flex layout to prevent overflow on mobile.',
-    },
-    {
-        date: '2026-03-29',
-        tag: TAG.improved,
-        title: 'AI assistant converted from full page to inline panel',
-        description: 'AI assistant now opens as a side panel instead of a separate route.',
-    },
-    {
-        date: '2026-03-29',
-        tag: TAG.added,
-        title: 'Welcome screen hero + full mobile optimization',
-    },
-    {
-        date: '2026-03-29',
-        tag: TAG.improved,
-        title: 'Header navigation reorganized',
-    },
-];
-
-const DESIGN_LOG: ChangelogEntry[] = [
-    {
-        date: '2026-03-30',
-        tag: TAG.added,
-        title: 'Theme toggle button in navbar',
-        description: 'Sun/Moon/Monitor icon button added next to profile icon on desktop and in Settings section on mobile menu.',
-    },
-    {
-        date: '2026-03-30',
-        tag: TAG.added,
-        title: 'Light aurora background variant',
-        description: 'Softer teal/blue crescent aurora for light theme — same ring-based technique with reduced opacity and warm edge vignette.',
-    },
-    {
-        date: '2026-03-30',
-        tag: TAG.changed,
-        title: '1000+ hardcoded hex colors replaced with CSS variable tokens',
-        description: 'All bg-[#0b0e14], text-[#ced5e4], border-[#1a1e26] etc. now use bg-bs-bg, text-bs-text-secondary, border-bs-border — enabling theme switching.',
-    },
-    {
-        date: '2026-03-30',
-        tag: TAG.improved,
-        title: 'Aurora background reshaped into proper crescent curve',
-        description: 'Replaced elliptical radial gradients with ring-based approach: large off-screen circles with gradient borders so only the curved edge is visible.',
-    },
-    {
-        date: '2026-03-30',
-        tag: TAG.changed,
-        title: 'Background PNGs replaced with CSS-generated aurora effect',
-        description: 'Eliminated ~5.3 MB of static assets (background.png + background_wallpaper_dot.png) by recreating the aurora gradient with CSS radial/conic gradients and blur.',
-    },
-    {
-        date: '2026-03-30',
-        tag: TAG.added,
-        title: 'Animated number cells in interactive order book',
-        description: 'Cells flash green/red when values change. Depth bars animate with 500ms CSS transitions.',
-    },
-    {
-        date: '2026-03-29',
-        tag: TAG.changed,
-        title: 'Blueshift dark color palette applied across entire app',
-        description: 'Replaced all bg-black with #0b0e14, borders with #1a1e26, purple accents with cyan brand (#00ffff), green/red with #00e66b/#ff285a. Updated 73 files.',
-        credit: 'Blueshift Design System',
-        source: 'https://learn.blueshift.gg',
-    },
-    {
-        date: '2026-03-29',
-        tag: TAG.changed,
-        title: 'Border radius updated from sharp to rounded-lg (8px)',
-        description: 'Applied minimum 8px border radius to all UI elements across the app.',
-    },
-    {
-        date: '2026-03-29',
-        tag: TAG.added,
-        title: 'Color Palette reference page at /learn2',
-        description: 'Displays all Blueshift color tokens with swatches, token names, hex values, and live preview.',
-    },
-];
-
-const DEV_LOG: ChangelogEntry[] = [
-    {
-        date: '2026-03-30',
-        tag: TAG.dep,
-        title: '@chenglou/pretext installed',
-        description: 'Pure JS/TS multiline text measurement and layout library with broad international language support. Renders to DOM, Canvas, SVG, and server-side.',
-        credit: 'Cheng Lou',
-        source: 'https://www.npmjs.com/package/@chenglou/pretext',
-    },
-    {
-        date: '2026-03-30',
-        tag: TAG.dep,
-        title: 'next-themes installed',
-        description: 'Abstraction for light/dark/system theme switching in Next.js. Handles class toggling, system preference detection, and localStorage persistence.',
-        credit: 'pacocoursey/next-themes',
-        source: 'https://github.com/pacocoursey/next-themes',
-    },
-    {
-        date: '2026-03-30',
-        tag: TAG.dep,
-        title: 'react-rewrite-cli added as dev dependency',
-        description: 'Visual editing tool for React apps — edit Tailwind layout, spacing, typography, and colors while the app is running, writes changes back to source files.',
-        credit: 'donghaxkim/react-rewrite',
-        source: 'https://github.com/donghaxkim/react-rewrite',
-    },
-    {
-        date: '2026-03-30',
-        tag: TAG.dep,
-        title: 'expect skill installed from millionco',
-        description: 'Agent skill for Claude Code and other AI coding agents.',
-        credit: 'millionco/expect',
-        source: 'https://github.com/millionco/expect',
-    },
-    {
-        date: '2026-03-30',
-        tag: TAG.improved,
-        title: 'Changelog tag detection improved for non-conventional commits',
-        description: 'Added keyword-based detection (add, replace, use, remove, etc.) so commits without feat:/fix: prefixes still get proper tags.',
-    },
-    {
-        date: '2026-03-30',
-        tag: TAG.added,
-        title: 'Live Binance WebSocket depth stream for interactive order book',
-        description: 'REST snapshot on load + wss://stream.binance.com depth20@1000ms for live updates. Falls back to REST if WebSocket fails.',
-    },
-    {
-        date: '2026-03-29',
-        tag: TAG.infra,
-        title: 'Route-based architecture with i18n support',
-        description: 'Next.js App Router with next-intl for locale-aware routing.',
-    },
-    {
-        date: '2026-03-29',
-        tag: TAG.dep,
-        title: '@number-flow/react installed',
-        description: 'Spring-based number animation library for smooth value transitions.',
-        credit: '@number-flow/react',
-        source: 'https://number-flow.barvian.me',
-    },
-];
-
-const TAB_DATA: Record<ChangelogTab, { entries: ChangelogEntry[]; icon: string; description: string }> = {
-    product: { entries: PRODUCT_LOG, icon: '🚀', description: 'Features, modules, and user-facing changes' },
-    design:  { entries: DESIGN_LOG, icon: '🎨', description: 'UI, styling, and visual changes' },
-    dev:     { entries: DEV_LOG, icon: '🔧', description: 'Dependencies, infra, and developer tooling' },
+const TAB_META: Record<ChangelogTab, { icon: string; description: string }> = {
+    product: { icon: '🚀', description: 'Features, modules, and user-facing changes' },
+    design:  { icon: '🎨', description: 'UI, styling, and visual changes' },
+    dev:     { icon: '🔧', description: 'Dependencies, infra, and developer tooling' },
 };
 
 // ============================================
@@ -272,7 +66,7 @@ function TabButton({
     active: boolean;
     onClick: () => void;
 }) {
-    const { icon, description } = TAB_DATA[tab];
+    const { icon, description } = TAB_META[tab];
     const label = tab.charAt(0).toUpperCase() + tab.slice(1);
 
     return (
@@ -328,6 +122,16 @@ function EntryItem({ entry }: { entry: ChangelogEntry }) {
                     )}
                 </div>
             )}
+            {entry.testHref && (
+                <div className="pl-12">
+                    <a
+                        href={entry.testHref}
+                        className="inline-flex rounded-md border border-bs-border px-2.5 py-1 text-xs text-bs-text-secondary hover:text-bs-text-primary"
+                    >
+                        {entry.testLabel ?? 'Test now'}
+                    </a>
+                </div>
+            )}
         </li>
     );
 }
@@ -338,7 +142,7 @@ function EntryItem({ entry }: { entry: ChangelogEntry }) {
 
 export default function ChangelogPage() {
     const [activeTab, setActiveTab] = useState<ChangelogTab>('product');
-    const { entries } = TAB_DATA[activeTab];
+    const { data: entries = [] } = useChangelog(activeTab);
     const days = groupByDate(entries);
 
     return (
