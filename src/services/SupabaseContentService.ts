@@ -539,6 +539,50 @@ export class SupabaseContentService {
         return true;
     }
 
+    // ─── Site Settings ──────────────────────
+
+    static async getSiteSettings(): Promise<{ defaultPresetId: string; enabledPresets: string[] }> {
+        const fallback = { defaultPresetId: 'paper', enabledPresets: ['paper', 'winter', 'spring', 'summer', 'glass', 'soft', 'retro'] };
+        if (!isSupabaseConfigured()) return fallback;
+
+        const { data, error } = await supabase
+            .from('site_settings')
+            .select('default_preset_id, enabled_presets')
+            .eq('id', 1)
+            .single();
+
+        if (error) {
+            console.error('[ContentService] getSiteSettings error:', error);
+            return fallback;
+        }
+
+        return {
+            defaultPresetId: data.default_preset_id || 'paper',
+            enabledPresets: data.enabled_presets || fallback.enabledPresets,
+        };
+    }
+
+    static async updateSiteSettings(data: {
+        defaultPresetId: string;
+        enabledPresets: string[];
+    }): Promise<boolean> {
+        if (!isSupabaseConfigured()) return false;
+
+        const { error } = await supabase
+            .from('site_settings')
+            .update({
+                default_preset_id: data.defaultPresetId,
+                enabled_presets: data.enabledPresets,
+            })
+            .eq('id', 1);
+
+        if (error) {
+            console.error('[ContentService] updateSiteSettings error:', error);
+            return false;
+        }
+        return true;
+    }
+
     static async upsertSupportPath(data: {
         id?: number;
         title: string;

@@ -12,6 +12,7 @@ const NAV_ITEMS = [
     { href: '/admin/changelog', label: 'Changelog' },
     { href: '/admin/roadmap', label: 'Roadmap' },
     { href: '/admin/faq', label: 'FAQ' },
+    { href: '/admin/presets', label: 'Presets' },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

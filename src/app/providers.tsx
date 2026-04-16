@@ -58,23 +58,23 @@ export default function Providers({ children }: PropsWithChildren) {
     if (!WalletProvider) {
         // Wallet not loaded yet — still provide AppearanceProvider with null wallet
         return (
-            <ThemePresetProvider>
-                <AppearanceProvider walletAddress={null}>
+            <AppearanceProvider walletAddress={null}>
+                <ThemePresetProvider>
                     {children}
-                </AppearanceProvider>
-            </ThemePresetProvider>
+                </ThemePresetProvider>
+            </AppearanceProvider>
         );
     }
 
     return (
-        <ThemePresetProvider>
-            <WalletProvider
-                wallets={[]}
-                config={walletConfig}
-                localStorageKey={`deriverse.wallet.${cluster}`}
-            >
-                <AppearanceWrapper>{children}</AppearanceWrapper>
-            </WalletProvider>
-        </ThemePresetProvider>
+        <WalletProvider
+            wallets={[]}
+            config={walletConfig}
+            localStorageKey={`deriverse.wallet.${cluster}`}
+        >
+            <AppearanceWrapper>
+                <ThemePresetProvider>{children}</ThemePresetProvider>
+            </AppearanceWrapper>
+        </WalletProvider>
     );
 }

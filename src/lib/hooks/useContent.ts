@@ -25,6 +25,34 @@ const SWR_OPTIONS = {
     dedupingInterval: 60_000,
 };
 
+// ─── Site Settings ─────────────────────────
+
+export interface SiteSettings {
+    defaultPresetId: string;
+    enabledPresets: string[];
+}
+
+const FALLBACK_SITE_SETTINGS: SiteSettings = {
+    defaultPresetId: 'paper',
+    enabledPresets: ['paper', 'winter', 'spring', 'summer', 'glass', 'soft', 'retro'],
+};
+
+export function useSiteSettings() {
+    return useSWR<SiteSettings>(
+        'content:site-settings',
+        async () => {
+            if (!isSupabaseConfigured()) return FALLBACK_SITE_SETTINGS;
+            try {
+                return await SupabaseContentService.getSiteSettings();
+            } catch (err) {
+                console.warn('[useSiteSettings] Supabase fetch failed:', err);
+                return FALLBACK_SITE_SETTINGS;
+            }
+        },
+        { ...SWR_OPTIONS, fallbackData: FALLBACK_SITE_SETTINGS },
+    );
+}
+
 // ─── Modules ────────────────────────────────
 
 export function useModules() {
