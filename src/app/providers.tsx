@@ -5,6 +5,7 @@ import type { Cluster } from '@solana/web3.js';
 import type { IUnifiedWalletConfig } from '@jup-ag/wallet-adapter/dist/types/contexts/WalletConnectionProvider';
 import { APP_BASE_URL, DEFAULT_WALLET_CLUSTER, SupportedCluster, WALLET_CLUSTER_CONFIG } from '@/lib/constants';
 import { AppearanceProvider } from '@/lib/context/AppearanceContext';
+import { ThemePresetProvider } from '@/lib/context/ThemePresetContext';
 import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 import { useTheme } from 'next-themes';
 
@@ -57,19 +58,23 @@ export default function Providers({ children }: PropsWithChildren) {
     if (!WalletProvider) {
         // Wallet not loaded yet — still provide AppearanceProvider with null wallet
         return (
-            <AppearanceProvider walletAddress={null}>
-                {children}
-            </AppearanceProvider>
+            <ThemePresetProvider>
+                <AppearanceProvider walletAddress={null}>
+                    {children}
+                </AppearanceProvider>
+            </ThemePresetProvider>
         );
     }
 
     return (
-        <WalletProvider
-            wallets={[]}
-            config={walletConfig}
-            localStorageKey={`deriverse.wallet.${cluster}`}
-        >
-            <AppearanceWrapper>{children}</AppearanceWrapper>
-        </WalletProvider>
+        <ThemePresetProvider>
+            <WalletProvider
+                wallets={[]}
+                config={walletConfig}
+                localStorageKey={`deriverse.wallet.${cluster}`}
+            >
+                <AppearanceWrapper>{children}</AppearanceWrapper>
+            </WalletProvider>
+        </ThemePresetProvider>
     );
 }
