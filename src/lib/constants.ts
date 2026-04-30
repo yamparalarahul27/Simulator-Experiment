@@ -10,7 +10,10 @@ export const PROGRAM_ID = process.env.NEXT_PUBLIC_PROGRAM_ID ?? 'Drvrseg8AQLP8B9
 export const DERIVERSE_VERSION = parseInt(process.env.NEXT_PUBLIC_DERIVERSE_VERSION ?? '12', 10);
 
 // RPC Configuration
-export const HELIUS_RPC_URL = process.env.NEXT_PUBLIC_HELIUS_RPC_URL ?? 'https://devnet.helius-rpc.com/?api-key=REMOVED';
+// NOTE: Do not embed Helius API keys here — NEXT_PUBLIC_* vars ship to the browser.
+// Set NEXT_PUBLIC_HELIUS_RPC_URL in your environment if you want to use Helius;
+// otherwise the public Solana devnet RPC is used as a key-less fallback.
+export const HELIUS_RPC_URL = process.env.NEXT_PUBLIC_HELIUS_RPC_URL ?? 'https://api.devnet.solana.com';
 export const RPC_HTTP = process.env.NEXT_PUBLIC_RPC_HTTP ?? HELIUS_RPC_URL;
 
 export type SupportedCluster = 'devnet' | 'mainnet-beta';
