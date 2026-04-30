@@ -20,7 +20,7 @@ const BG_MODES: { value: BgMode; label: string; icon: string }[] = [
 ];
 
 function PresetSection() {
-    const { presetId, setPresetId } = useThemePreset();
+    const { presetId, setPresetId, enabledPresets } = useThemePreset();
 
     return (
         <section className="overflow-hidden rounded-2xl border border-bs-border bg-bs-card">
@@ -31,7 +31,7 @@ function PresetSection() {
 
             <div className="px-5 py-5">
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-                    {PRESET_ORDER.map((id) => {
+                    {PRESET_ORDER.filter(id => enabledPresets.includes(id)).map((id) => {
                         const preset = PRESETS[id];
                         const isActive = presetId === id;
 
