@@ -1,7 +1,6 @@
 'use client';
 
 import { usePathname } from '@/i18n/navigation';
-import RouteBasedNavbar from './RouteBasedNavbar';
 import Footer from './Footer';
 
 const FULL_SCREEN_ROUTES: string[] = [];
@@ -13,8 +12,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
     if (isFullScreen) {
         return (
             <div className="min-h-dvh text-bs-text-primary">
-                <RouteBasedNavbar />
-                <div className="pt-20 md:pt-24">
+                <div className="pt-6 md:pt-8">
                     {children}
                 </div>
             </div>
@@ -23,9 +21,8 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
 
     return (
         <div className="min-h-dvh text-bs-text-primary">
-            <RouteBasedNavbar />
             <div className="h-full">
-                <div className="mx-auto max-w-6xl px-4 pb-8 pt-24 md:px-6 md:pt-32">
+                <div className="mx-auto max-w-screen-2xl px-4 pb-8 pt-8 md:px-6 md:pt-12">
                     {children}
                     <Footer />
                 </div>

@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import SpotOrderBook from './SpotOrderBook';
 import SpotOrderForm from './SpotOrderForm';
 import OrderFlowVisualiser, { getSliderRange, computeKnobColor } from './OrderFlowVisualiser';
 import type { SimConfig } from './OrderFlowVisualiser';
@@ -15,23 +14,31 @@ import { cn } from '@/lib/utils';
 
 // Static style constant (avoids creating a new object on every render)
 const SLIDER_MARGIN_STYLE = { marginTop: '16px', marginBottom: '16px' } as const;
-const NOOP_PRICE_CLICK = () => {};
 
 interface SpotConceptsProps {
     trade: ReturnType<typeof import('@/lib/hooks/useSpotTrade').useSpotTrade>;
+    currency: 'USD' | 'INR';
+    usdInrRate: number;
     controlPanelOpen: boolean;
     onToggleControlPanel: () => void;
 }
 
-export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlPanel }: SpotConceptsProps) {
+export default function SpotConcepts({ trade, currency, usdInrRate, controlPanelOpen, onToggleControlPanel }: SpotConceptsProps) {
     const {
         selectedPair, setSelectedPair, currentPrice,
-        orderBook, formatPrice, settings,
     } = trade;
     const { livePrices, wsSource } = useLivePrices();
 
+    // Currency-aware formatter — converts USD → INR using the resolved
+    // currency/rate from the parent (works with or without a connected wallet).
+    const formatPrice = React.useCallback((amount: number, decimals?: number): string => {
+        const value = currency === 'INR' ? amount * usdInrRate : amount;
+        const symbol = currency === 'INR' ? '₹' : '$';
+        const d = decimals ?? (value > 1000 ? 2 : value < 0.01 ? 7 : 4);
+        return `${symbol}${value.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d })}`;
+    }, [currency, usdInrRate]);
+
     const [pairDropdownOpen, setPairDropdownOpen] = React.useState(false);
-    const [activePanel, setActivePanel] = React.useState<'orderbook' | 'orderform'>('orderform');
     const [orderType, setOrderType] = React.useState<DemoOrderType>('market');
     const [side, setSide] = React.useState<'buy' | 'sell'>('buy');
     const [simSnapshot, setSimSnapshot] = React.useState<SimConfig | null>(null);
@@ -205,13 +212,8 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                     </TooltipProvider>
                 </div>
 
-                {/* Currency indicator + Control button */}
+                {/* Control button */}
                 <div className="flex items-center gap-3">
-                    {settings?.currency === 'INR' && (
-                        <div className="text-[9px] font-mono text-orange-400/70 bg-orange-500/10 px-2 py-1 border border-orange-500/10">
-                            INR rates not available for Spot
-                        </div>
-                    )}
                     <button
                         onClick={onToggleControlPanel}
                         className={cn(
@@ -228,44 +230,14 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                 </div>
             </div>
 
-            {/* ─── Sub-tab strip ──────────────────────────────── */}
-            <div className="flex items-center gap-1 rounded-xl border border-bs-border bg-bs-card-fg p-1">
-                {([
-                    { id: 'orderform', label: 'Order Simulator' },
-                    { id: 'orderbook', label: 'Order Book' },
-                ] as const).map(({ id, label }) => (
-                    <button
-                        key={id}
-                        onClick={() => setActivePanel(id)}
-                        className={cn(
-                            'rounded-lg border px-4 py-2 text-xs font-medium',
-                            activePanel === id
-                                ? 'border-bs-border bg-bs-card text-bs-text-primary'
-                                : 'border-transparent text-bs-text-tertiary hover:text-bs-text-secondary'
-                        )}
-                    >
-                        {label}
-                    </button>
-                ))}
-            </div>
-
             {/* ─── Panel Content ──────────────────────────────── */}
-            {activePanel === 'orderbook' ? (
-                <div className="min-h-[500px] rounded-2xl border border-bs-border bg-bs-card p-4">
-                    <SpotOrderBook
-                        orderBook={orderBook}
-                        formatPrice={formatPrice}
-                        onPriceClick={NOOP_PRICE_CLICK}
-                    />
-                </div>
-            ) : (
-                <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3">
                     {/* ── Top row: Order Form + Order Flow + Price Scale ── */}
                     <div className="flex flex-col gap-3 md:flex-row md:items-stretch md:min-h-[500px]">
 
                         {/* ── Box 1: Order Form ── */}
-                        <div className="flex w-full flex-col rounded-2xl border border-bs-border bg-bs-card p-4 md:w-[300px] md:flex-shrink-0">
-                            <p className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider mb-3">Order Form</p>
+                        <div className="flex w-full flex-col rounded-2xl border border-bs-border bg-bs-card p-4 md:w-[360px] md:flex-shrink-0">
+                            <p className="text-[11px] font-mono text-bs-text-mute uppercase tracking-wider mb-3">Order Form</p>
                             <SpotOrderForm
                                 pair={selectedPair}
                                 currentPrice={currentPrice.price}
@@ -279,7 +251,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                         </div>
 
                         {/* ── Box 2: Order Flow ── */}
-                        <div className="flex min-h-[300px] min-w-0 flex-1 flex-col rounded-2xl border border-bs-border bg-bs-card p-4 md:min-h-0">
+                        <div className="flex min-h-[300px] min-w-0 flex-1 flex-col rounded-2xl border border-bs-border bg-[var(--color-surface-dim)] p-4 md:min-h-0">
                             <OrderFlowVisualiser
                                 orderType={orderType}
                                 side={side}
@@ -293,8 +265,8 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                         </div>
 
                         {/* ── Box 3: Price Scale ── */}
-                        <div className="flex w-full flex-col rounded-2xl border border-bs-border bg-bs-card p-4 md:w-[120px] md:flex-shrink-0">
-                            <p className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider mb-3">Price Scale</p>
+                        <div className="flex w-full flex-col rounded-2xl border border-bs-border bg-bs-card p-4 md:w-[160px] md:flex-shrink-0">
+                            <p className="text-[11px] font-mono text-bs-text-mute uppercase tracking-wider mb-3">Price Scale</p>
                             {!simSnapshot ? (
                                 <div className="flex-1 flex items-center justify-center">
                                     <div className="text-bs-text-primary/15 text-[9px] font-mono text-center leading-relaxed">
@@ -405,8 +377,7 @@ export default function SpotConcepts({ trade, controlPanelOpen, onToggleControlP
                             </div>
                         )}
                     </div>
-                </div>
-            )}
+            </div>
         </div>
     );
 }

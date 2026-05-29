@@ -392,17 +392,7 @@ export const GlassmorphismNavbar = ({
                                 </div>
                                 */}
 
-                                {/* Profile dropdown — temporarily disabled, direct link instead */}
-                                <div className="hidden sm:block">
-                                    <Link
-                                        href="/profile-settings"
-                                        onClick={() => onProfileSettingsClick?.()}
-                                        className="flex h-8 w-8 items-center justify-center rounded-full border border-bs-border bg-bs-card-fg"
-                                        aria-label="Profile &amp; Settings"
-                                    >
-                                        <img src="/assets/Profile_icon.png" alt="Profile &amp; Settings" className="h-5 w-5 opacity-85" />
-                                    </Link>
-                                </div>
+                                {/* Profile & Settings — removed */}
                                 {/* Original profile dropdown with Exchange Manager:
                                 <div
                                     className="hidden sm:block relative"
@@ -561,19 +551,7 @@ export const GlassmorphismNavbar = ({
 
                             {/* Mobile specific extra items */}
                             <div>
-                                <p className="text-xs text-bs-text-mute uppercase tracking-wider mb-3">Settings</p>
                                 <div className="space-y-1">
-                                    <Link
-                                        href="/profile-settings"
-                                        onClick={() => {
-                                            onProfileSettingsClick?.();
-                                            setIsMobileMenuOpen(false);
-                                        }}
-                                        className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-colors ${activePath === '/profile-settings' ? 'bg-bs-card-fg text-bs-text-primary' : 'text-bs-text-tertiary hover:bg-bs-card-fg hover:text-bs-text-primary'}`}
-                                    >
-                                        <span className={`w-1.5 h-1.5 rounded-full ${activePath === '/profile-settings' ? 'bg-white' : 'bg-bs-border'}`} />
-                                        Profile &amp; Settings
-                                    </Link>
                                     {/* Exchange Manager — temporarily disabled
                                     <Link
                                         href="/exchange-manager"

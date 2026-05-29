@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
 export default function AssistantPage() {
-    redirect('/lessons');
+    redirect('/simulator');
 }
