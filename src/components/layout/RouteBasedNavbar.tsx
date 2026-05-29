@@ -5,12 +5,9 @@ import { usePathname, useRouter } from '@/i18n/navigation';
 import { GlassmorphismNavbar, NavItem } from './GlassmorphismNavbar';
 
 const NAV_ITEMS: NavItem[] = [
-    { title: 'Learn', href: '/lessons', category: 'main' },
     { title: 'Simulator', href: '/simulator', category: 'main' },
     // { title: 'Perks', href: '/perks', category: 'main' },
-    { title: 'Changelog', href: '/changelog', category: 'main' },
     // { title: 'Help', href: '/help', category: 'main' },
-    { title: 'About', href: '/about', category: 'main' },
     // { title: 'Roadmap', href: '/roadmap', category: 'dropdown' },
     // { title: 'Exchange Manager', href: '/exchange-manager', category: 'dropdown' },
 ];
@@ -28,14 +25,11 @@ function getNetworkName(net: 'devnet' | 'mainnet' | 'mock') {
  * Maps sub-routes to their parent nav item.
  */
 function resolveActivePath(pathname: string): string {
-    if (pathname === '/' || pathname.startsWith('/lessons')) return '/lessons';
-    if (pathname.startsWith('/simulator')) return '/simulator';
+    if (pathname === '/' || pathname.startsWith('/simulator')) return '/simulator';
     if (pathname.startsWith('/perks')) return '/perks';
     if (pathname.startsWith('/help')) return '/help';
-    if (pathname.startsWith('/about')) return '/about';
     if (pathname.startsWith('/roadmap')) return '/roadmap';
     if (pathname.startsWith('/exchange-manager')) return '/exchange-manager';
-    if (pathname.startsWith('/profile-settings')) return '/profile-settings';
     if (pathname.startsWith('/challenges')) return '/challenges';
     return pathname;
 }
@@ -77,9 +71,8 @@ export default function RouteBasedNavbar() {
                 isActive: true,
             }}
             onNetworkChange={setNetwork}
-            onProfileSettingsClick={() => router.push('/profile-settings')}
             onExchangeManagerClick={() => router.push('/exchange-manager')}
-            onLogoClick={() => router.push('/lessons')}
+            onLogoClick={() => router.push('/simulator')}
             className="mb-4"
         />
     );

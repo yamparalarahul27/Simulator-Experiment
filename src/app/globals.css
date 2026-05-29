@@ -18,101 +18,143 @@
    ============================================ */
 
 :root {
-  /* Paper Light Palette */
-  --bs-bg: #f0ebe3;
-  --bs-card: #f9f5ee;
-  --bs-card-fg: #eee8dc;
-  --bs-border: #8d877d;
-  --bs-border-subtle: #d9d0c1;
-  --bs-border-active: rgba(134, 101, 19, 0.3);
-  --bs-bg-primary: rgba(134, 101, 19, 0.06);
+  /* ============================================
+     Workspace Palette (dark-only) — single source of truth
+     ============================================ */
+  /* Neutral black-and-white base — high contrast, no color cast */
+  --color-surface-dim: #000000;            /* deepest wells (order-flow canvas) */
+  --color-surface-page: #0a0a0a;           /* default dark workspace background */
+  --color-surface: #121212;                /* main content canvas, broad panels */
+  --color-surface-container: #171717;      /* cards, rows, settings panels */
+  --color-surface-container-high: #242424; /* active nav, hover rows, popovers */
+  --color-surface-bright: #313131;         /* tooltips, floating menus, emphasis */
 
-  --bs-text-primary: #2c2416;
-  --bs-text-secondary: #4a3f32;
-  --bs-text-tertiary: #73695b;
-  --bs-text-mute: #70695f;
+  --color-outline: #3a3a3a;                /* crisp card borders, panel edges */
+  --color-outline-variant: #262626;        /* subtle dividers, hairline rules */
 
-  --bs-brand: #866513;
-  --bs-brand-secondary: #866615;
-  --bs-brand-tertiary: #725610;
-  --bs-brand-anchor: #3d5a2d;
-  --bs-brand-rust: #995b32;
-  --bs-brand-ts: #476ba0;
+  --color-fg: #ffffff;                      /* primary text, headings — pure white */
+  --color-fg-muted: #c4c4c4;                /* secondary text, metadata */
+  --color-fg-subtle: #8c8c8c;               /* placeholders, inactive labels */
+  --color-fg-inverse: #0a0a0a;              /* text on bright accent backgrounds */
 
-  --bs-success: #457453;
-  --bs-error: #a63d2f;
+  /* Vivid accents — the only color in the UI */
+  --color-brand: #c026ff;                   /* dominant electric-purple accent */
+  --color-brand-hover: #d65cff;             /* hover / active emphasis */
+  --color-brand-bright: #ec9cff;            /* high-contrast highlight / focus */
+  --color-brand-subtle: #2a0f3d;            /* muted fill for badges / selected */
+  --color-on-brand: #14001f;                /* text on bright brand backgrounds */
 
-  /* Semantic accent colors — WCAG AA on cream */
-  --bs-buy: #1a7a3a;
-  --bs-sell: #c42b3a;
-  --bs-info: #2d6ab4;
-  --bs-accent-cyan: #097575;
-  --bs-warning: #8a6207;
-  --bs-chart-green: #267842;
-  --bs-chart-red: #c43030;
+  --color-buy: #00e676;                     /* vivid green */
+  --color-buy-strong: #00c853;
+  --color-sell: #ff4d4d;                    /* vivid red */
+  --color-sell-strong: #ff1744;
 
-  /* Legacy Deriverse tokens mapped to Paper */
-  --ds-primary: #725610;
-  --ds-secondary: #866615;
-  --ds-accent: #866513;
-  --ds-gradient-mid: #866615;
+  --color-warning: #ffab00;                 /* vivid amber */
+  --color-warning-strong: #ff9100;
+  --color-error: #ff5252;
+  --color-error-strong: #ff1744;
+  --color-info: #2e9bff;                    /* vivid blue */
+  --color-info-strong: #2979ff;
+  --color-success: #00e676;
+  --color-success-strong: #00c853;
 
-  --ds-bg-dark: #f0ebe3;
-  --ds-bg-light: #4a3f32;
-  --ds-border: #8d877d;
+  /* ============================================
+     App tokens (bs-*) mapped onto the palette
+     ============================================ */
+  --bs-bg: var(--color-surface-page);
+  --bs-card: var(--color-surface-container);
+  --bs-card-fg: var(--color-surface-container-high);
+  --bs-border: var(--color-outline);
+  --bs-border-subtle: var(--color-outline-variant);
+  --bs-border-active: rgba(200, 79, 245, 0.35);
+  --bs-bg-primary: rgba(200, 79, 245, 0.08);
 
-  --ds-text-primary: #2c2416;
-  --ds-text-dark: #2c2416;
-  --ds-text-muted: #70695f;
+  --bs-text-primary: var(--color-fg);
+  --bs-text-secondary: var(--color-fg-muted);
+  --bs-text-tertiary: var(--color-fg-subtle);
+  --bs-text-mute: #5b5c63;
+
+  --bs-brand: var(--color-brand);
+  --bs-brand-secondary: var(--color-brand-hover);
+  --bs-brand-tertiary: var(--color-brand-bright);
+  --bs-brand-anchor: var(--color-info);
+  --bs-brand-rust: var(--color-warning);
+  --bs-brand-ts: var(--color-info);
+
+  --bs-success: var(--color-success);
+  --bs-error: var(--color-error);
+
+  /* Semantic accent colors */
+  --bs-buy: var(--color-buy);
+  --bs-sell: var(--color-sell);
+  --bs-info: var(--color-info);
+  --bs-accent-cyan: var(--color-info);
+  --bs-warning: var(--color-warning);
+  --bs-chart-green: var(--color-buy-strong);
+  --bs-chart-red: var(--color-sell-strong);
+
+  /* Legacy Deriverse tokens */
+  --ds-primary: var(--color-brand-bright);
+  --ds-secondary: var(--color-brand-hover);
+  --ds-accent: var(--color-brand);
+  --ds-gradient-mid: var(--color-brand-hover);
+
+  --ds-bg-dark: var(--color-surface-page);
+  --ds-bg-light: var(--color-fg-muted);
+  --ds-border: var(--color-outline);
+
+  --ds-text-primary: var(--color-fg);
+  --ds-text-dark: var(--color-surface-page);
+  --ds-text-muted: var(--color-fg-subtle);
 
   --radius: 0.625rem;
 
-  --background: #f0ebe3;
-  --foreground: #2c2416;
+  --background: var(--color-surface-page);
+  --foreground: var(--color-fg);
 
-  --card: #f9f5ee;
-  --card-foreground: #2c2416;
+  --card: var(--color-surface-container);
+  --card-foreground: var(--color-fg);
 
-  --popover: #f9f5ee;
-  --popover-foreground: #2c2416;
+  --popover: var(--color-surface-container-high);
+  --popover-foreground: var(--color-fg);
 
-  --primary: #2c2416;
-  --primary-foreground: #f9f5ee;
+  --primary: var(--color-fg);
+  --primary-foreground: var(--color-surface-container);
 
-  --secondary: #eee8dc;
-  --secondary-foreground: #2c2416;
+  --secondary: var(--color-surface-container-high);
+  --secondary-foreground: var(--color-fg);
 
-  --muted: #eee8dc;
-  --muted-foreground: #73695b;
+  --muted: var(--color-surface-container);
+  --muted-foreground: var(--color-fg-muted);
 
-  --accent: #eee8dc;
-  --accent-foreground: #2c2416;
+  --accent: var(--color-surface-container-high);
+  --accent-foreground: var(--color-fg);
 
-  --destructive: #a63d2f;
+  --destructive: var(--color-error);
 
-  --border: #8d877d;
-  --input: #8d877d;
-  --ring: #70695f;
+  --border: var(--color-outline-variant);
+  --input: var(--color-outline);
+  --ring: var(--color-brand);
 
-  --chart-1: #866513;
-  --chart-2: #457453;
-  --chart-3: #476ba0;
-  --chart-4: #995b32;
-  --chart-5: #a63d2f;
+  --chart-1: var(--color-brand);
+  --chart-2: var(--color-buy);
+  --chart-3: var(--color-info);
+  --chart-4: var(--color-warning);
+  --chart-5: var(--color-sell);
 
-  --sidebar: #f9f5ee;
-  --sidebar-foreground: #2c2416;
-  --sidebar-primary: #2c2416;
-  --sidebar-primary-foreground: #f9f5ee;
-  --sidebar-accent: #eee8dc;
-  --sidebar-accent-foreground: #2c2416;
-  --sidebar-border: #8d877d;
-  --sidebar-ring: #70695f;
+  --sidebar: var(--color-surface-container);
+  --sidebar-foreground: var(--color-fg);
+  --sidebar-primary: var(--color-brand);
+  --sidebar-primary-foreground: var(--color-on-brand);
+  --sidebar-accent: var(--color-surface-container-high);
+  --sidebar-accent-foreground: var(--color-fg);
+  --sidebar-border: var(--color-outline-variant);
+  --sidebar-ring: var(--color-brand);
 
-  /* Paper texture variables */
-  --paper-grain-opacity: 0.4;
-  --paper-fiber-opacity: 0.03;
-  --paper-vignette-opacity: 0.08;
+  /* Texture variables — minimal for a flat dark theme */
+  --paper-grain-opacity: 0.04;
+  --paper-fiber-opacity: 0.015;
+  --paper-vignette-opacity: 0.12;
 }
 
 @theme inline {
@@ -519,78 +561,15 @@ body {
 }
 
 /* ============================================
-   Midnight Dark Theme
-   Deep navy tones — NOT black
+   Dark theme — the app is dark-only.
+   All color tokens live in :root and already resolve to the
+   workspace palette above, so the .dark class only needs to
+   re-assert the texture opacities used by .dark-scoped effects.
    ============================================ */
 .dark {
-  --bs-bg: #0c1220;
-  --bs-card: #1c2640;
-  --bs-card-fg: #243050;
-  --bs-border: #2e3d62;
-  --bs-border-active: rgba(212, 165, 74, 0.25);
-  --bs-bg-primary: rgba(212, 165, 74, 0.08);
-
-  --bs-text-primary: #e8e4dd;
-  --bs-text-secondary: #c4bfb4;
-  --bs-text-tertiary: #8e8a80;
-  --bs-text-mute: #5a564e;
-
-  --bs-brand: #d4a54a;
-  --bs-brand-secondary: #e0b85c;
-  --bs-brand-tertiary: #b8903e;
-  --bs-brand-anchor: #a8c9a0;
-  --bs-brand-rust: #e0965a;
-  --bs-brand-ts: #7da6d4;
-
-  --bs-success: #5fb87a;
-  --bs-error: #e05d4e;
-
-  --ds-primary: #b8903e;
-  --ds-secondary: #e0b85c;
-  --ds-accent: #d4a54a;
-  --ds-gradient-mid: #e0b85c;
-  --ds-bg-dark: #0c1220;
-  --ds-bg-light: #c4bfb4;
-  --ds-border: #2e3d62;
-  --ds-text-primary: #e8e4dd;
-  --ds-text-dark: #0c1220;
-  --ds-text-muted: #5a564e;
-
-  --background: #0c1220;
-  --foreground: #e8e4dd;
-  --card: #1c2640;
-  --card-foreground: #e8e4dd;
-  --popover: #1c2640;
-  --popover-foreground: #e8e4dd;
-  --primary: #e8e4dd;
-  --primary-foreground: #1c2640;
-  --secondary: #243050;
-  --secondary-foreground: #e8e4dd;
-  --muted: #243050;
-  --muted-foreground: #8e8a80;
-  --accent: #243050;
-  --accent-foreground: #e8e4dd;
-  --destructive: #e05d4e;
-  --border: rgba(212, 165, 74, 0.12);
-  --input: rgba(212, 165, 74, 0.15);
-  --ring: #5a564e;
-  --chart-1: #d4a54a;
-  --chart-2: #5fb87a;
-  --chart-3: #7da6d4;
-  --chart-4: #e0965a;
-  --chart-5: #e05d4e;
-  --sidebar: #1c2640;
-  --sidebar-foreground: #e8e4dd;
-  --sidebar-primary: #d4a54a;
-  --sidebar-primary-foreground: #e8e4dd;
-  --sidebar-accent: #243050;
-  --sidebar-accent-foreground: #e8e4dd;
-  --sidebar-border: rgba(212, 165, 74, 0.12);
-  --sidebar-ring: #5a564e;
-
-  --paper-grain-opacity: 0.25;
-  --paper-fiber-opacity: 0.02;
-  --paper-vignette-opacity: 0.15;
+  --paper-grain-opacity: 0.04;
+  --paper-fiber-opacity: 0.015;
+  --paper-vignette-opacity: 0.12;
 }
 
 @layer base {

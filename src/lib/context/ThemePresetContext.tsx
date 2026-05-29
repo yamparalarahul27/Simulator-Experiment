@@ -43,17 +43,10 @@ const LEGACY_TOKEN_MAP: Record<string, string> = {
   '--bs-text-mute': '--ds-text-muted',
 };
 
-function applyPresetTokens(tokens: PresetColorTokens) {
-  const root = document.documentElement;
-  const entries = Object.entries(tokens) as [string, string][];
-
-  for (const [key, value] of entries) {
-    root.style.setProperty(key, value);
-    const legacy = LEGACY_TOKEN_MAP[key];
-    if (legacy) {
-      root.style.setProperty(legacy, value);
-    }
-  }
+function applyPresetTokens(_tokens: PresetColorTokens) {
+  // Dark-theme-only mode: color presets (all light variants) are disabled.
+  // The `.dark` class on <html> is the single source of truth for theming.
+  // Intentionally a no-op so cached/stored presets can't override dark mode.
 }
 
 function clearPresetTokens(tokens: PresetColorTokens) {

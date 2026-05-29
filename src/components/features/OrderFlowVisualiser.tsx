@@ -36,10 +36,10 @@ interface ComputedLayout { nodes: LayoutNode[]; edges: LayoutEdge[]; width: numb
 
 // ─── Graph Constants ───────────────────────────────────────────────────────────
 
-const NODE_W = 108;
-const NODE_H = 54;
-const DEPTH_GAP = 80;
-const SIBLING_GAP = 52;
+const NODE_W = 132;
+const NODE_H = 66;
+const DEPTH_GAP = 84;
+const SIBLING_GAP = 56;
 const PAD = 56;
 
 // ─── Graph Data ────────────────────────────────────────────────────────────────
@@ -651,26 +651,27 @@ function bezierMid(e: LayoutEdge): { x: number; y: number } {
 
 // ─── Colours ───────────────────────────────────────────────────────────────────
 
+// Vivid node palette — purple (start), blue (state), green (filled/tp), red (sl/sell), gray (cancel)
 const NODE_STYLE: Record<NodeKind, { fill: string; activeFill: string; stroke: string; text: string; sub: string }> = {
-    start: { fill: 'rgba(114,86,16,0.12)', activeFill: 'rgba(114,86,16,0.30)', stroke: 'rgba(114,86,16,0.70)', text: 'var(--bs-brand)', sub: 'var(--bs-brand-secondary)' },
-    state: { fill: 'var(--bs-bg-primary)', activeFill: 'rgba(9,117,117,0.12)', stroke: 'var(--bs-brand-tertiary)', text: 'var(--bs-text-secondary)', sub: 'var(--bs-text-mute)' },
-    terminal: { fill: 'rgba(26,122,58,0.10)', activeFill: 'rgba(26,122,58,0.28)', stroke: 'rgba(26,122,58,0.65)', text: 'var(--bs-buy)', sub: 'var(--bs-success)' },
-    tp: { fill: 'rgba(38,120,66,0.10)', activeFill: 'rgba(38,120,66,0.28)', stroke: 'rgba(38,120,66,0.65)', text: 'var(--bs-chart-green)', sub: 'var(--bs-success)' },
-    sl: { fill: 'rgba(196,48,48,0.10)', activeFill: 'rgba(196,48,48,0.28)', stroke: 'rgba(196,48,48,0.65)', text: 'var(--bs-chart-red)', sub: 'var(--bs-error)' },
-    cancel: { fill: 'rgba(112,105,95,0.05)', activeFill: 'rgba(112,105,95,0.12)', stroke: 'rgba(112,105,95,0.35)', text: 'var(--bs-text-mute)', sub: 'rgba(112,105,95,0.45)' },
+    start: { fill: 'rgba(192,38,255,0.16)', activeFill: 'rgba(192,38,255,0.38)', stroke: 'rgba(192,38,255,0.85)', text: 'var(--bs-brand)', sub: 'var(--bs-brand-secondary)' },
+    state: { fill: 'rgba(46,155,255,0.12)', activeFill: 'rgba(46,155,255,0.30)', stroke: 'rgba(46,155,255,0.75)', text: 'var(--bs-info)', sub: 'var(--bs-text-secondary)' },
+    terminal: { fill: 'rgba(0,230,118,0.14)', activeFill: 'rgba(0,230,118,0.34)', stroke: 'rgba(0,230,118,0.80)', text: 'var(--bs-buy)', sub: 'var(--bs-success)' },
+    tp: { fill: 'rgba(0,230,118,0.14)', activeFill: 'rgba(0,230,118,0.32)', stroke: 'rgba(0,230,118,0.75)', text: 'var(--bs-chart-green)', sub: 'var(--bs-success)' },
+    sl: { fill: 'rgba(255,77,77,0.14)', activeFill: 'rgba(255,77,77,0.34)', stroke: 'rgba(255,77,77,0.80)', text: 'var(--bs-chart-red)', sub: 'var(--bs-error)' },
+    cancel: { fill: 'rgba(140,140,140,0.07)', activeFill: 'rgba(140,140,140,0.16)', stroke: 'rgba(140,140,140,0.45)', text: 'var(--bs-text-mute)', sub: 'rgba(140,140,140,0.55)' },
 };
 
 function resolveNodeStyle(kind: NodeKind, side: 'buy' | 'sell') {
     if (side === 'sell' && kind === 'terminal') {
-        return { fill: 'rgba(196,48,48,0.10)', activeFill: 'rgba(196,48,48,0.28)', stroke: 'rgba(196,48,48,0.65)', text: 'var(--bs-sell)', sub: 'var(--bs-error)' };
+        return { fill: 'rgba(255,77,77,0.14)', activeFill: 'rgba(255,77,77,0.34)', stroke: 'rgba(255,77,77,0.80)', text: 'var(--bs-sell)', sub: 'var(--bs-error)' };
     }
     return NODE_STYLE[kind];
 }
 
 const EDGE_STROKE: Record<EdgeColor, string> = {
-    neutral: 'var(--bs-text-mute)',
-    tp: 'rgba(38,120,66,0.65)',
-    sl: 'rgba(196,48,48,0.65)',
+    neutral: 'var(--bs-text-subtle, var(--bs-text-tertiary))',
+    tp: 'rgba(0,230,118,0.70)',
+    sl: 'rgba(255,77,77,0.70)',
 };
 
 // ─── SVG Sub-components ────────────────────────────────────────────────────────
@@ -712,18 +713,18 @@ function NodeBox({ node, side, nodeState }: { node: LayoutNode; side: 'buy' | 's
                 />
             )}
             <rect x={node.x} y={node.y} width={NODE_W} height={NODE_H}
-                fill={fill} stroke={s.stroke} strokeWidth={strokeW} rx={2} />
+                fill={fill} stroke={s.stroke} strokeWidth={strokeW} rx={3} />
             <text
-                x={node.x + NODE_W / 2} y={hasSub ? midY - 9 : midY}
+                x={node.x + NODE_W / 2} y={hasSub ? midY - 11 : midY}
                 textAnchor="middle" dominantBaseline="middle"
-                fill={s.text} fontSize={12} fontFamily="monospace" fontWeight="700"
+                fill={s.text} fontSize={15} fontFamily="monospace" fontWeight="700"
                 letterSpacing="0.06em"
             >{node.label}</text>
             {hasSub && (
                 <text
-                    x={node.x + NODE_W / 2} y={midY + 10}
+                    x={node.x + NODE_W / 2} y={midY + 12}
                     textAnchor="middle" dominantBaseline="middle"
-                    fill={s.sub} fontSize={10} fontFamily="monospace"
+                    fill={s.sub} fontSize={12} fontFamily="monospace"
                 >{node.sublabel}</text>
             )}
         </g>
@@ -741,13 +742,13 @@ function EdgeLine({ edge }: { edge: LayoutEdge }) {
                 strokeDasharray={edge.dashed ? '4 3' : undefined}
                 markerEnd={`url(#${markerId})`} />
             {edge.label && (() => {
-                const labelW = edge.label.length * 6.5;
+                const labelW = edge.label.length * 7.5;
                 return (
                     <g>
-                        <rect x={mid.x - labelW / 2 - 3} y={mid.y - 9} width={labelW + 6} height={14}
-                            fill="var(--bs-card)" rx={2} />
-                        <text x={mid.x} y={mid.y} textAnchor="middle"
-                            fill="var(--bs-text-secondary)" fontSize={10} fontFamily="monospace">
+                        <rect x={mid.x - labelW / 2 - 4} y={mid.y - 10} width={labelW + 8} height={17}
+                            fill="var(--color-surface-dim)" rx={3} />
+                        <text x={mid.x} y={mid.y} textAnchor="middle" dominantBaseline="middle"
+                            fill="var(--bs-text-secondary)" fontSize={12} fontFamily="monospace">
                             {edge.label}
                         </text>
                     </g>
@@ -958,18 +959,18 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
         <div className="flex flex-col h-full">
             {/* Header */}
             <div className="flex items-center gap-2 mb-3 flex-wrap">
-                <p className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider">Order Flow</p>
-                <span className="px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-widest bg-bs-brand-tertiary/15 text-bs-brand border border-bs-brand-tertiary/20">
+                <p className="text-xs font-mono text-bs-text-mute uppercase tracking-wider">Order Flow</p>
+                <span className="px-2 py-0.5 text-[11px] font-mono font-bold uppercase tracking-widest bg-bs-brand/15 text-bs-brand border border-bs-brand/30">
                     {ORDER_TYPE_LABELS[orderType]}
                 </span>
                 {side === 'buy'
-                    ? <span className="px-2 py-0.5 text-[9px] font-mono font-bold bg-bs-success/10 text-bs-success border border-bs-buy/20">BUY</span>
-                    : <span className="px-2 py-0.5 text-[9px] font-mono font-bold bg-bs-error/10 text-bs-error border border-bs-sell/20">SELL</span>
+                    ? <span className="px-2 py-0.5 text-[11px] font-mono font-bold bg-bs-buy/15 text-bs-buy border border-bs-buy/30">BUY</span>
+                    : <span className="px-2 py-0.5 text-[11px] font-mono font-bold bg-bs-sell/15 text-bs-sell border border-bs-sell/30">SELL</span>
                 }
-                {tpEnabled && <span className="px-1.5 py-0.5 text-[9px] font-mono bg-bs-success/8 text-bs-success/70 border border-bs-buy/15">TP</span>}
-                {slEnabled && <span className="px-1.5 py-0.5 text-[9px] font-mono bg-bs-error/8 text-bs-error/70 border border-bs-sell/15">SL</span>}
+                {tpEnabled && <span className="px-1.5 py-0.5 text-[11px] font-mono bg-bs-buy/10 text-bs-buy/80 border border-bs-buy/20">TP</span>}
+                {slEnabled && <span className="px-1.5 py-0.5 text-[11px] font-mono bg-bs-sell/10 text-bs-sell/80 border border-bs-sell/20">SL</span>}
                 {simSnapshot && (
-                    <span className="px-2 py-0.5 text-[9px] font-mono bg-bs-brand-tertiary/10 text-bs-brand/70 border border-bs-brand-tertiary/15">
+                    <span className="px-2 py-0.5 text-[11px] font-mono bg-bs-brand/10 text-bs-brand/80 border border-bs-brand/20">
                         SIM RUNNING
                     </span>
                 )}
@@ -1043,25 +1044,25 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
             <div className="flex items-center gap-3 mt-3 pt-2 border-t border-bs-border flex-wrap">
                 {([
                     { color: 'var(--bs-brand)', label: 'Start' },
-                    { color: 'var(--bs-text-mute)', label: 'State' },
+                    { color: 'var(--bs-info)', label: 'State' },
                     { color: 'var(--bs-success)', label: 'Filled' },
                     { color: 'var(--bs-chart-green)', label: 'TP' },
                     { color: 'var(--bs-chart-red)', label: 'SL' },
-                    { color: 'var(--bs-border)', label: 'Cancelled' },
+                    { color: 'var(--bs-text-mute)', label: 'Cancelled' },
                 ] as { color: string; label: string }[]).map(({ color, label }) => (
-                    <div key={label} className="flex items-center gap-1">
-                        <div className="w-2.5 h-2.5 border flex-shrink-0" style={{ borderColor: color, background: color }} />
-                        <span className="text-[8px] font-mono text-bs-text-mute">{label}</span>
+                    <div key={label} className="flex items-center gap-1.5">
+                        <div className="w-3 h-3 rounded-sm border flex-shrink-0" style={{ borderColor: color, background: color }} />
+                        <span className="text-[10px] font-mono text-bs-text-tertiary">{label}</span>
                     </div>
                 ))}
                 <div className="flex items-center gap-3 ml-2">
-                    <div className="flex items-center gap-1">
-                        <div className="w-3 h-3 rounded-sm border-2 bg-bs-info/30 border-bs-info/60 flex-shrink-0" />
-                        <span className="text-[8px] font-mono text-bs-text-mute">Active</span>
+                    <div className="flex items-center gap-1.5">
+                        <div className="w-3.5 h-3.5 rounded-sm border-2 bg-bs-info/30 border-bs-info/60 flex-shrink-0" />
+                        <span className="text-[10px] font-mono text-bs-text-tertiary">Active</span>
                     </div>
-                    <div className="flex items-center gap-1">
-                        <div className="w-2.5 h-2.5 border flex-shrink-0 opacity-40" style={{ borderColor: 'var(--bs-border)', background: 'var(--bs-bg-primary)' }} />
-                        <span className="text-[8px] font-mono text-bs-text-mute">Done</span>
+                    <div className="flex items-center gap-1.5">
+                        <div className="w-3 h-3 rounded-sm border flex-shrink-0 opacity-40" style={{ borderColor: 'var(--bs-border)', background: 'var(--bs-bg-primary)' }} />
+                        <span className="text-[10px] font-mono text-bs-text-tertiary">Done</span>
                     </div>
                 </div>
             </div>

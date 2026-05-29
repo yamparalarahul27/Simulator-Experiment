@@ -2,23 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from 'next-themes';
-import GeneratedBackground from './GeneratedBackground';
 
 /**
  * LoadingScreen Component — Logo Splash
  *
  * Shows a brief logo animation on app load, then fades out
- * to reveal the lessons page directly. No welcome screen.
- *
- * Uses the SVG logo as a CSS mask so the fill color adapts to theme:
- * - Light: deep warm brown on cream
- * - Dark: warm gold on midnight navy
+ * to reveal the app directly. Dark-only: brand purple logo on the
+ * flat workspace surface.
  */
 export default function LoadingScreen() {
     const [isVisible, setIsVisible] = useState(true);
-    const { resolvedTheme } = useTheme();
-    const isLight = resolvedTheme === 'light';
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -43,7 +36,7 @@ export default function LoadingScreen() {
         }
     }, [isVisible]);
 
-    const logoColor = isLight ? '#2c1810' : '#d4a54a';
+    const logoColor = '#c84ff5';
 
     return (
         <AnimatePresence>
@@ -59,8 +52,6 @@ export default function LoadingScreen() {
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0, transition: { duration: 0.6, ease: "easeInOut" } }}
                 >
-                    <GeneratedBackground />
-
                     {/* Logo animation */}
                     <motion.div
                         className="relative z-10 flex flex-col items-center gap-6"

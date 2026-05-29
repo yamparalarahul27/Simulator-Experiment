@@ -116,7 +116,7 @@ function DemoMarketInner({ walletAddress, simulatorKind }: { walletAddress?: str
                                 : 'text-bs-text-tertiary hover:text-bs-text-secondary'
                         )}
                     >
-                        Spot Concepts
+                        Spot - Order Types
                     </button>
                     <button
                         onClick={() => setActiveTab('future')}
@@ -127,7 +127,7 @@ function DemoMarketInner({ walletAddress, simulatorKind }: { walletAddress?: str
                                 : 'text-bs-text-tertiary hover:text-bs-text-secondary'
                         )}
                     >
-                        Future Concepts
+                        Futures - Liquidation
                     </button>
                 </div>
             )}
@@ -137,6 +137,8 @@ function DemoMarketInner({ walletAddress, simulatorKind }: { walletAddress?: str
                     {activeTab === 'spot' ? (
                         <SpotConcepts
                             trade={spotTrade}
+                            currency={currency}
+                            usdInrRate={usdInrRate}
                             controlPanelOpen={controlPanelOpen}
                             onToggleControlPanel={toggleControlPanel}
                         />
