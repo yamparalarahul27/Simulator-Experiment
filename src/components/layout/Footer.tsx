@@ -15,7 +15,7 @@ export default function Footer() {
                 <div className="grid gap-5 px-5 py-6 md:grid-cols-[1fr_auto] md:items-center md:px-6">
                     <div className="space-y-1">
                         <p className="text-lg font-semibold text-bs-text-primary text-balance">
-                            Built for traders who want clarity before execution.
+                            A learning resource for running test cases and designing better information around trading.
                         </p>
                         <p className="text-sm text-bs-text-secondary text-pretty">
                             Design and engineering by Yamparala Rahul. © 2026 YDEX.

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import LiquidationSimulator from './LiquidationSimulator';
+import FuturesWalletSimulator from './FuturesWalletSimulator';
 import { useLivePrices } from '@/lib/context/LivePricesContext';
 import { cn } from '@/lib/utils';
 
@@ -18,7 +19,7 @@ interface FutureConceptsProps {
     usdInrRate: number;
 }
 
-type Section = 'liquidation' | 'funding' | 'leverage';
+type Section = 'liquidation' | 'wallet' | 'funding' | 'leverage';
 
 export default function FutureConcepts({ currency, usdInrRate }: FutureConceptsProps) {
     const { livePrices } = useLivePrices();
@@ -26,6 +27,7 @@ export default function FutureConcepts({ currency, usdInrRate }: FutureConceptsP
 
     const sections: { id: Section; label: string; enabled: boolean }[] = [
         { id: 'liquidation', label: 'Liquidation', enabled: true },
+        { id: 'wallet', label: 'Wallet & Positions', enabled: true },
         { id: 'funding', label: 'Funding Rate', enabled: false },
         { id: 'leverage', label: 'Leverage', enabled: false },
     ];
@@ -59,6 +61,10 @@ export default function FutureConcepts({ currency, usdInrRate }: FutureConceptsP
             {/* Section Content */}
             {activeSection === 'liquidation' && (
                 <LiquidationSimulator livePrices={livePrices} currency={currency} usdInrRate={usdInrRate} />
+            )}
+
+            {activeSection === 'wallet' && (
+                <FuturesWalletSimulator livePrices={livePrices} currency={currency} usdInrRate={usdInrRate} />
             )}
 
             {/* TODO: Funding Rate section */}
