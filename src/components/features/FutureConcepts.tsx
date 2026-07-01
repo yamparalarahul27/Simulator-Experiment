@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import LiquidationSimulator from './LiquidationSimulator';
 import FuturesWalletSimulator from './FuturesWalletSimulator';
+import NettingSimulator from './NettingSimulator';
 import { useLivePrices } from '@/lib/context/LivePricesContext';
 import { cn } from '@/lib/utils';
 
@@ -19,7 +20,7 @@ interface FutureConceptsProps {
     usdInrRate: number;
 }
 
-type Section = 'liquidation' | 'wallet' | 'funding' | 'leverage';
+type Section = 'liquidation' | 'wallet' | 'netting' | 'funding' | 'leverage';
 
 export default function FutureConcepts({ currency, usdInrRate }: FutureConceptsProps) {
     const { livePrices } = useLivePrices();
@@ -28,6 +29,7 @@ export default function FutureConcepts({ currency, usdInrRate }: FutureConceptsP
     const sections: { id: Section; label: string; enabled: boolean }[] = [
         { id: 'liquidation', label: 'Liquidation', enabled: true },
         { id: 'wallet', label: 'Wallet & Positions', enabled: true },
+        { id: 'netting', label: 'Netting & TP/SL', enabled: true },
         { id: 'funding', label: 'Funding Rate', enabled: false },
         { id: 'leverage', label: 'Leverage', enabled: false },
     ];
@@ -65,6 +67,10 @@ export default function FutureConcepts({ currency, usdInrRate }: FutureConceptsP
 
             {activeSection === 'wallet' && (
                 <FuturesWalletSimulator livePrices={livePrices} currency={currency} usdInrRate={usdInrRate} />
+            )}
+
+            {activeSection === 'netting' && (
+                <NettingSimulator livePrices={livePrices} currency={currency} usdInrRate={usdInrRate} />
             )}
 
             {/* TODO: Funding Rate section */}
