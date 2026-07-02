@@ -80,11 +80,11 @@ function getOrderContext(snap: SimConfig): { headline: string; detail: string } 
 
 function Row({ label, value, sub, className = '' }: { label: string; value: string; sub?: string; className?: string }) {
     return (
-        <div className="flex items-center justify-between py-1">
-            <span className="text-[10px] font-mono text-bs-text-mute">{label}</span>
+        <div className="flex items-center justify-between gap-3 py-1.5">
+            <span className="text-xs text-bs-text-mute">{label}</span>
             <div className="text-right">
-                <span className={`text-[11px] font-mono font-semibold ${className}`}>{value}</span>
-                {sub && <span className="block text-[9px] font-mono text-bs-text-mute">{sub}</span>}
+                <span className={`text-xs font-mono font-semibold ${className}`}>{value}</span>
+                {sub && <span className="block text-[10px] text-bs-text-mute">{sub}</span>}
             </div>
         </div>
     );
@@ -179,9 +179,9 @@ const TradeSummaryPanel = React.memo(function TradeSummaryPanel({ simSnapshot, f
     const hasTpSl = tp || sl;
 
     return (
-        <div className="mt-3 bg-bs-bg/40 border border-white/8 p-3 space-y-3">
+        <div className="bg-bs-bg/40 border border-white/8 p-3 space-y-3">
             {/* Header */}
-            <p className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider">Trade Summary</p>
+            <p className="text-xs font-semibold text-bs-text-primary">Trade summary</p>
 
             {/* Order Snapshot */}
             <div className="flex items-center gap-2 flex-wrap">
@@ -194,18 +194,19 @@ const TradeSummaryPanel = React.memo(function TradeSummaryPanel({ simSnapshot, f
                 <span className="px-2 py-0.5 text-[9px] font-mono bg-bs-brand-tertiary/10 text-bs-brand border border-bs-brand-tertiary/20">
                     {simSnapshot.orderType.replace('_', ' ').toUpperCase()}
                 </span>
-                <span className="text-[10px] font-mono text-bs-text-tertiary">
+                <span className="text-xs font-mono text-bs-text-tertiary">
                     {simSnapshot.amount.toFixed(4)} {token}
                 </span>
-                <span className="text-[10px] font-mono text-bs-text-mute">@</span>
-                <span className="text-[10px] font-mono text-bs-text-primary font-bold">
+                <span className="text-xs font-mono text-bs-text-mute">@</span>
+                <span className="text-xs font-mono text-bs-text-primary font-bold">
                     {formatPrice(effectiveEntry)}
                 </span>
             </div>
 
             {/* Order Context */}
-            <div className="text-[10px] font-mono text-bs-text-tertiary leading-relaxed border-l-2 border-bs-border pl-2">
-                {context.headline}
+            <div className="rounded-lg border border-bs-info/20 bg-bs-info/8 p-3">
+                <div className="text-sm font-semibold text-bs-text-primary">{context.headline}</div>
+                <p className="mt-1 text-xs leading-relaxed text-bs-text-secondary">{context.detail}</p>
             </div>
 
             {/* P&L Scenarios */}
@@ -246,7 +247,7 @@ const TradeSummaryPanel = React.memo(function TradeSummaryPanel({ simSnapshot, f
 
             {/* No TP/SL message for limit orders */}
             {simSnapshot.orderType === 'limit' && !hasTpSl && (
-                <p className="text-[9px] font-mono text-bs-text-mute italic">
+                <p className="text-xs text-bs-text-secondary">
                     Enable TP and/or SL on the order form to see profit/loss projections.
                 </p>
             )}

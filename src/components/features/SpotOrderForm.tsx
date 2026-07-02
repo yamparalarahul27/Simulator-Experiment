@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { Play, AlertTriangle } from 'lucide-react';
+import { Calculator, Play, AlertTriangle } from 'lucide-react';
 import type { DemoOrderType } from '@/services/SupabaseDemoService';
 import type { SimConfig } from './OrderFlowVisualiser';
+import OrderInfoPanel from './OrderInfoPanel';
 
 interface SpotOrderFormProps {
     pair: string;
@@ -14,6 +15,7 @@ interface SpotOrderFormProps {
     side: 'buy' | 'sell';
     onSideChange: (v: 'buy' | 'sell') => void;
     onRunSimulation: (config: SimConfig) => void;
+    currency: 'USD' | 'INR';
 }
 
 const ORDER_TYPES: { value: DemoOrderType; label: string }[] = [
@@ -56,6 +58,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
     orderType, onOrderTypeChange,
     side, onSideChange,
     onRunSimulation,
+    currency,
 }: SpotOrderFormProps) {
     const [form, setForm] = useState<FormState>(INITIAL_FORM);
 
@@ -189,6 +192,30 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
         }
     }
 
+    const orderPriceReference =
+        orderType === 'market' || orderType === 'stop_market' || orderType === 'twap' || orderType === 'trailing_stop'
+            ? currentPrice
+            : orderType === 'stop_limit'
+                ? (pLimit || pStop || currentPrice)
+                : (pPrice || currentPrice);
+    const estimatedNotional = amountNum > 0 && orderPriceReference > 0 ? amountNum * orderPriceReference : 0;
+    const estimatedFee = estimatedNotional * 0.001;
+    const executionLabel =
+        orderType === 'market' ? 'Fills immediately'
+            : orderType === 'limit' ? 'Waits at your limit'
+                : orderType === 'stop_market' ? 'Triggers, then market fills'
+                    : orderType === 'stop_limit' ? 'Triggers, then limit waits'
+                        : orderType === 'iceberg' ? 'Reveals slices'
+                            : orderType === 'twap' ? 'Splits over time'
+                                : orderType === 'trailing_stop' ? 'Trails, then triggers'
+                                    : 'Two linked orders';
+    const triggerLabel =
+        orderType === 'market' ? 'Current market price'
+            : orderType === 'limit' || orderType === 'iceberg' ? (pPrice > 0 ? formatPrice(pPrice) : 'Set limit price')
+                : orderType === 'stop_market' || orderType === 'stop_limit' || orderType === 'oco' ? (pStop > 0 ? formatPrice(pStop) : 'Set stop trigger')
+                    : orderType === 'trailing_stop' ? (pAct > 0 ? `${formatPrice(pAct)} activation` : 'Set activation')
+                        : `${form.twapIntervals || '0'} slices`;
+
 
     const handleRunSimulation = () => {
         if (!amountNum || amountNum <= 0 || currentPrice <= 0 || isInvalid) return;
@@ -247,13 +274,17 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                         key={ot.value}
                         onClick={() => handleOrderTypeChange(ot.value)}
                         className={`px-2 py-1 text-sm font-mono font-medium transition-all border ${orderType === ot.value
-                            ? 'bg-white/10 text-white border-white/30'
+                            ? 'bg-bs-card-fg text-bs-text-primary border-bs-border-active'
                             : 'text-bs-text-mute border-bs-border hover:text-bs-text-tertiary hover:border-bs-border'
                             }`}
                     >
                         {ot.label}
                     </button>
                 ))}
+            </div>
+
+            <div className="mb-4">
+                <OrderInfoPanel key={orderType} orderType={orderType} side={side} currency={currency} />
             </div>
 
             {/* Dynamic Fields */}
@@ -337,7 +368,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                             <input
                                 type="number"
                                 step="any"
-                                placeholder={side === 'buy' ? 'Must be > Market' : 'Must be < Market'}
+                                placeholder={side === 'buy' ? 'Must be < Market' : 'Must be > Market'}
                                 value={form.activationPrice}
                                 onChange={(e) => handleField('activationPrice', e.target.value)}
                                 className="w-full bg-bs-bg/50 border border-bs-border text-bs-text-primary text-sm font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-bs-text-primary/15"
@@ -469,6 +500,41 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                         </div>
                     </div>
                 )}
+
+                <div className="rounded-lg border border-bs-border bg-bs-bg/45 p-3">
+                    <div className="mb-3 flex items-center gap-2">
+                        <Calculator size={14} className="text-bs-brand" />
+                        <span className="text-xs font-semibold text-bs-text-primary">Order impact</span>
+                        <span className="ml-auto text-[10px] text-bs-text-mute">before simulation</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                            <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Behavior</div>
+                            <div className="mt-1 font-semibold text-bs-text-primary">{executionLabel}</div>
+                        </div>
+                        <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                            <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Trigger / price</div>
+                            <div className="mt-1 font-semibold text-bs-text-primary">{triggerLabel}</div>
+                        </div>
+                        <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                            <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Notional</div>
+                            <div className="mt-1 font-semibold text-bs-text-primary">
+                                {estimatedNotional > 0 ? formatPrice(estimatedNotional) : 'Enter amount'}
+                            </div>
+                        </div>
+                        <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                            <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Fee estimate</div>
+                            <div className="mt-1 font-semibold text-bs-text-primary">
+                                {estimatedFee > 0 ? formatPrice(estimatedFee) : '-'}
+                            </div>
+                        </div>
+                    </div>
+                    {(form.tpEnabled || form.slEnabled) && (
+                        <p className="mt-2 text-xs leading-relaxed text-bs-text-secondary">
+                            TP/SL becomes an exit plan after the main order fills. In the flow, the filled state should branch into the active protection orders.
+                        </p>
+                    )}
+                </div>
             </div>
 
             {/* RUN SIMULATION Button */}
@@ -482,7 +548,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                     }`}
             >
                 <Play size={13} fill="currentColor" />
-                RUN SIMULATION
+                SIMULATE ORDER FLOW
             </button>
         </div>
     );

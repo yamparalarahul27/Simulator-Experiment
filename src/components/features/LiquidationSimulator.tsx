@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
-import { ChevronDown, ChevronUp, Lock, Info, Play } from 'lucide-react';
+import { Calculator, ChevronDown, ChevronUp, Lock, Info, Play } from 'lucide-react';
 import type { PriceData } from '@/lib/hooks/useSpotTrade';
 
 /**
@@ -94,6 +94,24 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
         if (!xrpPrice || xrpPrice <= 0) return 0;
         return (quantity * xrpPrice) / leverage;
     }, [quantity, xrpPrice, leverage]);
+
+    const notionalValue = useMemo(() => {
+        if (!xrpPrice || xrpPrice <= 0) return 0;
+        return quantity * xrpPrice;
+    }, [quantity, xrpPrice]);
+
+    const estimatedLiqPrice = useMemo(() => {
+        if (!xrpPrice || xrpPrice <= 0) return 0;
+        return calcLiquidationPrice(xrpPrice, leverage, mmr / 100, side);
+    }, [xrpPrice, leverage, mmr, side]);
+
+    const distanceToLiquidationPct = useMemo(() => {
+        if (!xrpPrice || xrpPrice <= 0 || !estimatedLiqPrice) return 0;
+        const distance = side === 'long'
+            ? xrpPrice - estimatedLiqPrice
+            : estimatedLiqPrice - xrpPrice;
+        return Math.max(0, (distance / xrpPrice) * 100);
+    }, [xrpPrice, estimatedLiqPrice, side]);
 
     // Run simulation
     const runSimulation = useCallback(() => {
@@ -215,8 +233,32 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
     const isINR = currency === 'INR';
     const symbol = isINR ? '₹' : '$';
     const convert = (n: number) => isINR ? n * usdInrRate : n;
-    const fmt = (n: number, d = 2) => `${symbol}${convert(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d })}`;
+    const fmt = (n: number, d = 2) => `${n < 0 ? '-' : ''}${symbol}${Math.abs(convert(n)).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d })}`;
     const fmtPct = (n: number) => `${n >= 0 ? '+' : ''}${n.toFixed(2)}%`;
+
+    const statusInsight = results && simResult
+        ? results.status === 'liquidated'
+            ? 'The simulated mark price crossed the liquidation line. The exchange would close the position.'
+            : results.consumed === 0
+                ? `Price moved in favor of this ${simResult.side}. Margin buffer is untouched.`
+                : `${results.consumed.toFixed(0)}% of the entry-to-liquidation distance is used. The next adverse move matters more.`
+        : null;
+    const caseSteps = [
+        {
+            label: 'Open',
+            value: xrpPrice > 0 ? `${quantity} XRP ${side} at ${fmt(xrpPrice, 4)}` : 'Waiting for live price',
+        },
+        {
+            label: 'Borrowed size',
+            value: `${leverage}x turns ${fmt(marginRequired)} margin into ${fmt(notionalValue)} exposure`,
+        },
+        {
+            label: 'Danger line',
+            value: estimatedLiqPrice > 0
+                ? `Mark Price ${side === 'long' ? 'falls to' : 'rises to'} ${fmt(estimatedLiqPrice, 4)}`
+                : 'Estimated after live price loads',
+        },
+    ];
 
     // ─── Render ───────────────────────────────
 
@@ -235,7 +277,12 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
 
                 {/* ═══ LEFT: Inputs ═══ */}
                 <div className="md:col-span-4 bg-bs-bg/60 backdrop-blur-xl border border-bs-border p-4 space-y-4">
-                    <span className="text-label-12 text-bs-text-tertiary uppercase tracking-wider">Simulator Inputs</span>
+                    <div>
+                        <span className="text-sm font-semibold text-bs-text-primary">Case setup</span>
+                        <p className="mt-1 text-sm leading-relaxed text-bs-text-secondary">
+                            Build a position, then drag Mark Price to see how losses consume margin.
+                        </p>
+                    </div>
 
                     {/* Token */}
                     <div>
@@ -317,9 +364,54 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                     <div className="p-3 bg-bs-brand-tertiary/10 border border-bs-brand-tertiary/20">
                         <div className="text-[10px] font-mono text-bs-brand-secondary/60 uppercase tracking-wider mb-1">Margin Required</div>
                         <div className="text-sm font-mono text-bs-brand-secondary font-bold">
-                            💰 {fmt(marginRequired)} {isINR ? 'INR' : 'USDC'}
+                            {fmt(marginRequired)} {isINR ? 'INR' : 'USDC'}
                         </div>
                         <div className="text-[9px] font-mono text-bs-text-mute mt-0.5">Qty × Price ÷ Leverage</div>
+                    </div>
+
+                    <div className="rounded-lg border border-bs-brand-tertiary/20 bg-bs-brand-tertiary/8 p-3">
+                        <div className="mb-2 text-xs font-semibold text-bs-text-primary">Case path</div>
+                        <div className="space-y-2">
+                            {caseSteps.map((step, index) => (
+                                <div key={step.label} className="flex gap-2 rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-bs-brand-tertiary/30 text-[10px] font-bold text-bs-brand">
+                                        {index + 1}
+                                    </span>
+                                    <div>
+                                        <div className="text-[10px] font-semibold uppercase tracking-wide text-bs-text-mute">{step.label}</div>
+                                        <div className="text-xs leading-relaxed text-bs-text-primary">{step.value}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="rounded-lg border border-bs-info/20 bg-bs-info/8 p-3">
+                        <div className="mb-3 flex items-center gap-2">
+                            <Calculator size={14} className="text-bs-info" />
+                            <span className="text-xs font-semibold text-bs-text-primary">Risk preview</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                            <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Position value</div>
+                                <div className="mt-1 font-mono font-semibold text-bs-text-primary">{notionalValue > 0 ? fmt(notionalValue) : '-'}</div>
+                            </div>
+                            <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Margin used</div>
+                                <div className="mt-1 font-mono font-semibold text-bs-brand-secondary">{marginRequired > 0 ? fmt(marginRequired) : '-'}</div>
+                            </div>
+                            <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Est. liq price</div>
+                                <div className="mt-1 font-mono font-semibold text-bs-error">{estimatedLiqPrice > 0 ? fmt(estimatedLiqPrice, 4) : '-'}</div>
+                            </div>
+                            <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Distance</div>
+                                <div className="mt-1 font-mono font-semibold text-bs-text-primary">{distanceToLiquidationPct.toFixed(2)}%</div>
+                            </div>
+                        </div>
+                        <p className="mt-2 text-sm leading-relaxed text-bs-text-secondary">
+                            Liquidation uses Mark Price. A {side} is in danger when price {side === 'long' ? 'falls toward' : 'rises toward'} the liquidation line.
+                        </p>
                     </div>
 
                     {/* Position Side */}
@@ -366,12 +458,28 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                 <div className={`md:col-span-5 bg-bs-bg/60 backdrop-blur-xl border border-bs-border p-4 ${!simResult ? 'flex items-center justify-center' : ''}`}>
                     {!simResult ? (
                         <div className="text-center">
-                            <div className="text-bs-text-primary/15 text-xs font-mono mb-2">No simulation running</div>
-                            <div className="text-bs-text-primary/10 text-[10px] font-mono">Configure inputs and press "Run Simulation"</div>
+                            <div className="text-sm font-semibold text-bs-text-secondary mb-2">No simulation running</div>
+                            <div className="mx-auto max-w-sm text-sm leading-relaxed text-bs-text-mute">
+                                Configure the case on the left. The preview already shows the estimated liquidation line; running the simulation lets you drag Mark Price toward it.
+                            </div>
                         </div>
                     ) : results && (
                         <div className="space-y-4">
-                            <span className="text-label-12 text-bs-text-tertiary uppercase tracking-wider">Simulation Results</span>
+                            <span className="text-sm font-semibold text-bs-text-primary">Simulation results</span>
+
+                            {statusInsight && (
+                                <div className={`rounded-lg border p-3 ${STATUS_CONFIG[results.status].border} bg-bs-card/60`}>
+                                    <div className="mb-1 flex items-center justify-between gap-3">
+                                        <span className={`text-xs font-semibold ${STATUS_CONFIG[results.status].color}`}>
+                                            {STATUS_CONFIG[results.status].label}: {STATUS_CONFIG[results.status].sublabel}
+                                        </span>
+                                        <span className="text-xs font-mono text-bs-text-mute">
+                                            {(100 - results.consumed).toFixed(0)}% buffer left
+                                        </span>
+                                    </div>
+                                    <p className="text-sm leading-relaxed text-bs-text-secondary">{statusInsight}</p>
+                                </div>
+                            )}
 
                             {/* XRP Change */}
                             <div className="p-3 bg-bs-card border border-bs-border">
@@ -423,7 +531,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
 
                             {/* Liquidation Status Bar */}
                             <div className={`p-3 border ${STATUS_CONFIG[results.status].border} bg-bs-bg/40`}>
-                                <div className="text-[10px] font-mono text-bs-text-mute uppercase tracking-wider mb-2">Liquidation Status</div>
+                                <div className="text-xs font-semibold text-bs-text-primary mb-2">Distance to liquidation</div>
 
                                 {/* Bar */}
                                 <div className="relative h-3 bg-bs-card overflow-hidden mb-2">
@@ -459,13 +567,16 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                 <div className="md:col-span-3 bg-bs-bg/60 backdrop-blur-xl border border-bs-border p-4">
                     {!simResult ? (
                         <div className="h-full flex items-center justify-center">
-                            <div className="text-bs-text-primary/10 text-[10px] font-mono text-center">
-                                Price slider<br />appears after<br />simulation
+                            <div className="max-w-[11rem] text-center text-xs leading-relaxed text-bs-text-mute">
+                                Run the case to unlock the Mark Price slider.
                             </div>
                         </div>
                     ) : (
                         <div className="h-full flex flex-col">
-                            <span className="text-label-12 text-bs-text-tertiary uppercase tracking-wider mb-3">Market Price</span>
+                            <span className="text-sm font-semibold text-bs-text-primary mb-1">Mark Price</span>
+                            <p className="mb-3 text-sm leading-relaxed text-bs-text-secondary">
+                                Liquidation checks this price line, not the last traded price.
+                            </p>
 
                             {/* Current sim price display */}
                             <div className="text-center mb-3">
@@ -504,7 +615,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                                 >
                                     <div className="flex-1 h-px bg-bs-error/60" />
                                     <span className="text-[9px] font-mono text-bs-error whitespace-nowrap">
-                                        {fmt(simResult.liquidationPrice, 4)} Liq 🔴
+                                        {fmt(simResult.liquidationPrice, 4)} Liq
                                     </span>
                                 </div>
 
@@ -531,7 +642,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                             </div>
 
                             <div className="text-center mt-2">
-                                <span className="text-[9px] font-mono text-bs-text-mute">Drag to simulate price</span>
+                                <span className="text-xs text-bs-text-secondary">Drag Mark Price to test the case</span>
                             </div>
                         </div>
                     )}
@@ -546,7 +657,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                 >
                     <div className="flex items-center gap-2">
                         <Info size={14} className="text-bs-brand" />
-                        <span className="text-xs font-mono text-bs-text-tertiary">What is Liquidation?</span>
+                        <span className="text-sm font-semibold text-bs-text-tertiary">What is Liquidation?</span>
                     </div>
                     {accordionOpen ? (
                         <ChevronUp size={14} className="text-bs-text-mute" />
@@ -557,15 +668,15 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
 
                 {accordionOpen && (
                     <div className="px-4 pb-4 border-t border-bs-border">
-                        <div className="pt-3 space-y-3 text-xs font-mono text-bs-text-mute leading-relaxed">
+                        <div className="pt-3 space-y-3 text-sm text-bs-text-secondary leading-relaxed">
                             <p>
                                 In perpetual futures trading, <span className="text-bs-text-secondary">liquidation</span> occurs when your
-                                position's unrealized loss consumes your initial margin (collateral). The exchange automatically
+                                position&apos;s unrealized loss consumes your initial margin (collateral). The exchange automatically
                                 closes your position to prevent further losses.
                             </p>
                             <div className="space-y-1.5">
                                 <p className="text-bs-text-tertiary font-bold">Key Takeaways:</p>
-                                <ul className="space-y-1 text-bs-text-primary/35">
+                                <ul className="space-y-1 text-bs-text-secondary">
                                     <li className="flex items-start gap-2">
                                         <span className="text-bs-brand mt-0.5">•</span>
                                         <span>Higher leverage moves the liquidation price closer to your entry — more risk.</span>
@@ -584,7 +695,7 @@ export default function LiquidationSimulator({ livePrices, currency, usdInrRate 
                                     </li>
                                 </ul>
                             </div>
-                            <div className="p-2 bg-bs-card border border-bs-border text-[10px] text-bs-text-mute">
+                            <div className="p-2 bg-bs-card border border-bs-border text-[10px] font-mono text-bs-text-mute">
                                 <span className="text-bs-text-mute">Formula:</span><br />
                                 Long Liq Price = Entry × (1 − 1/Leverage + MMR)<br />
                                 Short Liq Price = Entry × (1 + 1/Leverage − MMR)
