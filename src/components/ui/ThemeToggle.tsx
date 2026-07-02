@@ -3,6 +3,7 @@
 import { useTheme } from 'next-themes';
 import { Sun, Moon, Monitor } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAppSound } from '@/lib/context/SoundContext';
 
 const MODES = ['light', 'dark', 'system'] as const;
 type ThemeMode = (typeof MODES)[number];
@@ -26,15 +27,21 @@ interface ThemeToggleProps {
 
 export default function ThemeToggle({ showLabel = false, className }: ThemeToggleProps) {
     const { theme, setTheme } = useTheme();
+    const { playClick } = useAppSound();
 
     const current = MODES.includes(theme as ThemeMode) ? theme as ThemeMode : 'system';
     const next = MODES[(MODES.indexOf(current) + 1) % MODES.length];
     const Icon = ICONS[current] ?? Moon;
 
+    const handleClick = () => {
+        playClick();
+        setTheme(next);
+    };
+
     return (
         <button
             type="button"
-            onClick={() => setTheme(next)}
+            onClick={handleClick}
             className={cn(
                 'inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-bs-border bg-bs-card-fg px-2.5 text-xs font-medium text-bs-text-secondary transition-colors hover:text-bs-text-primary',
                 !showLabel && 'w-9 px-0',

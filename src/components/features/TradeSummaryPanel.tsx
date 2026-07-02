@@ -179,10 +179,7 @@ const TradeSummaryPanel = React.memo(function TradeSummaryPanel({ simSnapshot, f
     const hasTpSl = tp || sl;
 
     return (
-        <div className="bg-bs-bg/40 border border-white/8 p-3 space-y-3">
-            {/* Header */}
-            <p className="text-xs font-semibold text-bs-text-primary">Trade summary</p>
-
+        <div className="space-y-3">
             {/* Order Snapshot */}
             <div className="flex items-center gap-2 flex-wrap">
                 <span className={`px-2 py-0.5 text-[9px] font-mono font-bold border ${simSnapshot.side === 'buy'

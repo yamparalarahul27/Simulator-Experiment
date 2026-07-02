@@ -8,8 +8,6 @@ import {
     DemoBalance,
     DemoSettings,
     CreateOrderParams,
-    DemoOrderStatus,
-    DEFAULT_BALANCES,
 } from '@/services/SupabaseDemoService';
 import { toast } from 'sonner';
 
@@ -124,7 +122,8 @@ export function useSpotTrade(walletAddress: string | null) {
     const [isLoading, setIsLoading] = useState(true);
 
     // Live prices from context (WS/REST managed by LivePricesProvider)
-    const { livePrices, wsSource } = useLivePrices();
+    const { livePrices: rawLivePrices, wsSource } = useLivePrices();
+    const [localPriceOverrides, setLocalPriceOverrides] = useState<Record<string, number>>({});
 
     // Track which tokens have price overrides (used by ControlPanel)
     const [wsDisabled, setWsDisabled] = useState<Record<string, boolean>>({});
@@ -135,8 +134,6 @@ export function useSpotTrade(walletAddress: string | null) {
     // ─── Refs for matching engine (stable 2s interval, no restart on tick) ─
     const openOrdersRef = useRef<DemoOrder[]>(openOrders);
     openOrdersRef.current = openOrders;
-    const livePricesStateRef = useRef<Record<string, PriceData>>(livePrices);
-    livePricesStateRef.current = livePrices;
     const fillOrderRef = useRef<(order: DemoOrder, fillPrice: number) => Promise<void>>(async () => {});
     const applyFillRef = useRef<(order: DemoOrder, qty: number, fillPrice: number) => Promise<void>>(async () => {});
     const createTpSlRef = useRef<(parentOrder: DemoOrder, fillPrice: number) => Promise<void>>(async () => {});
@@ -147,6 +144,26 @@ export function useSpotTrade(walletAddress: string | null) {
         () => DEMO_PAIRS.find(p => p.pair === selectedPair) || DEMO_PAIRS[0],
         [selectedPair]
     );
+
+    const activePriceOverrides = settings?.priceOverrides ?? localPriceOverrides;
+
+    const livePrices = useMemo(() => {
+        const merged: Record<string, PriceData> = {};
+
+        DEMO_PAIRS.forEach(({ token }) => {
+            const live = rawLivePrices[token] || { price: 0, change: 0, isOverridden: false };
+            const override = activePriceOverrides[token];
+
+            merged[token] = typeof override === 'number' && override > 0
+                ? { price: override, change: live.change, isOverridden: true }
+                : { ...live, isOverridden: false };
+        });
+
+        return merged;
+    }, [activePriceOverrides, rawLivePrices]);
+
+    const livePricesStateRef = useRef<Record<string, PriceData>>(livePrices);
+    livePricesStateRef.current = livePrices;
 
     const currentPrice = useMemo(() => {
         const token = currentPairInfo.token;
@@ -430,7 +447,7 @@ export function useSpotTrade(walletAddress: string | null) {
         toast.success(`Order Filled: ${order.side.toUpperCase()} ${order.quantity} ${order.pair} @ ${formatPrice(fillPrice)}`);
     }, [service, applyFill, formatPrice]);
 
-    const createTpSlOrders = useCallback(async (parentOrder: DemoOrder, fillPrice: number) => {
+    const createTpSlOrders = useCallback(async (parentOrder: DemoOrder) => {
         if (!walletAddress) return;
         const oppositeSide = parentOrder.side === 'buy' ? 'sell' : 'buy';
 
@@ -522,13 +539,7 @@ export function useSpotTrade(walletAddress: string | null) {
                 }
             }
 
-            // Set TWAP next slice time
-            let adjustedParams = { ...params };
-            if (params.orderType === 'twap' && params.twapDuration && params.twapIntervals) {
-                const sliceIntervalMs = (params.twapDuration * 1000) / params.twapIntervals;
-                const firstSlice = new Date(Date.now() + sliceIntervalMs);
-                // We'll handle via the matching engine
-            }
+            const adjustedParams = { ...params };
 
             const order = await service.createOrder(walletAddress, {
                 ...adjustedParams,
@@ -538,7 +549,7 @@ export function useSpotTrade(walletAddress: string | null) {
 
             // Market orders create TP/SL immediately
             if (params.orderType === 'market') {
-                await createTpSlOrders({ ...order, tpPrice: params.tpPrice ?? null, slPrice: params.slPrice ?? null }, price);
+                await createTpSlOrders({ ...order, tpPrice: params.tpPrice ?? null, slPrice: params.slPrice ?? null });
             }
 
             await refreshOrders();
@@ -605,35 +616,76 @@ export function useSpotTrade(walletAddress: string | null) {
     // ─── Control Panel methods ──────────────
 
     const setPriceOverride = useCallback(async (token: string, price: number | null) => {
-        if (!walletAddress || !settings) return;
+        const normalizedPrice = price != null && price > 0 ? price : null;
 
-        const newOverrides = { ...settings.priceOverrides };
-        if (price === null || price <= 0) {
-            delete newOverrides[token];
-        } else {
-            newOverrides[token] = price;
+        if (!walletAddress || !settings) {
+            setLocalPriceOverrides(prev => {
+                const next = { ...prev };
+                if (normalizedPrice == null) {
+                    delete next[token];
+                } else {
+                    next[token] = normalizedPrice;
+                }
+                return next;
+            });
+            setWsDisabled(prev => {
+                const next = { ...prev };
+                if (normalizedPrice == null) {
+                    delete next[token];
+                } else {
+                    next[token] = true;
+                }
+                return next;
+            });
+            return;
         }
 
-        const updated = await service.updateSettings(walletAddress, { priceOverrides: newOverrides });
-        setSettings(updated);
+        const newOverrides = { ...settings.priceOverrides };
+        if (normalizedPrice == null) {
+            delete newOverrides[token];
+        } else {
+            newOverrides[token] = normalizedPrice;
+        }
+
+        setSettings(prev => prev ? { ...prev, priceOverrides: newOverrides } : prev);
         setWsDisabled(prev => {
             const next = { ...prev };
-            if (price === null || price <= 0) {
+            if (normalizedPrice == null) {
                 delete next[token];
             } else {
                 next[token] = true;
             }
             return next;
         });
+
+        try {
+            const updated = await service.updateSettings(walletAddress, { priceOverrides: newOverrides });
+            setSettings(updated);
+        } catch (err) {
+            console.error('[useSpotTrade] price override error:', err);
+            toast.error('Failed to update manual price');
+        }
     }, [walletAddress, settings, service]);
 
     const resetAllOverrides = useCallback(async () => {
-        if (!walletAddress || !settings) return;
-
-        const updated = await service.updateSettings(walletAddress, { priceOverrides: {} });
-        setSettings(updated);
+        setLocalPriceOverrides({});
         setWsDisabled({});
-        toast.success('Price overrides reset — live WebSocket re-enabled');
+
+        if (!walletAddress || !settings) {
+            toast.success('Price overrides reset — live prices re-enabled');
+            return;
+        }
+
+        setSettings(prev => prev ? { ...prev, priceOverrides: {} } : prev);
+
+        try {
+            const updated = await service.updateSettings(walletAddress, { priceOverrides: {} });
+            setSettings(updated);
+            toast.success('Price overrides reset — live prices re-enabled');
+        } catch (err) {
+            console.error('[useSpotTrade] reset overrides error:', err);
+            toast.error('Failed to reset manual prices');
+        }
     }, [walletAddress, settings, service]);
 
     const updateCurrency = useCallback(async (currency: 'USD' | 'INR') => {

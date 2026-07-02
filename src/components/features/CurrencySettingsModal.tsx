@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { X, RefreshCw, Info, Check } from 'lucide-react';
+import { useAppSound } from '@/lib/context/SoundContext';
 
 /**
  * CurrencySettingsModal — Modal for changing the USD/INR exchange rate.
@@ -25,10 +26,12 @@ export default function CurrencySettingsModal({ isOpen, onClose, currentRate, on
     const [rate, setRate] = useState(currentRate);
     const [fetching, setFetching] = useState(false);
     const [fetchStatus, setFetchStatus] = useState<'idle' | 'success' | 'error'>('idle');
+    const { playClick, playOpen, playSuccess } = useAppSound();
 
     if (!isOpen) return null;
 
     const fetchLiveRate = async () => {
+        playOpen();
         setFetching(true);
         setFetchStatus('idle');
         try {
@@ -49,7 +52,13 @@ export default function CurrencySettingsModal({ isOpen, onClose, currentRate, on
     };
 
     const handleApply = () => {
+        playSuccess();
         onApply(rate);
+        onClose();
+    };
+
+    const handleClose = () => {
+        playClick();
         onClose();
     };
 
@@ -58,7 +67,7 @@ export default function CurrencySettingsModal({ isOpen, onClose, currentRate, on
             {/* Backdrop */}
             <div
                 className="fixed inset-0 bg-bs-bg/60 backdrop-blur-sm z-[80]"
-                onClick={onClose}
+                onClick={handleClose}
             />
 
             {/* Modal */}
@@ -67,7 +76,7 @@ export default function CurrencySettingsModal({ isOpen, onClose, currentRate, on
                 <div className="flex items-center justify-between px-5 py-4 border-b border-bs-border">
                     <h3 className="text-sm font-mono font-bold text-bs-text-primary">Currency Settings</h3>
                     <button
-                        onClick={onClose}
+                        onClick={handleClose}
                         className="text-bs-text-mute hover:text-bs-text-primary transition-colors"
                     >
                         <X size={16} />
@@ -103,7 +112,7 @@ export default function CurrencySettingsModal({ isOpen, onClose, currentRate, on
                             {PRESETS.map(p => (
                                 <button
                                     key={p}
-                                    onClick={() => { setRate(p); setFetchStatus('idle'); }}
+                                    onClick={() => { playClick(); setRate(p); setFetchStatus('idle'); }}
                                     className={`flex-1 py-1.5 text-xs font-mono transition-all border ${rate === p
                                             ? 'bg-bs-brand-tertiary/20 border-bs-brand-tertiary/30 text-bs-brand-secondary'
                                             : 'bg-bs-card border-bs-border text-bs-text-mute hover:text-bs-text-tertiary hover:bg-bs-card-fg'

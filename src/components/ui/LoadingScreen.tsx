@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
  * LoadingScreen Component — Logo Splash
  *
  * Shows a brief logo animation on app load, then fades out
- * to reveal the app directly. Dark-only: brand purple logo on the
+ * to reveal the app directly. Dark-only: white logo on the
  * flat workspace surface.
  */
 export default function LoadingScreen() {
@@ -36,13 +36,13 @@ export default function LoadingScreen() {
         }
     }, [isVisible]);
 
-    const logoColor = '#c84ff5';
+    const logoColor = '#ffffff';
 
     return (
         <AnimatePresence>
             {isVisible && (
                 <motion.div
-                    className="loading-screen fixed inset-0 z-50 flex items-center justify-center bg-bs-bg"
+                    className="loading-screen fixed inset-0 z-50 flex items-center justify-center bg-[#0b0b0c]"
                     style={{
                         top: 'calc(-1 * env(safe-area-inset-top, 0px))',
                         bottom: 'calc(-1 * env(safe-area-inset-bottom, 0px))',

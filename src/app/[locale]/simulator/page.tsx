@@ -8,7 +8,7 @@ const DemoMarket = dynamic(() => import('@/components/features/DemoMarket'), {
 
 export default function SimulatorPage() {
     return (
-        <div className="w-full">
+        <div className="flex min-h-0 w-full flex-1">
             <DemoMarket />
         </div>
     );
