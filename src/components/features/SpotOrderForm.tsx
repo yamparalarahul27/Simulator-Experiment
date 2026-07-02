@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { Calculator, Play, AlertTriangle } from 'lucide-react';
+import { Calculator, Play, AlertTriangle, Sparkles } from 'lucide-react';
 import type { DemoOrderType } from '@/services/SupabaseDemoService';
 import type { SimConfig } from './OrderFlowVisualiser';
 import OrderInfoPanel from './OrderInfoPanel';
+import { useAppSound } from '@/lib/context/SoundContext';
 
 interface SpotOrderFormProps {
     pair: string;
@@ -53,6 +54,19 @@ const INITIAL_FORM: FormState = {
     twapDuration: '60', twapIntervals: '6',
 };
 
+function asInput(n: number, decimals = 6) {
+    return Number(n.toFixed(decimals)).toString();
+}
+
+function demoAmountFor(price: number) {
+    if (price >= 10000) return 0.01;
+    if (price >= 1000) return 0.05;
+    if (price >= 100) return 0.25;
+    if (price >= 10) return 1;
+    if (price >= 1) return 100;
+    return 1000;
+}
+
 const SpotOrderForm = React.memo(function SpotOrderForm({
     pair, currentPrice, formatPrice,
     orderType, onOrderTypeChange,
@@ -61,6 +75,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
     currency,
 }: SpotOrderFormProps) {
     const [form, setForm] = useState<FormState>(INITIAL_FORM);
+    const { playClick, playOpen, playSuccess } = useAppSound();
 
     const handleField = useCallback(<K extends keyof FormState>(key: K, value: FormState[K]) => {
         setForm(prev => ({ ...prev, [key]: value }));
@@ -71,10 +86,16 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
 
     // TP/SL is only supported for Limit orders in Spot
     const handleOrderTypeChange = (v: DemoOrderType) => {
+        if (v !== orderType) playClick();
         if (v !== 'limit') {
             setForm(prev => ({ ...prev, tpEnabled: false, slEnabled: false, tpPrice: '', slPrice: '' }));
         }
         onOrderTypeChange(v);
+    };
+
+    const handleSideChange = (nextSide: 'buy' | 'sell') => {
+        if (nextSide !== side) playClick();
+        onSideChange(nextSide);
     };
 
     // Parsed values for validation
@@ -216,9 +237,100 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                     : orderType === 'trailing_stop' ? (pAct > 0 ? `${formatPrice(pAct)} activation` : 'Set activation')
                         : `${form.twapIntervals || '0'} slices`;
 
+    const guidedCaseSummary =
+        orderType === 'market' ? 'Amount only; fills immediately.'
+            : orderType === 'limit' ? 'Limit entry with TP/SL protection.'
+                : orderType === 'stop_market' ? 'Stop trigger, then market fill.'
+                    : orderType === 'stop_limit' ? 'Stop trigger with a limit cap.'
+                        : orderType === 'iceberg' ? 'Large limit order split into slices.'
+                            : orderType === 'twap' ? 'Timed slices over one minute.'
+                                : orderType === 'trailing_stop' ? 'Activation plus trailing delta.'
+                                    : 'Target leg and protection leg together.';
+
+    const loadGuidedCase = () => {
+        if (currentPrice <= 0) return;
+        playOpen();
+
+        const amount = demoAmountFor(currentPrice);
+        const amountText = asInput(amount, 4);
+        const sliceText = asInput(Math.max(amount / 4, 0.0001), 4);
+        const buyLimit = currentPrice * 0.98;
+        const sellLimit = currentPrice * 1.02;
+        const entry = side === 'buy' ? buyLimit : sellLimit;
+        const base: FormState = {
+            ...INITIAL_FORM,
+            amount: amountText,
+        };
+
+        switch (orderType) {
+            case 'market':
+                setForm(base);
+                break;
+            case 'limit':
+                setForm({
+                    ...base,
+                    price: asInput(entry),
+                    tpEnabled: true,
+                    slEnabled: true,
+                    tpPrice: asInput(side === 'buy' ? entry * 1.04 : entry * 0.96),
+                    slPrice: asInput(side === 'buy' ? entry * 0.97 : entry * 1.03),
+                });
+                break;
+            case 'stop_market':
+                setForm({
+                    ...base,
+                    stopPrice: asInput(side === 'buy' ? currentPrice * 1.02 : currentPrice * 0.98),
+                });
+                break;
+            case 'stop_limit': {
+                const stop = side === 'buy' ? currentPrice * 1.02 : currentPrice * 0.98;
+                setForm({
+                    ...base,
+                    stopPrice: asInput(stop),
+                    limitPrice: asInput(side === 'buy' ? stop * 1.005 : stop * 0.995),
+                    visibleQty: sliceText,
+                });
+                break;
+            }
+            case 'iceberg':
+                setForm({
+                    ...base,
+                    price: asInput(side === 'buy' ? currentPrice * 0.99 : currentPrice * 1.01),
+                    visibleQty: sliceText,
+                });
+                break;
+            case 'twap':
+                setForm({
+                    ...base,
+                    twapDuration: '60',
+                    twapIntervals: '6',
+                });
+                break;
+            case 'trailing_stop':
+                setForm({
+                    ...base,
+                    activationPrice: asInput(side === 'buy' ? currentPrice * 0.98 : currentPrice * 1.02),
+                    trailingPercent: '1.2',
+                });
+                break;
+            case 'oco': {
+                const limit = side === 'buy' ? currentPrice * 0.98 : currentPrice * 1.02;
+                const stop = side === 'buy' ? currentPrice * 1.02 : currentPrice * 0.98;
+                setForm({
+                    ...base,
+                    price: asInput(limit),
+                    stopPrice: asInput(stop),
+                    limitPrice: asInput(side === 'buy' ? stop * 1.005 : stop * 0.995),
+                });
+                break;
+            }
+        }
+    };
+
 
     const handleRunSimulation = () => {
         if (!amountNum || amountNum <= 0 || currentPrice <= 0 || isInvalid) return;
+        playSuccess();
 
         // Construct standard simulation payload based on type
         // The simulator handles node traversal based on these values
@@ -244,12 +356,13 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
     };
 
     return (
-        <div className="h-full flex flex-col">
-            {/* Buy/Sell Toggle */}
-            <div className="grid grid-cols-2 gap-0 mb-4">
+        <div className="flex h-full min-h-0 flex-col overflow-hidden">
+            <div className="min-h-0 flex-1 overflow-y-auto pr-1 custom-scrollbar">
+                {/* Buy/Sell Toggle */}
+                <div className="mb-3 grid grid-cols-2 gap-0">
                 <button
-                    onClick={() => onSideChange('buy')}
-                    className={`py-2.5 text-sm font-mono font-bold transition-all ${side === 'buy'
+                    onClick={() => handleSideChange('buy')}
+                    className={`py-2 text-xs font-mono font-bold transition-all ${side === 'buy'
                         ? 'bg-bs-buy/10 text-bs-buy border border-bs-buy/30'
                         : 'bg-bs-card text-bs-text-mute border border-bs-border hover:text-bs-text-tertiary'
                         }`}
@@ -257,8 +370,8 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                     BUY
                 </button>
                 <button
-                    onClick={() => onSideChange('sell')}
-                    className={`py-2.5 text-sm font-mono font-bold transition-all ${side === 'sell'
+                    onClick={() => handleSideChange('sell')}
+                    className={`py-2 text-xs font-mono font-bold transition-all ${side === 'sell'
                         ? 'bg-bs-sell/10 text-bs-sell border border-bs-sell/30'
                         : 'bg-bs-card text-bs-text-mute border border-bs-border hover:text-bs-text-tertiary'
                         }`}
@@ -267,13 +380,13 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                 </button>
             </div>
 
-            {/* Order Type Tabs */}
-            <div className="flex flex-wrap gap-1 mb-4">
+                {/* Order Type Tabs */}
+                <div className="mb-3 flex flex-wrap gap-1">
                 {ORDER_TYPES.map(ot => (
                     <button
                         key={ot.value}
                         onClick={() => handleOrderTypeChange(ot.value)}
-                        className={`px-2 py-1 text-sm font-mono font-medium transition-all border ${orderType === ot.value
+                        className={`px-2 py-1 text-xs font-mono font-medium transition-all border ${orderType === ot.value
                             ? 'bg-bs-card-fg text-bs-text-primary border-bs-border-active'
                             : 'text-bs-text-mute border-bs-border hover:text-bs-text-tertiary hover:border-bs-border'
                             }`}
@@ -283,12 +396,35 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                 ))}
             </div>
 
-            <div className="mb-4">
+                <div className="mb-2.5">
                 <OrderInfoPanel key={orderType} orderType={orderType} side={side} currency={currency} />
             </div>
 
-            {/* Dynamic Fields */}
-            <div className="space-y-3 flex-1 overflow-y-auto pr-1 custom-scrollbar">
+                <div className="mb-3 rounded-lg border border-bs-brand-tertiary/20 bg-bs-brand-tertiary/8 px-3 py-2">
+                <div className="flex items-start gap-2">
+                    <Sparkles size={13} className="mt-0.5 shrink-0 text-bs-brand" />
+                    <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-xs font-semibold text-bs-text-primary">Guided case</span>
+                            <span className="rounded border border-bs-border bg-bs-card/70 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-bs-text-mute">
+                                {side} {orderType.replace('_', ' ')}
+                            </span>
+                        </div>
+                        <p className="mt-0.5 text-[11px] leading-snug text-bs-text-secondary">{guidedCaseSummary}</p>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={loadGuidedCase}
+                        disabled={currentPrice <= 0}
+                        className="shrink-0 rounded-md border border-bs-border bg-bs-card px-2.5 py-1.5 text-xs font-semibold text-bs-text-primary transition-colors hover:bg-bs-card-fg disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                        Load
+                    </button>
+                </div>
+            </div>
+
+                {/* Dynamic Fields */}
+                <div className="space-y-2.5">
 
                 {warning && (
                     <div className="flex items-start gap-2 p-2 bg-bs-warning/10 border border-bs-warning/20 text-bs-warning text-sm font-mono leading-tight">
@@ -297,12 +433,28 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                     </div>
                 )}
 
-                {/* Entry Price (read-only, shows live price) */}
-                <div>
-                    <label className="text-sm font-mono text-bs-text-mute block mb-1">Entry (Market) Price</label>
-                    <div className="w-full bg-bs-card border border-bs-border text-bs-text-primary text-sm font-mono px-3 py-2 flex items-center justify-between">
-                        <span>{currentPrice > 0 ? formatPrice(currentPrice) : '—'}</span>
-                        <span className="text-[9px] text-bs-success font-mono">LIVE</span>
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    {/* Entry Price (read-only, shows live price) */}
+                    <div>
+                        <label className="mb-1 block font-mono text-xs text-bs-text-mute">Entry Price</label>
+                        <div className="flex w-full items-center justify-between border border-bs-border bg-bs-card px-2.5 py-2 font-mono text-xs text-bs-text-primary">
+                            <span>{currentPrice > 0 ? formatPrice(currentPrice) : '—'}</span>
+                            <span className="font-mono text-[8px] text-bs-success">LIVE</span>
+                        </div>
+                    </div>
+
+                    {/* Amount */}
+                    <div>
+                        <label className="mb-1 block font-mono text-xs text-bs-text-mute">Amount ({token})</label>
+                        <input
+                            type="number"
+                            inputMode="decimal"
+                            step="any"
+                            placeholder="0.00"
+                            value={form.amount}
+                            onChange={(e) => handleField('amount', e.target.value)}
+                            className="w-full border border-bs-border bg-bs-bg/50 px-2.5 py-2 font-mono text-xs text-bs-text-primary placeholder:text-bs-text-primary/15 focus:border-bs-brand-tertiary/50 focus:outline-none"
+                        />
                     </div>
                 </div>
 
@@ -392,11 +544,11 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                 {orderType === 'limit' && (
                     <div className="flex items-center gap-4 mt-2">
                         <label className="flex items-center gap-2 cursor-pointer group">
-                            <input type="checkbox" checked={form.tpEnabled} onChange={e => handleField('tpEnabled', e.target.checked)} className="accent-bs-accent-cyan cursor-pointer" />
+                            <input type="checkbox" checked={form.tpEnabled} onChange={e => { playClick(); handleField('tpEnabled', e.target.checked); }} className="accent-bs-accent-cyan cursor-pointer" />
                             <span className="text-sm font-mono text-bs-text-tertiary group-hover:text-bs-text-secondary transition-colors">TP</span>
                         </label>
                         <label className="flex items-center gap-2 cursor-pointer group">
-                            <input type="checkbox" checked={form.slEnabled} onChange={e => handleField('slEnabled', e.target.checked)} className="accent-bs-accent-cyan cursor-pointer" />
+                            <input type="checkbox" checked={form.slEnabled} onChange={e => { playClick(); handleField('slEnabled', e.target.checked); }} className="accent-bs-accent-cyan cursor-pointer" />
                             <span className="text-sm font-mono text-bs-text-tertiary group-hover:text-bs-text-secondary transition-colors">SL</span>
                         </label>
                     </div>
@@ -449,19 +601,6 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                     );
                 })()}
 
-                {/* Amount */}
-                <div className="pt-2">
-                    <label className="text-sm font-mono text-bs-text-mute block mb-1">Amount ({token})</label>
-                    <input
-                        type="number"
-                        step="any"
-                        placeholder="0.00"
-                        value={form.amount}
-                        onChange={(e) => handleField('amount', e.target.value)}
-                        className="w-full bg-bs-bg/50 border border-bs-border text-bs-text-primary text-sm font-mono px-3 py-2 focus:outline-none focus:border-bs-brand-tertiary/50 placeholder:text-bs-text-primary/15"
-                    />
-                </div>
-
                 {/* Visible Qty (Iceberg, Stop Limit) */}
                 {(orderType === 'iceberg' || orderType === 'stop_limit') && (
                     <div>
@@ -501,47 +640,50 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                     </div>
                 )}
 
-                <div className="rounded-lg border border-bs-border bg-bs-bg/45 p-3">
-                    <div className="mb-3 flex items-center gap-2">
-                        <Calculator size={14} className="text-bs-brand" />
-                        <span className="text-xs font-semibold text-bs-text-primary">Order impact</span>
-                        <span className="ml-auto text-[10px] text-bs-text-mute">before simulation</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                        <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
-                            <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Behavior</div>
-                            <div className="mt-1 font-semibold text-bs-text-primary">{executionLabel}</div>
+                {amountNum > 0 && (
+                    <div className="rounded-lg border border-bs-border bg-bs-bg/45 p-3">
+                        <div className="mb-3 flex items-center gap-2">
+                            <Calculator size={14} className="text-bs-brand" />
+                            <span className="text-xs font-semibold text-bs-text-primary">Order impact</span>
+                            <span className="ml-auto text-[10px] text-bs-text-mute">before simulation</span>
                         </div>
-                        <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
-                            <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Trigger / price</div>
-                            <div className="mt-1 font-semibold text-bs-text-primary">{triggerLabel}</div>
-                        </div>
-                        <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
-                            <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Notional</div>
-                            <div className="mt-1 font-semibold text-bs-text-primary">
-                                {estimatedNotional > 0 ? formatPrice(estimatedNotional) : 'Enter amount'}
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                            <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Behavior</div>
+                                <div className="mt-1 font-semibold text-bs-text-primary">{executionLabel}</div>
+                            </div>
+                            <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Trigger / price</div>
+                                <div className="mt-1 font-semibold text-bs-text-primary">{triggerLabel}</div>
+                            </div>
+                            <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Notional</div>
+                                <div className="mt-1 font-semibold text-bs-text-primary">
+                                    {estimatedNotional > 0 ? formatPrice(estimatedNotional) : 'Enter amount'}
+                                </div>
+                            </div>
+                            <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Fee estimate</div>
+                                <div className="mt-1 font-semibold text-bs-text-primary">
+                                    {estimatedFee > 0 ? formatPrice(estimatedFee) : '-'}
+                                </div>
                             </div>
                         </div>
-                        <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
-                            <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Fee estimate</div>
-                            <div className="mt-1 font-semibold text-bs-text-primary">
-                                {estimatedFee > 0 ? formatPrice(estimatedFee) : '-'}
-                            </div>
-                        </div>
+                        {(form.tpEnabled || form.slEnabled) && (
+                            <p className="mt-2 text-xs leading-relaxed text-bs-text-secondary">
+                                TP/SL becomes an exit plan after the main order fills. In the flow, the filled state should branch into the active protection orders.
+                            </p>
+                        )}
                     </div>
-                    {(form.tpEnabled || form.slEnabled) && (
-                        <p className="mt-2 text-xs leading-relaxed text-bs-text-secondary">
-                            TP/SL becomes an exit plan after the main order fills. In the flow, the filled state should branch into the active protection orders.
-                        </p>
-                    )}
-                </div>
+                )}
+            </div>
             </div>
 
             {/* RUN SIMULATION Button */}
             <button
                 onClick={handleRunSimulation}
                 disabled={amountNum <= 0 || currentPrice <= 0 || isInvalid}
-                className={`w-full py-3 text-sm font-mono font-bold transition-all mt-4 flex items-center justify-center gap-2 text-bs-text-primary
+                className={`mt-3 flex w-full shrink-0 items-center justify-center gap-2 py-2.5 text-xs font-mono font-bold text-bs-text-primary transition-all
                     ${isInvalid || amountNum <= 0 || currentPrice <= 0
                         ? 'bg-bs-card-fg text-bs-text-mute cursor-not-allowed border border-bs-border'
                         : 'bg-bs-accent-cyan text-white hover:opacity-90 border border-transparent shadow-[0_0_15px_rgba(9,117,117,0.3)]'

@@ -36,11 +36,11 @@ interface ComputedLayout { nodes: LayoutNode[]; edges: LayoutEdge[]; width: numb
 
 // ─── Graph Constants ───────────────────────────────────────────────────────────
 
-const NODE_W = 132;
-const NODE_H = 66;
-const DEPTH_GAP = 84;
-const SIBLING_GAP = 56;
-const PAD = 56;
+const NODE_W = 120;
+const NODE_H = 58;
+const DEPTH_GAP = 68;
+const SIBLING_GAP = 44;
+const PAD = 42;
 
 // ─── Graph Data ────────────────────────────────────────────────────────────────
 
@@ -717,14 +717,14 @@ function NodeBox({ node, side, nodeState }: { node: LayoutNode; side: 'buy' | 's
             <text
                 x={node.x + NODE_W / 2} y={hasSub ? midY - 11 : midY}
                 textAnchor="middle" dominantBaseline="middle"
-                fill={s.text} fontSize={15} fontFamily="monospace" fontWeight="700"
-                letterSpacing="0.06em"
+                fill={s.text} fontSize={13} fontFamily="monospace" fontWeight="700"
+                letterSpacing="0"
             >{node.label}</text>
             {hasSub && (
                 <text
                     x={node.x + NODE_W / 2} y={midY + 12}
                     textAnchor="middle" dominantBaseline="middle"
-                    fill={s.sub} fontSize={12} fontFamily="monospace"
+                    fill={s.sub} fontSize={10.5} fontFamily="monospace"
                 >{node.sublabel}</text>
             )}
         </g>
@@ -745,10 +745,10 @@ function EdgeLine({ edge }: { edge: LayoutEdge }) {
                 const labelW = edge.label.length * 7.5;
                 return (
                     <g>
-                        <rect x={mid.x - labelW / 2 - 4} y={mid.y - 10} width={labelW + 8} height={17}
+                        <rect x={mid.x - labelW / 2 - 4} y={mid.y - 9} width={labelW + 8} height={16}
                             fill="var(--color-surface-dim)" rx={3} />
                         <text x={mid.x} y={mid.y} textAnchor="middle" dominantBaseline="middle"
-                            fill="var(--bs-text-secondary)" fontSize={12} fontFamily="monospace">
+                            fill="var(--bs-text-secondary)" fontSize={11} fontFamily="monospace">
                             {edge.label}
                         </text>
                     </g>
@@ -917,6 +917,8 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
     }, [orderType, tpEnabled, slEnabled, simSnapshot, formatPrice, maxExtremum, simPrice, sessionMin, sessionMax, postFillMin, postFillMax]);
 
     const layout = useMemo(() => computeLayout(graph), [graph]);
+    const scaledLayoutWidth = layout.width * zoom;
+    const scaledLayoutHeight = layout.height * zoom;
 
     // Compute per-node states based on simPrice
     const nodeStates = useMemo((): Record<string, NodeState> => {
@@ -993,14 +995,15 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
                 className="flex-1 overflow-auto min-h-0 select-none cursor-grab custom-scrollbar"
             >
                 <div style={{
-                    transform: `scale(${zoom})`,
-                    transformOrigin: 'top left',
-                    width: layout.width * zoom,
-                    height: layout.height * zoom,
+                    width: scaledLayoutWidth,
+                    height: scaledLayoutHeight,
                     minWidth: '100%',
                     minHeight: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                 }}>
-                    <svg width="100%" height="100%"
+                    <svg width={scaledLayoutWidth} height={scaledLayoutHeight}
                         viewBox={`0 0 ${layout.width} ${layout.height}`}
                         preserveAspectRatio="xMidYMid meet"
                         style={{ display: 'block' }}>
@@ -1036,7 +1039,7 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
                 <div className="flex items-center justify-center gap-2 py-2 mt-1 border border-bs-buy/15 bg-bs-success/5">
                     <span className="text-[10px] font-mono text-bs-success/70">Order flow complete</span>
                     <span className="text-[10px] font-mono text-bs-text-mute">—</span>
-                    <span className="text-[10px] font-mono text-bs-text-mute">Re-run Simulation to replay</span>
+                    <span className="text-[10px] font-mono text-bs-text-mute">Use Rerun to replay</span>
                 </div>
             )}
 

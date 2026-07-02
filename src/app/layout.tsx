@@ -8,6 +8,7 @@ import "./globals.css";
 import '@pqina/flip/dist/flip.min.css';
 import { Agentation } from "agentation";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { SoundProvider } from "@/lib/context/SoundContext";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -62,7 +63,9 @@ export default function RootLayout({
           storageKey="ydex-theme"
           disableTransitionOnChange
         >
-          {children}
+          <SoundProvider>
+            {children}
+          </SoundProvider>
         </ThemeProvider>
         {process.env.NODE_ENV === "development" && <Agentation />}
       </body>

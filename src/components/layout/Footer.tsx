@@ -1,35 +1,54 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { X } from 'lucide-react';
+import { useAppSound } from '@/lib/context/SoundContext';
 
 const QR_IMAGE_SRC = '/assets/QR_image.png';
 
 export default function Footer() {
     const [isScanOpen, setIsScanOpen] = useState(false);
+    const { playClick, playOpen } = useAppSound();
+
+    const openScan = useCallback(() => {
+        playOpen();
+        setIsScanOpen(true);
+    }, [playOpen]);
+
+    const closeScan = useCallback(() => {
+        playClick();
+        setIsScanOpen(false);
+    }, [playClick]);
+
+    useEffect(() => {
+        if (!isScanOpen) return;
+        const onKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') closeScan();
+        };
+        window.addEventListener('keydown', onKeyDown);
+        return () => window.removeEventListener('keydown', onKeyDown);
+    }, [closeScan, isScanOpen]);
 
     return (
-        <footer className="mb-8 mt-14">
-            <div className="overflow-hidden rounded-2xl border border-bs-border bg-bs-card shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_1px_3px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.03)]">
-                <div className="grid gap-5 px-5 py-6 md:grid-cols-[1fr_auto] md:items-center md:px-6">
-                    <div className="space-y-1">
-                        <p className="text-lg font-semibold text-bs-text-primary text-balance">
-                            A learning resource for running test cases and designing better information around trading.
-                        </p>
-                        <p className="text-sm text-bs-text-secondary text-pretty">
-                            Design and engineering by Yamparala Rahul. © 2026 YDEX.
-                        </p>
-                    </div>
-                    <div>
-                        <button
-                            type="button"
-                            onClick={() => setIsScanOpen(true)}
-                            className="rounded-xl border border-bs-border px-4 py-2 text-sm font-medium text-bs-text-primary"
-                        >
-                            Connect with Rahul
-                        </button>
-                    </div>
+        <footer className="mt-auto shrink-0 border-t border-bs-border-subtle py-1">
+            <div className="flex flex-col gap-2 text-xs md:flex-row md:items-center md:justify-between">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+                    <span className="font-semibold text-bs-text-primary">YDEX</span>
+                    <span className="hidden h-4 border-l border-bs-border-subtle sm:block" />
+                    <p className="text-bs-text-secondary">
+                        Trading case simulator for orders, liquidation, and risk.
+                    </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 text-bs-text-tertiary">
+                    <span className="tabular-nums">© 2026 Yamparala Rahul</span>
+                    <button
+                        type="button"
+                        onClick={openScan}
+                        className="rounded-md border border-bs-border bg-bs-card px-2.5 py-0.5 text-xs font-medium text-bs-text-primary transition-colors hover:bg-bs-card-fg"
+                    >
+                        Connect
+                    </button>
                 </div>
             </div>
 
@@ -37,7 +56,7 @@ export default function Footer() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
                     <div
                         className="absolute inset-0 bg-black/65"
-                        onClick={() => setIsScanOpen(false)}
+                        onClick={closeScan}
                     />
                     <div className="relative z-10 w-full max-w-sm rounded-2xl border border-bs-border bg-bs-card p-6 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_24px_rgba(0,0,0,0.1)]">
                         <h4 className="text-lg font-semibold text-bs-text-primary text-balance">Scan to say hi</h4>
@@ -57,7 +76,7 @@ export default function Footer() {
                         <button
                             aria-label="Close QR modal"
                             className="mt-6 inline-flex items-center justify-center rounded-lg border border-bs-border px-4 py-2 text-sm text-bs-text-secondary"
-                            onClick={() => setIsScanOpen(false)}
+                            onClick={closeScan}
                         >
                             <X className="h-4 w-4" />
                         </button>

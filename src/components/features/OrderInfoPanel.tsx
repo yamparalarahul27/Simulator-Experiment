@@ -115,7 +115,7 @@ function buildInfo(currency: 'USD' | 'INR'): Record<DemoOrderType, OrderInfo> {
 }
 
 export default function OrderInfoPanel({ orderType, side, currency }: OrderInfoPanelProps) {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
     const info = useMemo(() => buildInfo(currency)[orderType], [currency, orderType]);
 
     return (
@@ -123,7 +123,7 @@ export default function OrderInfoPanel({ orderType, side, currency }: OrderInfoP
             <button
                 type="button"
                 onClick={() => setOpen(value => !value)}
-                className="flex w-full items-center gap-2 px-3 py-2.5 text-left"
+                className="flex w-full items-center gap-2 px-3 py-2 text-left"
             >
                 <BookOpen size={14} className="shrink-0 text-bs-brand" />
                 <div className="min-w-0 flex-1">
@@ -133,7 +133,7 @@ export default function OrderInfoPanel({ orderType, side, currency }: OrderInfoP
                             {info.badge}
                         </span>
                     </div>
-                    <p className="mt-1 text-sm leading-relaxed text-bs-text-secondary">{info.plain}</p>
+                    <p className="mt-1 max-h-8 overflow-hidden text-xs leading-snug text-bs-text-secondary">{info.plain}</p>
                 </div>
                 {open ? <ChevronUp size={14} className="text-bs-text-mute" /> : <ChevronDown size={14} className="text-bs-text-mute" />}
             </button>

@@ -13,10 +13,60 @@ interface ControlPanelProps {
 /**
  * ControlPanel — Side drawer for market manipulation, currency settings, and balance reset
  */
+function sanitizePriceInput(value: string) {
+    const cleaned = value.replace(/[^\d.]/g, '');
+    const [whole, ...decimalParts] = cleaned.split('.');
+    return decimalParts.length > 0 ? `${whole}.${decimalParts.join('')}` : whole;
+}
+
+function parsePriceDraft(value: string) {
+    const trimmed = value.trim();
+    if (!trimmed || trimmed === '.') return null;
+
+    const parsed = Number(trimmed);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+}
+
+function formatPriceDraft(value: number | null | undefined) {
+    if (value == null || !Number.isFinite(value) || value <= 0) return '';
+    return value.toLocaleString('en-US', {
+        maximumFractionDigits: 12,
+        useGrouping: false,
+    });
+}
+
 export default function ControlPanel({ isOpen, onClose, trade }: ControlPanelProps) {
-    if (!isOpen) return null;
+    const [draftOverrides, setDraftOverrides] = React.useState<Record<string, string>>({});
 
     const { settings, livePrices, setPriceOverride, resetAllOverrides, resetBalancesToDefault } = trade;
+
+    const updateOverrideDraft = React.useCallback((token: string, rawValue: string) => {
+        const nextValue = sanitizePriceInput(rawValue);
+        setDraftOverrides(prev => ({ ...prev, [token]: nextValue }));
+
+        if (nextValue !== '.') {
+            void setPriceOverride(token, parsePriceDraft(nextValue));
+        }
+    }, [setPriceOverride]);
+
+    const setOverrideValue = React.useCallback((token: string, value: number | null) => {
+        setDraftOverrides(prev => ({ ...prev, [token]: formatPriceDraft(value) }));
+        void setPriceOverride(token, value);
+    }, [setPriceOverride]);
+
+    const normalizeOverrideDraft = React.useCallback((token: string) => {
+        setDraftOverrides(prev => {
+            if (!(token in prev)) return prev;
+            return { ...prev, [token]: formatPriceDraft(parsePriceDraft(prev[token])) };
+        });
+    }, []);
+
+    const handleResetAll = React.useCallback(() => {
+        setDraftOverrides({});
+        void resetAllOverrides();
+    }, [resetAllOverrides]);
+
+    if (!isOpen) return null;
 
     return (
         <div className="fixed inset-x-0 bottom-0 z-[70] max-h-[80vh] w-full overflow-y-auto rounded-t-2xl border border-bs-border bg-bs-card shadow-xl md:inset-x-auto md:bottom-auto md:right-0 md:top-0 md:h-full md:max-h-none md:w-80 md:rounded-none md:border-l">
@@ -41,7 +91,7 @@ export default function ControlPanel({ isOpen, onClose, trade }: ControlPanelPro
                     <div className="flex items-center justify-between mb-3">
                         <h4 className="text-label-12 text-bs-text-tertiary uppercase tracking-wider">Price Control</h4>
                         <button
-                            onClick={resetAllOverrides}
+                            onClick={handleResetAll}
                             className="flex items-center gap-1 text-[10px] font-mono text-bs-warning hover:text-bs-warning/80 transition-colors"
                         >
                             <RefreshCw size={10} />
@@ -54,7 +104,10 @@ export default function ControlPanel({ isOpen, onClose, trade }: ControlPanelPro
                             const priceData = livePrices[token];
                             const isOverridden = priceData?.isOverridden || false;
                             const currentPrice = priceData?.price || 0;
-                            const overrideValue = settings?.priceOverrides?.[token];
+                            const overrideValue = isOverridden ? currentPrice : settings?.priceOverrides?.[token];
+                            const draftValue = token in draftOverrides
+                                ? draftOverrides[token]
+                                : formatPriceDraft(overrideValue);
 
                             return (
                                 <div key={token} className="rounded-xl border border-bs-border bg-bs-card-fg p-3">
@@ -81,31 +134,31 @@ export default function ControlPanel({ isOpen, onClose, trade }: ControlPanelPro
                                     {/* Override input */}
                                     <div className="flex items-center gap-1">
                                         <input
-                                            type="number"
-                                            step="any"
+                                            type="text"
+                                            inputMode="decimal"
+                                            pattern="[0-9]*[.]?[0-9]*"
                                             placeholder="Override price..."
-                                            value={overrideValue ?? ''}
-                                            onChange={(e) => {
-                                                const val = e.target.value ? parseFloat(e.target.value) : null;
-                                                setPriceOverride(token, val);
-                                            }}
+                                            value={draftValue}
+                                            aria-label={`${token} override price`}
+                                            onChange={(e) => updateOverrideDraft(token, e.target.value)}
+                                            onBlur={() => normalizeOverrideDraft(token)}
                                             className="flex-1 rounded-md border border-bs-border bg-bs-card px-2 py-1.5 text-xs font-mono text-bs-text-primary placeholder:text-bs-text-mute focus:outline-none focus:border-bs-border-active"
                                         />
                                         <button
-                                            onClick={() => setPriceOverride(token, currentPrice * 1.05)}
+                                            onClick={() => setOverrideValue(token, currentPrice * 1.05)}
                                             className="rounded-md border border-bs-success/30 bg-bs-success/10 px-1.5 py-1.5 text-[9px] font-mono font-bold text-bs-success transition-colors hover:bg-bs-success/20"
                                         >
                                             ↑5%
                                         </button>
                                         <button
-                                            onClick={() => setPriceOverride(token, currentPrice * 0.95)}
+                                            onClick={() => setOverrideValue(token, currentPrice * 0.95)}
                                             className="rounded-md border border-bs-error/30 bg-bs-error/10 px-1.5 py-1.5 text-[9px] font-mono font-bold text-bs-error transition-colors hover:bg-bs-error/20"
                                         >
                                             ↓5%
                                         </button>
                                         {isOverridden && (
                                             <button
-                                                onClick={() => setPriceOverride(token, null)}
+                                                onClick={() => setOverrideValue(token, null)}
                                                 className="rounded-md border border-bs-border bg-bs-card px-1.5 py-1.5 text-[9px] font-mono text-bs-text-mute transition-colors hover:text-bs-text-primary"
                                             >
                                                 ✕
