@@ -13,15 +13,15 @@
 
 /* ============================================
    Paper Texture UI — Design Tokens
-   Light: warm cream parchment
-   Dark: midnight navy (NOT black)
+   Light and dark theme palettes
    ============================================ */
 
 :root {
+  color-scheme: dark;
+
   /* ============================================
-     Workspace Palette (dark-only) — single source of truth
+     Workspace Palette — dark default
      ============================================ */
-  /* Neutral black-and-white base — high contrast, no color cast */
   --color-surface-dim: #000000;            /* deepest wells (order-flow canvas) */
   --color-surface-page: #0a0a0a;           /* default dark workspace background */
   --color-surface: #121212;                /* main content canvas, broad panels */
@@ -155,6 +155,53 @@
   --paper-grain-opacity: 0.04;
   --paper-fiber-opacity: 0.015;
   --paper-vignette-opacity: 0.12;
+}
+
+.light {
+  color-scheme: light;
+
+  --color-surface-dim: #f8fafc;
+  --color-surface-page: #f3f6fb;
+  --color-surface: #ffffff;
+  --color-surface-container: #ffffff;
+  --color-surface-container-high: #eef2f7;
+  --color-surface-bright: #e1e7f0;
+
+  --color-outline: #d3dae6;
+  --color-outline-variant: #e6eaf1;
+
+  --color-fg: #111827;
+  --color-fg-muted: #465160;
+  --color-fg-subtle: #7a8494;
+  --color-fg-inverse: #ffffff;
+
+  --color-brand: #9d2fe6;
+  --color-brand-hover: #7c1fc4;
+  --color-brand-bright: #b45cff;
+  --color-brand-subtle: #f3e6ff;
+  --color-on-brand: #ffffff;
+
+  --color-buy: #008f5a;
+  --color-buy-strong: #007a4c;
+  --color-sell: #d92d48;
+  --color-sell-strong: #b4233a;
+
+  --color-warning: #b7791f;
+  --color-warning-strong: #975a16;
+  --color-error: #d92d48;
+  --color-error-strong: #b4233a;
+  --color-info: #0969da;
+  --color-info-strong: #0757b8;
+  --color-success: #008f5a;
+  --color-success-strong: #007a4c;
+
+  --bs-border-active: rgba(157, 47, 230, 0.32);
+  --bs-bg-primary: rgba(157, 47, 230, 0.08);
+  --bs-text-mute: #9aa4b2;
+
+  --paper-grain-opacity: 0.018;
+  --paper-fiber-opacity: 0.01;
+  --paper-vignette-opacity: 0.035;
 }
 
 @theme inline {
@@ -561,12 +608,10 @@ body {
 }
 
 /* ============================================
-   Dark theme — the app is dark-only.
-   All color tokens live in :root and already resolve to the
-   workspace palette above, so the .dark class only needs to
-   re-assert the texture opacities used by .dark-scoped effects.
+   Dark theme texture tuning. Color tokens live in :root.
    ============================================ */
 .dark {
+  color-scheme: dark;
   --paper-grain-opacity: 0.04;
   --paper-fiber-opacity: 0.015;
   --paper-vignette-opacity: 0.12;

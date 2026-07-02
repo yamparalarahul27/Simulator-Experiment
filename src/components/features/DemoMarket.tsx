@@ -10,6 +10,7 @@ import { useSpotTrade } from '@/lib/hooks/useSpotTrade';
 import { LivePricesProvider } from '@/lib/context/LivePricesContext';
 import { Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 /**
  * DemoMarket — Page shell with Spot/Future tabs and Control Panel drawer.
@@ -76,7 +77,8 @@ function DemoMarketInner({ walletAddress, simulatorKind }: { walletAddress?: str
                 </div>
 
                 <div className="flex flex-col items-start gap-2 md:items-end">
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                        <ThemeToggle showLabel className="order-3 sm:order-none" />
                         <button
                             onClick={toggleCurrency}
                             className="flex items-center gap-2 rounded-lg border border-bs-border bg-bs-card-fg px-3 py-2 text-xs text-bs-text-secondary"

@@ -7,6 +7,7 @@ import {
     buildWalletSummary,
     buildPositionView,
     requiredMargin,
+    isolatedLiqPrice,
     type Position,
     type DemoToken,
     type PositionSide,
@@ -98,7 +99,30 @@ export default function FuturesWalletSimulator({ livePrices, currency, usdInrRat
     // ─── Open / close ─────────────────────────────────────────
     const formPrice = livePrice(fToken);
     const formMargin = requiredMargin(fQty, formPrice, fLev);
+    const formNotional = fQty * formPrice;
+    const formLiqPrice = formPrice > 0
+        ? isolatedLiqPrice({ entryPrice: formPrice, leverage: fLev, mmr: fMmr / 100, side: fSide })
+        : null;
+    const formLiqDistance = formPrice > 0 && formLiqPrice != null
+        ? Math.max(0, ((fSide === 'long' ? formPrice - formLiqPrice : formLiqPrice - formPrice) / formPrice) * 100)
+        : 0;
     const canOpen = formPrice > 0 && fQty > 0 && formMargin <= summary.freeBalance + 1e-9;
+    const formCaseSteps = [
+        {
+            label: 'Open',
+            value: formPrice > 0 ? `${fSide} ${fQty} ${fToken} at ${fmtPx(formPrice)}` : 'Waiting for live price',
+        },
+        {
+            label: 'Reserve margin',
+            value: `${fMode === 'cross' ? 'Uses shared pool' : 'Locks isolated margin'}: ${fmt(formMargin)}`,
+        },
+        {
+            label: 'Stress test',
+            value: fMode === 'cross'
+                ? 'Watch account Margin Ratio reach 100%'
+                : `Watch Mark Price move toward ${formLiqPrice != null ? fmtPx(formLiqPrice) : 'liq price'}`,
+        },
+    ];
 
     // Plain handlers — the React Compiler memoizes these automatically.
     const openPosition = () => {
@@ -245,7 +269,7 @@ export default function FuturesWalletSimulator({ livePrices, currency, usdInrRat
                                 </div>
                             </div>
                         </div>
-                        <p className="text-[9px] font-mono text-bs-text-mute mt-2">
+                        <p className="text-sm leading-relaxed text-bs-text-secondary mt-2">
                             All cross positions share this collateral. Account liquidates when margin ratio hits 100%.
                         </p>
 
@@ -311,6 +335,11 @@ export default function FuturesWalletSimulator({ livePrices, currency, usdInrRat
                                 <Lock size={11} /> Isolated
                             </button>
                         </div>
+                        <p className="mt-1.5 text-sm leading-relaxed text-bs-text-secondary">
+                            {fMode === 'cross'
+                                ? 'Cross shares the wallet pool. Liquidation is account-level when maintenance margin catches equity.'
+                                : 'Isolated locks margin per position. Loss is capped to that margin and has a fixed liquidation price.'}
+                        </p>
                     </div>
 
                     {/* Side */}
@@ -379,17 +408,55 @@ export default function FuturesWalletSimulator({ livePrices, currency, usdInrRat
                         />
                     </div>
 
-                    {/* Margin required */}
-                    <div className="p-2.5 bg-bs-brand-tertiary/10 border border-bs-brand-tertiary/20 flex items-center justify-between">
-                        <div>
-                            <div className="text-[10px] font-mono text-bs-brand-secondary/60 uppercase tracking-wider">Margin Required</div>
-                            <div className="text-sm font-mono text-bs-brand-secondary font-bold">{fmt(formMargin)}</div>
+                    {/* Order impact */}
+                    <div className="rounded-lg border border-bs-brand-tertiary/20 bg-bs-brand-tertiary/10 p-3">
+                        <div className="mb-2 flex items-center justify-between">
+                            <span className="text-xs font-semibold text-bs-text-primary">Order impact</span>
+                            <span className={cn('text-xs font-mono font-bold', canOpen ? 'text-bs-success' : 'text-bs-error')}>
+                                Free {fmt(summary.freeBalance)}
+                            </span>
                         </div>
-                        <div className="text-right">
-                            <div className="text-[9px] font-mono text-bs-text-mute uppercase">Free</div>
-                            <div className={cn('text-xs font-mono font-bold', canOpen ? 'text-bs-success' : 'text-bs-error')}>
-                                {fmt(summary.freeBalance)}
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                            <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Position value</div>
+                                <div className="mt-1 font-mono font-semibold text-bs-text-primary">{formNotional > 0 ? fmt(formNotional) : '-'}</div>
                             </div>
+                            <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Margin required</div>
+                                <div className="mt-1 font-mono font-semibold text-bs-brand-secondary">{fmt(formMargin)}</div>
+                            </div>
+                            <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Liq model</div>
+                                <div className="mt-1 font-semibold text-bs-text-primary">{fMode === 'cross' ? 'Account pool' : 'Position line'}</div>
+                            </div>
+                            <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">{fMode === 'cross' ? 'Trigger' : 'Est. liq'}</div>
+                                <div className={cn('mt-1 font-mono font-semibold', fMode === 'cross' ? 'text-bs-warning' : 'text-bs-error')}>
+                                    {fMode === 'cross' ? 'Ratio 100%' : (formLiqPrice != null ? fmtPx(formLiqPrice) : '-')}
+                                </div>
+                            </div>
+                        </div>
+                        {fMode === 'isolated' && (
+                            <p className="mt-2 text-sm leading-relaxed text-bs-text-secondary">
+                                About {formLiqDistance.toFixed(2)}% adverse move from entry reaches the liquidation line.
+                            </p>
+                        )}
+                    </div>
+
+                    <div className="rounded-lg border border-bs-info/20 bg-bs-info/8 p-3">
+                        <div className="mb-2 text-xs font-semibold text-bs-text-primary">Case path</div>
+                        <div className="space-y-2">
+                            {formCaseSteps.map((step, index) => (
+                                <div key={step.label} className="flex gap-2 rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-bs-info/30 text-[10px] font-bold text-bs-info">
+                                        {index + 1}
+                                    </span>
+                                    <div>
+                                        <div className="text-[10px] font-semibold uppercase tracking-wide text-bs-text-mute">{step.label}</div>
+                                        <div className="text-xs leading-relaxed text-bs-text-primary">{step.value}</div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
@@ -639,16 +706,16 @@ export default function FuturesWalletSimulator({ livePrices, currency, usdInrRat
                 >
                     <div className="flex items-center gap-2">
                         <Info size={14} className="text-bs-brand" />
-                        <span className="text-xs font-mono text-bs-text-tertiary">Cross vs Isolated — how margin behaves</span>
+                        <span className="text-sm font-semibold text-bs-text-tertiary">Cross vs Isolated - how margin behaves</span>
                     </div>
                     {accordionOpen ? <ChevronUp size={14} className="text-bs-text-mute" /> : <ChevronDown size={14} className="text-bs-text-mute" />}
                 </button>
                 {accordionOpen && (
-                    <div className="px-4 pb-4 border-t border-bs-border pt-3 space-y-3 text-xs font-mono text-bs-text-mute leading-relaxed">
+                    <div className="px-4 pb-4 border-t border-bs-border pt-3 space-y-3 text-sm text-bs-text-secondary leading-relaxed">
                         <div className="grid md:grid-cols-2 gap-3">
                             <div className="p-3 bg-bs-card border border-bs-info/20">
                                 <div className="text-bs-info font-bold mb-1 flex items-center gap-1"><Lock size={11} /> Isolated</div>
-                                <ul className="space-y-1 text-bs-text-primary/40">
+                                <ul className="space-y-1 text-bs-text-secondary">
                                     <li>• Each position locks its own margin.</li>
                                     <li>• Loss is capped at that margin — the rest of your wallet is safe.</li>
                                     <li>• Liquidates alone at a fixed liq price.</li>
@@ -656,7 +723,7 @@ export default function FuturesWalletSimulator({ livePrices, currency, usdInrRat
                             </div>
                             <div className="p-3 bg-bs-card border border-bs-brand-tertiary/20">
                                 <div className="text-bs-brand font-bold mb-1 flex items-center gap-1"><Layers size={11} /> Cross</div>
-                                <ul className="space-y-1 text-bs-text-primary/40">
+                                <ul className="space-y-1 text-bs-text-secondary">
                                     <li>• All cross positions share the wallet&apos;s collateral.</li>
                                     <li>• Profits on one can support losses on another.</li>
                                     <li>• The whole account liquidates when margin ratio hits 100%.</li>
@@ -668,7 +735,7 @@ export default function FuturesWalletSimulator({ livePrices, currency, usdInrRat
                             Watch the isolated one hit its own liq line while the cross pool absorbs the rest — until the account-level health bar runs out.
                         </p>
 
-                        <div className="p-3 bg-bs-card border border-bs-border space-y-1.5 text-[10px] leading-relaxed">
+                        <div className="p-3 bg-bs-card border border-bs-border space-y-1.5 text-[10px] font-mono leading-relaxed text-bs-text-mute">
                             <div className="text-bs-text-tertiary font-bold flex items-center gap-1 mb-1"><Sigma size={11} /> Formulas (toggle “Show calculations” to see these with live numbers)</div>
                             <div>Initial Margin = Qty × Entry ÷ Leverage</div>
                             <div>uPnL (long) = Qty × (Mark − Entry) &nbsp;·&nbsp; uPnL (short) = Qty × (Entry − Mark)</div>

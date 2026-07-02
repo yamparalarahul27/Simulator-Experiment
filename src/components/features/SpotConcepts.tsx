@@ -242,6 +242,7 @@ export default function SpotConcepts({ trade, currency, usdInrRate, controlPanel
                                 pair={selectedPair}
                                 currentPrice={currentPrice.price}
                                 formatPrice={formatPrice}
+                                currency={currency}
                                 orderType={orderType}
                                 onOrderTypeChange={setOrderType}
                                 side={side}
