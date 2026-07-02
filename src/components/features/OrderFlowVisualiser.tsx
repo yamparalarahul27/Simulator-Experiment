@@ -961,7 +961,7 @@ const OrderFlowVisualiser = React.memo(function OrderFlowVisualiser({
         <div className="flex flex-col h-full">
             {/* Header */}
             <div className="flex items-center gap-2 mb-3 flex-wrap">
-                <p className="text-xs font-mono text-bs-text-mute uppercase tracking-wider">Order Flow</p>
+                <p className="text-xs font-mono font-semibold uppercase tracking-wide text-bs-text-secondary">Order Flow</p>
                 <span className="px-2 py-0.5 text-[11px] font-mono font-bold uppercase tracking-widest bg-bs-brand/15 text-bs-brand border border-bs-brand/30">
                     {ORDER_TYPE_LABELS[orderType]}
                 </span>

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { Calculator, Play, AlertTriangle, Sparkles } from 'lucide-react';
+import { Calculator, ChevronDown, ChevronUp, Play, AlertTriangle, Sparkles } from 'lucide-react';
 import type { DemoOrderType } from '@/services/SupabaseDemoService';
 import type { SimConfig } from './OrderFlowVisualiser';
 import OrderInfoPanel from './OrderInfoPanel';
@@ -75,6 +75,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
     currency,
 }: SpotOrderFormProps) {
     const [form, setForm] = useState<FormState>(INITIAL_FORM);
+    const [caseOpen, setCaseOpen] = useState(false);
     const { playClick, playOpen, playSuccess } = useAppSound();
 
     const handleField = useCallback(<K extends keyof FormState>(key: K, value: FormState[K]) => {
@@ -250,6 +251,7 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
     const loadGuidedCase = () => {
         if (currentPrice <= 0) return;
         playOpen();
+        setCaseOpen(true);
 
         const amount = demoAmountFor(currentPrice);
         const amountText = asInput(amount, 4);
@@ -381,12 +383,12 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
             </div>
 
                 {/* Order Type Tabs */}
-                <div className="mb-3 flex flex-wrap gap-1">
+                <div className="mb-3 flex gap-1 overflow-x-auto pb-1 custom-scrollbar">
                 {ORDER_TYPES.map(ot => (
                     <button
                         key={ot.value}
                         onClick={() => handleOrderTypeChange(ot.value)}
-                        className={`px-2 py-1 text-xs font-mono font-medium transition-all border ${orderType === ot.value
+                        className={`shrink-0 px-2 py-1 text-xs font-mono font-medium transition-all border ${orderType === ot.value
                             ? 'bg-bs-card-fg text-bs-text-primary border-bs-border-active'
                             : 'text-bs-text-mute border-bs-border hover:text-bs-text-tertiary hover:border-bs-border'
                             }`}
@@ -396,32 +398,83 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                 ))}
             </div>
 
-                <div className="mb-2.5">
-                <OrderInfoPanel key={orderType} orderType={orderType} side={side} currency={currency} />
-            </div>
-
-                <div className="mb-3 rounded-lg border border-bs-brand-tertiary/20 bg-bs-brand-tertiary/8 px-3 py-2">
-                <div className="flex items-start gap-2">
-                    <Sparkles size={13} className="mt-0.5 shrink-0 text-bs-brand" />
-                    <div className="min-w-0 flex-1">
-                        <div className="flex flex-wrap items-center gap-2">
-                            <span className="text-xs font-semibold text-bs-text-primary">Guided case</span>
-                            <span className="rounded border border-bs-border bg-bs-card/70 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-bs-text-mute">
-                                {side} {orderType.replace('_', ' ')}
+                <div className="mb-3 overflow-hidden rounded-lg border border-bs-brand-tertiary/20 bg-bs-brand-tertiary/8">
+                    <div className="flex items-start gap-2 px-3 py-2">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (!caseOpen) playOpen();
+                                else playClick();
+                                setCaseOpen(value => !value);
+                            }}
+                            className="flex min-w-0 flex-1 items-start gap-2 text-left"
+                            aria-expanded={caseOpen}
+                        >
+                            <Sparkles size={13} className="mt-0.5 shrink-0 text-bs-brand" />
+                            <div className="min-w-0 flex-1">
+                                <div className="flex flex-wrap items-center gap-2">
+                                    <span className="text-xs font-semibold text-bs-text-primary">Simulation case</span>
+                                    <span className="rounded border border-bs-border bg-bs-card/70 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-bs-text-mute">
+                                        {side} {orderType.replace(/_/g, ' ')}
+                                    </span>
+                                </div>
+                                <p className="mt-0.5 text-[11px] leading-snug text-bs-text-secondary">{guidedCaseSummary}</p>
+                            </div>
+                            <span className="mt-0.5 shrink-0 text-bs-text-mute">
+                                {caseOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                             </span>
-                        </div>
-                        <p className="mt-0.5 text-[11px] leading-snug text-bs-text-secondary">{guidedCaseSummary}</p>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={loadGuidedCase}
+                            disabled={currentPrice <= 0}
+                            className="shrink-0 rounded-md border border-bs-border bg-bs-card px-2.5 py-1.5 text-xs font-semibold text-bs-text-primary transition-colors hover:bg-bs-card-fg disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                            Load
+                        </button>
                     </div>
-                    <button
-                        type="button"
-                        onClick={loadGuidedCase}
-                        disabled={currentPrice <= 0}
-                        className="shrink-0 rounded-md border border-bs-border bg-bs-card px-2.5 py-1.5 text-xs font-semibold text-bs-text-primary transition-colors hover:bg-bs-card-fg disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                        Load
-                    </button>
+
+                    {caseOpen && (
+                        <div className="space-y-2 border-t border-bs-brand-tertiary/15 px-3 pb-3 pt-2">
+                            <OrderInfoPanel key={orderType} orderType={orderType} side={side} currency={currency} embedded />
+
+                            <div className="rounded-md border border-bs-border bg-bs-card/60 p-2">
+                                <div className="mb-2 flex items-center gap-2">
+                                    <Calculator size={13} className="text-bs-brand" />
+                                    <span className="text-xs font-semibold text-bs-text-primary">Order impact</span>
+                                    <span className="ml-auto text-[10px] text-bs-text-mute">before simulation</span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2 text-xs">
+                                    <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                        <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Behavior</div>
+                                        <div className="mt-1 font-semibold text-bs-text-primary">{executionLabel}</div>
+                                    </div>
+                                    <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                        <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Trigger / price</div>
+                                        <div className="mt-1 font-semibold text-bs-text-primary">{triggerLabel}</div>
+                                    </div>
+                                    <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                        <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Notional</div>
+                                        <div className="mt-1 font-semibold text-bs-text-primary">
+                                            {estimatedNotional > 0 ? formatPrice(estimatedNotional) : 'Enter amount'}
+                                        </div>
+                                    </div>
+                                    <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
+                                        <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Fee estimate</div>
+                                        <div className="mt-1 font-semibold text-bs-text-primary">
+                                            {estimatedFee > 0 ? formatPrice(estimatedFee) : '-'}
+                                        </div>
+                                    </div>
+                                </div>
+                                {(form.tpEnabled || form.slEnabled) && (
+                                    <p className="mt-2 text-xs leading-relaxed text-bs-text-secondary">
+                                        TP/SL becomes an exit plan after the main order fills. In the flow, the filled state should branch into the active protection orders.
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
-            </div>
 
                 {/* Dynamic Fields */}
                 <div className="space-y-2.5">
@@ -640,42 +693,6 @@ const SpotOrderForm = React.memo(function SpotOrderForm({
                     </div>
                 )}
 
-                {amountNum > 0 && (
-                    <div className="rounded-lg border border-bs-border bg-bs-bg/45 p-3">
-                        <div className="mb-3 flex items-center gap-2">
-                            <Calculator size={14} className="text-bs-brand" />
-                            <span className="text-xs font-semibold text-bs-text-primary">Order impact</span>
-                            <span className="ml-auto text-[10px] text-bs-text-mute">before simulation</span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                            <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
-                                <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Behavior</div>
-                                <div className="mt-1 font-semibold text-bs-text-primary">{executionLabel}</div>
-                            </div>
-                            <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
-                                <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Trigger / price</div>
-                                <div className="mt-1 font-semibold text-bs-text-primary">{triggerLabel}</div>
-                            </div>
-                            <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
-                                <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Notional</div>
-                                <div className="mt-1 font-semibold text-bs-text-primary">
-                                    {estimatedNotional > 0 ? formatPrice(estimatedNotional) : 'Enter amount'}
-                                </div>
-                            </div>
-                            <div className="rounded-md border border-bs-border bg-bs-card/70 p-2">
-                                <div className="text-[10px] uppercase tracking-wide text-bs-text-mute">Fee estimate</div>
-                                <div className="mt-1 font-semibold text-bs-text-primary">
-                                    {estimatedFee > 0 ? formatPrice(estimatedFee) : '-'}
-                                </div>
-                            </div>
-                        </div>
-                        {(form.tpEnabled || form.slEnabled) && (
-                            <p className="mt-2 text-xs leading-relaxed text-bs-text-secondary">
-                                TP/SL becomes an exit plan after the main order fills. In the flow, the filled state should branch into the active protection orders.
-                            </p>
-                        )}
-                    </div>
-                )}
             </div>
             </div>
 

@@ -314,7 +314,7 @@ export default function SpotConcepts({ trade, currency, usdInrRate, controlPanel
                     {/* ── Main row: Order Form + Order Flow + Trade Summary ── */}
                     <div className="grid min-h-0 flex-1 grid-cols-1 gap-2.5 xl:grid-cols-[340px_minmax(0,1fr)_300px]">
                         <div className="flex min-h-[360px] w-full flex-col overflow-hidden rounded-2xl border border-bs-border bg-bs-card p-3 xl:min-h-0">
-                            <p className="mb-2.5 text-[10px] font-mono uppercase tracking-wider text-bs-text-mute">Order Form</p>
+                            <p className="mb-2.5 text-xs font-mono font-semibold uppercase tracking-wide text-bs-text-secondary">Order Form</p>
                             <SpotOrderForm
                                 pair={selectedPair}
                                 currentPrice={currentPrice.price}
@@ -343,7 +343,7 @@ export default function SpotConcepts({ trade, currency, usdInrRate, controlPanel
 
                         <div className="flex min-h-[220px] min-w-0 flex-col overflow-hidden rounded-2xl border border-bs-border bg-bs-card p-3 xl:min-h-0">
                             <div className="mb-2.5 flex items-center justify-between gap-2">
-                                <p className="text-[10px] font-mono uppercase tracking-wider text-bs-text-mute">Trade Summary</p>
+                                <p className="text-xs font-mono font-semibold uppercase tracking-wide text-bs-text-secondary">Trade Summary</p>
                                 {simSnapshot && (
                                     <span className="rounded border border-bs-border bg-bs-card-fg px-1.5 py-0.5 text-[9px] font-semibold uppercase text-bs-text-mute">
                                         {side} {orderType.replace('_', ' ')}
@@ -353,6 +353,7 @@ export default function SpotConcepts({ trade, currency, usdInrRate, controlPanel
                             <div className="min-h-0 flex-1 overflow-y-auto custom-scrollbar">
                                 <TradeSummaryPanel
                                     simSnapshot={simSnapshot}
+                                    simPrice={simPrice}
                                     formatPrice={formatPrice}
                                 />
                                 {!simSnapshot && (
@@ -369,7 +370,7 @@ export default function SpotConcepts({ trade, currency, usdInrRate, controlPanel
                     {/* ── Bottom row: Horizontal Price Scale ── */}
                     <div className="shrink-0 overflow-hidden rounded-2xl border border-bs-border bg-bs-card px-3 py-2">
                         <div className="mb-1.5 flex flex-wrap items-center justify-between gap-2">
-                            <p className="text-[10px] font-mono uppercase tracking-wider text-bs-text-mute">Market Price Scale</p>
+                            <p className="text-xs font-mono font-semibold uppercase tracking-wide text-bs-text-secondary">Market Price Scale</p>
                             {simSnapshot && (
                                 <div className="flex items-baseline gap-2">
                                     <span className="text-xs font-mono font-bold text-bs-text-primary">{formatPrice(simPrice)}</span>

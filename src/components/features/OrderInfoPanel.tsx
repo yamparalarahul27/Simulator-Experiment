@@ -9,6 +9,7 @@ interface OrderInfoPanelProps {
     orderType: DemoOrderType;
     side: 'buy' | 'sell';
     currency: 'USD' | 'INR';
+    embedded?: boolean;
 }
 
 interface OrderInfo {
@@ -114,9 +115,56 @@ function buildInfo(currency: 'USD' | 'INR'): Record<DemoOrderType, OrderInfo> {
     };
 }
 
-export default function OrderInfoPanel({ orderType, side, currency }: OrderInfoPanelProps) {
+export default function OrderInfoPanel({ orderType, side, currency, embedded = false }: OrderInfoPanelProps) {
     const [open, setOpen] = useState(false);
     const info = useMemo(() => buildInfo(currency)[orderType], [currency, orderType]);
+
+    if (embedded) {
+        return (
+            <div className="space-y-2">
+                <div className="rounded-md border border-bs-border bg-bs-card/60 p-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-xs font-semibold text-bs-text-primary">{info.label}</span>
+                        <span className={cn('rounded border px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide', info.accent)}>
+                            {info.badge}
+                        </span>
+                    </div>
+                    <p className="mt-1 text-xs leading-snug text-bs-text-secondary">{info.plain}</p>
+                </div>
+                <div className="grid gap-2 text-sm leading-relaxed md:grid-cols-2">
+                    <div className="rounded-md border border-bs-brand-tertiary/20 bg-bs-brand-tertiary/8 p-2 md:col-span-2">
+                        <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-bs-brand">Case path</div>
+                        <div className="grid gap-2 sm:grid-cols-3">
+                            {info.flow.map((step, index) => (
+                                <div key={step} className="rounded border border-bs-border bg-bs-card/70 p-2">
+                                    <div className="text-[10px] font-semibold uppercase tracking-wide text-bs-text-mute">Step {index + 1}</div>
+                                    <div className="mt-1 text-xs font-semibold text-bs-text-primary">{step}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className={cn(
+                        'rounded-md border p-2',
+                        side === 'buy' ? 'border-bs-buy/30 bg-bs-buy/8' : 'border-bs-border bg-bs-card/60',
+                    )}>
+                        <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-bs-buy">If buying</div>
+                        <p className="text-bs-text-secondary">{info.buy}</p>
+                    </div>
+                    <div className={cn(
+                        'rounded-md border p-2',
+                        side === 'sell' ? 'border-bs-sell/30 bg-bs-sell/8' : 'border-bs-border bg-bs-card/60',
+                    )}>
+                        <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-bs-sell">If selling</div>
+                        <p className="text-bs-text-secondary">{info.sell}</p>
+                    </div>
+                    <div className="rounded-md border border-bs-info/20 bg-bs-info/8 p-2 md:col-span-2">
+                        <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-bs-info">What to watch</div>
+                        <p className="text-bs-text-secondary">{info.watch}</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="rounded-lg border border-bs-border bg-bs-bg/45">
