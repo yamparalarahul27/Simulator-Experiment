@@ -25,7 +25,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
         return (
             <div className="h-dvh overflow-hidden text-bs-text-primary">
                 <div className="mx-auto flex h-full max-w-screen-2xl flex-col px-4 pt-3 md:px-6 md:pt-4">
-                    <div className="flex min-h-0 flex-1 overflow-hidden">
+                    <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
                         {children}
                     </div>
                     <Footer />
